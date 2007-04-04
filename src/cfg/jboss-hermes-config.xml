@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config auditDirectory="C:\temp" autoBrowseRefreshRate="10" copyJMSCorrelationID="false" copyJMSExpiration="false" copyJMSPriority="false" copyJMSReplyTo="false" copyJMSType="false" displayFactoryAdmin="true" embeddedMessageInBrowsePane="false" lastEditedByHermesVersion="v1.9" lastEditedByUser="Colin" maxColumnsInStatisticsTable="10" maxMessagesInBrowserPane="1000" maxThreadPoolSize="5" messageFilesDir="C:\work\Workspaces\Hermes\Hermes\hermes-v1.9\bin\.\messages">
+    <classpathGroup id="JBoss 4.0.1">
+        <library jar="C:\local\jboss-4.0.1\client\jboss-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.1\client\jbossall-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.1\client\jbossmq-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.1\client\jmx-invoker-adaptor-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.1\client\jnp-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.1\lib\concurrent.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.1\lib\jboss-jmx.jar" noFactories="true"/>
+        <library jar="C:\local\jndi-1.2\lib\fscontext.jar" noFactories="true"/>
+        <library jar="C:\local\jndi-1.2\lib\providerutil.jar" noFactories="true"/>
+    </classpathGroup>
+    <naming classpathId="JBoss 4.0.1" id="JBoss">
+        <properties>
+            <property name="providerURL" value="jnp://localhost:1099"/>
+            <property name="initialContextFactory" value="org.jnp.interfaces.NamingContextFactory"/>
+            <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+            <property name="securityCredentials" value="admin"/>
+            <property name="securityPrincipal" value="admin"/>
+        </properties>
+    </naming>
+    <naming classpathId="JBoss 4.0.1" id="Filesystem">
+        <properties>
+            <property name="providerURL" value="file:///work/naming/fs"/>
+            <property name="initialContextFactory" value="com.sun.jndi.fscontext.RefFSContextFactory"/>
+            <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+        </properties>
+    </naming>
+    <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+        <properties>
+            <property name="toStringOnObjectMessage" value="false"/>
+            <property name="messageCache" value="100"/>
+            <property name="bytesIsString" value="false"/>
+            <property name="bytesIsObjectBufferSize" value="65536"/>
+            <property name="bytesIsObject" value="false"/>
+        </properties>
+    </renderer>
+    <factory classpathId="System">
+        <provider className="hermes.providers.file.FileConnectionFactory">
+            <properties>
+                <property name="baseDirectory" value="messages"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="Files" reconnects="0"/>
+        </connection>
+        <destination domain="1" name="examples.xml"/>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="JBoss 4.0.1">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="providerURL" value="jnp://localhost:1099"/>
+                <property name="initialContextFactory" value="org.jnp.interfaces.NamingContextFactory"/>
+                <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+                <property name="securityCredentials" value="admin"/>
+                <property name="securityPrincipal" value="admin"/>
+                <property name="binding" value="UIL2ConnectionFactory"/>
+            </properties>
+        </provider>
+        <connection>
+            <session id="JBoss" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="2" name="topic/testDurableTopic"/>
+        <destination domain="2" name="topic/testTopic"/>
+        <destination domain="2" name="topic/securedTopic"/>
+        <destination domain="1" name="queue/A"/>
+        <destination domain="1" name="queue/testQueue"/>
+        <destination domain="1" name="queue/ex"/>
+        <destination domain="1" name="queue/DLQ"/>
+        <destination domain="1" name="queue/D"/>
+        <destination domain="1" name="queue/C"/>
+        <destination domain="1" name="queue/B"/>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="JBoss 4.0.1">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="providerURL" value="file:///work/naming/fs"/>
+                <property name="initialContextFactory" value="com.sun.jndi.fscontext.RefFSContextFactory"/>
+                <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+                <property name="binding" value="CF"/>
+            </properties>
+        </provider>
+        <connection>
+            <session id="JBoss (FS)" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="C"/>
+        <destination domain="1" name="D"/>
+        <destination domain="1" name="A"/>
+        <destination domain="1" name="B"/>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+</config>
+

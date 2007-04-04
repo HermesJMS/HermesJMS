@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config auditDirectory="/temp" autoBrowseRefreshRate="10" displayFactoryAdmin="true" lastEditedByHermesVersion="v1.9" lastEditedByUser="Colin" maxColumnsInStatisticsTable="10" maxMessagesInBrowserPane="1000" maxThreadPoolSize="5">
+    <renderer className="hermes.renderers.DefaultMessageRenderer"/>
+    <factory classpathId="System">
+        <provider className="hermes.providers.file.FileConnectionFactory">
+            <properties>
+                <property name="baseDirectory" value="${hermes.home}/bin/messages"/>
+            </properties>
+        </provider>
+        <connection>
+            <session audit="false" id="Files" reconnects="0"/>
+        </connection>
+        <destination domain="1" name="examples.xml"/>
+        <destination domain="1" durable="false" name="fix.xml" useLocalRenderer="true">
+            <renderer className="hermes.renderers.fix.FIXMessageRenderer">
+                <properties>
+                    <property name="messageCache" value="100"/>
+                    <property name="displayHeaderAndTrailer" value="true"/>
+                    <property name="displayValueWithEnum" value="true"/>
+                </properties>
+            </renderer>
+        </destination>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+</config>
+

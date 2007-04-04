@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config auditDirectory="c:\temp" autoBrowseRefreshRate="10" copyJMSCorrelationID="false" copyJMSExpiration="false" copyJMSPriority="false" copyJMSProviderProperties="false" copyJMSReplyTo="true" copyJMSType="false" correctDropSemantics="false" displayFactoryAdmin="true" embeddedMessageInBrowsePane="false" lastEditedByHermesVersion="v1.10 build 131205" lastEditedByUser="Colin" maxColumnsInStatisticsTable="10" maxMessagesInBrowserPane="10000" maxThreadPoolSize="5" messageFilesDir="c:\local\hermes-v1.10\bin\${hermes.home}\bin\messages" queueBrowseConsumerTimeout="0" selectorImpl="hermes.selector.ActiveMQMessageSelectorFactory">
+    <classpathGroup id="JBoss 4.0.1">
+        <library jar="C:\local\jboss-4.0.3RC1\client\jboss-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3RC1\client\jbossall-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3RC1\client\jbossmq-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3RC1\client\jmx-invoker-adaptor-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3RC1\client\jnp-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3RC1\lib\concurrent.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3RC1\lib\jboss-jmx.jar" noFactories="true"/>
+        <library jar="C:\local\jndi-1.2\lib\fscontext.jar" noFactories="true"/>
+        <library jar="C:\local\jndi-1.2\lib\providerutil.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="JORAM 4.2.0">
+        <library jar="C:\local\joram-4_2_0\ship\lib\JCup.jar" noFactories="true"/>
+        <library jar="C:\local\joram-4_2_0\ship\lib\joram-client.jar" noFactories="true"/>
+        <library jar="C:\local\joram-4_2_0\ship\lib\joram-shared.jar" noFactories="true"/>
+        <library jar="C:\local\joram-4_2_0\ship\lib\ow_monolog.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="WebLogic 8.1">
+        <library jar="C:\local\bea\weblogic81\server\lib\weblogic.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="SonicMQ 6.1">
+        <library jar="C:\local\sonic\MQ6.1\lib\jmxri.jar" noFactories="true"/>
+        <library jar="C:\local\sonic\MQ6.1\lib\jndi.jar" noFactories="true"/>
+        <library jar="C:\local\sonic\MQ6.1\lib\mfcontext.jar" noFactories="true"/>
+        <library jar="C:\local\sonic\MQ6.1\lib\mgmt_agent.jar" noFactories="true"/>
+        <library jar="C:\local\sonic\MQ6.1\lib\mgmt_client.jar" noFactories="true"/>
+        <library jar="C:\local\sonic\MQ6.1\lib\mgmt_config.jar" noFactories="true"/>
+        <library factories="progress.message.jclient.ConnectionFactory,progress.message.jclient.QueueConnectionFactory,progress.message.jclient.TopicConnectionFactory" jar="C:\local\sonic\MQ6.1\lib\sonic_Client.jar" noFactories="false"/>
+        <library jar="C:\local\sonic\MQ6.1\lib\sonic_mgmt_client.jar" noFactories="true"/>
+        <library jar="C:\local\sonic\MQ6.1\lib\xercesImpl.jar" noFactories="true"/>
+        <library jar="C:\local\sonic\MQ6.1\lib\xmlParserAPIs.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="JNDI FS 1.2">
+        <library jar="C:\local\jndi-1.2\lib\fscontext.jar" noFactories="true"/>
+        <library jar="C:\local\jndi-1.2\lib\providerutil.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="ActiveMQ 3.1">
+        <library jar="C:\local\jndi-1.2\lib\fscontext.jar" noFactories="true"/>
+        <library jar="C:\local\jndi-1.2\lib\providerutil.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-3.1\lib\activeio-1.1.jar" noFactories="true"/>
+        <library factories="org.activemq.ActiveMQConnectionFactory,org.activemq.ActiveMQConnectionFactory,org.activemq.ActiveMQConnectionFactory,org.activemq.pool.PooledConnectionFactory" jar="C:\local\activemq-3.1\lib\activemq-core-3.1.jar" noFactories="false"/>
+        <library jar="C:\local\activemq-3.1\lib\commons-logging-1.0.3.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-3.1\lib\concurrent-1.3.4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-3.1\lib\geronimo-spec-j2ee-jacc-1.0-rc4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-3.1\lib\geronimo-spec-j2ee-management-1.0-rc4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-3.1\lib\geronimo-spec-jms-1.1-rc4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-3.1\lib\geronimo-spec-jta-1.0.1B-rc4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-3.1\lib\log4j-1.2.8.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="EMS 4.0.1">
+        <library jar="C:\local\tibco\ems\clients\java\crimson.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jaxp.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jcert.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jms.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jndi.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jnet.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jsse.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jta-spec1_0_1.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\tibcrypt.jar" noFactories="true"/>
+        <library factories="com.tibco.tibjms.TibjmsConnectionFactory,com.tibco.tibjms.TibjmsQueueConnectionFactory,com.tibco.tibjms.TibjmsTopicConnectionFactory,com.tibco.tibjms.TibjmsXAQueueConnectionFactory,com.tibco.tibjms.TibjmsXATopicConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedQueueConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedTopicConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedXAQueueConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedXATopicConnectionFactory" jar="C:\local\tibco\ems\clients\java\tibjms.jar" noFactories="false"/>
+        <library jar="C:\local\tibco\ems\clients\java\tibjmsadmin.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\tibjmsapps.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\tibrvjms.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="Arjuna 4.0.1">
+        <library jar="C:\local\Arjuna\ams-4.1\lib\ams-client.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="WMQ 6.0">
+        <library jar="C:\local\wmq-60\java\com.ibm.mq.jar" noFactories="true"/>
+        <library jar="C:\local\wmq-60\java\com.ibm.mq.pcf.jar" noFactories="true"/>
+        <library factories="com.ibm.mq.jms.MQConnectionFactory,com.ibm.mq.jms.MQQueueConnectionFactory,com.ibm.mq.jms.MQTopicConnectionFactory" jar="C:\local\wmq-60\java\com.ibm.mqjms.jar" noFactories="false"/>
+        <library jar="C:\local\wmq-60\java\commonservices.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="WebLogic 9.0">
+        <library jar="C:\local\bea\weblogic90\server\lib\weblogic.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="ActiveMQ 4.0 SNAPSHOT">
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\activeio-2.0-SNAPSHOT.jar" noFactories="true"/>
+        <library factories="org.activemq.pool.PooledConnectionFactory,org.activemq.ActiveMQConnectionFactory" jar="C:\local\activemq-4.0-SNAPSHOT\lib\activemq-core-4.0-SNAPSHOT.jar" noFactories="false"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\commons-logging-1.0.3.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\concurrent-1.3.4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\geronimo-spec-j2ee-management-1.0-rc4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\geronimo-spec-jms-1.1-rc4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\geronimo-spec-jta-1.0.1B-rc4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\mx4j-2.1.1.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="JBoss 4.0.3">
+        <library jar="C:\local\jboss-4.0.3\client\jboss-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3\client\jbossall-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3\client\jbossmq-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3\client\jmx-invoker-adaptor-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3\client\jnp-client.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3\lib\concurrent.jar" noFactories="true"/>
+        <library jar="C:\local\jboss-4.0.3\lib\jboss-jmx.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="ActiveMQ 4.0">
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\activeio-2.1.jar" noFactories="true"/>
+        <library factories="org.apache.activemq.pool.PooledConnectionFactory,org.apache.activemq.ActiveMQConnectionFactory" jar="C:\local\activemq-4.0-SNAPSHOT\lib\activemq-core-4.0-SNAPSHOT.jar" noFactories="false"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\backport-util-concurrent-2.0_01_pd.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\commons-logging-1.0.3.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\geronimo-spec-j2ee-management-1.0-rc4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\geronimo-spec-jms-1.1-rc4.jar" noFactories="true"/>
+        <library jar="C:\local\activemq-4.0-SNAPSHOT\lib\mx4j-2.1.1.jar" noFactories="true"/>
+    </classpathGroup>
+    <classpathGroup id="OpenJMS">
+        <library jar="C:\local\openjms-0.7.6.1\lib\antlr-2.7.2.jar" noFactories="true"/>
+        <library jar="C:\local\openjms-0.7.6.1\lib\castor-0.9.5.jar" noFactories="true"/>
+        <library jar="C:\local\openjms-0.7.6.1\lib\exolabcore-0.3.7.jar" noFactories="true"/>
+        <library jar="C:\local\openjms-0.7.6.1\lib\jdbm.jar" noFactories="true"/>
+        <library jar="C:\local\openjms-0.7.6.1\lib\jta-1.0.1.jar" noFactories="true"/>
+        <library factories="org.exolab.jms.client.JmsConnectionFactory,org.exolab.jms.client.JmsQueueConnectionFactory,org.exolab.jms.client.JmsTopicConnectionFactory,org.exolab.jms.client.JmsXAQueueConnectionFactory,org.exolab.jms.client.JmsXATopicConnectionFactory" jar="C:\local\openjms-0.7.6.1\lib\openjms-client-0.7.6.1.jar" noFactories="false"/>
+        <library jar="C:\local\openjms-0.7.6.1\lib\oro-2.0.7.jar" noFactories="true"/>
+        <library jar="C:\local\openjms-0.7.6.1\lib\xerces-2.3.0.jar" noFactories="true"/>
+        <library jar="C:\local\openjms-0.7.6.1\lib\xml-apis-1.0.b2.jar" noFactories="true"/>
+    </classpathGroup>
+    <naming classpathId="JBoss 4.0.1" id="JBoss">
+        <properties>
+            <property name="providerURL" value="jnp://localhost:1099"/>
+            <property name="initialContextFactory" value="org.jnp.interfaces.NamingContextFactory"/>
+            <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+            <property name="securityCredentials" value="admin"/>
+            <property name="securityPrincipal" value="admin"/>
+        </properties>
+    </naming>
+    <naming classpathId="JBoss 4.0.3" id="JBoss (redhat)">
+        <properties>
+            <property name="providerURL" value="jnp://redhat:1099"/>
+            <property name="initialContextFactory" value="org.jnp.interfaces.NamingContextFactory"/>
+            <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+            <property name="securityCredentials" value="admin"/>
+            <property name="securityPrincipal" value="admin"/>
+        </properties>
+    </naming>
+    <naming classpathId="JORAM 4.2.0" id="Joram">
+        <properties>
+            <property name="port" value="16400"/>
+            <property name="initialContextFactory" value="fr.dyade.aaa.jndi2.client.NamingContextFactory"/>
+            <property name="host" value="localhost"/>
+        </properties>
+    </naming>
+    <naming classpathId="WebLogic 8.1" id="WebLogic">
+        <properties>
+            <property name="providerURL" value="t3://localhost:7001"/>
+            <property name="initialContextFactory" value="weblogic.jndi.WLInitialContextFactory"/>
+            <property name="securityCredentials" value="admin"/>
+            <property name="securityPrincipal" value="admin"/>
+        </properties>
+    </naming>
+    <naming classpathId="SonicMQ 6.1" id="SonicMQ">
+        <properties>
+            <property name="providerURL" value="localhost:2506"/>
+            <property name="initialContextFactory" value="com.sonicsw.jndi.mfcontext.MFContextFactory"/>
+            <property name="userPropertiesURL" value="file:${hermes.home}/cfg/sonicmq.jndi.properties"/>
+        </properties>
+    </naming>
+    <naming classpathId="JBoss 4.0.1" id="Filesystem">
+        <properties>
+            <property name="providerURL" value="file:///work/naming/fs"/>
+            <property name="initialContextFactory" value="com.sun.jndi.fscontext.RefFSContextFactory"/>
+            <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+        </properties>
+    </naming>
+    <naming classpathId="EMS 4.0.1" id="EMS">
+        <properties>
+            <property name="providerURL" value="tibjmsnaming://localhost:7222"/>
+            <property name="initialContextFactory" value="com.tibco.tibjms.naming.TibjmsInitialContextFactory"/>
+        </properties>
+    </naming>
+    <naming classpathId="Arjuna 4.0.1" id="Arjuna">
+        <properties>
+            <property name="providerURL" value="ams://server?tcp#plain://localhost:13000"/>
+            <property name="initialContextFactory" value="com.arjuna.ams.client.naming.AMSInitialContextFactory"/>
+        </properties>
+    </naming>
+    <naming classpathId="ActiveMQ 3.1" id="ActiveMQ">
+        <properties>
+            <property name="providerURL" value="tcp://localhost:61616"/>
+            <property name="initialContextFactory" value="org.activemq.jndi.ActiveMQInitialContextFactory"/>
+            <property name="userPropertiesFile" value="${hermes.home}/cfg/activemq.jndi.properties"/>
+        </properties>
+    </naming>
+    <naming classpathId="OpenJMS" id="OpenJMS">
+        <properties>
+            <property name="initialContextFactory" value="org.exolab.jms.jndi.InitialContextFactory"/>
+        </properties>
+    </naming>
+    <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+        <properties>
+            <property name="toStringOnObjectMessage" value="false"/>
+            <property name="messageCache" value="100"/>
+            <property name="bytesIsString" value="false"/>
+            <property name="bytesIsObjectBufferSize" value="65536"/>
+            <property name="bytesIsObject" value="false"/>
+        </properties>
+    </renderer>
+    <factory classpathId="System">
+        <provider className="hermes.providers.file.FileConnectionFactory">
+            <properties>
+                <property name="baseDirectory" value="messages"/>
+            </properties>
+        </provider>
+        <connection clientID="XXX" connectionPerThread="false" password="hermesjms" username="colin">
+            <session audit="false" id="Files" reconnects="0" useConsumerForQueueBrowse="false"/>
+        </connection>
+        <destination domain="1" name="examples.xml"/>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="JBoss 4.0.1">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="binding" value="UIL2ConnectionFactory"/>
+                <property name="initialContextFactory" value="org.jnp.interfaces.NamingContextFactory"/>
+                <property name="providerURL" value="jnp://localhost:1099"/>
+                <property name="securityCredentials" value="admin"/>
+                <property name="securityPrincipal" value="admin"/>
+                <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="JBoss" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="queue/A"/>
+        <destination domain="1" name="queue/testQueue"/>
+        <destination domain="1" name="queue/ex"/>
+        <destination domain="1" name="queue/DLQ"/>
+        <destination domain="1" name="queue/D"/>
+        <destination domain="1" name="queue/C"/>
+        <destination domain="1" name="queue/B"/>
+        <extension className="hermes.ext.jbossmq.JBossMQAdminFactory">
+            <properties>
+                <property name="rmiAdaptorBinding" value="jmx/rmi/RMIAdaptor"/>
+            </properties>
+        </extension>
+    </factory>
+    <factory classpathId="WebLogic 9.0">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="binding" value="javax/jms/QueueConnectionFactory"/>
+                <property name="initialContextFactory" value="weblogic.jndi.WLInitialContextFactory"/>
+                <property name="providerURL" value="t3://localhost:7001"/>
+                <property name="securityCredentials" value="admin"/>
+                <property name="securityPrincipal" value="admin"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="WebLogic" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="testQueue"/>
+        <destination domain="2" name="javax/jms/testTopic"/>
+        <destination domain="2" name="testTopic@MyJMS Server"/>
+        <destination domain="1" name="testQueue@MyJMS Server"/>
+        <extension className="hermes.ext.weblogic.WebLogicJMSAdminFactory">
+            <properties>
+                <property name="jmsServer" value="MyJMS Server"/>
+                <property name="webLogicDomain" value="mydomain"/>
+                <property name="webLogicServer" value="myserver"/>
+            </properties>
+        </extension>
+    </factory>
+    <factory classpathId="SonicMQ 6.1">
+        <provider className="hermes.JNDITopicConnectionFactory">
+            <properties>
+                <property name="binding" value="ConnectionFactory"/>
+                <property name="initialContextFactory" value="com.sonicsw.jndi.mfcontext.MFContextFactory"/>
+                <property name="providerURL" value="localhost:2506"/>
+                <property name="userProperties" value="${hermes.home}/cfg/sonicmq.jndi.properties"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="SonicMQ (JNDI)" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="Queue3"/>
+        <destination domain="1" name="Queue2"/>
+        <destination domain="1" name="Queue1"/>
+        <destination domain="1" name="Queue4"/>
+        <extension className="hermes.ext.sonicmq.SonicMQAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="SonicMQ 6.1">
+        <provider className="progress.message.jclient.ConnectionFactory">
+            <properties>
+                <property name="brokerURL" value="tcp://localhost:2506"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="SonicMQ" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="SampleQ4"/>
+        <destination domain="1" name="SonicMQ.routingQueue"/>
+        <destination domain="1" name="SampleQ3"/>
+        <destination domain="1" name="SampleQ2"/>
+        <destination domain="1" name="SampleQ1"/>
+        <destination domain="1" name="SonicMQ.deadMessage"/>
+        <extension className="hermes.ext.sonicmq.SonicMQAdminFactory">
+            <properties>
+                <property name="brokerName" value="Broker1"/>
+                <property name="container" value="Container1"/>
+                <property name="timeout" value="10000"/>
+                <property name="domain" value="Domain1"/>
+            </properties>
+        </extension>
+    </factory>
+    <factory classpathId="ActiveMQ 4.0">
+        <provider className="org.apache.activemq.ActiveMQConnectionFactory">
+            <properties>
+                <property name="brokerURL" value="tcp://redhat:61616"/>
+            </properties>
+        </provider>
+        <connection clientID="XXX" connectionPerThread="false">
+            <session audit="false" id="ActiveMQ" reconnects="0" transacted="true" useConsumerForQueueBrowse="false"/>
+        </connection>
+        <destination domain="2" durable="false" name="ActiveMQ.&gt;" useLocalRenderer="false">
+            <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+                <properties>
+                    <property name="toStringOnObjectMessage" value="false"/>
+                    <property name="messageCache" value="100"/>
+                    <property name="bytesIsString" value="false"/>
+                    <property name="bytesIsObjectBufferSize" value="65536"/>
+                    <property name="bytesIsObject" value="false"/>
+                </properties>
+            </renderer>
+        </destination>
+        <destination domain="2" durable="false" name="test.T2" useLocalRenderer="false">
+            <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+                <properties>
+                    <property name="toStringOnObjectMessage" value="false"/>
+                    <property name="messageCache" value="100"/>
+                    <property name="bytesIsString" value="false"/>
+                    <property name="bytesIsObjectBufferSize" value="65536"/>
+                    <property name="bytesIsObject" value="false"/>
+                </properties>
+            </renderer>
+        </destination>
+        <destination domain="2" durable="false" name="test.&gt;" useLocalRenderer="false">
+            <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+                <properties>
+                    <property name="toStringOnObjectMessage" value="false"/>
+                    <property name="messageCache" value="100"/>
+                    <property name="bytesIsString" value="false"/>
+                    <property name="bytesIsObjectBufferSize" value="65536"/>
+                    <property name="bytesIsObject" value="false"/>
+                </properties>
+            </renderer>
+        </destination>
+        <destination domain="1" durable="false" name="test.Q2" useLocalRenderer="false">
+            <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+                <properties>
+                    <property name="toStringOnObjectMessage" value="false"/>
+                    <property name="messageCache" value="100"/>
+                    <property name="bytesIsString" value="false"/>
+                    <property name="bytesIsObjectBufferSize" value="65536"/>
+                    <property name="bytesIsObject" value="false"/>
+                </properties>
+            </renderer>
+        </destination>
+        <destination domain="1" durable="false" name="test.Q1" useLocalRenderer="false">
+            <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+                <properties>
+                    <property name="toStringOnObjectMessage" value="false"/>
+                    <property name="messageCache" value="100"/>
+                    <property name="bytesIsString" value="false"/>
+                    <property name="bytesIsObjectBufferSize" value="65536"/>
+                    <property name="bytesIsObject" value="false"/>
+                </properties>
+            </renderer>
+        </destination>
+        <destination clientID="XXX" domain="2" durable="true" name="test.T1" useLocalRenderer="false">
+            <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+                <properties>
+                    <property name="toStringOnObjectMessage" value="false"/>
+                    <property name="messageCache" value="100"/>
+                    <property name="bytesIsString" value="false"/>
+                    <property name="bytesIsObjectBufferSize" value="65536"/>
+                    <property name="bytesIsObject" value="false"/>
+                </properties>
+            </renderer>
+        </destination>
+        <destination domain="2" durable="false" name="ActiveMQ.Advisory.&gt;" useLocalRenderer="false">
+            <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+                <properties>
+                    <property name="toStringOnObjectMessage" value="false"/>
+                    <property name="messageCache" value="100"/>
+                    <property name="bytesIsString" value="false"/>
+                    <property name="bytesIsObjectBufferSize" value="65536"/>
+                    <property name="bytesIsObject" value="false"/>
+                </properties>
+            </renderer>
+        </destination>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="EMS 4.0.1">
+        <provider className="com.tibco.tibjms.TibjmsConnectionFactory">
+            <properties>
+                <property name="serverUrl" value="tcp://localhost:7222"/>
+                <property name="userName" value="colin"/>
+                <property name="userPassword" value="hermes"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="EMS" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="$TMP$.EMS-SERVER.C804344DD1E13.9"/>
+        <destination domain="1" name="$sys.admin"/>
+        <destination domain="1" name="$sys.lookup"/>
+        <destination domain="1" name="$sys.undelivered"/>
+        <destination domain="1" name="&gt;"/>
+        <destination domain="1" name="queue.sample"/>
+        <destination domain="1" name="sample"/>
+        <destination domain="2" name="&gt;"/>
+        <destination domain="2" name="sample"/>
+        <destination domain="2" name="samples/topic"/>
+        <destination domain="2" name="topic.sample"/>
+        <destination domain="2" name="topic.sample.exported"/>
+        <destination domain="2" name="topic.sample.imported"/>
+        <extension className="hermes.ext.ems.TibcoEMSAdminFactory">
+            <properties>
+                <property name="password" value="hermesjms"/>
+                <property name="username" value="admin"/>
+            </properties>
+        </extension>
+    </factory>
+    <factory classpathId="EMS 4.0.1">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="binding" value="GenericConnectionFactory"/>
+                <property name="initialContextFactory" value="com.tibco.tibjms.naming.TibjmsInitialContextFactory"/>
+                <property name="providerURL" value="tcp://localhost:7222"/>
+                <property name="securityCredentials" value="hermesjms"/>
+                <property name="securityPrincipal" value="admin"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="EMS (JNDI)" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="sample"/>
+        <destination domain="2" name="topic"/>
+        <extension className="hermes.ext.ems.TibcoEMSAdminFactory">
+            <properties>
+                <property name="username" value="admin"/>
+                <property name="password" value="hermesjms"/>
+            </properties>
+        </extension>
+    </factory>
+    <factory classpathId="Arjuna 4.0.1">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="binding" value="ConnectionFactory"/>
+                <property name="initialContextFactory" value="com.arjuna.ams.client.naming.AMSInitialContextFactory"/>
+                <property name="providerURL" value="ams://server?tcp#plain://localhost:13000"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="ArjunaMQ" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="2" name="AMS_ConsumptionNotification"/>
+        <destination domain="2" name="fruit"/>
+        <destination domain="2" name="fruit.apples"/>
+        <destination domain="2" name="fruit.apples.coxes"/>
+        <destination domain="1" name="AMS_RemoteJMXQueue"/>
+        <destination domain="1" name="Q1"/>
+        <extension className="hermes.ext.arjuna.ArjunaMSAdminFactory">
+            <properties>
+                <property name="adminBinding" value="Admin"/>
+            </properties>
+        </extension>
+    </factory>
+    <factory classpathId="WMQ 6.0">
+        <provider className="com.ibm.mq.jms.MQQueueConnectionFactory">
+            <properties>
+                <property name="hostName" value="redhat"/>
+                <property name="port" value="1414"/>
+                <property name="queueManager" value="redhat.queue.manager"/>
+                <property name="transportType" value="1"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="WMQ" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="AMQ.4356684520001102"/>
+        <destination domain="1" name="DEAD.LETTER"/>
+        <destination domain="1" durable="false" name="DEV.0001" useLocalRenderer="false">
+            <properties>
+                <property name="targetClient" value="1"/>
+            </properties>
+            <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+                <properties>
+                    <property name="toStringOnObjectMessage" value="false"/>
+                    <property name="messageCache" value="100"/>
+                    <property name="bytesIsString" value="false"/>
+                    <property name="bytesIsObjectBufferSize" value="65536"/>
+                    <property name="bytesIsObject" value="false"/>
+                </properties>
+            </renderer>
+        </destination>
+        <destination domain="1" name="DEV.0002"/>
+        <destination domain="1" name="DEV.0003"/>
+        <destination domain="1" name="DEV.0004"/>
+        <destination domain="1" name="SYSTEM.ADMIN.ACCOUNTING.QUEUE"/>
+        <destination domain="1" name="SYSTEM.ADMIN.ACTIVITY.QUEUE"/>
+        <destination domain="1" name="SYSTEM.ADMIN.CHANNEL.EVENT"/>
+        <destination domain="1" name="SYSTEM.ADMIN.COMMAND.QUEUE"/>
+        <destination domain="1" name="SYSTEM.ADMIN.LOGGER.EVENT"/>
+        <destination domain="1" name="SYSTEM.ADMIN.PERFM.EVENT"/>
+        <destination domain="1" name="SYSTEM.ADMIN.QMGR.EVENT"/>
+        <destination domain="1" name="SYSTEM.ADMIN.STATISTICS.QUEUE"/>
+        <destination domain="1" name="SYSTEM.ADMIN.TRACE.ROUTE.QUEUE"/>
+        <destination domain="1" name="SYSTEM.AUTH.DATA.QUEUE"/>
+        <destination domain="1" name="SYSTEM.CHANNEL.INITQ"/>
+        <destination domain="1" name="SYSTEM.CHANNEL.SYNCQ"/>
+        <destination domain="1" name="SYSTEM.CICS.INITIATION.QUEUE"/>
+        <destination domain="1" name="SYSTEM.CLUSTER.COMMAND.QUEUE"/>
+        <destination domain="1" name="SYSTEM.CLUSTER.REPOSITORY.QUEUE"/>
+        <destination domain="1" name="SYSTEM.CLUSTER.TRANSMIT.QUEUE"/>
+        <destination domain="1" name="SYSTEM.DEAD.LETTER.QUEUE"/>
+        <destination domain="1" name="SYSTEM.DEFAULT.INITIATION.QUEUE"/>
+        <destination domain="1" name="SYSTEM.DEFAULT.LOCAL.QUEUE"/>
+        <destination domain="1" name="SYSTEM.PENDING.DATA.QUEUE"/>
+        <extension className="hermes.ext.mq.MQSeriesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="ActiveMQ 3.1">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="binding" value="QCF"/>
+                <property name="initialContextFactory" value="com.sun.jndi.fscontext.RefFSContextFactory"/>
+                <property name="providerURL" value="file:///work/naming/fs"/>
+                <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="ActiveMQ (JNDI)" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="myTrades"/>
+        <destination domain="1" name="myOrders"/>
+        <destination domain="1" name="myIOIs"/>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="ActiveMQ 3.1">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="binding" value="ConnectionFactory"/>
+                <property name="initialContextFactory" value="org.activemq.jndi.ActiveMQInitialContextFactory"/>
+                <property name="providerURL" value="tcp://localhost:61616"/>
+                <property name="userPropertiesFile" value="${hermes.home}/cfg/jndi.properties"/>
+            </properties>
+        </provider>
+        <connection clientID="XXX" connectionPerThread="false">
+            <session audit="false" id="ActiveMQ (Provider JNDI)" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="2" name="T1"/>
+        <destination domain="2" name="T2"/>
+        <destination domain="1" name="Q1"/>
+        <destination domain="1" name="Q2"/>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="JBoss 4.0.1">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="binding" value="UIL2ConnectionFactory"/>
+                <property name="initialContextFactory" value="org.jnp.interfaces.NamingContextFactory"/>
+                <property name="providerURL" value="jnp://localhost:1099"/>
+                <property name="securityCredentials" value="admin"/>
+                <property name="securityPrincipal" value="admin"/>
+                <property name="urlPkgPrefixes" value="org.jnp.interfaces:org.jboss.naming"/>
+            </properties>
+        </provider>
+        <connection password="needle" username="john">
+            <session audit="false" checkSize="false" checkSizePeriod="0" id="JBoss (John)" reconnects="0" transacted="true"/>
+        </connection>
+        <destination clientID="XXX" domain="2" durable="true" name="topic/testDurableTopic"/>
+        <destination domain="2" name="topic/testDurableTopic"/>
+        <destination domain="2" name="topic/testTopic"/>
+        <destination domain="2" name="topic/securedTopic"/>
+        <destination domain="1" name="queue/A"/>
+        <destination domain="1" name="queue/testQueue"/>
+        <destination domain="1" name="queue/ex"/>
+        <destination domain="1" name="queue/DLQ"/>
+        <destination domain="1" name="queue/D"/>
+        <destination domain="1" name="queue/C"/>
+        <destination domain="1" name="queue/B"/>
+        <destination clientID="YYY" domain="2" durable="true" name="topic/testDurableTopic" useLocalRenderer="false">
+            <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+                <properties>
+                    <property name="toStringOnObjectMessage" value="false"/>
+                    <property name="messageCache" value="100"/>
+                    <property name="bytesIsString" value="false"/>
+                    <property name="bytesIsObjectBufferSize" value="65536"/>
+                    <property name="bytesIsObject" value="false"/>
+                </properties>
+            </renderer>
+        </destination>
+        <extension className="hermes.ext.jbossmq.JBossMQAdminFactory">
+            <properties>
+                <property name="rmiAdaptorBinding" value="jmx/rmi/RMIAdaptor"/>
+            </properties>
+        </extension>
+    </factory>
+    <factory classpathId="JORAM 4.2.0">
+        <provider className="hermes.JNDITopicConnectionFactory">
+            <properties>
+                <property name="binding" value="cf"/>
+                <property name="host" value="localhost"/>
+                <property name="initialContextFactory" value="fr.dyade.aaa.jndi2.client.NamingContextFactory"/>
+                <property name="port" value="16400"/>
+            </properties>
+        </provider>
+        <connection>
+            <session audit="false" checkSize="false" checkSizePeriod="0" id="JORAM" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="queue"/>
+        <destination domain="2" name="topic"/>
+        <extension className="hermes.ext.joram.JoramAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="EMS 4.0.1">
+        <provider className="com.tibco.tibjms.TibjmsConnectionFactory">
+            <properties>
+                <property name="serverUrl" value="tcp://redhat:7222"/>
+                <property name="userName" value="colin"/>
+                <property name="userPassword" value="hermes"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" checkSize="false" checkSizePeriod="0" id="EMS (redhat)" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="$TMP$.EMS-SERVER.12A443567C231F.1"/>
+        <destination domain="1" name="$TMP$.EMS-SERVER.12A443567C232.1"/>
+        <destination domain="1" name="$sys.admin"/>
+        <destination domain="1" name="$sys.lookup"/>
+        <destination domain="1" name="$sys.undelivered"/>
+        <destination domain="1" name="&gt;"/>
+        <destination domain="1" name="queue.sample"/>
+        <destination domain="1" name="sample"/>
+        <destination domain="2" name="&gt;"/>
+        <destination domain="2" name="sample"/>
+        <destination domain="2" name="topic.sample"/>
+        <destination domain="2" name="topic.sample.exported"/>
+        <destination domain="2" name="topic.sample.imported"/>
+        <extension className="hermes.ext.ems.TibcoEMSAdminFactory">
+            <properties>
+                <property name="password" value="thinkpad"/>
+                <property name="serverURL" value="tcp://redhat:7222"/>
+                <property name="username" value="admin"/>
+            </properties>
+        </extension>
+    </factory>
+    <factory classpathId="OpenJMS">
+        <provider className="hermes.JNDITopicConnectionFactory">
+            <properties>
+                <property name="initialContextFactory" value="org.exolab.jms.jndi.InitialContextFactory"/>
+                <property name="binding" value="JmsTopicConnectionFactory"/>
+            </properties>
+        </provider>
+        <connection>
+            <session id="OpenJMS (Topics)" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="2" name="topic1"/>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="OpenJMS">
+        <provider className="hermes.JNDIQueueConnectionFactory">
+            <properties>
+                <property name="initialContextFactory" value="org.exolab.jms.jndi.InitialContextFactory"/>
+                <property name="binding" value="JmsQueueConnectionFactory"/>
+            </properties>
+        </provider>
+        <connection>
+            <session id="OpenJMS (Queues)" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="queue3"/>
+        <destination domain="1" name="queue2"/>
+        <destination domain="1" name="queue1"/>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+</config>
+

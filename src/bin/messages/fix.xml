@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<content>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSMessageID="ID:EMS-SERVER.9B842A19CA1A:7" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="1117897329048" codec="Base64">
+            <headerProperty name="SenderCompID" type="java.lang.String" value="BKVR"/>
+            <headerProperty name="TargetCompID" type="java.lang.String" value="INVMGR"/>
+            <text>OD1GSVguNC4xATk9MTU0ATM1PTYBNDk9QlJLUgE1Nj1JTlZNR1IBMzQ9MjM2ATUyPTE5OTgwNjA0LTA3OjU4OjQ4ATIzPTExNTY4NQEyOD1OATU1PVNQTUkuTUkBNTQ9MgEyNz0yMDAwMDABNDQ9MTAxMDAuMDAwMDAwATI1PUgBMTA9MTU5AQ==</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSMessageID="ID:EMS-SERVER.9B842A19CA117:1" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="1117898632453" codec="Base64">
+            <headerProperty name="SenderCompID" type="java.lang.String" value="BKVR"/>
+            <headerProperty name="TargetCompID" type="java.lang.String" value="INVMGR"/>
+            <text>OD1GSVguNC4xATk9MTU0ATM1PTYBNDk9QlJLUgE1Nj1JTlZNR1IBMzQ9MjM4ATUyPTE5OTgwNjA0LTA3OjU5OjU2ATIzPTExNTY4NgEyOD1OATU1PUZJQS5NSQE1ND0yATI3PTI1MDAwMAE0ND03OTAwLjAwMDAwMAEyNT1IATEwPTIzMQE=</text>
+        </textMessage>
+    </entry>
+</content>
+
+

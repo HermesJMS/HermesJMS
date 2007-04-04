@@ -1,0 +1,582 @@
+<project name="hermes" default="jar-ext" basedir=".">
+
+	<!-- Dependent 3rd party libraries are defined in the build.properties file -->
+
+	<property file="build.properties" />
+
+	<property name="installer.jar" value="hermes-installer-1.12.jar" />
+	<property name="src" value="src" />
+	<property name="src.java" value="${src}/java" />
+	<property name="resources" value="${src}/resources" />
+	<property name="src.lib" value="${src}/lib" />
+	<property name="src.libext" value="${src}/libext" />
+	<property name="src.providers" value="${src}/providers" />
+
+	<property name="src.bin" value="${src}/bin" />
+	<property name="src.cfg" value="${src}/cfg" />
+	<property name="src.webstart" value="${src}/webstart" />
+	<property name="build" value="build" />
+	<property name="build.classes" value="build/classes" />
+
+
+	<property name="classes" value="${build.classes}/classes" />
+	<property name="classes.ext.selectors" value="${build.classes}/classes-ext/selectors" />
+	<property name="classes.ext.mq" value="${build.classes}/classes-ext/mq" />
+	<property name="classes.ext.sonic" value="${build.classes}/classes-ext/sonicmq" />
+	<property name="classes.ext.jbossmq" value="${build.classes}/classes-ext/jbossmq" />
+	<property name="classes.ext.arjuna" value="${build.classes}/classes-ext/arjuna" />
+	<property name="classes.ext.weblogic" value="${build.classes}/classes-ext/weblogic" />
+	<property name="classes.ext.joram" value="${build.classes}/classes-ext/joram" />
+	<property name="classes.ext.wme" value="${build.classes}/classes-ext/wme" />
+	<property name="classes.ext.openjms" value="${build.classes}/classes-ext/openjms" />
+	<property name="classes.ext.fiorano" value="${build.classes}/classes-ext/fiorano" />
+	<property name="classes.ext.ems" value="${build.classes}/classes-ext/ems" />
+	<property name="classes.ext.activemq" value="${build.classes}/classes-ext/activemq" />
+	<property name="classes.ext.seebeyond" value="${build.classes}/classes-ext/seebeyond" />
+	<property name="classes.webstart" value="${build.classes}/webstart" />
+
+
+	<property name="lib" value="${build}/lib" />
+	<property name="lib.weaved" value="${build}/lib.weaved" />
+	<property name="providers" value="${build}/providers" />
+
+	<property name="cfg" value="${build}/cfg" />
+	<property name="bin" value="${build}/bin" />
+	<property name="javadoc.dir" value="${build}/javadoc" />
+	<property name="config.schema" value="${src}/xml/hermes-schema.xsd" />
+	<property name="config.package" value="hermes.config" />
+	<property name="jms2xml.schema" value="${src}/xml/jms2xml-schema.xsd" />
+	<property name="jms2xml.package" value="hermes.xml" />
+	<property name="webstart" value="${build}/webstart" />
+	<property name="webstart.retro" value="${build}/retrowebstart" />
+
+	<macrodef name="convertUnixLineEndings">
+		<element name="files" implicit="true" />
+		<sequential>
+			<replaceregexp flags="smg" match="\r$" replace="" byline="false">
+				<files />
+			</replaceregexp>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="convertUnixScripts">
+		<attribute name="dir" />
+		<sequential>
+			<convertUnixLineEndings>
+				<fileset dir="@{dir}/bin" includes="*.sh" />
+			</convertUnixLineEndings>
+		</sequential>
+	</macrodef>
+
+	<target name="init">
+
+		<path id="retrotranslator.classpath">
+			<fileset dir="${retrotranslator.lib}" includes="**/*.jar" />
+		</path>
+
+		<taskdef name="retrotranslator" classpathref="retrotranslator.classpath" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" />
+
+		<taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${src.lib}/jarjar-0.6.jar" />
+		<taskdef name="izpack" classpath="${src.libext}/standalone-compiler.jar" classname="com.izforge.izpack.ant.IzPackTask" />
+
+		<tstamp />
+
+		<available file="${websphere.lib}/com.ibm.mqjms.jar" property="mq.present" />
+		<available file="${jboss.lib}/jbossall-client.jar" property="jbossmq.present" />
+		<available file="${weblogic.lib}/weblogic.jar" property="weblogic.present" />
+		<available file="${arjuna.lib}/ams-common.jar" property="arjuna.present" />
+		<available file="${joram.lib}/joram-client.jar" property="joram.present" />
+		<available file="${wme.lib}/client61.jar" property="wme.present" />
+		<available file="${openjms.lib}/openjms-client-0.7.6.1.jar" property="openjms.present" />
+		<available file="${fiorano.lib}/fmq-client-all.jar" property="fiorano.present" />
+		<available file="${ems.lib}/tibjms.jar" property="ems.present" />
+		<available file="${sonic.lib}/sonic_Client.jar" property="sonic.present" />
+		<available file="${activemq.root}/incubator-activemq-4.1-SNAPSHOT.jar" property="activemq.present" />
+		<available file="${mx4j.lib}/mx4j.jar" property="mx4j.present" />
+
+		<mkdir dir="${build}" />
+		<mkdir dir="${classes}" />
+		<mkdir dir="${classes.ext.selectors}" />
+		<mkdir dir="${classes.ext.mq}" />
+		<mkdir dir="${classes.ext.jbossmq}" />
+		<mkdir dir="${classes.ext.arjuna}" />
+		<mkdir dir="${classes.ext.weblogic}" />
+		<mkdir dir="${classes.ext.joram}" />
+		<mkdir dir="${classes.ext.wme}" />
+		<mkdir dir="${classes.ext.openjms}" />
+		<mkdir dir="${classes.ext.fiorano}" />
+		<mkdir dir="${classes.ext.ems}" />
+		<mkdir dir="${classes.ext.sonic}" />
+		<mkdir dir="${classes.ext.activemq}" />
+		<mkdir dir="${classes.ext.seebeyond}" />
+		<mkdir dir="${classes.webstart}" />
+		<mkdir dir="${webstart}" />
+		<mkdir dir="${webstart.retro}" />
+		<mkdir dir="${lib}" />
+		<mkdir dir="${lib.weaved}" />
+		<mkdir dir="${bin}" />
+		<mkdir dir="${cfg}" />
+		<mkdir dir="${providers}" />
+		<mkdir dir="${javadoc.dir}" />
+
+		<!-- The core classpath -->
+
+		<path id="project.classpath">
+			<fileset dir="${src.lib}">
+				<include name="*.jar" />
+			</fileset>
+
+			<fileset dir="${jide.lib}">
+				<include name="*.jar" />
+			</fileset>
+
+			<fileset dir="${ant.lib}">
+				<include name="ant.jar" />
+			</fileset>
+
+			<fileset dir="${jamsel.lib}">
+				<include name="selector-1.1.jar" />
+			</fileset>
+
+			<fileset file="${activemq.lib.selector}" />
+		</path>
+
+		<!-- Base classpath for all plugins-->
+
+		<path id="plugin.classpath">
+			<path refid="project.classpath" />
+			<fileset dir="${lib}">
+				<include name="hermes.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for building selector implementions -->
+
+		<path id="selectors.classpath">
+			<path refid="plugin.classpath" />
+			<fileset dir="${jamsel.lib}">
+				<include name="jamsel.jar" />
+			</fileset>
+
+			<fileset dir="${activemq.lib}">
+				<include name="activemq-core-3.1.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for SonicMQ -->
+
+		<path id="sonic.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${sonic.lib}">
+				<include name="sonic_Client.jar" />
+				<include name="sonic_mgmt_client.jar" />
+				<include name="mgmt_agent.jar" />
+				<include name="mgmt_config.jar" />
+				<include name="jmxri.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for TIBCO EMS -->
+
+		<path id="ems.classpath">
+
+			<path refid="plugin.classpath" />
+			<fileset dir="${ems.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+
+		<path id="seebeyond.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${mx4j.lib}">
+				<include name="*.jar" />
+			</fileset>
+
+		</path>
+
+		<!-- Classpath for ActiveMQ -->
+
+		<path id="activemq.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${activemq.root}">
+				<include name="*.jar" />
+			</fileset>
+
+			<fileset dir="${activemq.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+
+
+		<!-- Classpath for Arjuna -->
+
+		<path id="arjuna.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${arjuna.lib}">
+				<include name="*.jar" />
+			</fileset>
+
+			<fileset dir="${arjuna.ext}">
+				<include name="mw-common.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for Fiorano -->
+
+		<path id="fiorano.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${fiorano.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for JBoss -->
+
+		<path id="jboss.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${jboss.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for JORAM -->
+
+		<path id="joram.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${joram.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for OpenJMS -->
+
+		<path id="openjms.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${openjms.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for WebLogic-->
+
+		<path id="weblogic.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${weblogic.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for WebSphereMQ -->
+
+		<path id="websphere.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${websphere.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		<!-- Classpath for WebMethods Enterprise -->
+
+		<path id="wme.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${wme.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+			<classpath refid="project.classpath" />
+		</taskdef>
+	</target>
+
+	<target name="compile" depends="compile-main">
+	</target>
+
+	<target name="compile-main" depends="init">
+		<xjc schema="${config.schema}" target="${src.java}" package="${config.package}" removeOldOutput="yes">
+			<produces dir="${src.java}/hermes/config" includes="* impl/**" />
+		</xjc>
+
+		<xjc schema="${jms2xml.schema}" target="${src.java}" package="${jms2xml.package}" removeOldOutput="yes">
+			<produces dir="${src.java}/hermes/xml" includes="**/*.java" />
+		</xjc>
+
+		<javac destdir="${classes}" deprecation="on" debug="true">
+			<src path="${src.java}" />
+			<exclude name="hermes/ext/sonicmq/*.java" />
+			<exclude name="hermes/ext/mq/*.java" />
+			<exclude name="hermes/ext/jbossmq/*.java" />
+			<exclude name="hermes/ext/weblogic/*.java" />
+			<exclude name="hermes/ext/arjuna/*.java" />
+			<exclude name="hermes/ext/joram/*.java" />
+			<exclude name="hermes/ext/wme/*.java" />
+			<exclude name="hermes/ext/openjms/*.java" />
+			<exclude name="hermes/ext/fiorano/*.java" />
+			<exclude name="hermes/ext/ems/*.java" />
+			<exclude name="hermes/ext/activemq/*.java" />
+			<exclude name="hermes/ext/seebeyond/*.java" />
+			<exclude name="hermes/ext/seebeyond/model/*.java" />
+			<exclude name="hermes/ext/seebeyond/ican/*.java" />
+			<exclude name="hermes/ext/seebeyond/jcaps/*.java" />
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-ext" depends="jar,compile-activemq,compile-mq,compile-jbossmq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond" />
+
+
+	<target name="compile-seebeyond" depends="jar" if="mx4j.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.seebeyond}" deprecation="on" debug="true">
+			<include name="**/ext/seebeyond/*.java" />
+			<include name="**/ext/seebeyond/model/*.java" />
+			<include name="**/ext/seebeyond/ican/*.java" />
+			<include name="**/ext/seebeyond/jcaps/*.java" />
+			<classpath refid="seebeyond.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-activemq" depends="jar" if="activemq.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.activemq}" deprecation="on" debug="true">
+			<include name="**/ext/activemq/*.java" />
+			<classpath refid="activemq.classpath" />
+		</javac>
+	</target>
+
+
+	<target name="compile-sonic" depends="jar" if="sonic.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.sonic}" deprecation="on" debug="true">
+			<include name="**/ext/sonicmq/*.java" />
+			<classpath refid="sonic.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-ems" depends="jar" if="ems.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.ems}" deprecation="on" debug="true">
+			<include name="**/ext/ems/*.java" />
+			<classpath refid="ems.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-fiorano" depends="compile-main" if="fiorano.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.fiorano}" deprecation="on" debug="true">
+			<include name="**/ext/fiorano/*.java" />
+			<classpath refid="fiorano.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-mq" depends="compile-main" if="mq.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.mq}" deprecation="on" debug="true">
+			<include name="**/ext/mq/*.java" />
+			<classpath refid="websphere.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-openjms" depends="compile-main" if="openjms.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.openjms}" deprecation="on" debug="true">
+			<include name="**/ext/openjms/*.java" />
+			<classpath refid="openjms.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-joram" depends="compile-main" if="joram.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.joram}" deprecation="on" debug="true">
+			<include name="**/ext/joram/*.java" />
+			<classpath refid="joram.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-jbossmq" depends="compile-main" if="jbossmq.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.jbossmq}" deprecation="on" debug="true">
+			<include name="**/ext/jbossmq/*.java" />
+			<classpath refid="jboss.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-weblogic" depends="compile-main" if="weblogic.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.weblogic}" deprecation="on" debug="true">
+			<include name="**/ext/weblogic/*.java" />
+			<classpath refid="weblogic.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-arjuna" depends="compile-main" if="arjuna.present">
+		<javac sourcepath="" srcdir="${src.java}" failonerror="false" destdir="${classes.ext.arjuna}" deprecation="on" debug="true">
+			<include name="**/ext/arjuna/*.java" />
+			<classpath refid="arjuna.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-wme" depends="compile-main" if="wme.present">
+		<javac sourcepath="" srcdir="${src.java}" failonerror="false" destdir="${classes.ext.wme}" deprecation="on" debug="true">
+			<include name="**/ext/wme/*.java" />
+			<classpath refid="wme.classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar jarfile="${lib}/hermes.jar">
+			<fileset dir="${classes}" />
+			<fileset dir="${jide.classes}" />
+			<fileset dir="${src.java}" excludes="**/*.java" />
+			<fileset dir="${resources}" />
+
+		</jar>
+	</target>
+
+	<target name="jar-ext" depends="compile-ext">
+
+		<jar jarfile="${lib}/hermes-seebeyond.jar">
+				<fileset dir="${classes.ext.seebeyond}" />
+			</jar>
+		
+		<jar jarfile="${lib}/hermes-activemq.jar">
+			<fileset dir="${classes.ext.activemq}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-sonicmq.jar">
+			<fileset dir="${classes.ext.sonic}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-ems.jar">
+			<fileset dir="${classes.ext.ems}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-fiorano.jar">
+			<fileset dir="${classes.ext.fiorano}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-jbossmq.jar">
+			<fileset dir="${classes.ext.jbossmq}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-webspheremq.jar">
+			<fileset dir="${classes.ext.mq}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-joram.jar">
+			<fileset dir="${classes.ext.joram}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-weblogic.jar">
+			<fileset dir="${classes.ext.weblogic}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-openjms.jar">
+			<fileset dir="${classes.ext.openjms}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-arjuna.jar">
+			<fileset dir="${classes.ext.arjuna}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-wme.jar">
+			<fileset dir="${classes.ext.wme}" />
+		</jar>
+
+		<copy todir="${lib}">
+			<fileset dir="${src.lib}">
+				<include name="**/*.jar" />
+				<exclude name="ant.jar" />
+			</fileset>
+		</copy>
+
+
+
+		<copy todir="${bin}">
+			<fileset dir="${src.bin}" />
+		</copy>
+
+		<copy todir="${cfg}">
+			<fileset dir="${src.cfg}" />
+		</copy>
+
+		<copy todir="${bin}">
+			<fileset dir="${src}/xml" />
+		</copy>
+
+	</target>
+
+	<target name="weave" depends="jar-ext">
+		<retrotranslator srcjar="${lib}/hermes.jar" destjar="${lib.weaved}/hermes.jar" />
+		<retrotranslator srcjar="${lib}/hermes-activemq.jar" destjar="${lib.weaved}/hermes-activemq.jar" />
+		  <retrotranslator srcjar="${lib}/hermes-seebeyond.jar" destjar="${lib.weaved}/hermes-seebeyond.jar" />
+		<retrotranslator srcjar="${lib}/hermes-arjuna.jar" destjar="${lib.weaved}/hermes-arjuna.jar" />
+		<retrotranslator srcjar="${lib}/hermes-ems.jar" destjar="${lib.weaved}/hermes-ems.jar" />
+		<retrotranslator srcjar="${lib}/hermes-fiorano.jar" destjar="${lib.weaved}/hermes-fiorano.jar" />
+		<retrotranslator srcjar="${lib}/hermes-jbossmq.jar" destjar="${lib.weaved}/hermes-jbossmq.jar" />
+		<retrotranslator srcjar="${lib}/hermes-joram.jar" destjar="${lib.weaved}/hermes-joram.jar" />
+		<retrotranslator srcjar="${lib}/hermes-openjms.jar" destjar="${lib.weaved}/hermes-openjms.jar" />
+		<retrotranslator srcjar="${lib}/hermes-sapjms.jar" destjar="${lib.weaved}/hermes-sapjms.jar" />
+		<retrotranslator srcjar="${lib}/hermes-sonicmq.jar" destjar="${lib.weaved}/hermes-sonicmq.jar" />
+		<retrotranslator srcjar="${lib}/hermes-weblogic.jar" destjar="${lib.weaved}/hermes-weblogic.jar" />
+		<retrotranslator srcjar="${lib}/hermes-webspheremq.jar" destjar="${lib.weaved}/hermes-webspheremq.jar" />
+		<retrotranslator srcjar="${lib}/hermes-wme.jar" destjar="${lib.weaved}/hermes-wme.jar" />
+		<retrotranslator srcjar="${src.lib}/commons-beanutils.jar" destjar="${lib.weaved}/commons-beanutils.jar" />
+		<retrotranslator srcjar="${src.lib}/cglib-2.1_3.jar" destjar="${lib.weaved}/cglib-2.1_3.jar" />
+	</target>
+
+	<target name="webstart" depends="weave">
+		<copy todir="${webstart}">
+			<fileset dir="${lib}" includes="*.jar" />
+			<fileset dir="${src.webstart}" />
+		</copy>
+
+		<copy todir="${webstart.retro}">
+			<fileset dir="${lib.weaved}" includes="*.jar" />
+		</copy>
+
+		<input message="Keystore password:" addproperty="keystore.password" />
+
+		<signjar keystore="${keystore}" alias="${keystore.alias}" storepass="${keystore.password}">
+			<fileset dir="${webstart}" includes="*.jar" />
+			<fileset dir="${webstart.retro}" includes="*.jar" />
+		</signjar>
+	</target>
+
+	<target name="javadoc" depends="init">
+		<javadoc sourcepath="${src.java}" destdir="${javadoc.dir}" packagenames="hermes,hermes.browser,hermes.browser.dialog,hermes.impl,hermes.xml,hermes.config,hermes.ext" classpathref="project.classpath" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build}" />
+	</target>
+
+	<target name="zip" depends="jar">
+		<zip destfile="${build}.zip">
+			<zipfileset dir="${build}" prefix="${build}" />
+		</zip>
+
+		<zip destfile="${build}-src.zip">
+			<zipfileset dir="." includes="README.BUILD,build.properties,build.xml,src/**" excludes="build/**,src/docs/**" prefix="${build}" />
+		</zip>
+	</target>
+
+	<target name="izpack" depends="weave">
+		<izpack input="izpack-install.xml" output="${installer.jar}" installerType="standard" basedir="." izPackDir="${izpack.dir}" />
+
+		<izpack input="izpack-install-with-source.xml" output="hermes-installer-with-source-1.12.jar" installerType="standard" basedir="." izPackDir="${izpack.dir}" />
+
+	</target>
+
+	<target name="release" depends="zip">
+		<ftp server="ftp.hermesjms.com" remotedir="public_html/patches" userid="upload" depends="yes">
+			<fileset dir=".">
+				<include name="${installer.jar}" />
+			</fileset>
+		</ftp>
+	</target>
+</project>
+

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config auditDirectory="c:\temp" autoBrowseRefreshRate="10" copyJMSCorrelationID="false" copyJMSExpiration="false" copyJMSPriority="false" copyJMSReplyTo="false" copyJMSType="false" displayFactoryAdmin="true" embeddedMessageInBrowsePane="false" lastEditedByHermesVersion="v1.9" lastEditedByUser="Colin" maxColumnsInStatisticsTable="10" maxMessagesInBrowserPane="1000" maxThreadPoolSize="5" messageFilesDir="c:\work\workspaces\Hermes\Hermes\hermes-v1.9\bin\.\messages">
+    <classpathGroup id="EMS 4.2">
+        <library jar="C:\local\tibco\ems\clients\java\crimson.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jaxp.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jcert.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jms.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jndi.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jnet.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jsse.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\jta-spec1_0_1.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\tibcrypt.jar" noFactories="true"/>
+        <library factories="com.tibco.tibjms.TibjmsConnectionFactory,com.tibco.tibjms.TibjmsQueueConnectionFactory,com.tibco.tibjms.TibjmsTopicConnectionFactory,com.tibco.tibjms.TibjmsXAQueueConnectionFactory,com.tibco.tibjms.TibjmsXATopicConnectionFactory" jar="C:\local\tibco\ems\clients\java\tibjms.jar" noFactories="false"/>
+        <library jar="C:\local\tibco\ems\clients\java\tibjmsadmin.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\tibjmsapps.jar" noFactories="true"/>
+        <library jar="C:\local\tibco\ems\clients\java\tibrvjms.jar" noFactories="true"/>
+    </classpathGroup>
+    <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+        <properties>
+            <property name="toStringOnObjectMessage" value="false"/>
+            <property name="messageCache" value="100"/>
+            <property name="bytesIsString" value="false"/>
+            <property name="bytesIsObjectBufferSize" value="65536"/>
+            <property name="bytesIsObject" value="false"/>
+        </properties>
+    </renderer>
+    <factory classpathId="System">
+        <provider className="hermes.providers.file.FileConnectionFactory">
+            <properties>
+                <property name="baseDirectory" value="messages"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="Files" reconnects="0"/>
+        </connection>
+        <destination domain="1" name="examples.xml"/>
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+    <factory classpathId="EMS 4.2">
+        <provider className="com.tibco.tibjms.TibjmsConnectionFactory">
+            <properties>
+                <property name="serverUrl" value="tcp://192.168.1.102:7222"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" id="EMS" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="$TMP$.EMS-SERVER.7E842A0123B10.3"/>
+        <destination domain="1" name="$TMP$.EMS-SERVER.7E842A0123B2.1"/>
+        <destination domain="1" name="$sys.admin"/>
+        <destination domain="1" name="$sys.lookup"/>
+        <destination domain="1" name="$sys.undelivered"/>
+        <destination domain="1" name="&gt;"/>
+        <destination domain="1" name="Q1"/>
+        <destination domain="1" name="Q2"/>
+        <destination domain="1" name="queue.sample"/>
+        <destination domain="1" name="sample"/>
+        <destination domain="2" name="&gt;"/>
+        <destination domain="2" name="sample"/>
+        <destination domain="2" name="topic.sample"/>
+        <destination domain="2" name="topic.sample.exported"/>
+        <destination domain="2" name="topic.sample.imported"/>
+        <extension className="hermes.ext.ems.TibcoEMSAdminFactory">
+            <properties>
+                <property name="username" value="admin"/>
+            </properties>
+        </extension>
+    </factory>
+</config>
+

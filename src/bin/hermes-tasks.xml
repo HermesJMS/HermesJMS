@@ -1,0 +1,48 @@
+<project name="hermes-tasks"  default="put" basedir="."> 
+
+   <taskdef name="browse" classname="hermes.ant.BrowseQueueTask"/> 
+   <taskdef name="putXML" classname="hermes.ant.PutXMLTask"/> 
+   <taskdef name="putText" classname="hermes.ant.PutTextTask"/> 
+   <taskdef name="wait" classname="hermes.ant.WaitTask"/>
+   <taskdef name="watchDepth" classname="hermes.ant.RegisterDepthTrigger"/>
+   <taskdef name="hermes.record" classname="hermes.ant.RecordMessagesTask"/>
+   <taskdef name="hermes.replay" classname="hermes.ant.ReplayMessagesTask"/>
+
+   <typedef name="hermes" classname="hermes.ant.HermesSelectionType"/>
+   <typedef name="destination" classname="hermes.ant.DestinationSelectionType"/>
+
+   <property name="destination" value="AAAA"/>
+   <property name="session" value="ActiveMQ"/>
+
+   <target name="browseActiveMQ"> 
+       <browse hermes="${session}" queue="${destination}" config="../cfg/jsig-hermes-config.xml" file="messages.xml"/> 
+   </target> 
+
+    <target name="put"> 
+       <putXML hermes="${session}" destination="${destination}" config="../cfg/jsig-hermes-config.xml" file="messages/examples.xml"/> 
+   </target> 
+
+ <target name="putFIX"> 
+       <putXML hermes="${session}" destination="${destination}" config="../cfg/jsig-hermes-config.xml" file="messages/fix.xml"/> 
+   </target> 
+
+   <target name="depthAlert">
+      <echo message="Alert!"/>
+    </target>
+
+   <target name="watchJBoss">
+      <watchDepth depth="50" target="depthAlert" config="../cfg/jsig-hermes-config.xml">
+          <hermes name="JBoss">
+	    <destination name="queue/A"/>
+	  </hermes>
+      </watchDepth>
+   </target>
+
+   <target name="watch" depends="watchJBoss">
+      <wait/>
+   </target>
+
+   <target name="replay">
+      <hermes.replay storeId="myMessages" hermes="ActiveMQ" config="../cfg/web-hermes-config.xml"/>
+   </target>
+</project> 

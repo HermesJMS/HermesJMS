@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Hermes Configuration Schema -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:complexType name="PropertyConfig">
+ 		<xs:attribute name="name" type="xs:string"/>	
+		<xs:attribute name="value" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="ProviderConfig">	
+		<xs:sequence>
+			<xs:element name="properties" type="PropertySetConfig" minOccurs='0' maxOccurs='1'/>
+		</xs:sequence>
+		
+		<xs:attribute name="className" type="xs:string" />
+		<xs:attribute name="trace" type="xs:boolean"/>
+	</xs:complexType>
+			
+	<xs:complexType name="PropertySetConfig">
+	 	<xs:sequence>
+			<xs:element name="property" type="PropertyConfig"  minOccurs='0' maxOccurs='unbounded'/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ConnectionConfig">
+		<xs:sequence>
+			<xs:element name="session" type="SessionConfig" minOccurs='0' maxOccurs='unbounded'/>
+		</xs:sequence>
+		<xs:attribute name="username" type="xs:string"/>
+		<xs:attribute name="password" type="xs:string"/>
+		<xs:attribute name="clientID" type="xs:string"/>
+		<xs:attribute name="connectionPerThread" type="xs:boolean"/>
+	</xs:complexType>
+	
+	<xs:complexType name="SessionConfig">
+		<xs:attribute name="id" type="xs:string" />
+		<xs:attribute name="reconnects" type="xs:integer"/>
+		<xs:attribute name="transacted" type="xs:boolean"/>
+		<xs:attribute name="audit" type="xs:boolean"/>
+		<xs:attribute name="auditDirectory" type="xs:string"/>
+		<xs:attribute name="checkSize" type="xs:boolean"/>
+		<xs:attribute name="checkSizePeriod" type="xs:long"/>
+	</xs:complexType>
+	
+	<xs:complexType name="ProviderExtConfig">
+		<xs:sequence>
+			<xs:element name="properties" type="PropertySetConfig" minOccurs='1' maxOccurs='1'/>
+		</xs:sequence>
+		
+		<xs:attribute type="xs:string" name="className"/>
+	</xs:complexType>
+
+	<xs:complexType name="ClasspathGroupConfig">
+		<xs:sequence>
+			<xs:element name="library" type="ClasspathConfig" minOccurs='0' maxOccurs='unbounded'/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string"/>
+	</xs:complexType>
+	
+	<xs:complexType name="ClasspathConfig">
+		<xs:attribute name="jar" type="xs:string" />
+		<xs:attribute name="noFactories" type="xs:boolean"/>
+		<xs:attribute name="factories" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="DestinationConfig">
+		<xs:sequence>
+			<xs:element name="properties" type="PropertySetConfig" minOccurs='0' maxOccurs='1'/>
+			<xs:element name="renderer" type="RendererConfig" minOccurs='0' maxOccurs='1'/>
+		</xs:sequence>
+		<xs:attribute name="className" type="xs:string"/>
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="shortName" type="xs:string"/>	
+		<xs:attribute name="domain" type="xs:int"/>
+		<xs:attribute name="clientID" type="xs:string"/>
+     	<xs:attribute name="durable" type="xs:boolean"/>
+     	<xs:attribute name="unsubscribeOnClose" type="xs:boolean"/>
+		<xs:attribute name="selector" type="xs:string"/>
+		<xs:attribute name="useLocalRenderer" type="xs:boolean"/>
+	</xs:complexType>
+
+	<xs:complexType name="RendererConfig">
+		<xs:sequence>
+			<xs:element name="properties" type="PropertySetConfig" minOccurs='0' maxOccurs='1'/>
+		</xs:sequence>
+
+		<xs:attribute name="className" type="xs:string"/>
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="HermesConfig">
+		<xs:sequence>
+			<xs:element name="classpathGroup" type="ClasspathGroupConfig" minOccurs='0' maxOccurs='unbounded'/>
+			<xs:element name="watch" type="WatchConfig" minOccurs='0' maxOccurs='unbounded'/>
+			<xs:element name="naming" type="NamingConfig" minOccurs='0' maxOccurs='unbounded'/>
+			<xs:element name="renderer" type="RendererConfig" minOccurs='0' maxOccurs='unbounded'/>
+			<xs:element name="loader" type="ClasspathConfig" minOccurs='0' maxOccurs='unbounded'/>
+			<xs:element name="factory" type="FactoryConfig" minOccurs='0' maxOccurs='unbounded' />
+			<xs:element name="remote" type="RemoteConfig" minOccurs='0' maxOccurs='unbounded' />
+		</xs:sequence>
+
+		<xs:attribute name="version" type="xs:int"/>
+		<xs:attribute name="lastEditedByUser" type="xs:string"/>
+	    <xs:attribute name="lastEditedByHermesVersion" type="xs:string"/>
+		<xs:attribute name="displayName" type="xs:string"/>
+		<xs:attribute name="maxThreadPoolSize" type="xs:int"/>
+		<xs:attribute name="auditDirectory" type="xs:string"/>
+		<xs:attribute name="messageFilesDir" type="xs:string"/>
+	    <xs:attribute name="maxMessagesInBrowserPane" type="xs:int"/>
+	    <xs:attribute name="copyJMSCorrelationID" type="xs:boolean"/>
+	    <xs:attribute name="copyJMSType" type="xs:boolean"/>
+	    <xs:attribute name="copyJMSExpiration" type="xs:boolean"/>
+	    <xs:attribute name="copyJMSReplyTo" type="xs:boolean"/>
+	    <xs:attribute name="copyJMSPriority" type="xs:boolean"/>
+	    <xs:attribute name="embeddedMessageInBrowsePane" type="xs:boolean"/>
+	    <xs:attribute name="displayFactoryAdmin" type="xs:boolean"/>
+	    <xs:attribute name="maxColumnsInStatisticsTable" type="xs:int"/>
+	    <xs:attribute name="autoBrowseRefreshRate" type="xs:int"/>
+	    <xs:attribute name="correctDropSemantics" type="xs:boolean"/>
+	</xs:complexType>
+
+	<xs:complexType name="FactoryConfig">
+		<xs:sequence>
+			<xs:element name="provider" type="ProviderConfig" minOccurs='1' maxOccurs='1' />
+			<xs:element name="connection" type="ConnectionConfig" minOccurs='1' maxOccurs='unbounded'/>
+			<xs:element name="destination" type="DestinationConfig" minOccurs='0' maxOccurs='unbounded'/>
+			<xs:element name="extension" type="ProviderExtConfig" minOccurs='0' maxOccurs="1"/>
+		</xs:sequence>
+		
+		<xs:attribute name="classpathId" type="xs:string"/>
+	</xs:complexType>
+	
+	<xs:complexType name="WatchDestinationConfig">
+		<xs:attribute type="xs:string" name="hermes"/>
+		<xs:attribute type="xs:string" name="destinationName"/>
+		<xs:attribute type="xs:int" name="depthAlertThreshold"/>
+		<xs:attribute type="xs:long" name="ageAlertThreshold"/>
+		<xs:attribute type="xs:boolean" name="allDestinations"/>
+	</xs:complexType>
+	
+	<xs:complexType name="WatchConfig">
+		<xs:sequence>
+			<xs:element name="destination" type="WatchDestinationConfig" minOccurs='0' maxOccurs='unbounded'/>
+		</xs:sequence>
+		<xs:attribute type="xs:string" name="id"/>
+		<xs:attribute type="xs:int" name="defaultDepthAlertThreshold"/>
+		<xs:attribute type="xs:long" name="defaultAgeAlertThreshold"/>
+		<xs:attribute type="xs:boolean" name="showAge"/>
+		<xs:attribute type="xs:long" name="updateFrequency"/>
+		
+	</xs:complexType>
+	
+	<xs:complexType name="NamingConfig">
+		<xs:sequence>
+			<xs:element name="properties" type="PropertySetConfig" minOccurs='0' maxOccurs='1'/>
+		</xs:sequence>
+	
+		<xs:attribute type="xs:string" name="id"/>
+		<xs:attribute type="xs:string" name="classpathId"/>
+	</xs:complexType>
+	
+	<xs:complexType name="NamingProviderConfig">
+		<xs:sequence>
+			<xs:element type="NamingConfig" name="namingConfig" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		
+		<xs:attribute type="xs:string" name="connectionFactoryBinding"/>
+	</xs:complexType>
+
+	<xs:complexType name="RemoteConfig">
+		<xs:sequence>
+			<xs:element name="namingConfig" type="NamingConfig" minOccurs='1' maxOccurs='1'/>
+		</xs:sequence>
+
+		<xs:attribute name="binding" type="xs:string"/>
+		<xs:attribute name="id" type="xs:string"/>
+	</xs:complexType>
+	
+	<xs:element name="config" type="HermesConfig" />
+	
+</xs:schema>
