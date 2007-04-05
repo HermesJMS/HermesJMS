@@ -43,6 +43,10 @@ public abstract class AbstractTreeNode extends DefaultMutableTreeNode
       this.bean = bean;
    }
 
+   public void setId(String id)
+   {
+      this.id = id ;
+   }
    public String getPathFromRoot()
    {
       

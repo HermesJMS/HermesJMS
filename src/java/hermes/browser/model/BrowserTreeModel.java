@@ -24,6 +24,7 @@ import hermes.HermesException;
 import hermes.HermesRepository;
 import hermes.HermesRepositoryListener;
 import hermes.HermesRuntimeException;
+import hermes.JNDIConnectionFactory;
 import hermes.browser.HermesBrowser;
 import hermes.browser.model.tree.AbstractTreeNode;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
@@ -280,16 +281,30 @@ public class BrowserTreeModel extends DefaultTreeModel implements HermesConfigur
                else
                {
                   destinationMap.put(key, dNode);
-                  
+
                   if (cfNode.isCascadeNamespace())
                   {
-                     TreeUtils.add(BrowserTreeModel.this, cfNode.getHermes(), destinationConfig.getName(), ".", cfNode, dNode);
+                     try
+                     {
+                        if (cfNode.getHermes().getConnectionFactory() instanceof JNDIConnectionFactory)
+                        {
+                           TreeUtils.add(BrowserTreeModel.this, cfNode.getHermes(), destinationConfig.getName(), "/", cfNode, dNode);
+                        }
+                        else
+                        {
+                           TreeUtils.add(BrowserTreeModel.this, cfNode.getHermes(), destinationConfig.getName(), ".", cfNode, dNode);
+                        }
+                     }
+                     catch (JMSException ex)
+                     {
+                        HermesBrowser.getBrowser().showErrorDialog(ex);
+                     }
                   }
                   else
                   {
                      cfNode.add(dNode);
-                     nodesWereInserted(cfNode, new int[] { cfNode.getIndex(dNode) }) ;                     
-                  }                  
+                     nodesWereInserted(cfNode, new int[] { cfNode.getIndex(dNode) });
+                  }
                }
             }
          }
@@ -322,15 +337,15 @@ public class BrowserTreeModel extends DefaultTreeModel implements HermesConfigur
                      }
                      else if (node.getParent() instanceof DestinationFragmentTreeNode)
                      {
-                        AbstractTreeNode cleanup = node ;
+                        AbstractTreeNode cleanup = node;
                         do
                         {
-                           AbstractTreeNode cleanupParent = (AbstractTreeNode) cleanup.getParent() ;
+                           AbstractTreeNode cleanupParent = (AbstractTreeNode) cleanup.getParent();
                            int index = cleanupParent.getIndex(cleanup);
                            cleanupParent.remove(cleanup);
-                           
+
                            nodesWereRemoved(cleanupParent, new int[] { index }, new Object[] { cleanup });
-                           cleanup = cleanupParent ;
+                           cleanup = cleanupParent;
                         }
                         while (cleanup.getChildCount() == 0 && cleanup instanceof DestinationFragmentTreeNode);
                      }

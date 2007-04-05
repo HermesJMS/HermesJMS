@@ -51,7 +51,6 @@ public class DestinationConfigTreeNode extends AbstractTreeNode
          {
             return -1;
          }
-
       }
    }
 
@@ -83,10 +82,6 @@ public class DestinationConfigTreeNode extends AbstractTreeNode
       }
    }
    
-   public  void setCascadeNamespace(boolean cascadeNamespace)
-   {
-      setUserObject(getLabel((DestinationConfig) getBean(), cascadeNamespace)) ;
-   }
    
    public String getToolTipText()
    {

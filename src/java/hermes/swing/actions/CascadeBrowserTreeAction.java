@@ -17,6 +17,7 @@
 
 package hermes.swing.actions;
 
+import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
 import hermes.browser.components.BrowserTree;
 import hermes.browser.model.TreeUtils;
@@ -28,6 +29,8 @@ import javax.swing.Action;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
+
+import org.apache.commons.digester.SetNextRule;
 
 /**
  * @author colincrist@hermesjms.com
@@ -42,36 +45,40 @@ public class CascadeBrowserTreeAction extends ActionSupport
    {
       this.browserTree = browserTree;
 
-      putValue(Action.NAME, "Cascade");
-      putValue(Action.SHORT_DESCRIPTION, "Cascade tree.");
-      putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.collapse.all"));
+      putValue(Action.NAME, "Cascade/Collapse");
+      putValue(Action.SHORT_DESCRIPTION, "Cascade or collapse the session tree.");
+      putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.collapse.cf"));
+      setEnabled(false) ;
       
-      
-
       browserTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener()
       {
          public void valueChanged(TreeSelectionEvent e)
          {
-            CascadeBrowserTreeAction.this.setEnabled(e.getPath() != null && TreeUtils.pathContains(e.getPaths(), HermesTreeNode.class));
+            CascadeBrowserTreeAction.this.setEnabled(e.getPath() != null && TreeUtils.pathContains(e.getPaths(), HermesTreeNode.class));                      
          }
       });
    }
 
    public void actionPerformed(ActionEvent e)
    {
-      TreePath[] paths = browserTree.getSelectionPaths() ;
-      
-      for (int i = 0 ; i < paths.length ; i++)
+      TreePath path = browserTree.getSelectionPath();
+
+      for (int j = 0; j < path.getPathCount(); j++)
       {
-         for (int j = 0 ; j < paths[i].getPathCount() ; j++)
+         if (path.getPath()[j] instanceof HermesTreeNode)
          {
-            if (paths[i].getPath()[j] instanceof HermesTreeNode)
+            HermesTreeNode node = (HermesTreeNode) path.getPath()[j];
+            node.setCascadeNamespace(!node.isCascadeNamespace()); 
+            
+            TreePath cascadeFrom = path ;
+            
+            while (!(cascadeFrom.getLastPathComponent() instanceof HermesTreeNode))
             {
-               HermesTreeNode node = (HermesTreeNode) paths[i].getPath()[j] ;
-               node.setCascadeNamespace(!node.isCascadeNamespace()) ;               
+               cascadeFrom = path.getParentPath() ;
             }
+            
+            TreeUtils.expandFully(browserTree, cascadeFrom) ;            
          }
       }
-     
    }
 }

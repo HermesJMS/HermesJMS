@@ -18,6 +18,8 @@
 package hermes.browser.model.tree;
 
 import hermes.Hermes;
+import hermes.JNDIConnectionFactory;
+import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
 import hermes.browser.model.BrowserTreeModel;
 import hermes.browser.model.TreeUtils;
@@ -28,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.jms.JMSException;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
@@ -91,24 +94,36 @@ public class HermesTreeNode extends AbstractTreeNode
       this.cascadeNamespace = cascadeNamespace;
 
       HashMap<DestinationConfigKeyWrapper, DestinationConfigTreeNode> map = new HashMap<DestinationConfigKeyWrapper, DestinationConfigTreeNode>();
-      getDestinationTreeNodes(this, map) ;
+      getDestinationTreeNodes(this, map);
       removeAllChildren();
-      model.nodeStructureChanged(this) ;
-      
+      model.nodeStructureChanged(this);
+
       for (Map.Entry<DestinationConfigKeyWrapper, DestinationConfigTreeNode> entry : map.entrySet())
-      {
-         entry.getValue().setCascadeNamespace(isCascadeNamespace()) ;
-         
+      {       
          if (isCascadeNamespace())
-         {            
-            TreeUtils.add(model, entry.getValue().getHermesTreeNode().getHermes(), entry.getValue().getDestinationName(), ".", this, entry.getValue());            
+         {
+            try
+            {
+               if (getHermes().getConnectionFactory() instanceof JNDIConnectionFactory)
+               {
+                  TreeUtils.add(model, entry.getValue().getHermesTreeNode().getHermes(), entry.getValue().getDestinationName(), "/", this, entry.getValue());
+               }
+               else
+               {
+                  TreeUtils.add(model, entry.getValue().getHermesTreeNode().getHermes(), entry.getValue().getDestinationName(), ".", this, entry.getValue());
+               }
+            }
+            catch (JMSException ex)
+            {
+               HermesBrowser.getBrowser().showErrorDialog(ex);
+            }
          }
          else
          {
-            entry.getValue().setUserObject(entry.getValue().getDestinationName()) ;
-            add(entry.getValue()) ;                
-         }     
-      }         
+            entry.getValue().setUserObject(entry.getValue().getDestinationName());
+            add(entry.getValue());
+         }
+      }
    }
 
    public Hermes getHermes()
