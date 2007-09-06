@@ -66,6 +66,7 @@ import hermes.swing.actions.GetDestinationStatisticsAction;
 import hermes.swing.actions.JNDIUnbindAction;
 import hermes.swing.actions.PasteMessagesFromClipboardAction;
 import hermes.swing.actions.RenameJNDIBindingAction;
+import hermes.swing.actions.SaveAllMessagesAsXMLAction;
 import hermes.swing.actions.SaveMessagesAsTextAction;
 import hermes.swing.actions.SaveMessagesAsXMLAction;
 import hermes.swing.actions.SaveMessagesIndividuallyAsXMLAction;
@@ -304,6 +305,7 @@ public class PopupMenuFactory
       popupMenu.add(truncateItem);
       popupMenu.add(watchMenu);
       popupMenu.add(recordMenu);
+      popupMenu.add(new JMenuItem(ActionRegistry.getAction(SaveAllMessagesAsXMLAction.class))) ;
       popupMenu.add(replayMenu);
       popupMenu.add(unsubscribe);
       popupMenu.addSeparator() ;

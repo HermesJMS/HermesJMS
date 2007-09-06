@@ -35,6 +35,7 @@ import javax.swing.ProgressMonitor;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * Truncate a queue.
@@ -46,15 +47,15 @@ import org.apache.log4j.Category;
 
 public class TruncateQueueTask extends TaskSupport
 {
-   private static final Category cat = Category.getInstance(TruncateQueueTask.class);
-   public static final int USE_SELECTOR = 1;
-   public static final int USE_MESSAGE_ACKNOWLEDGE = 2;
+   private static final Logger log = Logger.getLogger(TruncateQueueTask.class);
+  
 
    private DestinationConfig dConfig;
    private Hermes hermes;
    private Collection messageIds;
-   private int mode = USE_SELECTOR;
+ 
    private boolean showWarning = true;
+   private ProgressMonitor monitor ;
 
    public TruncateQueueTask(Hermes hermes, DestinationConfig dConfig, boolean showWarning)
    {
@@ -65,20 +66,20 @@ public class TruncateQueueTask extends TaskSupport
       this.showWarning = showWarning;
    }
 
-   public TruncateQueueTask(Hermes hermes, DestinationConfig dConfig, Collection messageIds, int mode, boolean showWarning)
+   public TruncateQueueTask(Hermes hermes, DestinationConfig dConfig, Collection messageIds, boolean showWarning)
    {
       super(IconCache.getIcon("hermes.messages.delete"));
 
       this.dConfig = dConfig;
       this.hermes = hermes;
       this.messageIds = messageIds;
-      this.mode = mode;
+    
       this.showWarning = showWarning;
    }
 
    public String getTitle()
    {
-      return (messageIds == null ? "Truncate" : "Delete") + " from " + dConfig.getName() ;
+      return (messageIds == null ? "Truncate" : "Delete") + " from " + dConfig.getName();
    }
 
    public void invoke() throws Exception
@@ -148,11 +149,13 @@ public class TruncateQueueTask extends TaskSupport
 
          if (size == 1)
          {
-            Hermes.ui.getDefaultMessageSink().add("Message deleted from " + dConfig.getName() + (dConfig.isDurable() ?  " durableName=" + dConfig.getClientID() : ""));
+            Hermes.ui.getDefaultMessageSink().add(
+                  "Message deleted from " + dConfig.getName() + (dConfig.isDurable() ? " durableName=" + dConfig.getClientID() : ""));
          }
          else
          {
-            Hermes.ui.getDefaultMessageSink().add("Deleted " + size + " messages from " + dConfig.getName() + (dConfig.isDurable() ?  " durableName=" + dConfig.getClientID() : ""));
+            Hermes.ui.getDefaultMessageSink().add(
+                  "Deleted " + size + " messages from " + dConfig.getName() + (dConfig.isDurable() ? " durableName=" + dConfig.getClientID() : ""));
          }
       }
    }
@@ -203,8 +206,11 @@ public class TruncateQueueTask extends TaskSupport
       if (isRunning())
       {
          final StringBuffer message = new StringBuffer();
-         ProgressMonitor monitor = new ProgressMonitor(HermesBrowser.getBrowser(), "Deleting " + messageIds.size()
-               + ((messageIds.size() == 1) ? " message" : " messages") + " from " + dConfig.getName(), "Connecting...", 0, messageIds.size());
+         monitor = new ProgressMonitor(HermesBrowser.getBrowser(), "Deleting " + messageIds.size()
+               + ((messageIds.size() == 1) ? " message" : " messages") + " from " + dConfig.getName(), "Connecting...", 0, messageIds.size())
+         {
+            
+         };
 
          monitor.setMillisToDecideToPopup(50);
          monitor.setMillisToPopup(100);
@@ -212,95 +218,27 @@ public class TruncateQueueTask extends TaskSupport
          try
          {
 
-            StringBuffer sqlBuffer = new StringBuffer();
+            hermes.delete(dConfig, messageIds, monitor);
 
-            if (mode == USE_SELECTOR)
+            if (isRunning())
             {
-               for (Iterator iter = messageIds.iterator(); iter.hasNext();)
-               {
-                  sqlBuffer.append("JMSMessageID = \'").append(iter.next()).append("\'");
-
-                  if (iter.hasNext())
-                  {
-                     sqlBuffer.append(" or ");
-                  }
-               }
-            }
-
-            final Destination d = hermes.getDestination(dConfig.getName(), Domain.getDomain(dConfig.getDomain()));
-            final String sql = sqlBuffer.toString();
-            int deleted = 0;
-
-            while (deleted < messageIds.size() && isRunning())
-            {
-               boolean wasDeleted = false;
-               Message m = hermes.receive(d, 10000, sql);
-
-               if (m != null)
-               {
-                  if (mode == USE_MESSAGE_ACKNOWLEDGE)
-                  {
-                     if (messageIds.contains(m.getJMSMessageID()))
-                     {
-                        m.acknowledge();
-                        wasDeleted = true;
-                        monitor.setNote(new Long(++deleted) + " messages deleted.");
-                        monitor.setProgress(deleted);
-                     }
-                  }
-                  else
-                  {
-                     wasDeleted = true;
-                  }
-
-                  if (wasDeleted)
-                  {
-                     monitor.setNote(new Long(++deleted) + " messages deleted.");
-                     monitor.setProgress(deleted);
-                  }
-
-               }
-               else
-               {
-                  stop();
-
-                  message.append("Timeout reading from message consumer.");
-
-                  HermesBrowser
-                        .getBrowser()
-                        .showErrorDialog(
-                              message.toString()
-                                    + "\nThis could be because the messages have already been deleted, the provider is slow or does not properly implement SQL92 selectors.");
-               }
-            }
-
-            if (mode == USE_SELECTOR)
-            {
-               if (isRunning())
-               {
-                  hermes.commit();
-                  message.append("Messages deleted and committed");
-               }
-               else
-               {
-                  hermes.rollback();
-                  message.append("Messages rolledback");
-               }
+               hermes.commit();
+               message.append("Messages deleted and committed");
             }
             else
             {
-               message.append("Messages deleted and committed");
+               hermes.rollback();
+               message.append("Messages rolledback");
             }
 
             hermes.close();
 
             Hermes.ui.getDefaultMessageSink().add(message.toString());
-
          }
          catch (Exception ex)
          {
             message.append("During delete from ").append(dConfig.getName()).append(": ").append(ex.getMessage());
-            cat.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
 
             try
             {
@@ -309,7 +247,7 @@ public class TruncateQueueTask extends TaskSupport
             catch (JMSException ex2)
             {
                message.append("\nRollback also failed, probably transport failure.");
-               cat.error(ex2);
+               log.error(ex2);
             }
 
             SwingRunner.invokeLater(new Runnable()
@@ -325,5 +263,5 @@ public class TruncateQueueTask extends TaskSupport
             monitor.close();
          }
       }
-   }
+   } 
 }

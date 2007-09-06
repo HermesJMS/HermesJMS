@@ -98,6 +98,7 @@ fi
 # Set HERMES_LIB location
 
 HERMES_LIB="${HERMES_HOME}/lib"
+HERMES_LIB_WEAVED="${HERMES_HOME}/lib.weaved"
 
 #
 # Setup the Java VM
@@ -135,6 +136,20 @@ do
     LOCALCLASSPATH=$LOCALCLASSPATH:$HERMES_LIB/$F
   fi
 done
+
+#
+# If we're using the weaved code, add all the weaved libs to the start of the CLASSPATH
+
+if $hermes_weaved ; then
+  HERMES_LIB_PROPERTY=$HERMES_LIB_WEAVED
+
+  for F in `ls $HERMES_LIB_WEAVED`
+  do    
+    LOCALCLASSPATH=$HERMES_LIB_WEAVED/$F:$LOCALCLASSPATH
+  done
+else
+  HERMES_LIB_PROPERTY=$HERMES_LIB
+fi
 
 #
 # See if we can find a config file.
@@ -177,4 +192,4 @@ fi
 #
 # Run main()
 
-$JAVACMD -Dlog4j.configuration=file:$HERMES_HOME/bin/log4j.props $HERMES_OPTS -Dhermes.home=$HERMES_HOME -Dhermes=$HERMES_CFG -Dhermes.libs=$HERMES_LIB -classpath $LOCALCLASSPATH  hermes.browser.HermesBrowser
+"$JAVACMD" $HERMES_OPTS -Dhermes.home=$HERMES_HOME -Dhermes=$HERMES_CFG -Dhermes.libs=$HERMES_LIB_PROPERTY -classpath $LOCALCLASSPATH  hermes.browser.HermesBrowser

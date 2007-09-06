@@ -32,6 +32,8 @@ import java.util.TreeMap;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Queue;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.TopicConnectionFactory;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -98,15 +100,16 @@ public class TibcoEMSAdmin extends HermesAdminSupport implements HermesAdmin
       {
          try
          {
-            DurableInfo info =  getAdmin().getDurable(destination.getClientID(), getHermes().getConnection().getClientID()) ;
-            
+            DurableInfo info = getAdmin().getDurable(destination.getClientID(), getHermes().getConnection().getClientID());
+
             if (info != null)
             {
-               return (int) info.getPendingMessageCount(); 
+               return (int) info.getPendingMessageCount();
             }
             else
             {
-               throw new HermesException("No durable information availble for clientID=" + getHermes().getConnection().getClientID() + ", durableName=" + destination.getClientID()) ;
+               throw new HermesException("No durable information availble for clientID=" + getHermes().getConnection().getClientID() + ", durableName="
+                     + destination.getClientID());
             }
          }
          catch (TibjmsAdminException ex)
@@ -222,7 +225,7 @@ public class TibcoEMSAdmin extends HermesAdminSupport implements HermesAdmin
          {
             if (dConfig.isDurable())
             {
-               getAdmin().purgeDurable(dConfig.getClientID(), getHermes().getConnection().getClientID()) ;
+               getAdmin().purgeDurable(dConfig.getClientID(), getHermes().getConnection().getClientID());
             }
             else
             {
@@ -250,65 +253,71 @@ public class TibcoEMSAdmin extends HermesAdminSupport implements HermesAdmin
       try
       {
          final Collection<DestinationConfig> rval = new ArrayList<DestinationConfig>();
-         final QueueInfo[] qinfos = getAdmin().getQueues();
-
-         for (int i = 0; i < qinfos.length; i++)
+         
+         if (!(getHermes().getConnectionFactory() instanceof TopicConnectionFactory))
          {
-            if (getHermes().getConnectionFactory() instanceof JNDIConnectionFactory)
+            final QueueInfo[] qinfos = getAdmin().getQueues();
+
+            for (int i = 0; i < qinfos.length; i++)
             {
-               if (qinfos[i].getJNDINames() != null)
+               if (getHermes().getConnectionFactory() instanceof JNDIConnectionFactory)
                {
-                  for (int j = 0; j < qinfos[i].getJNDINames().length; j++)
+                  if (qinfos[i].getJNDINames() != null)
                   {
-                     final DestinationConfig dConfig = HermesBrowser.getConfigDAO().createDestinationConfig();
+                     for (int j = 0; j < qinfos[i].getJNDINames().length; j++)
+                     {
+                        final DestinationConfig dConfig = HermesBrowser.getConfigDAO().createDestinationConfig();
 
-                     dConfig.setName(qinfos[i].getJNDINames()[j]);
-                     dConfig.setDomain(Domain.QUEUE.getId());
-                     rval.add(dConfig);
+                        dConfig.setName(qinfos[i].getJNDINames()[j]);
+                        dConfig.setDomain(Domain.QUEUE.getId());
+                        rval.add(dConfig);
 
+                     }
                   }
                }
-            }
-            else
-            {
-               final DestinationConfig dConfig = HermesBrowser.getConfigDAO().createDestinationConfig();
+               else
+               {
+                  final DestinationConfig dConfig = HermesBrowser.getConfigDAO().createDestinationConfig();
 
-               dConfig.setName(qinfos[i].getName());
-               dConfig.setDomain(Domain.QUEUE.getId());
-               rval.add(dConfig);
+                  dConfig.setName(qinfos[i].getName());
+                  dConfig.setDomain(Domain.QUEUE.getId());
+                  rval.add(dConfig);
+               }
             }
          }
 
-         final TopicInfo[] tinfos = getAdmin().getTopics();
-
-         for (int i = 0; i < tinfos.length; i++)
+         if (!(getHermes().getConnectionFactory() instanceof QueueConnectionFactory))
          {
-            if (getHermes().getConnectionFactory() instanceof JNDIConnectionFactory)
-            {
-               if (tinfos[i].getJNDINames() != null)
-               {
-                  for (int j = 0; j < tinfos[i].getJNDINames().length; j++)
-                  {
-                     final DestinationConfig dConfig = HermesBrowser.getConfigDAO().createDestinationConfig();
+            final TopicInfo[] tinfos = getAdmin().getTopics();
 
-                     dConfig.setName(tinfos[i].getJNDINames()[j]);
-                     dConfig.setDomain(Domain.TOPIC.getId());
-                     rval.add(dConfig);
-                     rval.addAll(discoverDurableSubscriptions(tinfos[i].getName(), tinfos[i].getJNDINames()[j]));
+            for (int i = 0; i < tinfos.length; i++)
+            {
+               if (getHermes().getConnectionFactory() instanceof JNDIConnectionFactory)
+               {
+                  if (tinfos[i].getJNDINames() != null)
+                  {
+                     for (int j = 0; j < tinfos[i].getJNDINames().length; j++)
+                     {
+                        final DestinationConfig dConfig = HermesBrowser.getConfigDAO().createDestinationConfig();
+
+                        dConfig.setName(tinfos[i].getJNDINames()[j]);
+                        dConfig.setDomain(Domain.TOPIC.getId());
+                        rval.add(dConfig);
+                        rval.addAll(discoverDurableSubscriptions(tinfos[i].getName(), tinfos[i].getJNDINames()[j]));
+                     }
                   }
                }
+               else
+               {
+                  final DestinationConfig dConfig = HermesBrowser.getConfigDAO().createDestinationConfig();
+                  dConfig.setName(tinfos[i].getName());
+
+                  dConfig.setDomain(Domain.TOPIC.getId());
+                  rval.add(dConfig);
+
+                  rval.addAll(discoverDurableSubscriptions(tinfos[i].getName(), null));
+               }
             }
-            else
-            {
-               final DestinationConfig dConfig = HermesBrowser.getConfigDAO().createDestinationConfig();
-               dConfig.setName(tinfos[i].getName());
-
-               dConfig.setDomain(Domain.TOPIC.getId());
-               rval.add(dConfig);
-
-               rval.addAll(discoverDurableSubscriptions(tinfos[i].getName(), null));
-            }
-
          }
 
          return rval;

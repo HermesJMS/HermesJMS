@@ -95,7 +95,8 @@ public class ThreadLocalSessionManager extends AbstractSessionManager
       {
          closeConsumers((Map) consumersTL.get());
          closeConsumers((Map) consumersWithSelectorTL.get());
-
+        
+         
          try
          {
             getSession().close();

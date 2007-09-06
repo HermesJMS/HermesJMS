@@ -472,7 +472,7 @@ public class DefaultXMLHelper implements XMLHelper
             }
             else if (property.getType().equals(Boolean.class.getName()))
             {
-               rval.setBooleanProperty(property.getName(), Boolean.getBoolean(property.getValue()));
+               rval.setBooleanProperty(property.getName(), Boolean.parseBoolean(property.getValue()));
             }
             else if (property.getType().equals(Short.class.getName()))
             {
@@ -481,7 +481,7 @@ public class DefaultXMLHelper implements XMLHelper
             else if (property.getType().equals(Integer.class.getName()))
             {
                rval.setIntProperty(property.getName(), Integer.parseInt(property.getValue()));
-            }
+            }           
          }
 
          return rval;

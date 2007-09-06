@@ -36,6 +36,7 @@ import javax.swing.table.TableCellRenderer;
 import org.apache.log4j.Category;
 
 import com.jidesoft.grid.JideTable;
+import com.jidesoft.grid.SortableTable;
 
 /**
  * @author colincrist@hermesjms.com
@@ -43,7 +44,7 @@ import com.jidesoft.grid.JideTable;
  *          Exp $
  */
 
-public class MessageHeaderTable extends JideTable
+public class MessageHeaderTable extends SortableTable
 {
    private static final Category cat = Category.getInstance(MessageHeaderTable.class);
 
@@ -59,6 +60,7 @@ public class MessageHeaderTable extends JideTable
       MessageHeaderTableSupport.init(action, this, myFlavours);
 
       setDragEnabled(true);
+      
 
       /* TODO: Finish support for adding user properties to the table.
       model.addTableModelListener(new TableModelListener()

@@ -100,17 +100,19 @@ public class HermesTreeNode extends AbstractTreeNode
 
       for (Map.Entry<DestinationConfigKeyWrapper, DestinationConfigTreeNode> entry : map.entrySet())
       {       
+         DestinationConfigTreeNode destinationNode = entry.getValue() ;
+         
          if (isCascadeNamespace())
          {
             try
             {
                if (getHermes().getConnectionFactory() instanceof JNDIConnectionFactory)
                {
-                  TreeUtils.add(model, entry.getValue().getHermesTreeNode().getHermes(), entry.getValue().getDestinationName(), "/", this, entry.getValue());
+                  TreeUtils.add(model, entry.getValue().getHermesTreeNode().getHermes(), entry.getValue().getDestinationName(), "/", this, new DestinationConfigTreeNode(this, destinationNode.getConfig(), true));
                }
                else
                {
-                  TreeUtils.add(model, entry.getValue().getHermesTreeNode().getHermes(), entry.getValue().getDestinationName(), ".", this, entry.getValue());
+                  TreeUtils.add(model, entry.getValue().getHermesTreeNode().getHermes(), entry.getValue().getDestinationName(), ".", this, new DestinationConfigTreeNode(this, destinationNode.getConfig(), true));
                }
             }
             catch (JMSException ex)
@@ -119,9 +121,8 @@ public class HermesTreeNode extends AbstractTreeNode
             }
          }
          else
-         {
-            entry.getValue().setUserObject(entry.getValue().getDestinationName());
-            add(entry.getValue());
+         {            
+            add(new DestinationConfigTreeNode(this, destinationNode.getConfig(), false));
          }
       }
    }

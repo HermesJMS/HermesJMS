@@ -27,6 +27,7 @@ import hermes.browser.MessageRenderer;
 import hermes.config.DestinationConfig;
 import hermes.impl.TopicBrowser;
 import hermes.util.JMSUtils;
+import hermes.util.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,7 +66,8 @@ public abstract class HermesAdminSupport
    private final List statisticsHeader = new ArrayList();
    private final Map destinationConfigs = new HashMap();
    private final Hermes hermes;
-   private boolean isNameInNamespaceCheck = true ;
+   private boolean isNameInNamespaceCheck = true;
+   private long ms = 10000;
 
    static
    {
@@ -85,6 +87,57 @@ public abstract class HermesAdminSupport
       super();
 
       this.hermes = hermes;
+   }
+   
+   public void delete(DestinationConfig dConfig, Collection<String> messageIds) throws JMSException, NamingException
+   {
+      delete(dConfig, messageIds, null) ;   
+   }
+
+   public void delete(DestinationConfig dConfig, Collection<String> messageIds, ProgressMonitor progress) throws JMSException, NamingException
+   {
+      StringBuffer sqlBuffer = new StringBuffer();
+
+      for (Iterator iter = messageIds.iterator(); iter.hasNext();)
+      {
+         sqlBuffer.append("JMSMessageID = \'").append(iter.next()).append("\'");
+
+         if (iter.hasNext())
+         {
+            sqlBuffer.append(" or ");
+         }
+      }
+
+      final Destination d = getHermes().getDestination(dConfig.getName(), Domain.getDomain(dConfig.getDomain()));
+      final String sql = sqlBuffer.toString();
+      int deleted = 0;
+
+      while (deleted < messageIds.size())
+      {
+         Message m = hermes.receive(d, ms, sql);
+
+         if (m != null)
+         {
+            deleted++;
+            
+            if (progress != null)
+            {
+               progress.setNote(deleted + " message" + TextUtils.plural(deleted) + " deleted") ;
+               progress.setProgress(deleted) ;
+               
+               if (progress.isCanceled())
+               {
+                  hermes.rollback() ;
+                  return ;
+               }
+            }
+         }
+         else
+         {
+            throw new JMSException("Timeout reading from MessageConsumer to delete messages");
+         }
+      }
+
    }
 
    public void addListener(HermesAdminListener listener)
@@ -145,11 +198,11 @@ public abstract class HermesAdminSupport
    public int truncate(DestinationConfig dConfig) throws JMSException
    {
       boolean keepRunning = true;
-      
+
       StringBuffer message = new StringBuffer();
       int numToDelete = 0;
-      ProgressMonitor monitor = new ProgressMonitor(HermesBrowser.getBrowser(), "Deleting from " + dConfig.getName(), "Discovering size of " + dConfig.getName(),
-            0, 102);
+      ProgressMonitor monitor = new ProgressMonitor(HermesBrowser.getBrowser(), "Deleting from " + dConfig.getName(), "Discovering size of "
+            + dConfig.getName(), 0, 102);
 
       monitor.setMillisToDecideToPopup(100);
       monitor.setMillisToPopup(400);
@@ -193,8 +246,8 @@ public abstract class HermesAdminSupport
 
          monitor.setProgress(2);
 
-         final Destination destination = getHermes().getDestination(dConfig.getName(), Domain.getDomain(dConfig.getDomain())) ;
-         
+         final Destination destination = getHermes().getDestination(dConfig.getName(), Domain.getDomain(dConfig.getDomain()));
+
          for (int i = 0; i < numToDelete && keepRunning && !monitor.isCanceled(); i++)
          {
             Message m = null;
@@ -288,14 +341,14 @@ public abstract class HermesAdminSupport
             {
                if (visited.contains(ctx.getNameInNamespace()))
                {
-                  return ;
+                  return;
                }
-               
+
                visited.add(ctx.getNameInNamespace());
             }
             catch (OperationNotSupportedException ex)
             {
-               isNameInNamespaceCheck = false ;
+               isNameInNamespaceCheck = false;
             }
          }
 
@@ -374,7 +427,7 @@ public abstract class HermesAdminSupport
       }
       catch (NamingException e)
       {
-         log.error(e.getMessage(), e) ;
+         log.error(e.getMessage(), e);
          throw new HermesException(e);
       }
    }
@@ -406,16 +459,16 @@ public abstract class HermesAdminSupport
    {
       return new TopicBrowser(getHermes().getSession(), getHermes().getDestinationManager(), dConfig);
    }
-   
+
    public String getRealDestinationName(DestinationConfig dConfig) throws JMSException
    {
       try
       {
-         return JMSUtils.getDestinationName(getHermes().getDestination(dConfig.getName(), Domain.getDomain(dConfig.getDomain()))) ;
+         return JMSUtils.getDestinationName(getHermes().getDestination(dConfig.getName(), Domain.getDomain(dConfig.getDomain())));
       }
       catch (NamingException ex)
       {
-         throw new HermesException(ex) ;
+         throw new HermesException(ex);
       }
    }
 }

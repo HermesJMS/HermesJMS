@@ -222,7 +222,7 @@ public class CopyOrMoveMessagesTask extends TaskSupport
                   BrowserAction activeAction = (BrowserAction) HermesBrowser.getBrowser().getDocumentPane().getActiveDocument();
 
                   HermesBrowser.getBrowser().getActionFactory().createTruncateAction(activeAction.getHermes(), activeAction.getConfig(), ids,
-                        TruncateQueueTask.USE_SELECTOR, false);
+                        false);
                }
             }
 

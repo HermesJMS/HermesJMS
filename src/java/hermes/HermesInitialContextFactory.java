@@ -40,6 +40,7 @@ public class HermesInitialContextFactory implements InitialContextFactory
     private static final Logger log = Logger.getLogger(HermesInitialContextFactory.class);
     private static final String LOADER = "hermes.loader";
     private static final String EXTENSION_LOADER = "hermes.extensionLoader";
+    private static final String IGNORE_CLASSPATHGROUPS = "hermes.ignoreClasspathGroups" ;
 
     /**
      *  
@@ -78,6 +79,11 @@ public class HermesInitialContextFactory implements InitialContextFactory
             if (map.containsKey(EXTENSION_LOADER))
             {
                 loader.setExtensionLoaderClass((String) map.get(EXTENSION_LOADER));
+            }
+            
+            if (map.containsKey(IGNORE_CLASSPATHGROUPS))
+            {
+               loader.setIgnoreClasspathGroups(true) ;
             }
 
             context = new HermesContext(map, loader);

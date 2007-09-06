@@ -118,6 +118,7 @@ import com.jidesoft.status.ProgressStatusBarItem;
 import com.jidesoft.status.StatusBar;
 import com.jidesoft.status.TimeStatusBarItem;
 import com.jidesoft.swing.JideBoxLayout;
+import com.jidesoft.swing.JideScrollPane;
 import com.jidesoft.swing.SplashScreen;
 import com.jidesoft.utils.Lm;
 
@@ -989,7 +990,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       actionsPane = new ActionsPanel();
 
       toolsPane = new DockableToolPanel();
-      toolsPane.addToolPanel("Tasks", actionsPane);
+      toolsPane.addToolPanel("Tasks", new JideScrollPane(actionsPane));
       toolsPane.addToolPanel("Log", new Log4JOutputViewer(""));
 
       browserTreePane = new BrowserTreeDockableFrame();

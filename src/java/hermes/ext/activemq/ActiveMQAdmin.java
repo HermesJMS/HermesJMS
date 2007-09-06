@@ -135,6 +135,7 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
    {
       Collection<DestinationConfig> rval = new HashSet<DestinationConfig>();
 
+      
       try
       {
          ObjectName[] queues = (ObjectName[]) getConnection().getAttribute(getBrokerObjectName(), "Queues");
@@ -145,14 +146,9 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
 
             rval.add(HermesBrowser.getConfigDAO().createDestinationConfig(name, Domain.QUEUE));
          }
-      }
-      catch (Exception e)
-      {
-         log.error(e.getMessage(), e);
-      }
+      
 
-      try
-      {
+     
          ObjectName[] topics = (ObjectName[]) getConnection().getAttribute(getBrokerObjectName(), "Topics");
 
          for (ObjectName topic : topics)
@@ -162,9 +158,9 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
             rval.add(HermesBrowser.getConfigDAO().createDestinationConfig(name, Domain.TOPIC));
          }
       }
-      catch (Exception e)
+      catch (Exception ex)
       {
-         log.error(e.getMessage(), e);
+         throw new HermesException(ex) ;
       }
 
       rval.addAll(_discoverDurableSubscriptions());
@@ -192,7 +188,7 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
       }
       catch (Exception e)
       {
-         log.error(e.getMessage(), e);
+         throw new HermesException(e) ;
       }
 
       try
@@ -212,7 +208,7 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
       }
       catch (Exception e)
       {
-         log.error(e.getMessage(), e);
+         throw new HermesException(e) ;
       }
 
       return rval;

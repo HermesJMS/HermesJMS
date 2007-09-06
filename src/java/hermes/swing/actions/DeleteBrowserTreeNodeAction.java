@@ -68,13 +68,15 @@ public class DeleteBrowserTreeNodeAction extends ActionSupport
       putValue(Action.NAME, "Delete");
       putValue(Action.SHORT_DESCRIPTION, "Delete the queue, topic, session, context or message store.");
       putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.objects.delete"));
-      putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false)) ; 
-      
+      putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 
       setEnabled(false);
 
-      enableOnBrowserTreeSelection(new Class[] { MessageStoreURLTreeNode.class, DestinationConfigTreeNode.class, NamingConfigTreeNode.class,
-            HermesTreeNode.class, MessageStoreTreeNode.class, MessageStoreQueueTreeNode.class, MessageStoreTopicTreeNode.class }, this, false);
+      if (!HermesBrowser.getBrowser().isRestricted())
+      {
+         enableOnBrowserTreeSelection(new Class[] { MessageStoreURLTreeNode.class, DestinationConfigTreeNode.class, NamingConfigTreeNode.class,
+               HermesTreeNode.class, MessageStoreTreeNode.class, MessageStoreQueueTreeNode.class, MessageStoreTopicTreeNode.class }, this, false);
+      }
 
    }
 
@@ -118,27 +120,25 @@ public class DeleteBrowserTreeNodeAction extends ActionSupport
       HermesBrowser.getBrowser().saveConfig();
       Hermes.ui.getDefaultMessageSink().add(destinationNode.getDestinationName() + " removed");
 
-      
-
       if (destinationNode.getParent() == hermesNode)
       {
          final int[] index = { destinationNode.getHermesTreeNode().getIndex(destinationNode) };
          final Object[] objects = { destinationNode };
-      hermesNode.remove(destinationNode);
+         hermesNode.remove(destinationNode);
 
-      HermesBrowser.getBrowser().getBrowserTree().getBrowserModel().nodesWereRemoved(hermesNode, index, objects);
+         HermesBrowser.getBrowser().getBrowserTree().getBrowserModel().nodesWereRemoved(hermesNode, index, objects);
       }
       else
       {
          AbstractTreeNode cleanup = destinationNode;
          do
          {
-            AbstractTreeNode cleanupParent = (AbstractTreeNode) cleanup.getParent() ;
+            AbstractTreeNode cleanupParent = (AbstractTreeNode) cleanup.getParent();
             int index = cleanupParent.getIndex(cleanup);
             cleanupParent.remove(cleanup);
-            
+
             HermesBrowser.getBrowser().getBrowserTree().getBrowserModel().nodesWereRemoved(cleanupParent, new int[] { index }, new Object[] { cleanup });
-            cleanup = cleanupParent ;
+            cleanup = cleanupParent;
          }
          while (cleanup.getChildCount() == 0 && cleanup instanceof DestinationFragmentTreeNode);
       }
@@ -261,8 +261,8 @@ public class DeleteBrowserTreeNodeAction extends ActionSupport
 
          if (paths != null && paths.length > 0)
          {
-            String msg = paths.length == 1 ? "Are you sure you want to delete this object?" : "Are you sure you want to delete these objects?" ;
-            
+            String msg = paths.length == 1 ? "Are you sure you want to delete this object?" : "Are you sure you want to delete these objects?";
+
             if (JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), msg, "Please confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
             {
                for (final TreePath path : paths)
@@ -299,13 +299,13 @@ public class DeleteBrowserTreeNodeAction extends ActionSupport
                   }
                }
             }
-            
-            HermesBrowser.getBrowser().saveConfig() ;
+
+            HermesBrowser.getBrowser().saveConfig();
          }
       }
       catch (Exception ex)
       {
-         log.error(ex.getMessage(), ex) ;
+         log.error(ex.getMessage(), ex);
          HermesBrowser.getBrowser().showErrorDialog("Cannot delete: ", ex);
       }
    }

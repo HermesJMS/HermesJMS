@@ -23,6 +23,7 @@ import hermes.HermesAdmin;
 import hermes.HermesException;
 import hermes.config.DestinationConfig;
 
+import java.util.Collection;
 import java.util.Enumeration;
 
 import javax.jms.JMSException;
@@ -49,7 +50,7 @@ public class DefaultHermesAdmin extends HermesAdminSupport implements HermesAdmi
         super(hermes);
     }
 
-    /*
+   /*
      * (non-Javadoc)
      * 
      * @see hermes.HermesAdmin#getDepth(javax.jms.Destination)

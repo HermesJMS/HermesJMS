@@ -101,7 +101,7 @@ public class CutMessagesToClipboardAction extends BrowseActionListenerAdapter
                else
                {
                   HermesBrowser.getBrowser().getActionFactory().createTruncateAction(browserAction.getHermes(), browserAction.getConfig(),
-                        browserAction.getSelectedMessageIDs(), TruncateQueueTask.USE_SELECTOR, false);
+                        browserAction.getSelectedMessageIDs(),  false);
                }
             }
             else

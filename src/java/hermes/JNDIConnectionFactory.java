@@ -31,73 +31,86 @@ import org.apache.log4j.Logger;
  */
 public class JNDIConnectionFactory extends JNDIContextFactory implements ConnectionFactory
 {
-    private static final Logger log = Logger.getLogger(JNDIConnectionFactory.class);
-    private String rmiAdaptorBinding;
+   private static final Logger log = Logger.getLogger(JNDIConnectionFactory.class);
+   private String rmiAdaptorBinding;
 
-    public ConnectionFactory _getConnectionFactory() throws NamingException, JMSException
-    {
-        return (ConnectionFactory) createContext().lookup(getBinding());
-    }
+   public ConnectionFactory _getConnectionFactory() throws NamingException, JMSException
+   {
+      return (ConnectionFactory) createContext().lookup(getBinding());
+   }
 
-    /**
-     * @return Returns the rmiAdaptorBinding.
-     */
-    public String getRmiAdaptorBinding()
-    {
-        return rmiAdaptorBinding;
-    }
+   /**
+    * @return Returns the rmiAdaptorBinding.
+    */
+   public String getRmiAdaptorBinding()
+   {
+      return rmiAdaptorBinding;
+   }
 
-    /**
-     * @param rmiAdaptorBinding
-     *            The rmiAdaptorBinding to set.
-     */
-    public void setRmiAdaptorBinding(String rmiAdaptorBinding)
-    {
-        this.rmiAdaptorBinding = rmiAdaptorBinding;
-    }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.jms.ConnectionFactory#createConnection()
-     */
-    public Connection createConnection() throws JMSException
-    {
-        ConnectionFactory factory;
+   /**
+    * @param rmiAdaptorBinding
+    *           The rmiAdaptorBinding to set.
+    */
+   public void setRmiAdaptorBinding(String rmiAdaptorBinding)
+   {
+      this.rmiAdaptorBinding = rmiAdaptorBinding;
+   }
 
-        try
-        {
-            factory = (ConnectionFactory) createContext().lookup(getBinding());
-        }
-        catch (NamingException e)
-        {
-			log.error(e.getMessage(), e);
-            throw new JMSException(e.getMessage());
-        }
+   private final void checkBinding() throws JMSException
+   {
+      if (getBinding() == null)
+      {
+         throw new HermesException("The binding property to locate the ConnectionFactory in the Context is not set");
+      }
+   }
 
-        return factory.createConnection();
-    }
+   /*
+    * (non-Javadoc)
+    * 
+    * @see javax.jms.ConnectionFactory#createConnection()
+    */
+   public Connection createConnection() throws JMSException
+   {
+      checkBinding();
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.jms.ConnectionFactory#createConnection(java.lang.String,
-     *      java.lang.String)
-     */
-    public Connection createConnection(String arg0, String arg1) throws JMSException
-    {
-        ConnectionFactory factory;
+      ConnectionFactory factory;
 
-        try
-        {
-            factory = (ConnectionFactory) createContext().lookup(getBinding());
-        }
-        catch (NamingException e)
-        {
-			log.error(e.getMessage(), e);
-            throw new JMSException(e.getMessage());
-        }
+      try
+      {
+         factory = (ConnectionFactory) createContext().lookup(getBinding());
+      }
+      catch (NamingException e)
+      {
+         log.error(e.getMessage(), e);
+         throw new JMSException(e.getMessage());
+      }
 
-        return factory.createConnection(arg0, arg1);
-    }
-   
+      return factory.createConnection();
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
+    * @see javax.jms.ConnectionFactory#createConnection(java.lang.String,
+    *      java.lang.String)
+    */
+   public Connection createConnection(String arg0, String arg1) throws JMSException
+   {
+      checkBinding();
+
+      ConnectionFactory factory;
+
+      try
+      {
+         factory = (ConnectionFactory) createContext().lookup(getBinding());
+      }
+      catch (NamingException e)
+      {
+         log.error(e.getMessage(), e);
+         throw new JMSException(e.getMessage());
+      }
+
+      return factory.createConnection(arg0, arg1);
+   }
+
 }

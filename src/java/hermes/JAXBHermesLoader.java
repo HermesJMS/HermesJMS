@@ -40,6 +40,7 @@ import hermes.impl.ConnectionManagerFactory;
 import hermes.impl.DefaultHermesImpl;
 import hermes.impl.DestinationManager;
 import hermes.impl.JNDIDestinationManager;
+import hermes.impl.NullClassLoaderManager;
 import hermes.impl.SessionManager;
 import hermes.impl.SimpleClassLoaderManager;
 import hermes.impl.jms.SimpleDestinationManager;
@@ -100,7 +101,8 @@ public class JAXBHermesLoader implements HermesLoader
    private Hashtable properties;
    private final Set listeners = new HashSet();
    private final Map<String, FactoryConfig> factoryConfigById = new HashMap<String, FactoryConfig>();
-
+   private boolean ignoreClasspathGroups ;
+   
    private Context context;
    private String extensionLoaderClass = DEFAULT_EXTENSION_LOADER;
 
@@ -384,7 +386,15 @@ public class JAXBHermesLoader implements HermesLoader
             config.getLoader().clear();
          }
 
-         classLoaderManager = new SimpleClassLoaderManager(config.getClasspathGroup());
+         if (!ignoreClasspathGroups)
+         {
+            classLoaderManager = new SimpleClassLoaderManager(config.getClasspathGroup());
+         }
+         else
+         {
+            classLoaderManager = new NullClassLoaderManager();
+         }
+         
          SingletonManager.put(ClassLoaderManager.class, classLoaderManager);
 
          //
@@ -822,5 +832,15 @@ public class JAXBHermesLoader implements HermesLoader
    public ClassLoaderManager getClassLoaderManager()
    {
       return classLoaderManager;
+   }
+
+   public boolean isIgnoreClasspathGroups()
+   {
+      return ignoreClasspathGroups;
+   }
+
+   public void setIgnoreClasspathGroups(boolean ignoreClasspathGroups)
+   {
+      this.ignoreClasspathGroups = ignoreClasspathGroups;
    }
 }

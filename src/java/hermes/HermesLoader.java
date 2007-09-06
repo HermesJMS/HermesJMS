@@ -76,4 +76,5 @@ public interface HermesLoader
     
     public Hermes createHermes(FactoryConfig factoryConfig) throws JAXBException, IOException, InvocationTargetException, InstantiationException, IllegalAccessException, ClassNotFoundException, JMSException, NamingException, NoSuchMethodException ;
     
+    public void setIgnoreClasspathGroups(boolean newValue) ;
 }

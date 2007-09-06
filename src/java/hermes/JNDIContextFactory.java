@@ -20,6 +20,7 @@ package hermes;
 import hermes.config.NamingConfig;
 import hermes.impl.ClassLoaderManager;
 import hermes.impl.LoaderSupport;
+import hermes.util.TextUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -201,7 +202,7 @@ public class JNDIContextFactory
 
       try
       {
-         if (userPropertiesURL != null)
+         if (!TextUtils.isEmpty(userPropertiesURL))
          {
             try
             {

@@ -242,9 +242,9 @@ public class ActionFactory
    /**
     * Create action to truncate a set of messages from a queue
     */
-   public TruncateQueueTask createTruncateAction(Hermes hermes, DestinationConfig destination, Collection messageIds, int mode, boolean warning) throws JMSException
+   public TruncateQueueTask createTruncateAction(Hermes hermes, DestinationConfig destination, Collection messageIds, boolean warning) throws JMSException
    {
-      TruncateQueueTask rval = new TruncateQueueTask(hermes, destination, messageIds, mode, warning);
+      TruncateQueueTask rval = new TruncateQueueTask(hermes, destination, messageIds, warning);
 
       rval.start();
 

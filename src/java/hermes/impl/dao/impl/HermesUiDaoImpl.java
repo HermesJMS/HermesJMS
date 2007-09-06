@@ -15,17 +15,26 @@
  * 
  */
 
-package hermes.impl.dao;
+package hermes.impl.dao.impl;
 
-import hermes.Hermes;
+import hermes.impl.dao.HermesUiDao;
 
 /**
  * @author colincrist@hermesjms.com
  * @version $Id$
  */
 
-public interface HermesConfigDao
+public class HermesUiDaoImpl implements HermesUiDao
 {
-   public HermesUiDao getHermesUiDao(Hermes hermes) ;
+   private boolean cascading ;
+   
+   public boolean isCascading()
+   {
+     return cascading ;
+   }
 
+   public void setCascading(boolean cascading)
+   {
+     this.cascading = cascading ;      
+   }
 }

@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.python.core.PyException;
@@ -40,9 +41,9 @@ import com.artenum.jyconsole.JyConsole;
 public class JythonManager
 {
    private static final Logger log = Logger.getLogger(JythonManager.class);
-  
-   private JyConsole jyConsole = new JyConsole(); 
-   
+
+   private JyConsole jyConsole = new JyConsole();
+
    public JythonManager()
    {
       init();
@@ -50,14 +51,14 @@ public class JythonManager
 
    public PythonInterpreter getInterpreter()
    {
-      return jyConsole.getPythonInterpreter() ;
+      return jyConsole.getPythonInterpreter();
    }
 
    public JyConsole getConsole()
    {
-      return jyConsole ;
+      return jyConsole;
    }
-   
+
    public void exec(String info, InputStream istream)
    {
       try
@@ -66,18 +67,20 @@ public class JythonManager
       }
       catch (PyException ex)
       {
-         HermesBrowser.getBrowser().getDefaultMessageSink().add("Error " + info + ": "+ ex.getMessage());
-         log.error(ex.getMessage(), ex) ;
+         HermesBrowser.getBrowser().getDefaultMessageSink().add("Error " + info + ": " + ex.getMessage());
+         log.error(ex.getMessage(), ex);
       }
       catch (Exception ex)
       {
-         HermesBrowser.getBrowser().getDefaultMessageSink().add("Error " + info + ": "+ ex.getMessage());
-         log.error(ex.getMessage(), ex) ;
+         HermesBrowser.getBrowser().getDefaultMessageSink().add("Error " + info + ": " + ex.getMessage());
+         log.error(ex.getMessage(), ex);
       }
    }
 
    public void init()
    {
+      log.debug("bootstraping jython...") ;
+      
       exec("Bootstrapping Jython", getClass().getResourceAsStream("bootstrap.py"));
 
       //
@@ -91,10 +94,11 @@ public class JythonManager
       {
          try
          {
+            log.debug("reading " + bootstrapFile.getName()) ;
             exec("Reading hermesrc.py", new FileInputStream(bootstrapFile));
-            
-            Hermes.ui.getDefaultMessageSink().add("Loaded hermesrc.py") ;
-            
+
+            Hermes.ui.getDefaultMessageSink().add("Loaded hermesrc.py");
+
          }
          catch (FileNotFoundException e)
          {
@@ -103,7 +107,26 @@ public class JythonManager
       }
       else
       {
-         log.debug("Unable to locate a hermesrc.py");
+         log.debug("Unable to locate a hermesrc.py in " + System.getProperty("user.home"));
+      }
+
+      try
+      {
+         if (System.getProperty("hermes.python.url") != null)
+         {            
+            String url = System.getProperty("hermes.python.url") ;
+            log.debug("reading " + url) ;
+            
+            exec("Reading " + url, new URL(url).openStream());
+         }
+         else
+         {
+            log.debug("no hermes.python.url set") ;
+         }
+      }
+      catch (Exception ex)
+      {
+         HermesBrowser.getBrowser().showErrorDialog(ex);
       }
    }
 }

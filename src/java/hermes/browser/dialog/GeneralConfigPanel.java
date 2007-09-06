@@ -69,6 +69,7 @@ public class GeneralConfigPanel extends JPanel
    private static final String QF_CACHE = "QuickFIXMessageCache";
    private static final String QF_FILTER_SESSION = "QuickFIXFilterSessionMessages";
    private static final String ENABLE_JYTHON = "EnableJython";
+   private static final String SCROLL_MESSAGES_IN_BROWSE = "ScrollMessagesDuringBrowse" ;
 
    private static final String AUDIT_DIRECTORY_INFO = "The directory where audit files are written whenever you interact with a queue/topic.";
    private static final String MESSAGES_DIRECTORY_INFO = "The directory to hold your message repository files.";
@@ -93,6 +94,7 @@ public class GeneralConfigPanel extends JPanel
    private static final String QF_CACHE_INFO = "Message cache for QuickFIX/J to control memory use";
    private static final String QF_FILTER_SESSION_INFO = "Filter out session level FIX messages";
    private static final String ENABLE_JYTHON_INFO = "Enable Jython";
+   private static final String SCROLL_MESSAGES_IN_BROWSE_INFO = "Scroll to the newest message during a browse" ;
 
    private PreferencesDialog dialog;
    private HermesConfig config;
@@ -117,6 +119,8 @@ public class GeneralConfigPanel extends JPanel
    private Property quickFIXCacheProperty;
    private Property quickFIXCacheFilterSessionProperty;
    private Property enableJythonProperty;
+   private Property scrollMessagesInBrowseProperty ;
+   
    private List<Runnable> watchSetters = new ArrayList<Runnable>();
 
    public static class PropertyImpl extends Property
@@ -205,6 +209,7 @@ public class GeneralConfigPanel extends JPanel
       config.getQuickFIX().setFilterSessionMsgTypes((Boolean) quickFIXCacheFilterSessionProperty.getValue());
       
       config.setEnableJython((Boolean) enableJythonProperty.getValue()) ;
+      config.setScrollMessagesDuringBrowse((Boolean) scrollMessagesInBrowseProperty.getValue()) ;
       
       if (consumerTimeoutProperty.getValue() != null)
       {
@@ -273,7 +278,8 @@ public class GeneralConfigPanel extends JPanel
       quickFIXCacheFilterSessionProperty = new PropertyImpl(QF_FILTER_SESSION, new Boolean(config.getQuickFIX().isFilterSessionMsgTypes()),
             QF_FILTER_SESSION_INFO, Boolean.class);
       enableJythonProperty = new PropertyImpl(ENABLE_JYTHON, new Boolean(config.isEnableJython()), ENABLE_JYTHON_INFO, Boolean.class) ;
-
+      scrollMessagesInBrowseProperty = new PropertyImpl(SCROLL_MESSAGES_IN_BROWSE, new Boolean(config.isScrollMessagesDuringBrowse()), SCROLL_MESSAGES_IN_BROWSE_INFO, Boolean.class) ;
+      
       for (Iterator iter = config.getWatch().iterator(); iter.hasNext();)
       {
          final WatchConfig wConfig = (WatchConfig) iter.next();
@@ -362,6 +368,7 @@ public class GeneralConfigPanel extends JPanel
       list.add(quickFIXCacheProperty);
       list.add(quickFIXCacheFilterSessionProperty);
       list.add(enableJythonProperty) ;
+      list.add(scrollMessagesInBrowseProperty) ;
 
       list.add(watchProperty);
 

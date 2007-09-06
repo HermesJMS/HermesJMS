@@ -39,7 +39,8 @@ import org.apache.log4j.Logger;
  */
 public class MessageUtils
 {
-   private static final Logger log = Logger.getLogger(MessageUtils.class) ;
+   private static final Logger log = Logger.getLogger(MessageUtils.class);
+
    public static byte[] asBytes(javax.jms.Message m) throws JMSException
    {
       if (m instanceof TextMessage)
@@ -78,8 +79,7 @@ public class MessageUtils
          char[] chars = s.toCharArray();
 
          bytes = new byte[chars.length];
-         
-         
+
          for (int i = 0; i < chars.length; i++)
             bytes[i] = (byte) chars[i];
       }
@@ -130,67 +130,44 @@ public class MessageUtils
       {
          //
          // Method does not exist before JMS 1.1
-         
-        return m.getBodyLength();
+
+         return m.getBodyLength();
       }
       catch (NoSuchMethodError e)
       {
-        
-         long bytesSize = 0;
-         try
+
+      }
+      catch (AbstractMethodError e)
+      {
+
+      }
+      long bytesSize = 0;
+      try
+      {
+         m.reset();
+
+         while (true)
          {
-            m.reset();
-            
-            while (true)
-            {
-               m.readByte();
-               bytesSize++;
-            }
+            m.readByte();
+            bytesSize++;
          }
-         catch (MessageEOFException e2)
-         {
-         }
-         catch (Exception ex)
-         {
-            log.error("unexpected exception reading bytes message, treating as EOF:" + ex.getMessage(), ex) ;
-         }
-         
-         return bytesSize ;
-      } 
+      }
+      catch (MessageEOFException e2)
+      {
+      }
+      catch (Exception ex)
+      {
+         log.error("unexpected exception reading bytes message, treating as EOF:" + ex.getMessage(), ex);
+      }
+
+      return bytesSize;
+
    }
-   
+
    public static byte[] asBytes(BytesMessage m) throws JMSException
    {
       byte[] bytes = null;
-      long bytesSize = 0;
-
-      try
-      {
-         //
-         // Method does not exist before JMS 1.1
-         
-         bytesSize = m.getBodyLength();
-      }
-      catch (NoSuchMethodError e)
-      {
-         try
-         {
-            m.reset();
-            
-            while (true)
-            {
-               m.readByte();
-               bytesSize++;
-            }
-         }
-         catch (MessageEOFException e2)
-         {
-         }
-         catch (Exception ex)
-         {
-            log.error("unexpected exception reading bytes message, treating as EOF:" + ex.getMessage(), ex) ;
-         }
-      }
+      long bytesSize = getBodyLength(m) ;
 
       bytes = new byte[(int) bytesSize];
 
@@ -199,21 +176,14 @@ public class MessageUtils
 
       try
       {
-         m.readBytes(bytes) ;
-         
-         /*
-         while (true)
-         {
-            bytes[i++] = m.readByte();
-         }
-         */
+         m.readBytes(bytes);
       }
       catch (MessageEOFException e2)
       {
       }
       catch (Exception ex)
       {
-         log.error("unexpected exception reading bytes message, treating as EOF:" + ex.getMessage(), ex) ;
+         log.error("unexpected exception reading bytes message, treating as EOF:" + ex.getMessage(), ex);
       }
 
       return bytes;

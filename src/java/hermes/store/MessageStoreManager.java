@@ -30,29 +30,30 @@ import java.util.Set;
 
 import javax.jms.JMSException;
 
+import org.apache.derby.impl.jdbc.EmbedSQLException;
 import org.apache.log4j.Logger;
 
 /**
  * @author colincrist@hermesjms.com
- * @version $Id: MessageStoreManager.java,v 1.7 2005/08/21 20:47:56 colincrist Exp $
+ * @version $Id: MessageStoreManager.java,v 1.7 2005/08/21 20:47:56 colincrist
+ *          Exp $
  */
 
 public class MessageStoreManager
 {
-   private static final Logger log = Logger.getLogger(MessageStoreManager.class) ;
-   private static final Set<String> dbsCreated = new HashSet<String>() ;
-   
+   private static final Logger log = Logger.getLogger(MessageStoreManager.class);
+   private static final Set<String> dbsCreated = new HashSet<String>();
+
    public static Collection<MessageStore> find() throws JMSException
    {
-      return find(StoreUtils.getDefaultConnectionURL()) ;
+      return find(StoreUtils.getDefaultConnectionURL());
    }
-   
+
    public static MessageStore create(String storeId) throws JMSException
    {
-      return create(StoreUtils.getDefaultConnectionURL(), storeId) ;
+      return create(StoreUtils.getDefaultConnectionURL(), storeId);
    }
-   
-   
+
    public static MessageStore create(String url, String storeId) throws JMSException
    {
       return new SingleUserMessageStore(storeId, url, !dbsCreated.contains(url));
@@ -64,36 +65,44 @@ public class MessageStoreManager
       {
          final JDBCAdapter adapter = StoreUtils.getJDBCAdapter(url);
          final Connection connection = DriverManager.getConnection(url);
-         
-         
+
          if (!dbsCreated.contains(url))
          {
-            adapter.createDatabase(connection) ;
-            dbsCreated.add(url) ;
+            adapter.createDatabase(connection);
+            dbsCreated.add(url);
          }
-         
+
          final Collection<MessageStore> rval = new ArrayList<MessageStore>();
 
          for (String storeId : adapter.getStores(connection))
          {
             rval.add(create(url, storeId));
          }
-         
-         connection.close() ;
-         
-         return rval ;
+
+         connection.close();
+
+         return rval;
       }
       catch (SQLException e)
       {
-         log.error(e.getMessage(), e) ;
-         
+         log.error(e.getMessage(), e);
+
          if (e.getNextException() != null)
          {
-            log.error(e.getNextException().getMessage(), e.getNextException()) ;
+            log.error(e.getNextException().getMessage(), e.getNextException());
          }
-         
+
+         if (e instanceof EmbedSQLException)
+         {
+            EmbedSQLException es = (EmbedSQLException) e;
+
+            if ("XJ040.C".equals(es.getMessageId()))
+            {
+               throw new HermesException("Is another instance of HermesJMS running?", e);
+            }
+         }
+
          throw new HermesException(e);
       }
    }
-
 }

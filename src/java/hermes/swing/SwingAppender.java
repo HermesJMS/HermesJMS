@@ -74,7 +74,7 @@ public class SwingAppender extends AppenderSkeleton
       {
          synchronized (cachedRows)
          {
-            cachedRows.add(format.format(new Date(event.timeStamp)) + event.getLevel() + " [" + event.getThreadName() + "] " + event.categoryName + " " + event.getMessage());
+            cachedRows.add(format.format(new Date(event.timeStamp)) + " " + event.getLevel() + " [" + event.getThreadName() + "] " + event.categoryName + " " + event.getMessage());
          }
 
          if (timerTask == null)

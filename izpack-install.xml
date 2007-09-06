@@ -17,12 +17,12 @@
     -->
     <info>
         <appname>HermesJMS</appname>
-        <appversion>1.12</appversion>
+        <appversion>1.13</appversion>
         <authors>
             <author name="Colin Crist" email="colincrist@hermesjms.com"/>
         </authors>
         <url>http://www.hermesjms.com/</url>
-	<javaversion>1.5</javaversion> 
+	<javaversion>1.4</javaversion> 
     </info>
     
     <native type="izpack" name="ShellLink.dll"/>

@@ -162,6 +162,7 @@
 		<xs:attribute name="enableJython" type="xs:boolean" default="true"/>
 		<xs:attribute name="lookAndFeel" type="xs:string"/>
 		<xs:attribute name="messageStoreSession" type="xs:string"/>
+		<xs:attribute name="scrollMessagesDuringBrowse" type="xs:boolean" default="true"/>
 		
 	</xs:complexType>
 

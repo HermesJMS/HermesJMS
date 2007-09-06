@@ -64,7 +64,14 @@ public class DestinationConfigTreeNode extends AbstractTreeNode
 
       if (config.getShortName() == null && cascadeNamespace)
       {
-         name = name.substring(name.lastIndexOf(".") + 1) ;
+         if (name.contains("."))
+         {
+            name = name.substring(name.lastIndexOf(".") + 1) ;
+         }
+         else
+         {
+            name = name.substring(name.lastIndexOf("/") + 1) ;
+         }
       }
       
       if (config.getDomain() == Domain.TOPIC.getId() && config.isDurable() && config.getClientID() != null)
@@ -87,6 +94,7 @@ public class DestinationConfigTreeNode extends AbstractTreeNode
    {
       return getDestinationName() ;
    }
+  
 
    public DestinationConfigTreeNode(HermesTreeNode hermesTreeNode, DestinationConfig destinationConfig, boolean cascadeNamespace)
    {

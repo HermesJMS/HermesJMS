@@ -26,6 +26,8 @@ import java.util.Map;
 
 import javax.jms.JMSException;
 import javax.jms.QueueBrowser;
+import javax.naming.NamingException;
+import javax.swing.ProgressMonitor;
 
 /**
  * Here is where we stick stuff that either JMS does not support or its very
@@ -112,4 +114,9 @@ public interface HermesAdmin
      * @throws JMSException
      */
     public QueueBrowser createDurableSubscriptionBrowser(DestinationConfig dConfig) throws JMSException ;
+    
+    public void delete(DestinationConfig dConfig, Collection<String> messageIds) throws JMSException, NamingException ;
+    
+    public void delete(DestinationConfig dConfig, Collection<String> messageIds, ProgressMonitor progress) throws JMSException, NamingException ;
+
 }

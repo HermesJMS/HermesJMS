@@ -1,5 +1,5 @@
 /* 
- * Copyright 2003,2004,2005 Colin Crist
+ * Copyright 2003-2007 Colin Crist
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ package hermes.impl.dao;
 
 public interface HermesUiDao
 {
-   public void setCascading(String hermesId, boolean cascading) ;
+   public void setCascading(boolean cascading) ;
    
-   public boolean isCascadeQueues() ;
+   public boolean isCascading() ;
 }

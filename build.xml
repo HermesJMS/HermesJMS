@@ -4,7 +4,7 @@
 
 	<property file="build.properties" />
 
-	<property name="installer.jar" value="hermes-installer-1.12.jar" />
+	<property name="installer.jar" value="hermes-installer-1.13.jar" />
 	<property name="src" value="src" />
 	<property name="src.java" value="${src}/java" />
 	<property name="resources" value="${src}/resources" />
@@ -567,7 +567,7 @@
 	<target name="izpack" depends="weave">
 		<izpack input="izpack-install.xml" output="${installer.jar}" installerType="standard" basedir="." izPackDir="${izpack.dir}" />
 
-		<izpack input="izpack-install-with-source.xml" output="hermes-installer-with-source-1.12.jar" installerType="standard" basedir="." izPackDir="${izpack.dir}" />
+		<izpack input="izpack-install-with-source.xml" output="hermes-installer-with-source-1.13.jar" installerType="standard" basedir="." izPackDir="${izpack.dir}" />
 
 	</target>
 

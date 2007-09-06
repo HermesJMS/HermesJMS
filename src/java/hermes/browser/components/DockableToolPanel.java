@@ -50,6 +50,6 @@ public class DockableToolPanel extends DockableFrame
 
     public void addToolPanel(String tab, JComponent component)
     {
-        tabbedPane.addTab(tab, new JideScrollPane(component));
+        tabbedPane.addTab(tab, component);
     }
 }

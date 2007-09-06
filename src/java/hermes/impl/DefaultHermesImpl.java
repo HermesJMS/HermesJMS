@@ -66,6 +66,7 @@ import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicPublisher;
 import javax.naming.NamingException;
+import javax.swing.ProgressMonitor;
 
 import org.apache.log4j.Category;
 
@@ -1298,6 +1299,19 @@ public class DefaultHermesImpl implements Hermes
       Thread.currentThread().setContextClassLoader(contextClassLoader);
 
       return getAdminAdapter().createDurableSubscriptionBrowser(dConfig);
+   }
+
+   public void delete(DestinationConfig dConfig, Collection<String> messageIds, ProgressMonitor progress) throws JMSException, NamingException
+   {
+      Thread.currentThread().setContextClassLoader(contextClassLoader);
+      
+      getAdminAdapter().delete(dConfig, messageIds, progress) ;
+      
+   }
+   
+   public void delete(DestinationConfig dConfig, Collection<String> messageIds) throws JMSException, NamingException
+   {
+      delete(dConfig, messageIds, null) ;
    }
 
    public Collection discoverDestinationConfigs() throws JMSException

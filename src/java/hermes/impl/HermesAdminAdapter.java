@@ -31,6 +31,7 @@ import java.util.Map;
 import javax.jms.JMSException;
 import javax.jms.QueueBrowser;
 import javax.naming.NamingException;
+import javax.swing.ProgressMonitor;
 
 /**
  * @author colincrist@hermesjms.com last changed by: $Author: colincrist $
@@ -152,6 +153,16 @@ public class HermesAdminAdapter implements HermesAdmin
     {
        return getAdmin().getMessageRenderer() ;
     }
+
+   public void delete(DestinationConfig dConfig, Collection<String> messageIds, ProgressMonitor monitor) throws JMSException, NamingException
+   {
+     getAdmin().delete(dConfig, messageIds, monitor) ;      
+   }
+   public void delete(DestinationConfig dConfig, Collection<String> messageIds) throws JMSException, NamingException
+   {
+      delete(dConfig, messageIds, null) ;
+   }
+   
 
    public QueueBrowser createDurableSubscriptionBrowser(DestinationConfig dConfig) throws JMSException
    {

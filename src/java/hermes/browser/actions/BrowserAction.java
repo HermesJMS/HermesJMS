@@ -36,6 +36,7 @@ import hermes.config.DestinationConfig;
 import hermes.swing.FilterablePanel;
 import hermes.swing.SQL92FilterableTableModel;
 import hermes.swing.SwingRunner;
+import hermes.swing.SwingUtils;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
@@ -66,6 +67,7 @@ import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 
 import com.codestreet.selector.parser.InvalidSelectorException;
+
 import com.jidesoft.document.DocumentComponentEvent;
 import com.jidesoft.document.DocumentComponentListener;
 import com.jidesoft.grid.HierarchicalTable;
@@ -149,14 +151,14 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
    {
       if (dConfig.getDomain() == Domain.QUEUE.getId())
       {
-         return "Q " + super.getName() ;
+         return "Q " + super.getName();
       }
       else
       {
-         return "T " + super.getName() ;
+         return "T " + super.getName();
       }
    }
-   
+
    public ListSelectionModel getListSelectionModel()
    {
       return messageHeaderTable.getSelectionModel();
@@ -251,7 +253,6 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
       log.debug("documentClosed " + getName());
 
       messageHeaderTableModel.clear();
-      
 
       if (task != null)
       {
@@ -593,13 +594,14 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
 
    public TableModel getTableModel()
    {
-      return getMessageHeaderTable().getModel() ;
+      return getMessageHeaderTable().getModel();
    }
+
    public boolean isDeleteable()
    {
-      return hasSelection() ;
+      return hasSelection();
    }
-   
+
    public boolean isAutoBrowse()
    {
       return autoBrowse;
@@ -803,6 +805,19 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
                   {
                      messageHeaderTableModel.removeFirstRow();
                   }
+
+                  try
+                  {
+                     if (HermesBrowser.getBrowser().getConfig().isScrollMessagesDuringBrowse())
+                     {
+                        SwingUtils.scrollVertically(messageHeaderTable, SwingUtils.getRowBounds(messageHeaderTable, messageHeaderTableModel.getRowCount(),
+                              messageHeaderTableModel.getRowCount()));
+                     }
+                  }
+                  catch (HermesException ex)
+                  {
+                     log.error(ex.getMessage(), ex);
+                  }
                }
 
                StringBuffer buffer = new StringBuffer();
@@ -878,7 +893,7 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
    {
       try
       {
-         HermesBrowser.getBrowser().getActionFactory().createTruncateAction(hermes, getConfig(), getSelectedMessageIDs(), TruncateQueueTask.USE_SELECTOR, true);
+         HermesBrowser.getBrowser().getActionFactory().createTruncateAction(hermes, getConfig(), getSelectedMessageIDs(), true);
       }
       catch (JMSException ex)
       {
