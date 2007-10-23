@@ -55,16 +55,16 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
    private JMXServiceURL serviceURL;
    private JMXConnector connector;
    private MBeanServerConnection server;
- 
+
    private String[] queueProperties = new String[] { "ConsumerCount", "EnqueueCount", "DequeueCount", "MemoryLimit", "MemoryPercentageUsed", "QueueSize" };
-   private ActiveMQAdminFactory factory ;
-   
+   private ActiveMQAdminFactory factory;
+
    public ActiveMQAdmin(ActiveMQAdminFactory factory, Hermes hermes, String brokerName, JMXServiceURL serviceURL)
    {
       super(hermes);
 
       this.serviceURL = serviceURL;
-      this.factory = factory ;
+      this.factory = factory;
    }
 
    @Override
@@ -125,7 +125,7 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
       catch (Exception e)
       {
          log.error(e.getMessage(), e);
-         return e.getMessage() ;
+         return e.getMessage();
       }
 
    }
@@ -135,7 +135,6 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
    {
       Collection<DestinationConfig> rval = new HashSet<DestinationConfig>();
 
-      
       try
       {
          ObjectName[] queues = (ObjectName[]) getConnection().getAttribute(getBrokerObjectName(), "Queues");
@@ -146,9 +145,23 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
 
             rval.add(HermesBrowser.getConfigDAO().createDestinationConfig(name, Domain.QUEUE));
          }
-      
 
-     
+         try
+         {
+            ObjectName[] tempQueues = (ObjectName[]) getConnection().getAttribute(getBrokerObjectName(), "TemporaryQueues");
+
+            for (ObjectName queue : tempQueues)
+            {
+               String name = (String) getConnection().getAttribute(queue, "Name");
+
+               rval.add(HermesBrowser.getConfigDAO().createDestinationConfig(name, Domain.QUEUE));
+            }
+         }
+         catch (Exception ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
+
          ObjectName[] topics = (ObjectName[]) getConnection().getAttribute(getBrokerObjectName(), "Topics");
 
          for (ObjectName topic : topics)
@@ -160,7 +173,7 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
       }
       catch (Exception ex)
       {
-         throw new HermesException(ex) ;
+         throw new HermesException(ex);
       }
 
       rval.addAll(_discoverDurableSubscriptions());
@@ -188,7 +201,7 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
       }
       catch (Exception e)
       {
-         throw new HermesException(e) ;
+         throw new HermesException(e);
       }
 
       try
@@ -208,7 +221,7 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
       }
       catch (Exception e)
       {
-         throw new HermesException(e) ;
+         throw new HermesException(e);
       }
 
       return rval;
@@ -313,9 +326,9 @@ public class ActiveMQAdmin extends HermesAdminSupport implements hermes.HermesAd
       }
       else
       {
-         final Map rval = new HashMap() ;
-         rval.put("jmx.remote.credentials", new String[] { factory.getUsername(), factory.getPassword() }) ;
-         return rval ;      
+         final Map rval = new HashMap();
+         rval.put("jmx.remote.credentials", new String[] { factory.getUsername(), factory.getPassword() });
+         return rval;
       }
    }
 
