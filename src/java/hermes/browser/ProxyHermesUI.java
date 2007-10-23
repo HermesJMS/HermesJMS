@@ -17,8 +17,10 @@
 
 package hermes.browser;
 
+import hermes.HermesException;
 import hermes.SingletonManager;
 import hermes.browser.tasks.ThreadPool;
+import hermes.config.HermesConfig;
 
 /**
  * @author cristco last changed by: $Author: colincrist $
@@ -74,4 +76,12 @@ public class ProxyHermesUI implements HermesUI
     {
         return (ThreadPool) SingletonManager.get(ThreadPool.class) ;
     }
+
+   public HermesConfig getConfig() throws HermesException
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+    
+    
 }

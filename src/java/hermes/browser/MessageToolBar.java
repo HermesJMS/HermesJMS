@@ -29,6 +29,7 @@ import hermes.swing.actions.RefreshBrowseAction;
 import hermes.swing.actions.SaveMessagesAsTextAction;
 import hermes.swing.actions.SaveMessagesAsXMLAction;
 import hermes.swing.actions.SaveMessagesIndividuallyAsXMLAction;
+import hermes.swing.actions.SelectPersistentSendAction;
 
 import com.jidesoft.action.CommandBar;
 import com.jidesoft.action.DockableBarContext;
@@ -58,5 +59,7 @@ public class MessageToolBar extends CommandBar
       add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SaveMessagesAsTextAction.class))) ;
       add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SaveMessagesAsXMLAction.class)) ) ;
       add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SaveMessagesIndividuallyAsXMLAction.class))) ;
+      addSeparator() ;
+      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SelectPersistentSendAction.class))) ;
    }
 }

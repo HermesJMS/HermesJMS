@@ -528,7 +528,9 @@
 		<retrotranslator srcjar="${src.lib}/cglib-2.1_3.jar" destjar="${lib.weaved}/cglib-2.1_3.jar" />
 	</target>
 
-	<target name="webstart" depends="weave">
+<!--  <target name="webstart" depends="weave"> -->
+
+	<target name="webstart">
 		<copy todir="${webstart}">
 			<fileset dir="${lib}" includes="*.jar" />
 			<fileset dir="${src.webstart}" />

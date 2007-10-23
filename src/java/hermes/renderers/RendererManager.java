@@ -61,7 +61,6 @@ public class RendererManager
     */
    public RendererManager()
    {
-
    }
 
    public MessageRenderer createRenderer(ClassLoader classLoader, RendererConfig rConfig) throws InvocationTargetException, HermesException,

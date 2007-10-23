@@ -48,6 +48,7 @@ import java.util.TimerTask;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
+import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -578,7 +579,18 @@ public class DefaultHermesImpl implements Hermes
       {
          throw new JMSException("Hermes is in read-only mode");
       }
-
+      
+      // http://hermesjms.com/jira/browse/HJMS-50
+      
+      if (HermesBrowser.getBrowser().getConfig().isDeliveryModePersistent())
+      {
+         m.setJMSDeliveryMode(DeliveryMode.PERSISTENT) ;
+      }
+      else
+      {
+         m.setJMSDeliveryMode(DeliveryMode.NON_PERSISTENT) ;
+      }
+      
       MessageProducer producer = sessionManager.getProducer();
 
       // http://hermesjms.com/jira/browse/HJMS-11
@@ -795,6 +807,10 @@ public class DefaultHermesImpl implements Hermes
          {
             // NOP
          }
+      }
+      else if (in instanceof Message)
+      {
+         out = createMessage() ;
       }
       else
       {

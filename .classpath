@@ -56,7 +56,7 @@
 	<classpathentry path="OPENJMS_ROOT/lib/openjms-client-0.7.6.1.jar" kind="var"/>
 	<classpathentry path="WME_ROOT/lib/BrokerJMS61.jar" kind="var"/>
 	<classpathentry path="WME_ROOT/lib/client61.jar" kind="var"/>
-	<classpathentry path="WEBLOGIC_ROOT/server/lib/weblogic.jar" kind="var"/>
+	<classpathentry path="WEBLOGIC_ROOT/wlserver_10.0/server/lib/weblogic.jar" kind="var"/>
 	<classpathentry path="SONICMQ_ROOT/lib/mgmt_agent.jar" kind="var"/>
 	<classpathentry path="SONICMQ_ROOT/lib/mgmt_client.jar" kind="var"/>
 	<classpathentry path="SONICMQ_ROOT/lib/mgmt_config.jar" kind="var"/>
@@ -100,5 +100,6 @@
 	<classpathentry path="src/lib/jaas.jar" kind="lib"/>
 	<classpathentry path="C:/local/mx4j/lib/mx4j-tools.jar" kind="lib"/>
 	<classpathentry path="src/lib/mina-core-1.1.0-SNAPSHOT.jar" kind="lib"/>
+	<classpathentry path="WEBLOGIC_ROOT/modules/com.bea.core.utils.full_1.0.0.0.jar" kind="var"/>
 	<classpathentry path="eclipse/classes" kind="output"/>
 </classpath>

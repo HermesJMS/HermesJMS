@@ -17,7 +17,9 @@
 
 package hermes.browser;
 
+import hermes.HermesException;
 import hermes.browser.tasks.ThreadPool;
+import hermes.config.HermesConfig;
 
 /**
  * Abstract interface into the user interface so Hermes can support more than one UI, e.g. an IDE
@@ -30,4 +32,6 @@ public interface HermesUI
     public UIMessageSink getDefaultMessageSink() ;
     
     public ThreadPool getThreadPool() ;
+    
+    public HermesConfig getConfig() throws HermesException;
 }

@@ -145,6 +145,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
 
    public static HermesBrowser getBrowser()
    {
+      
       return ui;
    }
    
