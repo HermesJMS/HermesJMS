@@ -77,7 +77,30 @@ public class EditObjectAction extends ActionSupport
                final DestinationConfigTreeNode node = (DestinationConfigTreeNode) component;
                final HermesTreeNode hermesNode = (HermesTreeNode) node.getHermesTreeNode();
 
-               Hermes.ui.getThreadPool().invokeLater(new EditDestinationPropertiesTask(hermesNode.getHermes(), node.getConfig()));
+               Hermes.ui.getThreadPool().invokeLater(new EditDestinationPropertiesTask(hermesNode.getHermes(), node.getConfig(), new Runnable()
+               {               
+                  public void run()
+                  {
+                     int index = hermesNode.getIndex(node) ;
+                     hermesNode.remove(node) ;                     
+                     HermesBrowser.getBrowser().getBrowserTree().getBrowserModel().nodesWereRemoved(hermesNode, new int[] { index }, new Object[] { node} ) ;
+                     
+                     DestinationConfigTreeNode newNode = new DestinationConfigTreeNode(hermesNode, node.getConfig(), false) ;
+                    
+                     
+                     hermesNode.add(newNode) ;
+                     HermesBrowser.getBrowser().getBrowserTree().getBrowserModel().nodesWereInserted(hermesNode, new int[] { hermesNode.getIndex(newNode) } ) ;
+                     
+                     try
+                     {
+                        HermesBrowser.getBrowser().saveConfig() ;                     
+                     }
+                     catch (Exception ex)
+                     {
+                        HermesBrowser.getBrowser().showErrorDialog(ex) ;
+                     }
+                  }               
+               }));
             }
             else if (component instanceof HermesTreeNode)
             {
