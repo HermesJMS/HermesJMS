@@ -21,6 +21,7 @@ import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 import hermes.swing.SwingUtils;
 import hermes.util.JMSUtils;
+import hermes.util.MessageUtils;
 
 import java.util.Date;
 import java.util.Enumeration;
@@ -145,7 +146,9 @@ public class DefaultMessageHeaderRenderer implements MessageRenderer
                try
                {
                   final String propertyName = (String) iter.nextElement();
-                  final Object[] row = { propertyName, m.getObjectProperty(propertyName) };
+                  final Object propertyValue = m.getObjectProperty(propertyName) ;                 
+                  final Object[] row = { propertyName,  propertyValue};
+                  
                   tableModel.addRow(row);
                }
                catch (RuntimeException ex)

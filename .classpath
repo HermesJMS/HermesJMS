@@ -24,7 +24,6 @@
 	<classpathentry path="HERMES_ROOT/src/lib/commons-digester.jar" kind="var"/>
 	<classpathentry path="HERMES_ROOT/src/lib/jaxb-impl.jar" kind="var"/>
 	<classpathentry path="HERMES_ROOT/src/lib/jasper-compiler.jar" kind="var"/>
-	<classpathentry path="HERMES_ROOT/src/lib/log4j-1.2.8.jar" kind="var"/>
 	<classpathentry path="HERMES_ROOT/src/lib/xsdlib.jar" kind="var"/>
 	<classpathentry path="HERMES_ROOT/src/lib/jaxb-libs.jar" kind="var"/>
 	<classpathentry path="HERMES_ROOT/src/lib/jaxb-xjc.jar" kind="var"/>
@@ -101,5 +100,6 @@
 	<classpathentry path="C:/local/mx4j/lib/mx4j-tools.jar" kind="lib"/>
 	<classpathentry path="src/lib/mina-core-1.1.0-SNAPSHOT.jar" kind="lib"/>
 	<classpathentry path="WEBLOGIC_ROOT/modules/com.bea.core.utils.full_1.0.0.0.jar" kind="var"/>
+	<classpathentry path="HERMES_ROOT/src/lib/log4j-1.2.15.jar" kind="var"/>
 	<classpathentry path="eclipse/classes" kind="output"/>
 </classpath>

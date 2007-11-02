@@ -254,7 +254,9 @@ public class TibcoEMSAdmin extends HermesAdminSupport implements HermesAdmin
       {
          final Collection<DestinationConfig> rval = new ArrayList<DestinationConfig>();
          
-         if (!(getHermes().getConnectionFactory() instanceof TopicConnectionFactory))
+         boolean both = (getHermes().getConnectionFactory() instanceof TopicConnectionFactory) && (getHermes().getConnectionFactory() instanceof TopicConnectionFactory) ;
+         
+         if (!(getHermes().getConnectionFactory() instanceof TopicConnectionFactory) || both)
          {
             final QueueInfo[] qinfos = getAdmin().getQueues();
 
@@ -286,7 +288,7 @@ public class TibcoEMSAdmin extends HermesAdminSupport implements HermesAdmin
             }
          }
 
-         if (!(getHermes().getConnectionFactory() instanceof QueueConnectionFactory))
+         if (!(getHermes().getConnectionFactory() instanceof QueueConnectionFactory) || both)
          {
             final TopicInfo[] tinfos = getAdmin().getTopics();
 

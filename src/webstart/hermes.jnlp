@@ -50,7 +50,7 @@
 <jar href="jsp-api.jar"/>
 <jar href="jta-spec1_0_1.jar"/>
 <jar href="jython.jar"/>
-<jar href="log4j-1.2.8.jar"/>
+<jar href="log4j-1.2.15.jar"/>
 <jar href="namespace.jar"/>
 <jar href="naming-common.jar"/>
 <jar href="naming-factory.jar"/>

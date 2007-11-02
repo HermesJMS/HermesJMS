@@ -118,7 +118,7 @@ public class DefaultJDBCAdapter implements JDBCAdapter
 
    private synchronized String getNextMessageId(String storeId)
    {
-      return storeId + ":" + messageIdSequence++;
+      return "ID:" + storeId + "-" + messageIdSequence++;
    }
 
    public void insert(Connection connection, String storeId, Message message) throws SQLException, JMSException
