@@ -48,7 +48,7 @@ class MessageHeaderTableSupport
 {
    private static final Logger log = Logger.getLogger(MessageHeaderTableSupport.class);
 
-   static void init(final BrowserAction action, final JTable table, DataFlavor[] myFlavours)
+   static void init(final BrowserAction action, final MessageHeaderTable table, DataFlavor[] myFlavours)
    {
       table.setDragEnabled(true);
       table.setTransferHandler(new MessageHeaderTransferHandler(action));
@@ -63,10 +63,19 @@ class MessageHeaderTableSupport
             }
             else if (SwingUtilities.isLeftMouseButton(e))
             {
+              
+                  if (e.getClickCount() == 2)
+                  {
+                     table.onDoubleClick();
+                  }
+                  else
+                  {
+              
                final JComponent c = (JComponent) e.getSource();
                final TransferHandler th = c.getTransferHandler();
 
                th.exportAsDrag(c, e, TransferHandler.COPY);
+                  }
             }
             else if (SwingUtilities.isRightMouseButton(e))
             {

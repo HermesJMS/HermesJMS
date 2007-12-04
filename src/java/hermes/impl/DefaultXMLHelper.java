@@ -506,7 +506,7 @@ public class DefaultXMLHelper implements XMLHelper
             XMLTextMessage textRval = (XMLTextMessage) rval;
             TextMessage textMessage = (TextMessage) message;
 
-            if (System.getProperty(SystemProperties.BASE64_ENCODE_TEXT_MESSAGE) != null)
+            if (Boolean.parseBoolean(System.getProperty(SystemProperties.BASE64_ENCODE_TEXT_MESSAGE, "false")))
             {
                byte[] bytes = getBase64().encode(textMessage.getText().getBytes());
                textRval.setText(new String(bytes, "ASCII"));

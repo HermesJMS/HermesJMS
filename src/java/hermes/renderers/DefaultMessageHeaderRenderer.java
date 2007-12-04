@@ -56,7 +56,15 @@ public class DefaultMessageHeaderRenderer implements MessageRenderer
    public JComponent render(Message m)
    {
       final SortableTable table = new SortableTable();
-      final DefaultTableModel tableModel = new DefaultTableModel();
+      final DefaultTableModel tableModel = new DefaultTableModel()
+      {
+      
+         @Override
+         public boolean isCellEditable(int row, int column)
+         {
+            return false ;
+         }      
+      };
 
       tableModel.addColumn("Property");
       tableModel.addColumn("Value");
@@ -167,6 +175,7 @@ public class DefaultMessageHeaderRenderer implements MessageRenderer
       }
 
       table.setModel(tableModel);
+      
       return SwingUtils.createJScrollPane(table);
    }
 

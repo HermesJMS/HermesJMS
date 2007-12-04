@@ -45,7 +45,7 @@ public class HierarchicalMessageHeaderTable extends HierarchicalTable
 
         setSortable(true);
         setDragEnabled(true);
-        MessageHeaderTableSupport.init(action, this, myFlavours);
+        //MessageHeaderTableSupport.init(action, this, myFlavours);
     }
 
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column)

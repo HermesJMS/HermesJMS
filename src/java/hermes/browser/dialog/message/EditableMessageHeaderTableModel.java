@@ -17,15 +17,22 @@
 
 package hermes.browser.dialog.message;
 
+import hermes.HermesRuntimeException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 
 /**
  * @author colincrist@hermesjms.com
@@ -35,49 +42,32 @@ import javax.swing.table.TableModel;
 
 public class EditableMessageHeaderTableModel implements TableModel
 {
-   private static class HeaderProperty
+   private static final Logger log = Logger.getLogger(EditableMessageHeaderTableModel.class) ;
+   private static final String[] JMS_PROPERTIES = { "JMSMessageID", "JMSType", "JMSReplyTo", "JMSCorrelationID", "JMSExpiration", "JMSPriority" };
+   private Message message;
+
+   private Vector<String> properties = new Vector<String>();
+   private List<TableModelListener> listeners = new ArrayList<TableModelListener>();
+
+   public EditableMessageHeaderTableModel(Message message) throws JMSException
    {
-      private String name;
-      private Object value = null;
-      private boolean changed = false;
+      this.message = message;
 
-      HeaderProperty(String name, Object value)
+      for (String jmsProperty : JMS_PROPERTIES)
       {
-         this.name = name;
-         this.value = value;
+         properties.add(jmsProperty);
       }
 
-      HeaderProperty(String name)
+      for (Enumeration iter = message.getPropertyNames(); iter.hasMoreElements();)
       {
-         this.name = name;
-      }
-
-      void setValue(Object value)
-      {
-         this.value = value;
-         changed = true;
-      }
-
-      void setClass(Class clazz)
-      {
-         // this.clazz = clazz ;
-      }
-
-      void populate(Message message) throws JMSException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
-      {
-         if (changed)
-         {
-            message.setObjectProperty(name, value);
-         }
+         String propertyName = (String) iter.nextElement();
+         properties.add(propertyName);
       }
    }
 
-   private Vector<HeaderProperty> rows = new Vector<HeaderProperty>();
-   private List<TableModelListener> listeners = new ArrayList<TableModelListener>();
-
    public int getRowCount()
    {
-      return rows.size();
+      return properties.size();
    }
 
    public int getColumnCount()
@@ -112,7 +102,32 @@ public class EditableMessageHeaderTableModel implements TableModel
 
    public Object getValueAt(int rowIndex, int columnIndex)
    {
-      return null;
+      try
+      {
+         switch (columnIndex)
+         {
+            case 0:
+               return properties.get(rowIndex);
+            case 1:
+               return BeanUtils.getProperty(message, properties.get(rowIndex));
+            case 2:
+               final Object o = BeanUtils.getProperty(message, properties.get(rowIndex));
+               if (o != null)
+               {
+                  return o.getClass().getName();
+               }
+               else
+               {
+                  return "Object.class";
+               }
+            default:
+               return "Error";
+         }
+      }
+      catch (Exception ex)
+      {
+         throw new HermesRuntimeException(ex);
+      }
    }
 
    public void setValueAt(Object aValue, int rowIndex, int columnIndex)

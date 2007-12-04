@@ -290,7 +290,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
 
    private ActionFactory actionFactory = new ActionFactory(this);
    private ActionsPanel actionsPane;
-   private DocumentPane browserPane = new DocumentPane();
+   private DocumentPane browserPane ;
 
    //
    // Structure for this window
@@ -971,6 +971,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       ObjectComparatorManager.registerComparator(Integer.class, new IntegerComparator());
       ObjectComparatorManager.registerComparator(Long.class, new LongComparator());
 
+      browserPane = new MainDocumentPane(); 
       // Shows us the memory usage and lets the user GC
 
       MemoryStatusBarItem memoryStatusBar = new MemoryStatusBarItem();

@@ -105,7 +105,8 @@ public class SwingUtils
       JideButton button = new JideButton(action);
 
       button.setText("");
-      button.setMargin(new Insets(0, 0, 0, 0));
+      //button.setMargin(new Insets(0, 0, 0, 0));
+      
 
       return button;
    }

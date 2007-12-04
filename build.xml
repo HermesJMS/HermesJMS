@@ -19,7 +19,7 @@
 	<property name="build.classes" value="build/classes" />
 
 
-	<property name="classes" value="${build.classes}/classes" />
+	<property name="classes" value="${build.classes}" />
 	<property name="classes.ext.selectors" value="${build.classes}/classes-ext/selectors" />
 	<property name="classes.ext.mq" value="${build.classes}/classes-ext/mq" />
 	<property name="classes.ext.sonic" value="${build.classes}/classes-ext/sonicmq" />

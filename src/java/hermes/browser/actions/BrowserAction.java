@@ -139,7 +139,7 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
 
       this.dConfig = dConfig;
       this.messageHeaderTableModel = new MessageHeaderTableModel(hermes, dConfig.getName());
-      this.messageHeaderTable = new MessageHeaderTable(this, messageHeaderTableModel);
+      this.messageHeaderTable = new MessageHeaderTable(hermes, this, messageHeaderTableModel);
       this.hermes = hermes;
       this.maxMessages = maxMessages;
       this.messagePayloadPanel = new MessagePayloadPanel(dConfig.getName());

@@ -30,6 +30,7 @@ import javax.swing.JTabbedPane;
 import org.apache.log4j.Logger;
 
 import com.jidesoft.swing.JideScrollPane;
+import com.jidesoft.swing.JideTabbedPane;
 
 /**
  * A panel for displaying JMS messages
@@ -41,7 +42,7 @@ import com.jidesoft.swing.JideScrollPane;
 public class MessagePayloadPanel extends JPanel
 {
    private static final Logger log = Logger.getLogger(MessagePayloadPanel.class);
-   private final JTabbedPane tabbedPane = new JTabbedPane();
+   private final JTabbedPane tabbedPane = new JideTabbedPane();
 
    private String destinationName;
 

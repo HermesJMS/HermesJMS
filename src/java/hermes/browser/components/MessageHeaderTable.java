@@ -17,14 +17,20 @@
 
 package hermes.browser.components;
 
+import hermes.Hermes;
 import hermes.HermesRuntimeException;
+import hermes.browser.HermesBrowser;
 import hermes.browser.actions.BrowserAction;
+import hermes.browser.dialog.message.MessageEditor;
 import hermes.browser.model.MessageHeaderTableModel;
 import hermes.swing.HideableTableColumn;
+import hermes.swing.SQL92FilterableTableModel;
 
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,9 +40,11 @@ import javax.jms.Message;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import com.jidesoft.grid.JideTable;
 import com.jidesoft.grid.SortableTable;
+import com.jidesoft.grid.SortableTableModel;
 
 /**
  * @author colincrist@hermesjms.com
@@ -46,58 +54,63 @@ import com.jidesoft.grid.SortableTable;
 
 public class MessageHeaderTable extends SortableTable
 {
-   private static final Category cat = Category.getInstance(MessageHeaderTable.class);
+   private static final Logger log = Logger.getLogger(MessageHeaderTable.class);
 
    private DataFlavor[] myFlavours;
    private Map<String, HideableTableColumn> userPropertyColumns = new HashMap<String, HideableTableColumn>();
+   private Hermes hermes;
 
-   public MessageHeaderTable(BrowserAction action, MessageHeaderTableModel model)
+   public MessageHeaderTable(Hermes hermes, BrowserAction action, MessageHeaderTableModel model)
    {
       super(model);
-
-      
+      this.hermes = hermes;
 
       MessageHeaderTableSupport.init(action, this, myFlavours);
-
       setDragEnabled(true);
-      
 
-      /* TODO: Finish support for adding user properties to the table.
-      model.addTableModelListener(new TableModelListener()
-      {
-         public final void tableChanged(TableModelEvent e)
-         {
-            if (e.getType() == TableModelEvent.INSERT)
-            {
-               for (int i = e.getFirstRow(); i < e.getLastRow(); i++)
-               {
-                  final MessageHeaderTableModel model = (MessageHeaderTableModel) e.getSource();
-                  final Message message = model.getMessageAt(i);
-
-                  checkForProperties(message);
-               }
-            }
-         }
-      });
-      */
+     
    }
-  
+
+   public void onDoubleClick()
+   {
+      /**
+      int selectedRow = getSelectedRow();
+      if (selectedRow > -1)
+      {
+         try
+         {
+            SortableTableModel sortModel = (SortableTableModel) getModel() ;
+            SQL92FilterableTableModel filterModel = (SQL92FilterableTableModel) sortModel.getActualModel() ;
+            MessageHeaderTableModel model = (MessageHeaderTableModel) filterModel.getActualModel();
+            Message message = model.getMessageAt(selectedRow);
+            MessageEditor editor = new MessageEditor(hermes, message);
+            editor.edit();
+
+         }
+         catch (Throwable t)
+         {
+            HermesBrowser.getBrowser().showErrorDialog(t);
+         }
+      }
+      **/
+   }
+
    private void checkForProperties(Message message)
    {
       try
       {
          for (final Enumeration e = message.getPropertyNames(); e.hasMoreElements();)
          {
-            String propertyName = (String) e.nextElement() ;
-            
+            String propertyName = (String) e.nextElement();
+
             if (!userPropertyColumns.containsKey(propertyName))
             {
-               final HideableTableColumn column = new HideableTableColumn() ;
-               column.setHeaderValue(propertyName) ;
-               
-               getColumnModel().addColumn(column) ;
-               
-               final MessageHeaderTableModel model = (MessageHeaderTableModel) getModel() ;
+               final HideableTableColumn column = new HideableTableColumn();
+               column.setHeaderValue(propertyName);
+
+               getColumnModel().addColumn(column);
+
+               final MessageHeaderTableModel model = (MessageHeaderTableModel) getModel();
                // model.displayColumn(column) ;
             }
          }
