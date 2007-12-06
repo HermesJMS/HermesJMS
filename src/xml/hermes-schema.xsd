@@ -164,6 +164,7 @@
 		<xs:attribute name="messageStoreSession" type="xs:string"/>
 		<xs:attribute name="scrollMessagesDuringBrowse" type="xs:boolean" default="true"/>
 		<xs:attribute name="deliveryModePersistent" type="xs:boolean"/>
+		<xs:attribute name="base64EncodeMessages" type="xs:boolean"/>
 		
 	</xs:complexType>
 

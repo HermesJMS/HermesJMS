@@ -21,6 +21,7 @@ import hermes.Domain;
 import hermes.HermesException;
 import hermes.MessageFactory;
 import hermes.SystemProperties;
+import hermes.browser.HermesBrowser;
 import hermes.util.JMSUtils;
 import hermes.xml.Content;
 import hermes.xml.Entry;
@@ -65,12 +66,13 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import com.sun.tools.xjc.generator.validator.StringOutputStream;
 import com.sun.xml.bind.StringInputStream;
 
 /**
- * Generic XML helper methods that are non-JMS specific.
+ * Generic XML helper methods that are non-JMS specific. The serialisation is very sub-optimal but okay for dealing withe a few thousands of messages per file.
  * 
  * @author colincrist@hermesjms.com
  * @version $Id: DefaultXMLHelper.java,v 1.23 2006/01/14 12:59:12 colincrist Exp $
@@ -78,16 +80,41 @@ import com.sun.xml.bind.StringInputStream;
 
 public class DefaultXMLHelper implements XMLHelper
 {
-   private static final Category cat = Category.getInstance(DefaultXMLHelper.class);
+   private static final Category log = Logger.getLogger(DefaultXMLHelper.class);
    private static final int XML_TEXT_MESSAGE = 1;
    private static final int XML_BYTES_MESSGAE = 2;
    private static final int XML_OBJECT_MESSAGE = 3;
    private static final int XML_MAP_MESSAGE = 4;
    private static final String BASE64_CODEC = "Base64";
    private final ThreadLocal base64EncoderTL = new ThreadLocal();
-
+   
+   
+   public DefaultXMLHelper()
+   { 
+      
+   }
    private ObjectFactory factory = new ObjectFactory();
 
+   public boolean isBase64EncodeTextMessages()
+   {
+      if (HermesBrowser.getBrowser() != null )
+      {
+         try
+         {
+            return  HermesBrowser.getBrowser().getConfig().isBase64EncodeMessages() ;
+         }
+         catch (HermesException ex)
+         {
+            log.error(ex.getMessage() ,ex) ;
+            return false ;
+         }
+      }
+      else
+      {
+         return Boolean.parseBoolean(System.getProperty(SystemProperties.BASE64_ENCODE_TEXT_MESSAGE, "false")) ;
+      }
+   }
+   
    public ObjectFactory getFactory()
    {
       return factory;
@@ -146,7 +173,7 @@ public class DefaultXMLHelper implements XMLHelper
       }
       catch (Exception ex)
       {
-         cat.error(ex.getMessage(), ex);
+         log.error(ex.getMessage(), ex);
 
          throw new HermesException(ex);
       }
@@ -160,7 +187,7 @@ public class DefaultXMLHelper implements XMLHelper
       }
       catch (Exception ex)
       {
-         cat.error(ex.getMessage(), ex);
+         log.error(ex.getMessage(), ex);
 
          throw new HermesException(ex);
       }
@@ -178,7 +205,7 @@ public class DefaultXMLHelper implements XMLHelper
       }
       catch (Exception ex)
       {
-         cat.error(ex.getMessage(), ex);
+         log.error(ex.getMessage(), ex);
 
          throw new HermesException(ex);
       }
@@ -204,7 +231,7 @@ public class DefaultXMLHelper implements XMLHelper
       }
       catch (Exception ex)
       {
-         cat.error(ex.getMessage(), ex);
+         log.error(ex.getMessage(), ex);
 
          throw new HermesException(ex);
       }
@@ -225,7 +252,7 @@ public class DefaultXMLHelper implements XMLHelper
       }
       catch (Exception ex)
       {
-         cat.error(ex.getMessage(), ex);
+         log.error(ex.getMessage(), ex);
 
          throw new HermesException(ex);
       }
@@ -311,7 +338,7 @@ public class DefaultXMLHelper implements XMLHelper
       }
       catch (Exception ex)
       {
-         cat.error(ex.getMessage(), ex);
+         log.error(ex.getMessage(), ex);
          throw new HermesException(ex);
       }
    }
@@ -411,7 +438,7 @@ public class DefaultXMLHelper implements XMLHelper
          }
          catch (JMSException ex)
          {
-            cat.error("unable to set JMSDeliveryMode to " + message.getJMSDeliveryMode() + ": " + ex.getMessage());
+            log.error("unable to set JMSDeliveryMode to " + message.getJMSDeliveryMode() + ": " + ex.getMessage());
          }
 
          try
@@ -420,7 +447,7 @@ public class DefaultXMLHelper implements XMLHelper
          }
          catch (JMSException ex)
          {
-            cat.error("unable to set JMSMessageID: " + ex.getMessage(), ex);
+            log.error("unable to set JMSMessageID: " + ex.getMessage(), ex);
          }
 
          rval.setJMSExpiration(message.getJMSExpiration());
@@ -432,7 +459,7 @@ public class DefaultXMLHelper implements XMLHelper
          }
          catch (JMSException ex)
          {
-            cat.error("unable to set JMSTimestamp:" + ex.getMessage(), ex);
+            log.error("unable to set JMSTimestamp:" + ex.getMessage(), ex);
          }
 
          if (message.getJMSCorrelationID() != null)
@@ -506,7 +533,7 @@ public class DefaultXMLHelper implements XMLHelper
             XMLTextMessage textRval = (XMLTextMessage) rval;
             TextMessage textMessage = (TextMessage) message;
 
-            if (Boolean.parseBoolean(System.getProperty(SystemProperties.BASE64_ENCODE_TEXT_MESSAGE, "false")))
+            if (isBase64EncodeTextMessages())
             {
                byte[] bytes = getBase64().encode(textMessage.getText().getBytes());
                textRval.setText(new String(bytes, "ASCII"));
