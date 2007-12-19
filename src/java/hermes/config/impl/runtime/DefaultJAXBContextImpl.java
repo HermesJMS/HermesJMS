@@ -15,8 +15,8 @@ import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.Validator;
 
-import com.sun.xml.bind.Messages;
 import com.sun.xml.bind.DatatypeConverterImpl;
+import com.sun.xml.bind.Messages;
 
 /**
  * This class provides the default implementation of JAXBContext.  It

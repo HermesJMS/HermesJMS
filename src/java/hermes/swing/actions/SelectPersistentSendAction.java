@@ -17,12 +17,11 @@
 
 package hermes.swing.actions;
 
-import java.awt.event.ActionEvent;
-
-import hermes.Domain;
 import hermes.HermesException;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
+
+import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 

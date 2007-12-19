@@ -22,7 +22,6 @@ import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
 import hermes.browser.actions.BrowserAction;
 import hermes.browser.actions.MessageStoreBrowserAction;
-import hermes.browser.tasks.TruncateQueueTask;
 import hermes.impl.DefaultXMLHelper;
 import hermes.impl.XMLHelper;
 import hermes.util.TextUtils;

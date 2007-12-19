@@ -25,16 +25,12 @@ import hermes.config.DestinationConfig;
 import hermes.swing.SwingRunner;
 
 import java.util.Collection;
-import java.util.Iterator;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 
 /**

@@ -19,18 +19,13 @@ package hermes.browser.components;
 
 import hermes.Hermes;
 import hermes.HermesRuntimeException;
-import hermes.browser.HermesBrowser;
 import hermes.browser.actions.BrowserAction;
-import hermes.browser.dialog.message.MessageEditor;
 import hermes.browser.model.MessageHeaderTableModel;
 import hermes.swing.HideableTableColumn;
-import hermes.swing.SQL92FilterableTableModel;
 
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,12 +34,9 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 
-import com.jidesoft.grid.JideTable;
 import com.jidesoft.grid.SortableTable;
-import com.jidesoft.grid.SortableTableModel;
 
 /**
  * @author colincrist@hermesjms.com

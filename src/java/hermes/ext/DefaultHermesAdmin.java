@@ -23,7 +23,6 @@ import hermes.HermesAdmin;
 import hermes.HermesException;
 import hermes.config.DestinationConfig;
 
-import java.util.Collection;
 import java.util.Enumeration;
 
 import javax.jms.JMSException;

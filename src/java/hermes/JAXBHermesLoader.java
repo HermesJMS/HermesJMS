@@ -82,7 +82,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * @author colincrist@hermesjms.com
@@ -90,7 +90,7 @@ import org.apache.log4j.Category;
  */
 public class JAXBHermesLoader implements HermesLoader
 {
-   private static final Category log = Category.getInstance(JAXBHermesLoader.class);
+   private static final Logger log = Logger.getLogger(JAXBHermesLoader.class);
    private static final String FILE_NAME = "hermes-config.xml";
    private static final String DEFAULT_EXTENSION_LOADER = "hermes.ext.ExtensionFinderImpl";
 

@@ -110,6 +110,8 @@ public class HermesBrowserTaskListener implements TaskListener
          stringBuffer.append(t.getMessage()).append(HermesConstants.CR);
       }
 
+      Exception linked = null ;
+      
       if (t instanceof JMSException)
       {
          JMSException e = (JMSException) t;
@@ -128,16 +130,12 @@ public class HermesBrowserTaskListener implements TaskListener
             {
                stringBuffer.append(e.getLinkedException().getMessage()).append(HermesConstants.CR);
             }
+            
+            linked = e.getLinkedException() ;
          }
       }
 
-      SwingRunner.invokeLater(new Runnable()
-      {
-         public void run()
-         {
-            JOptionPane.showMessageDialog(hermesBrowser, stringBuffer, "Error", JOptionPane.ERROR_MESSAGE);
-         }
-      });
+      HermesBrowser.getBrowser().showErrorDialog(stringBuffer.toString(), linked == null ? t : linked) ;
 
    }
 

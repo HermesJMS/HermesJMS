@@ -21,6 +21,7 @@ import hermes.Domain;
 import hermes.Hermes;
 import hermes.browser.HermesBrowser;
 import hermes.browser.actions.BrowserAction;
+import hermes.config.DestinationConfig;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -57,26 +58,27 @@ public class QueueSearchDialog extends StandardDialog
     private static Vector selectionHistory = new Vector();
 
     private JPanel topPanel = new JPanel();
-    private Hermes hermes;
-    private String destinationName;
+    private Hermes hermes;   
     private JLabel info = new JLabel("Enter the string or regular expression to search messages for.");;
     private JComboBox stringCombo;
     private JCheckBox stringCheckBox = new JCheckBox("Simple string search");
     private JCheckBox regexCheckBox = new JCheckBox("Regular expression search");
     private JCheckBox userHeaderCheckBox = new JCheckBox("Search user header properties");
     private JCheckBox jmsHeaderCheckBox = new JCheckBox("Search JMS header poperties");
+    private DestinationConfig destinationConfig ;
 
     /**
      * @param parent
      * @param name
      * @param modal
      */
-    public QueueSearchDialog(Frame parent, Hermes hermes, String destinationName)
+    public QueueSearchDialog(Frame parent, Hermes hermes, DestinationConfig destinationConfig)
     {
         super(parent, "Search queue/topic", true);
 
         this.hermes = hermes;
-        this.destinationName = destinationName;
+        this.destinationConfig = destinationConfig;
+        
 
         setDefaultAction(new AbstractAction()
         {
@@ -114,13 +116,16 @@ public class QueueSearchDialog extends StandardDialog
             {
                 BrowserAction action;
 
+                String destinationName = destinationConfig != null ? destinationConfig.getName() : null ;
+                Domain domain = destinationConfig != null ? Domain.getDomain(destinationConfig.getDomain()) : Domain.QUEUE ;
+                
                 if (regexCheckBox.isSelected())
                 {
-                    action = HermesBrowser.getBrowser().getActionFactory().createRegexQueueBrowseAction(hermes, destinationName, Domain.QUEUE, selection);
+                    action = HermesBrowser.getBrowser().getActionFactory().createRegexQueueBrowseAction(hermes, destinationName, domain, selection);
                 }
                 else
                 {
-                    action = HermesBrowser.getBrowser().getActionFactory().createStringSeachQueueBrowseAction(hermes, destinationName, Domain.QUEUE, selection,
+                    action = HermesBrowser.getBrowser().getActionFactory().createStringSeachQueueBrowseAction(hermes, destinationName, domain, selection,
                             userHeaderCheckBox.isSelected());
                 }
 

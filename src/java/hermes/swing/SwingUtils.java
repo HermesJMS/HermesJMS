@@ -30,7 +30,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
 
-import com.jidesoft.grid.JideTable;
 import com.jidesoft.swing.JideButton;
 
 /**

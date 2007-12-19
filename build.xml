@@ -525,12 +525,12 @@
 		<retrotranslator srcjar="${lib}/hermes-webspheremq.jar" destjar="${lib.weaved}/hermes-webspheremq.jar" />
 		<retrotranslator srcjar="${lib}/hermes-wme.jar" destjar="${lib.weaved}/hermes-wme.jar" />
 		<retrotranslator srcjar="${src.lib}/commons-beanutils.jar" destjar="${lib.weaved}/commons-beanutils.jar" />
-		<retrotranslator srcjar="${src.lib}/cglib-2.1_3.jar" destjar="${lib.weaved}/cglib-2.1_3.jar" />
+		<retrotranslator srcjar="${src.lib}/cglib-2.2_beta1.jar" destjar="${lib.weaved}/cglib-2.2_beta1.jar" />
 	</target>
 
 <!--  <target name="webstart" depends="weave"> -->
 
-	<target name="webstart">
+	<target name="webstart" depends="weave">
 		<copy todir="${webstart}">
 			<fileset dir="${lib}" includes="*.jar" />
 			<fileset dir="${src.webstart}" />

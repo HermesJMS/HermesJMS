@@ -149,6 +149,14 @@ public class RegexQueueBrowser implements QueueBrowser
                         String key = (String) headerNames.nextElement();
                         Object value = message.getObjectProperty(key);
 
+                        if (key != null)
+                        {
+                           if (pattern.matcher(key).lookingAt())
+                           {
+                               return true;
+                           }
+                           
+                        }
                         if (value != null)
                         {
                             if (pattern.matcher(value.toString()).lookingAt())

@@ -19,7 +19,6 @@ package hermes.browser.dialog;
 import hermes.Domain;
 import hermes.HermesRuntimeException;
 import hermes.browser.HermesBrowser;
-import hermes.browser.model.tree.DestinationConfigTreeNode;
 import hermes.config.DestinationConfig;
 import hermes.config.impl.PropertySetConfigImpl;
 

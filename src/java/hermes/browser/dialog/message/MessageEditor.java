@@ -21,15 +21,10 @@ import hermes.Hermes;
 import hermes.HermesRuntimeException;
 import hermes.browser.HermesBrowser;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.swing.BorderFactory;
@@ -40,10 +35,6 @@ import org.apache.log4j.Logger;
 
 import com.jidesoft.dialog.ButtonPanel;
 import com.jidesoft.dialog.StandardDialog;
-import com.jidesoft.grid.Property;
-import com.jidesoft.grid.PropertyTable;
-import com.jidesoft.grid.PropertyTableModel;
-import com.jidesoft.swing.JideButton;
 import com.jidesoft.swing.JideSwingUtilities;
 
 /**

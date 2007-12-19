@@ -31,7 +31,6 @@ import hermes.browser.components.PopupMenuFactory;
 import hermes.browser.model.MessageHeaderTableModel;
 import hermes.browser.tasks.MessageTaskListener;
 import hermes.browser.tasks.Task;
-import hermes.browser.tasks.TruncateQueueTask;
 import hermes.config.DestinationConfig;
 import hermes.swing.FilterablePanel;
 import hermes.swing.SQL92FilterableTableModel;
@@ -67,7 +66,6 @@ import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 
 import com.codestreet.selector.parser.InvalidSelectorException;
-
 import com.jidesoft.document.DocumentComponentEvent;
 import com.jidesoft.document.DocumentComponentListener;
 import com.jidesoft.grid.HierarchicalTable;

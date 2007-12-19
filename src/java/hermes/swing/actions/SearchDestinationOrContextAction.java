@@ -23,10 +23,13 @@ import hermes.browser.components.BrowserTree;
 import hermes.browser.dialog.QueueSearchDialog;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
 import hermes.browser.model.tree.HermesTreeNode;
+import hermes.config.DestinationConfig;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
+
+import com.jidesoft.swing.JideSwingUtilities;
 
 /**
  * Action to search a queue, topic or all destinations on a session.
@@ -57,7 +60,7 @@ public class SearchDestinationOrContextAction extends ActionSupport
       {
          final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) browserTree.getSelectionPath().getLastPathComponent();
          final HermesTreeNode hermesNode = (HermesTreeNode) destinationNode.getHermesTreeNode();
-         final QueueSearchDialog dialog = new QueueSearchDialog(HermesBrowser.getBrowser(), hermesNode.getHermes(), destinationNode.getDestinationName());
+         final QueueSearchDialog dialog = new QueueSearchDialog(HermesBrowser.getBrowser(), hermesNode.getHermes(), (DestinationConfig)  destinationNode.getBean());
 
          dialog.setLocationRelativeTo(null) ;
          dialog.show();
@@ -68,7 +71,7 @@ public class SearchDestinationOrContextAction extends ActionSupport
 
          final QueueSearchDialog dialog = new QueueSearchDialog(HermesBrowser.getBrowser(), hermesNode.getHermes());
 
-         dialog.setLocationRelativeTo(null) ;
+         JideSwingUtilities.centerWindow(dialog) ;
          dialog.show();
       }
 

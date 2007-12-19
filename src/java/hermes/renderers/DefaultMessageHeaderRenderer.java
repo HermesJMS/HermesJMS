@@ -21,7 +21,6 @@ import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 import hermes.swing.SwingUtils;
 import hermes.util.JMSUtils;
-import hermes.util.MessageUtils;
 
 import java.util.Date;
 import java.util.Enumeration;

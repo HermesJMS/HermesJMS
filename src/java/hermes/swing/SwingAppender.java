@@ -30,7 +30,6 @@ import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 
 /**

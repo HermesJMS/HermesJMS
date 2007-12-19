@@ -71,10 +71,6 @@
 	<classpathentry path="WEBSPHERE_ROOT/java/commonservices.jar" kind="var"/>
 	<classpathentry path="C:/local/mqseries-5.2/lib/com.ibm.mq.pcf.jar" kind="lib"/>
 	<classpathentry path="src/lib/ant.jar" kind="lib"/>
-	<classpathentry path="HERMES_ROOT/src/lib/asm.jar" kind="var"/>
-	<classpathentry path="HERMES_ROOT/src/lib/asm-attrs.jar" kind="var"/>
-	<classpathentry path="HERMES_ROOT/src/lib/asm-util.jar" kind="var"/>
-	<classpathentry path="HERMES_ROOT/src/lib/cglib-2.1_3.jar" kind="var"/>
 	<classpathentry sourcepath="/LOCAL/jamsel/selector-1.1.jar" path="HERMES_ROOT/src/lib/selector-1.1.jar" kind="var"/>
 	<classpathentry path="src/lib/jython.jar" kind="lib"/>
 	<classpathentry path="src/lib/ArtTk.jar" kind="lib"/>
@@ -91,7 +87,6 @@
 	<classpathentry path="ACTIVEMQ_ROOT/lib/geronimo-jms_1.1_spec-1.0.jar" kind="var"/>
 	<classpathentry sourcepath="C:/local/quickfixj/src" path="src/lib/quickfixj.jar" kind="lib"/>
 	<classpathentry path="src/resources" kind="src"/>
-	<classpathentry path="src/lib/slf4j-jdk14-1.0.1.jar" kind="lib"/>
 	<classpathentry path="src/lib/commons-lang-2.1.jar" kind="lib"/>
 	<classpathentry path="lib/swing-layout-1.0.jar" kind="lib"/>
 	<classpathentry path="C:/local/mx4j/lib/mx4j.jar" kind="lib"/>
@@ -101,5 +96,9 @@
 	<classpathentry path="src/lib/mina-core-1.1.0-SNAPSHOT.jar" kind="lib"/>
 	<classpathentry path="WEBLOGIC_ROOT/modules/com.bea.core.utils.full_1.0.0.0.jar" kind="var"/>
 	<classpathentry path="HERMES_ROOT/src/lib/log4j-1.2.15.jar" kind="var"/>
+	<classpathentry path="HERMES_ROOT/src/lib/cglib-2.2_beta1.jar" kind="var"/>
+	<classpathentry path="HERMES_ROOT/src/lib/asm.jar" kind="var"/>
+	<classpathentry path="HERMES_ROOT/src/lib/asm-commons.jar" kind="var"/>
+	<classpathentry path="HERMES_ROOT/src/lib/asm-util.jar" kind="var"/>
 	<classpathentry path="eclipse/classes" kind="output"/>
 </classpath>

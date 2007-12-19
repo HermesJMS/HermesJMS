@@ -19,13 +19,11 @@ package hermes.browser.dialog.message;
 
 import hermes.HermesRuntimeException;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.swing.event.TableModelListener;

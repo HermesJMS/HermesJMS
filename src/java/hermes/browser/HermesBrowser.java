@@ -66,6 +66,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -85,10 +87,14 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListSelectionListener;
@@ -103,6 +109,7 @@ import com.jidesoft.action.CommandBar;
 import com.jidesoft.action.DefaultDockableBarDockableHolder;
 import com.jidesoft.comparator.ObjectComparatorManager;
 import com.jidesoft.converter.ObjectConverterManager;
+import com.jidesoft.dialog.JideOptionPane;
 import com.jidesoft.docking.DefaultDockingManager;
 import com.jidesoft.docking.event.DockableFrameAdapter;
 import com.jidesoft.docking.event.DockableFrameEvent;
@@ -113,6 +120,7 @@ import com.jidesoft.document.DocumentPane;
 import com.jidesoft.grid.CellEditorManager;
 import com.jidesoft.grid.CellRendererManager;
 import com.jidesoft.plaf.LookAndFeelFactory;
+import com.jidesoft.plaf.basic.ThemePainter;
 import com.jidesoft.status.MemoryStatusBarItem;
 import com.jidesoft.status.ProgressStatusBarItem;
 import com.jidesoft.status.StatusBar;
@@ -137,7 +145,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
    private static final String HERMES_TITLE = "Hermes " + Hermes.VERSION;
    private static final Logger log = Logger.getLogger(HermesBrowser.class);
    private static final RendererManager rendererManager = new RendererManager();
-   private static final ConfigDAO configDAO  = new ConfigDAOImpl();
+   private static final ConfigDAO configDAO = new ConfigDAOImpl();
    private static final long serialVersionUID = 995079090594726460L;
    private static HermesBrowser ui;
    private static final String USER_PROFILE_NAME = "hermes.layout." + System.getProperty("user.name");
@@ -145,13 +153,13 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
 
    public static HermesBrowser getBrowser()
    {
-      
+
       return ui;
    }
-   
+
    public static ConfigDAO getConfigDAO()
    {
-      return configDAO ;
+      return configDAO;
    }
 
    public static RendererManager getRendererManager()
@@ -264,7 +272,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
                log.fatal("cannot initialise hermes browser: " + ex.getMessage(), ex);
             }
          }
-      });     
+      });
    }
 
    private static void setStatusMessage(final String statusMessage)
@@ -290,7 +298,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
 
    private ActionFactory actionFactory = new ActionFactory(this);
    private ActionsPanel actionsPane;
-   private DocumentPane browserPane ;
+   private DocumentPane browserPane;
 
    //
    // Structure for this window
@@ -901,6 +909,27 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       CellEditorManager.initDefaultEditor();
       CellRendererManager.initDefaultRenderer();
       ObjectComparatorManager.initDefaultComparator();
+      
+      LookAndFeelFactory.UIDefaultsCustomizer uiDefaultsCustomizer = new LookAndFeelFactory.UIDefaultsCustomizer() {
+         public void customize(UIDefaults defaults) {
+             ThemePainter painter = (ThemePainter) defaults.get("Theme.painter");
+             defaults.put("OptionPaneUI", "com.jidesoft.plaf.basic.BasicJideOptionPaneUI");
+             defaults.put("OptionPane.showBanner", Boolean.FALSE); // show banner or not. default is true
+             
+             // set both bannerBackgroundDk and // set both bannerBackgroundLt to null if you don't want gradient
+             defaults.put("OptionPane.bannerBackgroundDk", painter != null ? painter.getOptionPaneBannerDk() : null);
+             defaults.put("OptionPane.bannerBackgroundLt", painter != null ? painter.getOptionPaneBannerLt() : null);
+             defaults.put("OptionPane.bannerBackgroundDirection", Boolean.TRUE); // default is true
+
+             // optionally, you can set a Paint object for BannerPanel. If so, the three UIDefaults related to banner background above will be ignored.
+             defaults.put("OptionPane.bannerBackgroundPaint", null);
+
+             defaults.put("OptionPane.buttonAreaBorder", BorderFactory.createEmptyBorder(6, 6, 6, 6));
+             defaults.put("OptionPane.buttonOrientation", new Integer(SwingConstants.RIGHT));
+         }
+     };
+     uiDefaultsCustomizer.customize(UIManager.getDefaults());
+
    }
 
    /**
@@ -919,25 +948,17 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       {
          try
          {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());            
-            
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
             /**
-             * http://hermesjms.com/jira/browse/HJMS-16
-             * 
-             * I've not implemented this fully as the L&F class name is not all we need
-             * to persist, JIDE seems to add in lots of extension stuff and I don't
-             * see how to persist/restor them yet.
-             *             
-            if (TextUtils.isEmpty(getConfig().getLookAndFeel()))
-            {
-               UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());              
-            }
-            else
-            {
-               UIManager.setLookAndFeel(getConfig().getLookAndFeel()) ;
-            }
-            *
-            **/
+             * http://hermesjms.com/jira/browse/HJMS-16 I've not implemented
+             * this fully as the L&F class name is not all we need to persist,
+             * JIDE seems to add in lots of extension stuff and I don't see how
+             * to persist/restor them yet. if
+             * (TextUtils.isEmpty(getConfig().getLookAndFeel())) {
+             * UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+             * else { UIManager.setLookAndFeel(getConfig().getLookAndFeel()) ; }
+             */
          }
          catch (Throwable e)
          {
@@ -950,7 +971,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       {
          UIManager.setLookAndFeel(System.getProperty("swing.defaultlaf"));
       }
-      
+
       if (getConfig().isEnableJython() && jythonFrame == null)
       {
          jythonFrame = new JythonDockableFrame();
@@ -961,8 +982,8 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       {
          getDockingManager().removeFrame(jythonFrame.getKey());
          jythonFrame = null;
-      }      
-      
+      }
+
       CellEditorManager.registerEditor(Domain.class, new DomainCellEditor());
       CellEditorManager.registerEditor(SelectorImpl.class, new SelectorImplCellEditor());
       CellEditorManager.registerEditor(File.class, new DirectoryCellEditor(), DirectoryCellEditor.CONTEXT);
@@ -971,7 +992,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       ObjectComparatorManager.registerComparator(Integer.class, new IntegerComparator());
       ObjectComparatorManager.registerComparator(Long.class, new LongComparator());
 
-      browserPane = new MainDocumentPane(); 
+      browserPane = new MainDocumentPane();
       // Shows us the memory usage and lets the user GC
 
       MemoryStatusBarItem memoryStatusBar = new MemoryStatusBarItem();
@@ -1159,7 +1180,6 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
          }
       }
 
-     
    }
 
    /**
@@ -1251,7 +1271,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
     * @param message
     * @param t
     */
-   public void showErrorDialog(final String message, final Throwable t)
+   public void showErrorDialog2(final String message, final Throwable t)
    {
       log.error(t.getMessage(), t);
 
@@ -1281,6 +1301,56 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       {
          SwingUtilities.invokeLater(r);
       }
+   }
+
+   public void showErrorDialog(final String message, final Throwable t)
+   {
+      Runnable r = new Runnable()
+      {
+         public void run()
+         {
+            String detail = null;
+
+            if (t instanceof PyException)
+            {
+               StringBuffer s = new StringBuffer();
+               PyException pyT = (PyException) t;
+               pyT.traceback.dumpStack(s);
+
+               detail = s.toString();
+            }
+            else
+            {
+               StringWriter s = new StringWriter();
+               PrintWriter p = new PrintWriter(s);
+               t.printStackTrace(p);
+               detail = s.toString();
+            }
+
+            JideOptionPane optionPane = new JideOptionPane(message, JOptionPane.ERROR_MESSAGE,
+                  JideOptionPane.CLOSE_OPTION);
+            optionPane.setTitle(message);
+            
+            if (detail != null)
+            {
+               optionPane.setDetails(detail);
+            }
+            JDialog dialog = optionPane.createDialog(HermesBrowser.this, "Error");
+            dialog.setResizable(true);
+            dialog.pack();
+            dialog.setVisible(true);
+         }
+      };
+
+      if (SwingUtilities.isEventDispatchThread())
+      {
+         r.run();
+      }
+      else
+      {
+         SwingUtilities.invokeLater(r);
+      }
+
    }
 
    /**

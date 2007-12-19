@@ -20,10 +20,10 @@
 <jar href="ArtTk.jar"/>
 <jar href="JyConsole.jar"/>
 <jar href="activation.jar"/>
-<jar href="asm-attrs.jar"/>
+<jar href="asm-commons.jar"/>
 <jar href="asm-util.jar"/>
 <jar href="asm.jar"/>
-<jar href="cglib-2.1_3.jar"/>
+<jar href="cglib-2.2_beta1.jar"/>
 <jar href="commons-beanutils.jar"/>
 <jar href="commons-codec-1.1.jar"/>
 <jar href="commons-collections.jar"/>

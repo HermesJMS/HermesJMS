@@ -69,7 +69,7 @@ set CLASSPATH=%HERMES_LIBS%/jta-spec1_0_1.jar;%HERMES_LIBS%\xml-apis.jar;%HERMES
 if USE_WEAVED_CLASES=="" goto noWeave
 
 :weave
-set CLASSPATH=%HERMES_WEAVED_LIBS%\cglib-2.1_3.jar;%HERMES_WEAVED_LIBS%\commons-beanutils.jar;%HERMES_WEAVED_LIBS%\hermes.jar;%HERMES_LIBS%\backport-util-concurrent.jar;%HERMES_LIBS%\retrotranslator-runtime-1.0.7.jar;%CLASSPATH%;
+set CLASSPATH=%HERMES_WEAVED_LIBS%\cglib-2.2_beta1.jar;%HERMES_WEAVED_LIBS%\commons-beanutils.jar;%HERMES_WEAVED_LIBS%\hermes.jar;%HERMES_LIBS%\backport-util-concurrent.jar;%HERMES_LIBS%\retrotranslator-runtime-1.0.7.jar;%CLASSPATH%;
 set HERMES_LIBS=%HERMES_WEAVED_LIBS%
 goto launch
 

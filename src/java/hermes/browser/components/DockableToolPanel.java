@@ -23,7 +23,6 @@ import javax.swing.JComponent;
 
 import com.jidesoft.docking.DockContext;
 import com.jidesoft.docking.DockableFrame;
-import com.jidesoft.swing.JideScrollPane;
 import com.jidesoft.swing.JideTabbedPane;
 
 /**

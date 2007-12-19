@@ -51,6 +51,7 @@ import com.ibm.mq.jms.MQConnectionFactory;
 import com.ibm.mq.jms.MQQueueEnumeration;
 import com.ibm.mq.pcf.CMQC;
 import com.ibm.mq.pcf.CMQCFC;
+import com.ibm.mq.pcf.PCFException;
 import com.ibm.mq.pcf.PCFMessage;
 import com.ibm.mq.pcf.PCFMessageAgent;
 
@@ -249,6 +250,27 @@ public class MQSeriesAdmin extends HermesAdminSupport implements HermesAdmin
       }
    }
 
+   private void getQueueByType(PCFMessageAgent agent, int type, Collection destinations) throws PCFException, MQException, IOException
+   {
+      final PCFMessage request = new PCFMessage(CMQCFC.MQCMD_INQUIRE_Q_NAMES);
+
+      request.addParameter(CMQC.MQCA_Q_NAME, "*");
+      request.addParameter(CMQC.MQIA_Q_TYPE, type);
+
+      final PCFMessage[] responses = agent.send(request);
+      final String[] names = (String[]) responses[0].getParameterValue(CMQCFC.MQCACF_Q_NAMES);
+
+      for (int i = 0; i < names.length; i++)
+      {
+         final DestinationConfig dConfig = new DestinationConfigImpl();
+
+         dConfig.setName(names[i].trim());
+         dConfig.setDomain(Domain.QUEUE.getId());
+
+         destinations.add(dConfig);
+      }      
+   }
+   
    public synchronized Collection discoverDestinationConfigs() throws JMSException
    {
       final Collection rval = new ArrayList();
@@ -257,23 +279,8 @@ public class MQSeriesAdmin extends HermesAdminSupport implements HermesAdmin
       try
       {
          agent = new PCFMessageAgent(getQueueManager());
-         final PCFMessage request = new PCFMessage(CMQCFC.MQCMD_INQUIRE_Q_NAMES);
-
-         request.addParameter(CMQC.MQCA_Q_NAME, "*");
-         request.addParameter(CMQC.MQIA_Q_TYPE, MQC.MQQT_LOCAL);
-
-         final PCFMessage[] responses = agent.send(request);
-         final String[] names = (String[]) responses[0].getParameterValue(CMQCFC.MQCACF_Q_NAMES);
-
-         for (int i = 0; i < names.length; i++)
-         {
-            final DestinationConfig dConfig = new DestinationConfigImpl();
-
-            dConfig.setName(names[i].trim());
-            dConfig.setDomain(Domain.QUEUE.getId());
-
-            rval.add(dConfig);
-         }
+         getQueueByType(agent, MQC.MQQT_LOCAL, rval) ;
+         getQueueByType(agent, MQC.MQQT_ALIAS, rval) ;         
       }
       catch (MQException ex)
       {

@@ -163,6 +163,14 @@ public class StringSearchQueueBrowser implements QueueBrowser
                   String key = (String) headerNames.nextElement();
                   Object value = message.getObjectProperty(key);
 
+                  if (key != null)
+                  {
+                     if (key.indexOf(string) != -1)
+                     {
+                        return true;
+                     }
+                  }
+                  
                   if (value != null)
                   {
                      if (value.toString().indexOf(string) != -1)
