@@ -41,6 +41,8 @@ import com.jidesoft.swing.JideSwingUtilities;
 
 public class SearchDestinationOrContextAction extends ActionSupport
 {
+   private boolean searchUserHeader = true ;
+   
    public SearchDestinationOrContextAction()
    {
       putValue(Action.NAME, "Search...");
@@ -60,7 +62,7 @@ public class SearchDestinationOrContextAction extends ActionSupport
       {
          final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) browserTree.getSelectionPath().getLastPathComponent();
          final HermesTreeNode hermesNode = (HermesTreeNode) destinationNode.getHermesTreeNode();
-         final QueueSearchDialog dialog = new QueueSearchDialog(HermesBrowser.getBrowser(), hermesNode.getHermes(), (DestinationConfig)  destinationNode.getBean());
+         final QueueSearchDialog dialog = new QueueSearchDialog(HermesBrowser.getBrowser(), hermesNode.getHermes(), (DestinationConfig)  destinationNode.getBean(), searchUserHeader);
 
          dialog.setLocationRelativeTo(null) ;
          dialog.show();

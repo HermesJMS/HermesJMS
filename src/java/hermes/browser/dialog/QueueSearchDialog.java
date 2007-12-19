@@ -63,7 +63,7 @@ public class QueueSearchDialog extends StandardDialog
     private JComboBox stringCombo;
     private JCheckBox stringCheckBox = new JCheckBox("Simple string search");
     private JCheckBox regexCheckBox = new JCheckBox("Regular expression search");
-    private JCheckBox userHeaderCheckBox = new JCheckBox("Search user header properties");
+    private JCheckBox userHeaderCheckBox = new JCheckBox("Search user header properties", true);
     private JCheckBox jmsHeaderCheckBox = new JCheckBox("Search JMS header poperties");
     private DestinationConfig destinationConfig ;
 
@@ -72,7 +72,7 @@ public class QueueSearchDialog extends StandardDialog
      * @param name
      * @param modal
      */
-    public QueueSearchDialog(Frame parent, Hermes hermes, DestinationConfig destinationConfig)
+    public QueueSearchDialog(Frame parent, Hermes hermes, DestinationConfig destinationConfig, boolean searchUserHeader)
     {
         super(parent, "Search queue/topic", true);
 
@@ -106,9 +106,7 @@ public class QueueSearchDialog extends StandardDialog
 
     protected void onOK()
     {
-        log.debug("h=" + getSize().getHeight() + " w=" + getSize().getWidth());
-
-        String selection = stringCombo.getSelectedItem().toString();
+        String selection = stringCombo.getSelectedItem() != null ? stringCombo.getSelectedItem().toString() : null ;
 
         if (selection != null && !selection.equals(""))
         {
@@ -232,7 +230,7 @@ public class QueueSearchDialog extends StandardDialog
             }
         });
 
-        userHeaderCheckBox.setSelected(false);
+        userHeaderCheckBox.setSelected(true);
         jmsHeaderCheckBox.setSelected(false);
         jmsHeaderCheckBox.setEnabled(false);
 
