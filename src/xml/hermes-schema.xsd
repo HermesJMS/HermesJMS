@@ -95,6 +95,8 @@
 		<xs:attribute name="selector" type="xs:string" />
 		<xs:attribute name="useLocalRenderer" type="xs:boolean" />
 		<xs:attribute name="myHermes" type="xs:string" />
+		<xs:attribute name="username" type="xs:string" />
+		<xs:attribute name="password" type="xs:string"/>
 	</xs:complexType>
 
 	<xs:complexType name="RendererConfig">
@@ -165,6 +167,7 @@
 		<xs:attribute name="scrollMessagesDuringBrowse" type="xs:boolean" default="true"/>
 		<xs:attribute name="deliveryModePersistent" type="xs:boolean"/>
 		<xs:attribute name="base64EncodeMessages" type="xs:boolean"/>
+		<xs:attribute name="messageStoreMessageFactory" type="xs:string"/>
 		
 	</xs:complexType>
 

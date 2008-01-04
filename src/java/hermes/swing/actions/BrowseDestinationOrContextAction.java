@@ -18,6 +18,7 @@
 package hermes.swing.actions;
 
 import hermes.Hermes;
+import hermes.HermesException;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
@@ -27,6 +28,7 @@ import hermes.browser.model.tree.MessageStoreTopicTreeNode;
 import hermes.browser.model.tree.MessageStoreTreeNode;
 import hermes.browser.model.tree.NamingConfigTreeNode;
 import hermes.browser.model.tree.RepositoryTreeNode;
+import hermes.util.TextUtils;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -34,6 +36,7 @@ import java.awt.event.KeyEvent;
 
 import javax.jms.Queue;
 import javax.jms.Topic;
+import javax.naming.NamingException;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -60,13 +63,12 @@ public class BrowseDestinationOrContextAction extends ActionSupport
       putValue(Action.NAME, "Browse...");
       putValue(Action.SHORT_DESCRIPTION, "Browse the queue, topic or context");
       putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.browse"));
-      putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false)) ; 
-      
+      putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 
       setEnabled(false);
 
-      enableOnBrowserTreeSelection(new Class[] { MessageStoreQueueTreeNode.class, MessageStoreTopicTreeNode.class, MessageStoreTreeNode.class, DestinationConfigTreeNode.class,
-            NamingConfigTreeNode.class }, this, true);
+      enableOnBrowserTreeSelection(new Class[] { MessageStoreQueueTreeNode.class, MessageStoreTopicTreeNode.class, MessageStoreTreeNode.class,
+            DestinationConfigTreeNode.class, NamingConfigTreeNode.class }, this, true);
       enableOnBrowserTreeSelection(new Class[] { NamingConfigTreeNode.class }, this, new TreeSelectionListener()
       {
          public void valueChanged(TreeSelectionEvent e)
@@ -83,7 +85,7 @@ public class BrowseDestinationOrContextAction extends ActionSupport
 
    public void actionPerformed(TreePath selectionPath)
    {
-     
+
       if (selectionPath != null)
       {
          try
@@ -139,8 +141,8 @@ public class BrowseDestinationOrContextAction extends ActionSupport
                   final MessageStoreTreeNode storeNode = (MessageStoreTreeNode) queueNode.getParent();
                   final Hermes hermes = checkHermesForMessageStore();
 
-                  HermesBrowser.getBrowser().getActionFactory()
-                        .createMessageStoreBrowseAction(storeNode.getMessageStore(), hermes, (Queue) queueNode.getBean(), null);
+                  HermesBrowser.getBrowser().getActionFactory().createMessageStoreBrowseAction(storeNode.getMessageStore(), hermes,
+                        (Queue) queueNode.getBean(), null);
 
                }
             }
@@ -153,8 +155,8 @@ public class BrowseDestinationOrContextAction extends ActionSupport
                   final MessageStoreTreeNode storeNode = (MessageStoreTreeNode) topicNode.getParent();
                   final Hermes hermes = checkHermesForMessageStore();
 
-                  HermesBrowser.getBrowser().getActionFactory()
-                        .createMessageStoreBrowseAction(storeNode.getMessageStore(), hermes, (Topic) topicNode.getBean(), null);
+                  HermesBrowser.getBrowser().getActionFactory().createMessageStoreBrowseAction(storeNode.getMessageStore(), hermes,
+                        (Topic) topicNode.getBean(), null);
 
                }
             }
@@ -168,15 +170,32 @@ public class BrowseDestinationOrContextAction extends ActionSupport
       }
    }
 
-   private Hermes checkHermesForMessageStore()
+   private Hermes checkHermesForMessageStore() throws HermesException
    {
+      if (!TextUtils.isEmpty(HermesBrowser.getBrowser().getConfig().getMessageStoreMessageFactory()))
+      {
+         try
+         {
+            Hermes hermes = (Hermes) HermesBrowser.getBrowser().getContext().lookup(HermesBrowser.getBrowser().getConfig().getMessageStoreMessageFactory()) ;
+            
+            if (hermes != null)
+            {
+               return hermes ;
+            }
+         }
+         catch (NamingException ex)
+         {
+            log.info("cannot find configured message store message factory, using one from the tree instead: " + ex.getMessage(), ex) ;
+         }         
+      }
+      
       if (getBrowserTree().getLastSelectedHermesTreeNode() == null)
       {
-         return getBrowserTree().getBrowserModel().getFirstHermesTreeNode().getHermes() ;
+         return getBrowserTree().getBrowserModel().getFirstHermesTreeNode().getHermes();
       }
       else
       {
-         return getBrowserTree().getLastSelectedHermesTreeNode().getHermes() ;
+         return getBrowserTree().getLastSelectedHermesTreeNode().getHermes();
       }
    }
 }

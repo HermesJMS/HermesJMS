@@ -47,7 +47,15 @@ public class PooledSessionManager extends AbstractSessionManager
 
    
     
-    public void closeConsumer(Destination d, String selector) throws JMSException
+    public void reconnect(String username, String password) throws JMSException
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+
+
+   public void closeConsumer(Destination d, String selector) throws JMSException
     {
         // TODO Auto-generated method stub
 

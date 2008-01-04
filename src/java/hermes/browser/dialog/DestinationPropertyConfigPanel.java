@@ -62,6 +62,8 @@ public class DestinationPropertyConfigPanel extends JPanel
    private static final String ISQUEUE = "Domain";
    private static final String DURABLE = "Durable";
    private static final String DURABLE_CLIENT = "DurableName";
+   private static final String USERNAME = "Username" ;
+   private static final String PASSWORD = "Password" ;
 
    private static final String NAME_INFO = "The name of the queue/topic or the binding in JNDI";
    private static final String SHORT_NAME_INFO = "An alterative name you may wish to use for display purposes, for example if the real name is too long";
@@ -69,6 +71,8 @@ public class DestinationPropertyConfigPanel extends JPanel
    private static final String DURABLE_INFO = "Make a durable subscription if a topic";
    private static final String DURABLE_CLIENT_INFO = "The subscription name to use if this is a durable subscription to a topic.";
    private static final String SELECTOR_INFO = "The selector to use when browsing from the queue or subscribing to the topic.";
+   private static final String USERNAME_INFO = "Override the username from the sessions configuration" ;
+   private static final String PASSWORD_INFO = "Override the password from the sessions configuration" ;
 
    private DestinationConfig config;
    private PropertyTable propertyTable;
@@ -81,6 +85,8 @@ public class DestinationPropertyConfigPanel extends JPanel
    private Property domainProperty;
    private Property durableProperty;
    private Property durableClientIDProperty;
+   private Property usernameProperty ;
+   private Property passwordProperty ;
 
    private List onOK = new ArrayList();
    private Destination bean;
@@ -145,7 +151,9 @@ public class DestinationPropertyConfigPanel extends JPanel
       domainProperty = new JidePropertyImpl(ISQUEUE, ISQUEUE_INFO, Domain.class, Domain.getDomain(config.getDomain()));
       durableProperty = new JidePropertyImpl(DURABLE, DURABLE_INFO, Boolean.class, Boolean.valueOf(config.isDurable()));
       durableClientIDProperty = new JidePropertyImpl(DURABLE_CLIENT, DURABLE_CLIENT_INFO, String.class, config.getClientID());
-
+      usernameProperty =  new JidePropertyImpl(USERNAME, USERNAME_INFO, String.class, config.getUsername()) ;
+      passwordProperty =  new JidePropertyImpl(PASSWORD, PASSWORD_INFO, String.class, config.getPassword()) ;
+      
       Runnable doOnOK = new Runnable()
       {
          public void run()
@@ -195,6 +203,24 @@ public class DestinationPropertyConfigPanel extends JPanel
             {
                config.setClientID(null);
             }
+            
+            if (usernameProperty.getValue() != null && !usernameProperty.getValue().equals(""))
+            {
+               config.setUsername(usernameProperty.getValue().toString());
+            }
+            else
+            {
+               config.setUsername(null);
+            }
+            
+            if (passwordProperty.getValue() != null && !passwordProperty.getValue().equals(""))
+            {
+               config.setPassword(passwordProperty.getValue().toString());
+            }
+            else
+            {
+               config.setPassword(null);
+            }           
          }
       };
 
@@ -211,6 +237,8 @@ public class DestinationPropertyConfigPanel extends JPanel
       model.add(domainProperty);
       model.add(durableProperty);
       model.add(durableClientIDProperty);
+      model.add(usernameProperty) ;
+      model.add(passwordProperty) ;
 
       propertyTableModel = new PropertyTableModel(model);
       propertyTable = new PropertyTable(propertyTableModel);

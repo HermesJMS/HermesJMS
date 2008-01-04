@@ -135,6 +135,7 @@ public class BrowseDestinationTask extends TaskSupport implements Task
          final DestinationConfig dConfig = (DestinationConfig) iter.next();
          int nmessages = 0;
 
+                  
          try
          {
             final Destination destination = hermes.getDestination(dConfig.getName(), Domain.getDomain(dConfig.getDomain()));

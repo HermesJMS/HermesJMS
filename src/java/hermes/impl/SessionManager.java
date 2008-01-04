@@ -64,6 +64,7 @@ public interface SessionManager extends JMSManager
     
     public boolean isOpen() ;
     
+    public void reconnect(String username, String password) throws JMSException ;
     /**
      * Close the session, the next method that requires the session must arrange
      * to have it recreated (make getSession() recreate it is null is the

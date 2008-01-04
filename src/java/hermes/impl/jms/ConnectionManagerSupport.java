@@ -89,6 +89,11 @@ public abstract class ConnectionManagerSupport extends JMSManagerImpl implements
 
    protected Connection createConnection() throws JMSException
    {
+     return createConnection(username, password) ;
+   }
+   
+   protected Connection createConnection(String username, String password) throws JMSException
+   {
       final ConnectionFactory connectionFactory = (ConnectionFactory) parent.getObject();
       Connection rval = null;
 

@@ -70,6 +70,7 @@ import javax.naming.NamingException;
 import javax.swing.ProgressMonitor;
 
 import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * Default implementation for the Hermes interface. Its role is to delegate to
@@ -83,7 +84,7 @@ import org.apache.log4j.Category;
 public class DefaultHermesImpl implements Hermes
 {
 
-   private static final Category cat = Category.getInstance(DefaultHermesImpl.class);
+   private static final Logger log = Logger.getLogger(DefaultHermesImpl.class);
    private static final String DEFAULT_DISPATCHER = "defaultHermesDispatcher";
    private static final Timer timer = new Timer();
 
@@ -118,8 +119,13 @@ public class DefaultHermesImpl implements Hermes
       }
       catch (JMSException ex)
       {
-         cat.error("cannot bootstrap AdminAdapter: " + ex.getMessage(), ex);
+         log.error("cannot bootstrap AdminAdapter: " + ex.getMessage(), ex);
       }
+   }
+
+   public void reconnect(String username, String password) throws JMSException
+   {
+     sessionManager.reconnect(username, password) ;      
    }
 
    public SessionConfig getSessionConfig()
@@ -200,7 +206,7 @@ public class DefaultHermesImpl implements Hermes
       }
       else
       {
-         cat.warn("session " + getId() + " is not transacted");
+         log.warn("session " + getId() + " is not transacted");
       }
 
       try
@@ -212,7 +218,7 @@ public class DefaultHermesImpl implements Hermes
       }
       catch (JMSException ex)
       {
-         cat.error("cannot log audit during commit: " + ex.getMessage(), ex);
+         log.error("cannot log audit during commit: " + ex.getMessage(), ex);
       }
    }
 
@@ -351,6 +357,11 @@ public class DefaultHermesImpl implements Hermes
 
       if (dConfig != null)
       {
+         if (dConfig.getUsername() != null)
+         {
+            reconnect(dConfig.getUsername(), dConfig.getPassword()) ;
+         }
+         
          return sessionManager.getDestination(name, Domain.getDomain(dConfig.getDomain()));
       }
       else
@@ -558,7 +569,7 @@ public class DefaultHermesImpl implements Hermes
       }
       else
       {
-         cat.warn("session " + getId() + " is not transacted");
+         log.warn("session " + getId() + " is not transacted");
       }
 
       if (isAudit())
@@ -681,7 +692,7 @@ public class DefaultHermesImpl implements Hermes
                }
                catch (JMSException e)
                {
-                  cat.error(e.getMessage(), e);
+                  log.error(e.getMessage(), e);
                }
 
                l.onMessage(arg0);
@@ -823,7 +834,7 @@ public class DefaultHermesImpl implements Hermes
       }
       catch (Exception ex)
       {
-         cat.error(ex.getMessage(), ex);
+         log.error(ex.getMessage(), ex);
       }
       //
       // Header properties
@@ -836,7 +847,7 @@ public class DefaultHermesImpl implements Hermes
          }
          catch (JMSException ex)
          {
-            cat.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
          }
       }
 
@@ -848,7 +859,7 @@ public class DefaultHermesImpl implements Hermes
          }
          catch (JMSException ex)
          {
-            cat.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
          }
       }
 
@@ -860,7 +871,7 @@ public class DefaultHermesImpl implements Hermes
          }
          catch (JMSException ex)
          {
-            cat.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
          }
       }
 
@@ -876,7 +887,7 @@ public class DefaultHermesImpl implements Hermes
 
          catch (JMSException ex)
          {
-            cat.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
          }
          catch (NamingException ex)
          {
@@ -892,7 +903,7 @@ public class DefaultHermesImpl implements Hermes
          }
          catch (JMSException ex)
          {
-            cat.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
          }
       }
 
@@ -950,7 +961,7 @@ public class DefaultHermesImpl implements Hermes
             }
             catch (JMSException ex)
             {
-               cat.error(ex.getMessage(), ex);
+               log.error(ex.getMessage(), ex);
             }
          }
       };

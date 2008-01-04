@@ -32,6 +32,8 @@ public interface ConnectionManager extends JMSManager
       SHARED_CONNECTION, CONNECTION_PER_THREAD ;
    }
    
+   public void reconnect(String username, String password) throws JMSException;
+   
    public void setHermes(Hermes hermes) ;
    
     /**

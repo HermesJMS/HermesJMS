@@ -1328,8 +1328,9 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
             }
 
             JideOptionPane optionPane = new JideOptionPane(message, JOptionPane.ERROR_MESSAGE,
-                  JideOptionPane.CLOSE_OPTION);
+                  JideOptionPane.CLOSE_OPTION, UIManager.getIcon("OptionPane.errorIcon"));
             optionPane.setTitle(message);
+            
             
             if (detail != null)
             {

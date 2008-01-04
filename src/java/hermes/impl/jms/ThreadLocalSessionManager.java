@@ -134,6 +134,20 @@ public class ThreadLocalSessionManager extends AbstractSessionManager
       }
    }
 
+   public void reconnect(String username, String password) throws JMSException
+   {
+      try
+      {
+         close() ;
+      }
+      catch (JMSException ex) 
+      {
+         log.warn("when closing session: " + ex.getMessage(), ex) ;
+      }
+      
+      getConnectionManager().reconnect(username, password) ;     
+   }
+
    /**
     * Reconect the consumers in the map, keyed on destination
     */

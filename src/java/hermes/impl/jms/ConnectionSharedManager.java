@@ -49,12 +49,8 @@ public class ConnectionSharedManager extends ConnectionManagerSupport implements
       super();
    }
 
-   /**
-    * Connect with try and create the connection, if one exists it will be
-    * closed.
-    */
-   public void connect() throws JMSException
-   {
+   public void reconnect(String username, String password) throws JMSException
+   {       
       ConnectionFactory connectionFactory = (ConnectionFactory) parent.getObject();
 
       if (connectionFactory == null)
@@ -76,7 +72,23 @@ public class ConnectionSharedManager extends ConnectionManagerSupport implements
 
       cat.debug("creating connection from factory: " + parent);
 
-      connection = createConnection();
+      if (username != null)
+      {
+         connection = createConnection(username, password);
+      }
+      else
+      {
+         connection = createConnection() ;
+      }
+   }
+
+   /**
+    * Connect with try and create the connection, if one exists it will be
+    * closed.
+    */
+   public void connect() throws JMSException
+   {
+     reconnect(null, null) ;
 
    }
 

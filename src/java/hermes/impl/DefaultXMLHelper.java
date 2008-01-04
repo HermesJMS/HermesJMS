@@ -72,7 +72,9 @@ import com.sun.tools.xjc.generator.validator.StringOutputStream;
 import com.sun.xml.bind.StringInputStream;
 
 /**
- * Generic XML helper methods that are non-JMS specific. The serialisation is very sub-optimal but okay for dealing withe a few thousands of messages per file.
+ * Generic XML helper methods that are non-JMS specific. The serialisation is
+ * very sub-optimal but okay for dealing withe a few thousands of messages per
+ * file.
  * 
  * @author colincrist@hermesjms.com
  * @version $Id: DefaultXMLHelper.java,v 1.23 2006/01/14 12:59:12 colincrist Exp $
@@ -87,34 +89,33 @@ public class DefaultXMLHelper implements XMLHelper
    private static final int XML_MAP_MESSAGE = 4;
    private static final String BASE64_CODEC = "Base64";
    private final ThreadLocal base64EncoderTL = new ThreadLocal();
-   
-   
+
    public DefaultXMLHelper()
-   { 
-      
+   {
+
    }
    private ObjectFactory factory = new ObjectFactory();
 
    public boolean isBase64EncodeTextMessages()
    {
-      if (HermesBrowser.getBrowser() != null )
+      if (HermesBrowser.getBrowser() != null)
       {
          try
          {
-            return  HermesBrowser.getBrowser().getConfig().isBase64EncodeMessages() ;
+            return HermesBrowser.getBrowser().getConfig().isBase64EncodeMessages();
          }
          catch (HermesException ex)
          {
-            log.error(ex.getMessage() ,ex) ;
-            return false ;
+            log.error(ex.getMessage(), ex);
+            return false;
          }
       }
       else
       {
-         return Boolean.parseBoolean(System.getProperty(SystemProperties.BASE64_ENCODE_TEXT_MESSAGE, "false")) ;
+         return Boolean.parseBoolean(System.getProperty(SystemProperties.BASE64_ENCODE_TEXT_MESSAGE, "false"));
       }
    }
-   
+
    public ObjectFactory getFactory()
    {
       return factory;
@@ -450,9 +451,24 @@ public class DefaultXMLHelper implements XMLHelper
             log.error("unable to set JMSMessageID: " + ex.getMessage(), ex);
          }
 
-         rval.setJMSExpiration(message.getJMSExpiration());
-         rval.setJMSPriority(message.getJMSPriority());
+         try
+         {
+            rval.setJMSExpiration(message.getJMSExpiration());
+         }
+         catch (JMSException ex)
+         {
+            log.error("unable to set JMSExpiration: " + ex.getMessage(), ex);
+         }
 
+         try
+         {
+            rval.setJMSPriority(message.getJMSPriority());
+         }
+         catch (JMSException ex)
+         {
+            log.error("unable to set JMSPriority: " + ex.getMessage(), ex);
+         }
+         
          try
          {
             rval.setJMSTimestamp(message.getJMSTimestamp());
@@ -508,7 +524,7 @@ public class DefaultXMLHelper implements XMLHelper
             else if (property.getType().equals(Integer.class.getName()))
             {
                rval.setIntProperty(property.getName(), Integer.parseInt(property.getValue()));
-            }           
+            }
          }
 
          return rval;
@@ -614,14 +630,85 @@ public class DefaultXMLHelper implements XMLHelper
             rval.setJMSReplyToDomain(Domain.getDomain(message.getJMSReplyTo()).getId());
          }
 
-         rval.setJMSDeliveryMode(message.getJMSDeliveryMode());
-         rval.setJMSExpiration(message.getJMSExpiration());
-         rval.setJMSMessageID(message.getJMSMessageID());
-         rval.setJMSPriority(message.getJMSPriority());
-         rval.setJMSRedelivered(message.getJMSRedelivered());
-         rval.setJMSTimestamp(message.getJMSTimestamp());
-         rval.setJMSType(message.getJMSType());
-         rval.setJMSCorrelationID(message.getJMSCorrelationID());
+         // try/catch each individually as we sometime find some JMS providers
+         // can barf
+         try
+         {
+            rval.setJMSDeliveryMode(message.getJMSDeliveryMode());
+         }
+         catch (JMSException ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
+
+         try
+         {
+            rval.setJMSExpiration(message.getJMSExpiration());
+         }
+         catch (JMSException ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
+
+         try
+         {
+            rval.setJMSMessageID(message.getJMSMessageID());
+         }
+         catch (JMSException ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
+
+         try
+         {
+            rval.setJMSPriority(message.getJMSPriority());
+         }
+         catch (JMSException ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
+
+         try
+         {
+            rval.setJMSRedelivered(message.getJMSRedelivered());
+         }
+         catch (JMSException ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
+         catch (IllegalStateException ex)
+         {
+            // http://hermesjms.com/forum/viewtopic.php?f=4&t=346
+            
+            log.error(ex.getMessage(), ex);
+         }
+
+         try
+         {
+            rval.setJMSTimestamp(message.getJMSTimestamp());
+         }
+         catch (JMSException ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
+
+         try
+         {
+            rval.setJMSType(message.getJMSType());
+         }
+         catch (JMSException ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
+
+         try
+         {
+            rval.setJMSCorrelationID(message.getJMSCorrelationID());
+         }
+         catch (JMSException ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
 
          for (final Enumeration iter = message.getPropertyNames(); iter.hasMoreElements();)
          {

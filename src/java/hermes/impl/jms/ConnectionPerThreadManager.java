@@ -43,28 +43,41 @@ public class ConnectionPerThreadManager extends ConnectionManagerSupport impleme
         super();
     }
 
-    /*
+    public void reconnect(String username, String password) throws JMSException
+   {
+       Connection oldConnection = (Connection) connectionTL.get();
+
+       if (oldConnection != null)
+       {
+           try
+           {
+               oldConnection.close();
+           }
+           catch (JMSException e)
+           {
+               log.error("closing old connection: " + e.getMessage(), e);
+           }
+       }
+
+       if (username != null)
+       {
+          connectionTL.set(createConnection(username, password));
+       }
+       else
+       {
+          connectionTL.set(createConnection());
+       }
+      
+   }
+
+   /*
      * (non-Javadoc)
      * 
      * @see hermes.impl.JMSManager#connect()
      */
     public void connect() throws JMSException
     {
-        Connection oldConnection = (Connection) connectionTL.get();
-
-        if (oldConnection != null)
-        {
-            try
-            {
-                oldConnection.close();
-            }
-            catch (JMSException e)
-            {
-                log.error("closing old connection: " + e.getMessage(), e);
-            }
-        }
-
-        connectionTL.set(createConnection());
+       reconnect(null, null) ;
     }
 
     /*

@@ -379,4 +379,9 @@ public interface Hermes extends MessageFactory, HermesAdmin
      * Create a topic with the given name
      */
     public Topic createTopic(String topicName) throws JMSException, NamingException;
+    
+    /**
+     * Force a reconnect with a different username and password 
+     */
+    public void reconnect(String username, String password) throws JMSException;
 }
