@@ -19,10 +19,9 @@ REM %~dp0 is expanded pathname of the current script under NT
 REM Check for Java 1.5+ JVM but ensure system32 is first in the path as cygwin users may have a different find...
 
 set PATH=
+set HERMES_HOME=$INSTALL_PATH
 
 for /F "tokens=3" %%v in ('%JAVA_HOME%\bin\java -version 2^>^&1^| find "version"') do if "%%~v" lss "1.5.0" set USE_WEAVED_CLASSES=TRUE
-
-set HERMES_HOME=$INSTALL_PATH
 
 if "%HERMES_CONFIG%"=="" goto tryDotHermes
 goto setOtherVars

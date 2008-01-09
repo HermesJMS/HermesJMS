@@ -549,7 +549,7 @@
 	</target>
 
 	<target name="javadoc" depends="init">
-		<javadoc sourcepath="${src.java}" destdir="${javadoc.dir}" packagenames="hermes,hermes.browser,hermes.browser.dialog,hermes.impl,hermes.xml,hermes.config,hermes.ext" classpathref="project.classpath" />
+		<javadoc sourcepath="${src.java}" packagenames="hermes.*" destdir="${javadoc.dir}" classpathref="project.classpath" />
 	</target>
 
 	<target name="clean">
