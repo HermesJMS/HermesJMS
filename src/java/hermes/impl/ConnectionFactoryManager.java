@@ -32,6 +32,9 @@ import java.util.Collection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  * @author cristco last changed by: $Author: colincrist $
@@ -90,4 +93,6 @@ public interface ConnectionFactoryManager extends JMSManager
      *            The extensionFinder to set.
      */
     public void setExtensionFinder(ExtensionFinder extensionFinder);
+    
+    public Context createContext() throws NamingException, JMSException ;
 }

@@ -40,6 +40,8 @@ import javax.jms.Queue;
 import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.jms.Topic;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
@@ -384,4 +386,10 @@ public interface Hermes extends MessageFactory, HermesAdmin
      * Force a reconnect with a different username and password 
      */
     public void reconnect(String username, String password) throws JMSException;
+    
+    /**
+     * Create JNDI context that this Hermes has been configured with. Returns the context 
+     * or null is none exists. It is your responsibility to close the context when done.
+     */    
+    public Context createContext() throws NamingException, JMSException ;
 }

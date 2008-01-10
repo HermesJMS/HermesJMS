@@ -129,6 +129,18 @@ public class BrowserTreeModel extends DefaultTreeModel implements HermesConfigur
 
       Hermes.events.addConnectionListener(this);
    }
+   
+   public NamingConfigTreeNode getNamingConfigTreeNode(String name) throws HermesException
+   {
+      if (namingNodeById.containsKey(name))
+      {
+         return namingNodeById.get(name) ;
+      }
+      else
+      {
+         throw new HermesException("No such naming configuration " + name) ;
+      }
+   }
 
    public void addMessageStoreURLTreeNode(MessageStoreURLTreeNode node)
    {

@@ -66,6 +66,8 @@ import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicPublisher;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.ProgressMonitor;
 
@@ -666,6 +668,13 @@ public class DefaultHermesImpl implements Hermes
       {
          getAuditLog().onWrite(d, m);
       }
+   }
+   
+   public Context createContext() throws NamingException, JMSException
+   {
+      Thread.currentThread().setContextClassLoader(contextClassLoader);
+      
+      return sessionManager.getConnectionFactoryManager().createContext() ;
    }
 
    /**

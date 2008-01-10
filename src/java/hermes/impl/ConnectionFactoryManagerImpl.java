@@ -20,6 +20,7 @@ package hermes.impl;
 import hermes.Domain;
 import hermes.HermesAdminFactory;
 import hermes.HermesException;
+import hermes.JNDIConnectionFactory;
 import hermes.browser.HermesBrowser;
 import hermes.config.DestinationConfig;
 import hermes.config.FactoryConfig;
@@ -43,6 +44,9 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.TopicConnectionFactory;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Category;
@@ -125,6 +129,19 @@ public class ConnectionFactoryManagerImpl extends JMSManagerImpl implements Conn
 
       destinationConfigs.put(key, destConfig);
       destinationConfigsAsList.add(destConfig);
+   }
+
+   public Context createContext() throws NamingException, JMSException
+   {
+     if (connectionFactory instanceof JNDIConnectionFactory)
+     {
+        JNDIConnectionFactory jndiCF = (JNDIConnectionFactory) connectionFactory ;
+        return jndiCF.createContext() ;
+     }
+     else
+     {
+        return null ;
+     }
    }
 
    public void removeDestinationConfig(DestinationConfig destConfig)

@@ -27,6 +27,7 @@ import hermes.HermesInitialContextFactory;
 import hermes.HermesLoader;
 import hermes.HermesRepositoryManager;
 import hermes.JAXBHermesLoader;
+import hermes.JNDIContextFactory;
 import hermes.SingletonManager;
 import hermes.SystemProperties;
 import hermes.browser.actions.ActionFactory;
@@ -68,6 +69,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -663,6 +665,12 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       return browserTreePane.getBrowserTree();
    }
 
+   public Context createContext(String id) throws JMSException, NamingException, InvocationTargetException, IOException, IllegalAccessException, NoSuchMethodException
+   {
+      final NamingConfig config = getBrowserTree().getBrowserModel().getNamingConfigTreeNode(id).getConfig() ;
+      final JNDIContextFactory factory = new JNDIContextFactory(config) ;
+      return factory.createContext() ;
+   }
    /**
     * Get the current configuration model.
     * 
