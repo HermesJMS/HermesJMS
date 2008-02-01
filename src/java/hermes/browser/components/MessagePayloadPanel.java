@@ -85,7 +85,7 @@ public class MessagePayloadPanel extends JPanel
 
       for (MessageRenderer renderer : HermesBrowser.getRendererManager().getRenderers())
       {
-         if (renderer.canRender(m))
+         if (renderer.isActive() && renderer.canRender(m))
          {
             JComponent component = new JideScrollPane(renderer.render(m)) ;
             

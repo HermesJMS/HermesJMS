@@ -17,6 +17,7 @@
 
 package hermes.browser.dialog;
 
+import hermes.Hermes;
 import hermes.browser.HermesBrowser;
 import hermes.config.HermesConfig;
 import hermes.config.WatchConfig;
@@ -27,10 +28,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.naming.NamingException;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+
+import org.apache.log4j.Logger;
 
 import com.jidesoft.grid.Property;
 import com.jidesoft.grid.PropertyPane;
@@ -45,6 +49,8 @@ import com.jidesoft.grid.PropertyTableModel;
 
 public class GeneralConfigPanel extends JPanel
 {
+   private static final Logger log = Logger.getLogger(GeneralConfigPanel.class);
+
    private static final String AUDIT_DIRECTORY = "AuditDirectory";
    private static final String MESSAGES_DIRECTORY = "MessageDirectory";
    private static final String THREADPOOL = "ThreadPoolSize";
@@ -69,9 +75,10 @@ public class GeneralConfigPanel extends JPanel
    private static final String QF_CACHE = "QuickFIXMessageCache";
    private static final String QF_FILTER_SESSION = "QuickFIXFilterSessionMessages";
    private static final String ENABLE_JYTHON = "EnableJython";
-   private static final String SCROLL_MESSAGES_IN_BROWSE = "ScrollMessagesDuringBrowse" ;
-   private static final String BASE64_ENCODE_MESSAGES ="Base64 Encode Text Messages" ;
-   
+   private static final String SCROLL_MESSAGES_IN_BROWSE = "ScrollMessagesDuringBrowse";
+   private static final String BASE64_ENCODE_MESSAGES = "Base64EncodeTextMessages";
+   private static final String MESSAGE_STORE_MESSAGE_FACTORY = "MessageStoreMessageFactory";
+
    private static final String AUDIT_DIRECTORY_INFO = "The directory where audit files are written whenever you interact with a queue/topic.";
    private static final String MESSAGES_DIRECTORY_INFO = "The directory to hold your message repository files.";
    private static final String THREADPOOL_INFO = "The maximum size of the thread pool allowing concurrent tasks to take place.";
@@ -95,9 +102,10 @@ public class GeneralConfigPanel extends JPanel
    private static final String QF_CACHE_INFO = "Message cache for QuickFIX/J to control memory use";
    private static final String QF_FILTER_SESSION_INFO = "Filter out session level FIX messages";
    private static final String ENABLE_JYTHON_INFO = "Enable Jython";
-   private static final String SCROLL_MESSAGES_IN_BROWSE_INFO = "Scroll to the newest message during a browse" ;
-   private static final String BASE64_ENCODE_MESSAGES_INFO = "Base64 encode text messages when stored in XML or in message stores" ;
-   
+   private static final String SCROLL_MESSAGES_IN_BROWSE_INFO = "Scroll to the newest message during a browse";
+   private static final String BASE64_ENCODE_MESSAGES_INFO = "Base64 encode text messages when stored in XML or in message stores";
+   private static final String MESSAGE_STORE_MESSAGE_FACTORY_INFO = "The JMS session to use when working with message stores";
+
    private PreferencesDialog dialog;
    private HermesConfig config;
    private PropertyTable propertyTable;
@@ -121,9 +129,10 @@ public class GeneralConfigPanel extends JPanel
    private Property quickFIXCacheProperty;
    private Property quickFIXCacheFilterSessionProperty;
    private Property enableJythonProperty;
-   private Property scrollMessagesInBrowseProperty ;
-   private Property base64EncodeMessagesProperty ;
-   
+   private Property scrollMessagesInBrowseProperty;
+   private Property base64EncodeMessagesProperty;
+   private Property messageStoreMessageFactory;
+
    private List<Runnable> watchSetters = new ArrayList<Runnable>();
 
    public static class PropertyImpl extends Property
@@ -210,11 +219,12 @@ public class GeneralConfigPanel extends JPanel
 
       config.getQuickFIX().setCacheSize(((Integer) quickFIXCacheProperty.getValue()).intValue());
       config.getQuickFIX().setFilterSessionMsgTypes((Boolean) quickFIXCacheFilterSessionProperty.getValue());
-      
-      config.setEnableJython((Boolean) enableJythonProperty.getValue()) ;
-      config.setScrollMessagesDuringBrowse((Boolean) scrollMessagesInBrowseProperty.getValue()) ;
-      config.setBase64EncodeMessages((Boolean) base64EncodeMessagesProperty.getValue()) ;
-      
+
+      config.setEnableJython((Boolean) enableJythonProperty.getValue());
+      config.setScrollMessagesDuringBrowse((Boolean) scrollMessagesInBrowseProperty.getValue());
+      config.setBase64EncodeMessages((Boolean) base64EncodeMessagesProperty.getValue());
+      config.setMessageStoreMessageFactory((String) messageStoreMessageFactory.getValue());
+
       if (consumerTimeoutProperty.getValue() != null)
       {
          config.setQueueBrowseConsumerTimeout(((Long) consumerTimeoutProperty.getValue()));
@@ -281,10 +291,14 @@ public class GeneralConfigPanel extends JPanel
       quickFIXCacheProperty = new PropertyImpl(QF_CACHE, new Integer(config.getQuickFIX().getCacheSize()), QF_CACHE_INFO, Integer.class);
       quickFIXCacheFilterSessionProperty = new PropertyImpl(QF_FILTER_SESSION, new Boolean(config.getQuickFIX().isFilterSessionMsgTypes()),
             QF_FILTER_SESSION_INFO, Boolean.class);
-      enableJythonProperty = new PropertyImpl(ENABLE_JYTHON, new Boolean(config.isEnableJython()), ENABLE_JYTHON_INFO, Boolean.class) ;
-      scrollMessagesInBrowseProperty = new PropertyImpl(SCROLL_MESSAGES_IN_BROWSE, new Boolean(config.isScrollMessagesDuringBrowse()), SCROLL_MESSAGES_IN_BROWSE_INFO, Boolean.class) ;
-      base64EncodeMessagesProperty = new PropertyImpl(BASE64_ENCODE_MESSAGES, new Boolean(config.isBase64EncodeMessages()), BASE64_ENCODE_MESSAGES_INFO, Boolean.class) ;
-      
+      enableJythonProperty = new PropertyImpl(ENABLE_JYTHON, new Boolean(config.isEnableJython()), ENABLE_JYTHON_INFO, Boolean.class);
+      scrollMessagesInBrowseProperty = new PropertyImpl(SCROLL_MESSAGES_IN_BROWSE, new Boolean(config.isScrollMessagesDuringBrowse()),
+            SCROLL_MESSAGES_IN_BROWSE_INFO, Boolean.class);
+      base64EncodeMessagesProperty = new PropertyImpl(BASE64_ENCODE_MESSAGES, new Boolean(config.isBase64EncodeMessages()), BASE64_ENCODE_MESSAGES_INFO,
+            Boolean.class);
+      messageStoreMessageFactory = new PropertyImpl(MESSAGE_STORE_MESSAGE_FACTORY, config.getMessageStoreMessageFactory(), MESSAGE_STORE_MESSAGE_FACTORY_INFO,
+            Hermes.class);
+
       for (Iterator iter = config.getWatch().iterator(); iter.hasNext();)
       {
          final WatchConfig wConfig = (WatchConfig) iter.next();
@@ -372,9 +386,10 @@ public class GeneralConfigPanel extends JPanel
       list.add(consumerTimeoutProperty);
       list.add(quickFIXCacheProperty);
       list.add(quickFIXCacheFilterSessionProperty);
-      list.add(enableJythonProperty) ;
-      list.add(scrollMessagesInBrowseProperty) ;
-      list.add(base64EncodeMessagesProperty) ;
+      list.add(enableJythonProperty);
+      list.add(scrollMessagesInBrowseProperty);
+      list.add(base64EncodeMessagesProperty);
+      list.add(messageStoreMessageFactory);
 
       list.add(watchProperty);
 

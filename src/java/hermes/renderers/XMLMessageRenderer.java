@@ -17,7 +17,6 @@
 
 package hermes.renderers;
 
-import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 import hermes.swing.MyTextArea;
 import hermes.util.MessageUtils;
@@ -40,7 +39,7 @@ import org.apache.log4j.Logger;
  * @version $Id: XMLMessageRenderer.java,v 1.3 2007/02/18 16:13:41 colincrist Exp $
  */
 
-public class XMLMessageRenderer implements MessageRenderer
+public class XMLMessageRenderer extends AbstractMessageRenderer
 {
    private static final Logger log = Logger.getLogger(XMLMessageRenderer.class);
 
@@ -82,29 +81,6 @@ public class XMLMessageRenderer implements MessageRenderer
       return textArea ;
    }
 
-   /**
-    * There are no configurable options on this renderer.
-    */
-   public Config createConfig()
-   {
-      return null;
-   }
-
-   /**
-    * There are no configurable options on this renderer
-    */
-   public void setConfig(Config config)
-   {
-      // TODO Auto-generated method stub
-   }
-
-   /**
-    * There are no configurable options on this renderer
-    */
-   public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception
-   {
-      return null;
-   }
 
    /**
     * Any JMS message is rederable.
@@ -131,10 +107,5 @@ public class XMLMessageRenderer implements MessageRenderer
    public String getDisplayName()
    {
       return "XML";
-   }
-   
-   public Config getConfig()
-   {
-      return null ;
    }
 }

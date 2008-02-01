@@ -15,10 +15,14 @@
 
 package hermes.ext.ems;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import hermes.Hermes;
 import hermes.HermesAdmin;
 import hermes.HermesAdminFactory;
 import hermes.HermesException;
+import hermes.HermesRuntimeException;
 import hermes.JNDIConnectionFactory;
 
 import javax.jms.ConnectionFactory;
@@ -29,6 +33,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
 import com.tibco.tibjms.TibjmsConnectionFactory;
+import com.tibco.tibjms.TibjmsSSL;
 import com.tibco.tibjms.admin.TibjmsAdmin;
 
 /**
@@ -89,13 +94,21 @@ public class TibcoEMSAdminFactory implements HermesAdminFactory
          else if (connectionFactory instanceof TibjmsConnectionFactory)
          {
             final TibjmsConnectionFactory tibCF = (TibjmsConnectionFactory) connectionFactory;
-           
-            serverURL = serverURL == null ? (String) BeanUtils.getProperty(tibCF, "serverUrl") : serverURL ;
-            username = username == null ? (String) BeanUtils.getProperty(tibCF, "userName") : username ;
+            final Map ssl = getSSLParameters(tibCF);
+
+            serverURL = serverURL == null ? (String) BeanUtils.getProperty(tibCF, "serverUrl") : serverURL;
+            username = username == null ? (String) BeanUtils.getProperty(tibCF, "userName") : username;
             password = password == null ? (String) BeanUtils.getProperty(tibCF, "userPassword") : password;
-            
-            admin = new TibjmsAdmin(serverURL, username, password) ;
-                        
+
+            if (ssl.size() == 0)
+            {
+               admin = new TibjmsAdmin(serverURL, username, password);
+            }
+            else
+            {
+               admin = new TibjmsAdmin(serverURL, username, password, ssl);
+            }
+
          }
 
          if (admin == null)
@@ -111,6 +124,40 @@ public class TibcoEMSAdminFactory implements HermesAdminFactory
       }
 
       return admin;
+   }
+
+   private Map getSSLParameters(TibjmsConnectionFactory tibCF)
+   {
+      try
+      {
+         Map rval = new HashMap();
+
+         if (BeanUtils.getProperty(tibCF, "SSLIdentity") != null)
+         {
+            rval.put(TibjmsSSL.IDENTITY, BeanUtils.getProperty(tibCF, "SSLIdentity"));
+            rval.put(TibjmsSSL.AUTH_ONLY, BeanUtils.getProperty(tibCF, "SSLAuthOnly")) ;
+            rval.put(TibjmsSSL.CIPHER_SUITES, BeanUtils.getProperty(tibCF, "SSLCipherSuites")) ;
+            rval.put(TibjmsSSL.DEBUG_TRACE, BeanUtils.getProperty(tibCF, "SSLDebugTrace")) ;
+            rval.put(TibjmsSSL.ENABLE_VERIFY_HOST, BeanUtils.getProperty(tibCF, "SSLEnableVerifyHost")) ;
+            rval.put(TibjmsSSL.ENABLE_VERIFY_HOST_NAME, BeanUtils.getProperty(tibCF, "SSLEnableVerifyHostName")) ;
+            rval.put(TibjmsSSL.EXPECTED_HOST_NAME, BeanUtils.getProperty(tibCF, "SSLExpectedHostName")) ;          
+            rval.put(TibjmsSSL.IDENTITY_ENCODING, BeanUtils.getProperty(tibCF, "SSLIdentityEncoding")) ;
+            rval.put(TibjmsSSL.ENABLE_VERIFY_HOST_NAME, BeanUtils.getProperty(tibCF, "SSLEnableVerifyHostName")) ;
+            rval.put(TibjmsSSL.ISSUER_CERTIFICATES, BeanUtils.getProperty(tibCF, "SSLIssuerCertificate")) ;
+            rval.put(TibjmsSSL.PASSWORD, BeanUtils.getProperty(tibCF, "SSLPassword")) ;
+            rval.put(TibjmsSSL.PRIVATE_KEY, BeanUtils.getProperty(tibCF, "SSLPrivateKey")) ;
+            rval.put(TibjmsSSL.PRIVATE_KEY_ENCODING, BeanUtils.getProperty(tibCF, "SSLPrivateKeyEncoding")) ;
+            rval.put(TibjmsSSL.TRACE, BeanUtils.getProperty(tibCF, "SSLTrace")) ;
+            rval.put(TibjmsSSL.TRUSTED_CERTIFICATES, BeanUtils.getProperty(tibCF, "SSLTrustedertificate")) ;
+            rval.put(TibjmsSSL.VENDOR, BeanUtils.getProperty(tibCF, "SSLVendor")) ;            
+         }
+
+         return rval;
+      }
+      catch (Exception ex)
+      {
+         throw new HermesRuntimeException(ex);
+      }
    }
 
    public String getPassword()

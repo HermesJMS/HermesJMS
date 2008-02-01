@@ -17,7 +17,6 @@
 
 package hermes.renderers;
 
-import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 import hermes.swing.MyTextArea;
 
@@ -37,14 +36,13 @@ import org.apache.log4j.Logger;
  *          colincrist Exp $
  */
 
-public class ToStringMessageRenderer implements MessageRenderer
+public class ToStringMessageRenderer extends AbstractMessageRenderer
 {
    private static final Logger log = Logger.getLogger(ToStringMessageRenderer.class);
 
    public ToStringMessageRenderer()
    {
-      super();
-      // TODO Auto-generated constructor stub
+      super();    
    }
 
    public JComponent render(Message m)
@@ -59,35 +57,6 @@ public class ToStringMessageRenderer implements MessageRenderer
       textArea.setCaretPosition(0);
 
       return textArea;
-   }
-
-   public Config getConfig()
-   {
-      return null;
-   }
-
-   /**
-    * There are no configurable options on this renderer.
-    */
-   public Config createConfig()
-   {
-      return null;
-   }
-
-   /**
-    * There are no configurable options on this renderer
-    */
-   public void setConfig(Config config)
-   {
-      // TODO Auto-generated method stub
-   }
-
-   /**
-    * There are no configurable options on this renderer
-    */
-   public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception
-   {
-      return null;
    }
 
    /**

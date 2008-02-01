@@ -39,6 +39,10 @@ public interface MessageRenderer
         public void setName(String name) ;
 
         public String getPropertyDescription(String propertyName);
+        
+        public boolean isActive() ;
+      
+        public void setActive(boolean active) ;
     }
 
     /**
@@ -57,12 +61,13 @@ public interface MessageRenderer
     public Config createConfig();
 
     /**
-     * Called then the configuration is updated by the GUI
-     * 
-     * @param config
+     * Called when the configuration is updated by the GUI
      */
     public void setConfig(Config config);
     
+    /**
+     * Called by the GUI to get the current configuration.
+     */
     public Config getConfig() ;
 
     /**
@@ -78,15 +83,25 @@ public interface MessageRenderer
 
     /** 
      * Called to quickly check if this renderer can render a message.
-     * 
-     * @param message
-     * @return
      */
     public boolean canRender(Message message) ;
     
     /**
      * Get the name to show in the tabbbed pane
-     * @return
      */
     public String getDisplayName() ;
+    
+    
+    /** 
+     * Set the active state of this renderer. Inactive renderers are not called by the GUI
+     * but they still exist for configuration purposes
+     * 
+     * @param active
+     */
+    public void setActive(boolean active) ;
+    
+    /**
+     * Is this renderer active? 
+     */
+    public boolean isActive() ;
 }

@@ -17,7 +17,6 @@
 
 package hermes.renderers;
 
-import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 import hermes.swing.MyTextArea;
 import hermes.util.DumpUtils;
@@ -38,7 +37,7 @@ import org.apache.log4j.Logger;
  * @version $Id: HexMessageRenderer.java,v 1.3 2007/02/18 16:13:41 colincrist Exp $
  */
 
-public class HexMessageRenderer implements MessageRenderer
+public class HexMessageRenderer extends AbstractMessageRenderer
 {
    private static final Logger log = Logger.getLogger(HexMessageRenderer.class);
 
@@ -74,30 +73,7 @@ public class HexMessageRenderer implements MessageRenderer
       return textArea ;
    }
 
-   /**
-    * There are no configurable options on this renderer.
-    */
-   public Config createConfig()
-   {
-      return null;
-   }
-
-   /**
-    * There are no configurable options on this renderer
-    */
-   public void setConfig(Config config)
-   {
-      // TODO Auto-generated method stub
-   }
-
-   /**
-    * There are no configurable options on this renderer
-    */
-   public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception
-   {
-      return null;
-   }
-
+  
    /**
     * Any JMS message is rederable.
     */
@@ -110,11 +86,4 @@ public class HexMessageRenderer implements MessageRenderer
    {
       return "Hex";
    }
-   
-   public Config getConfig()
-   {
-      return null ;
-   }
-   
-  
 }

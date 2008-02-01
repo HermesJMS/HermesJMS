@@ -17,9 +17,9 @@
 
 package hermes.renderers;
 
-import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 import hermes.swing.MyTextArea;
+import hermes.util.MappedStringContent;
 import hermes.util.MessageUtils;
 
 import java.awt.Font;
@@ -30,6 +30,10 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
@@ -48,6 +52,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.PlainDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -62,7 +67,7 @@ import org.apache.log4j.Logger;
  *          colincrist Exp $
  */
 
-public class DefaultMessageRenderer implements MessageRenderer
+public class DefaultMessageRenderer extends AbstractMessageRenderer
 {
    private static final Logger log = Logger.getLogger(DefaultMessageRenderer.class);
    private static final String BYTESISSTRING = "bytesIsString";
@@ -86,7 +91,7 @@ public class DefaultMessageRenderer implements MessageRenderer
     *          colincrist Exp $
     */
 
-   public static class MyConfig implements MessageRenderer.Config
+   public class MyConfig extends AbstractMessageRenderer.BasicConfig
    {
       private String name;
       private boolean bytesIsObject = false;
@@ -220,7 +225,7 @@ public class DefaultMessageRenderer implements MessageRenderer
       }
    }
 
-   private MyConfig currentConfig = new MyConfig();
+  
 
    /**
     * DefaultMessageRenderer constructor comment.
@@ -243,14 +248,18 @@ public class DefaultMessageRenderer implements MessageRenderer
       // Show the text in a JTextArea, you can edit the message in place and
       // then drop it onto another queue/topic.
 
-      final JTextArea textPane = new MyTextArea() ; 
+      final String text = textMessage.getText() ;
+      final JTextArea textPane = new JTextArea(text) ;
+      
+      //final CharBuffer bytes = CharBuffer.wrap(text.subSequence(0, text.length())) ;
+      //final JTextArea textPane = new MyTextArea(new PlainDocument(new MappedStringContent(bytes))) ; 
 
       textPane.setEditable(true);
       textPane.setFont(Font.decode("Monospaced-PLAIN-12"));
       textPane.setLineWrap(true) ;
       textPane.setWrapStyleWord(true);
-      textPane.setText(textMessage.getText());
-
+      
+ 
       textPane.getDocument().addDocumentListener(new DocumentListener()
       {
          public void doChange()
@@ -326,7 +335,8 @@ public class DefaultMessageRenderer implements MessageRenderer
       {
          JTextArea textPane = new JTextArea();
          StringBuffer buffer = new StringBuffer();
-
+         MyConfig currentConfig = (MyConfig) getConfig() ;
+         
          if (currentConfig.isToStringOnObjectMessage())
          {
             buffer.append(obj.toString());
@@ -409,7 +419,8 @@ public class DefaultMessageRenderer implements MessageRenderer
    protected JComponent handleBytesMessage(BytesMessage bytesMessage) throws JMSException, IOException, ClassNotFoundException
    {
       final JTextArea textPane = new MyTextArea() ; 
-
+      final MyConfig currentConfig = (MyConfig) getConfig() ; 
+      
       textPane.setEditable(false);
       bytesMessage.reset();
 
@@ -552,16 +563,6 @@ public class DefaultMessageRenderer implements MessageRenderer
    /*
     * (non-Javadoc)
     * 
-    * @see hermes.browser.MessageRenderer#getConfigPanel()
-    */
-   public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception
-   {
-      return RendererHelper.createDefaultConfigPanel(dialogProxy);
-   }
-
-   /*
-    * (non-Javadoc)
-    * 
     * @see hermes.browser.MessageRenderer#createConfig()
     */
    public Config createConfig()
@@ -576,20 +577,18 @@ public class DefaultMessageRenderer implements MessageRenderer
     */
    public synchronized void setConfig(Config config)
    {
-      currentConfig = (MyConfig) config;
-
+      final MyConfig currentConfig = (MyConfig) config ;
       panelCache = new LRUMap(currentConfig.getMessageCache());
+      super.setConfig(config) ;
    }
 
-   public Config getConfig()
-   {
-      return currentConfig;
-   }
+  
 
    public synchronized LRUMap getPanelMap()
    {
       if (panelCache == null)
       {
+         final MyConfig currentConfig = (MyConfig) getConfig() ;
          panelCache = new LRUMap(currentConfig.getMessageCache());
       }
 

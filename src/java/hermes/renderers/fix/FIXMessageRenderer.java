@@ -17,14 +17,13 @@
 
 package hermes.renderers.fix;
 
-import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 import hermes.fix.FIXException;
 import hermes.fix.FIXMessage;
 import hermes.fix.FIXUtils;
 import hermes.fix.quickfix.QuickFIXMessage;
 import hermes.fix.quickfix.QuickFIXMessageCache;
-import hermes.renderers.RendererHelper;
+import hermes.renderers.AbstractMessageRenderer;
 import hermes.util.MessageUtils;
 
 import java.io.IOException;
@@ -49,7 +48,7 @@ import org.apache.log4j.Logger;
  * @version $Id: FIXMessageRenderer.java,v 1.6 2006/04/28 09:59:37 colincrist
  *          Exp $
  */
-public class FIXMessageRenderer implements MessageRenderer
+public class FIXMessageRenderer extends AbstractMessageRenderer
 {
    private static final Logger log = Logger.getLogger(FIXMessageRenderer.class);
    private static final String MESSAGE_CACHE = "messageCache";
@@ -61,9 +60,9 @@ public class FIXMessageRenderer implements MessageRenderer
 
    private QuickFIXMessageCache cache = new QuickFIXMessageCache(32) ;
    private LRUMap panelCache;
-   private MyConfig currentConfig = new MyConfig();
+  
 
-   public class MyConfig implements Config
+   public class MyConfig extends AbstractMessageRenderer.BasicConfig
    {
       private int messageCache = 100;
       private boolean displayValueWithEnum = true;
@@ -173,7 +172,7 @@ public class FIXMessageRenderer implements MessageRenderer
    {
       try
       {
-
+         final MyConfig currentConfig = (MyConfig) getConfig() ;
          return FIXUtils.createView(message, currentConfig.getDisplayHeaderAndTrailer(), currentConfig.getDisplayValueWithEnum());
       }
       catch (FIXException e)
@@ -255,36 +254,19 @@ public class FIXMessageRenderer implements MessageRenderer
       return new MyConfig();
    }
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.browser.MessageRenderer#setConfig(hermes.browser.MessageRenderer.Config)
-    */
-   public synchronized void setConfig(Config config)
-   {
-      currentConfig = (MyConfig) config;
+  
 
-      panelCache = new LRUMap(currentConfig.getMessageCache());
-   }
-
-   public synchronized Config getConfig()
-   {
-      return currentConfig;
-   }
+  
 
    public synchronized LRUMap getPanelMap()
    {
       if (panelCache == null)
       {
+         final MyConfig currentConfig = (MyConfig) getConfig() ;
          panelCache = new LRUMap(currentConfig.getMessageCache());
       }
 
       return panelCache;
-   }
-
-   public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception
-   {
-      return RendererHelper.createDefaultConfigPanel(dialogProxy);
    }
 
    public boolean canRender(Message message)

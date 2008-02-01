@@ -17,7 +17,6 @@
 
 package hermes.renderers;
 
-import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 
 import javax.jms.Message;
@@ -30,29 +29,8 @@ import javax.swing.JComponent;
  * @version $Id: NullMessageRenderer.java,v 1.2 2004/09/16 20:30:48 colincrist
  *          Exp $
  */
-public class NullMessageRenderer implements MessageRenderer
+public class NullMessageRenderer extends AbstractMessageRenderer
 {
-   private MyConfig currentConfig;
-
-   public class MyConfig implements Config
-   {
-      public void setName(String name)
-      {
-
-      }
-
-      public String getName()
-      {
-         return "ExampleMessageRenderer";
-      }
-
-      public String getPropertyDescription(String propertyName)
-      {
-         // TODO Auto-generated method stub
-         return null;
-      }
-   }
-
    /**
     * 
     */
@@ -76,43 +54,10 @@ public class NullMessageRenderer implements MessageRenderer
       return null;
    }
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.browser.MessageRenderer#createConfig()
-    */
-   public Config createConfig()
-   {
-      return new MyConfig();
-   }
-
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.browser.MessageRenderer#setConfig(hermes.browser.MessageRenderer.Config)
-    */
-   public void setConfig(Config config)
-   {
-      currentConfig = (MyConfig) config;
-   }
-
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.browser.MessageRenderer#getConfigPanel(hermes.browser.ConfigDialogProxy)
-    */
-   public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception
-   {
-      return RendererHelper.createDefaultConfigPanel(dialogProxy);
-   }
-
+  
    public String getDisplayName() 
    {
       return "Null" ;
    }
-   
-   public Config getConfig()
-   {
-      return null ;
-   }
+
 }

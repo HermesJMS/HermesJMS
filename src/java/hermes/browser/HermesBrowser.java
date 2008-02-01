@@ -41,6 +41,7 @@ import hermes.browser.components.WatchDockableFrame;
 import hermes.browser.dialog.ClasspathIdCellEdtitor;
 import hermes.browser.dialog.DirectoryCellEditor;
 import hermes.browser.dialog.DomainCellEditor;
+import hermes.browser.dialog.HermesCellEditor;
 import hermes.browser.dialog.SelectorImpl;
 import hermes.browser.dialog.SelectorImplCellEditor;
 import hermes.browser.jython.JythonDockableFrame;
@@ -996,6 +997,8 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       CellEditorManager.registerEditor(SelectorImpl.class, new SelectorImplCellEditor());
       CellEditorManager.registerEditor(File.class, new DirectoryCellEditor(), DirectoryCellEditor.CONTEXT);
       CellEditorManager.registerEditor(String.class, new ClasspathIdCellEdtitor(), ClasspathIdCellEdtitor.CONTEXT);
+      CellEditorManager.registerEditor(Hermes.class, new HermesCellEditor()) ;
+      
       ObjectComparatorManager.registerComparator(Date.class, new DateComparator());
       ObjectComparatorManager.registerComparator(Integer.class, new IntegerComparator());
       ObjectComparatorManager.registerComparator(Long.class, new LongComparator());

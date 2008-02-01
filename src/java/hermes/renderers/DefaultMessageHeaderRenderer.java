@@ -42,7 +42,7 @@ import com.jidesoft.grid.SortableTable;
  *          colincrist Exp $
  */
 
-public class DefaultMessageHeaderRenderer implements MessageRenderer
+public class DefaultMessageHeaderRenderer extends AbstractMessageRenderer
 {
    private static final Logger log = Logger.getLogger(DefaultMessageHeaderRenderer.class);
 
@@ -178,27 +178,7 @@ public class DefaultMessageHeaderRenderer implements MessageRenderer
       return SwingUtils.createJScrollPane(table);
    }
 
-   /**
-    * There are no configurable options on this renderer.
-    */
-   public Config createConfig()
-   {
-      return null;
-   }
-
-   public Config getConfig()
-   {
-      return null;
-   }
-
-   /**
-    * There are no configurable options on this renderer
-    */
-   public void setConfig(Config config)
-   {
-      // TODO Auto-generated method stub
-   }
-
+   
    /**
     * There are no configurable options on this renderer
     */

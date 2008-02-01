@@ -17,9 +17,9 @@
 
 package hermes.ext.mq;
 
-import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 import hermes.browser.model.OneRowMapTableModel;
+import hermes.renderers.AbstractMessageRenderer;
 import hermes.util.TextUtils;
 
 import java.io.IOException;
@@ -40,28 +40,11 @@ import com.jidesoft.grid.SortableTable;
 /**
  * @author colincrist@hermesjms.com
  */
-public class MQSeriesMessageRenderer implements MessageRenderer
+public class MQSeriesMessageRenderer extends AbstractMessageRenderer
 {
    private static final Logger log = Logger.getLogger(MQSeriesMessageRenderer.class);
 
-   public static class MyConfig implements Config
-   {
-
-      public String getName()
-      {
-         return "RFH";
-      }
-
-      public void setName(String name)
-      {
-
-      }
-
-      public String getPropertyDescription(String propertyName)
-      {
-         return propertyName;
-      }
-   }
+  
    private MQSeriesAdmin admin;
 
    public MQSeriesMessageRenderer(MQSeriesAdmin admin)
@@ -69,15 +52,7 @@ public class MQSeriesMessageRenderer implements MessageRenderer
       this.admin = admin;
    }
 
-   public Config createConfig()
-   {
-      return new MyConfig();
-   }
-
-   public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception
-   {
-      return null;
-   }
+  
 
    public JComponent render(final Message message)
    {
@@ -106,16 +81,6 @@ public class MQSeriesMessageRenderer implements MessageRenderer
          log.error(e.getMessage(), e);
       }
       return rval;
-   }
-
-   public synchronized Config getConfig()
-   {
-      return null ;
-   }
-   
-   public void setConfig(Config config)
-   {
-      // TODO Auto-generated method stub
    }
 
    public void inspectMessage(Map map, MQMessage message) throws IOException

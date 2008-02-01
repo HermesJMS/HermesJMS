@@ -17,98 +17,95 @@
 
 package hermes.util;
 
+import java.io.StringWriter;
+import java.io.Writer;
+
 /**
  * Utilities for displaying byte[]s in lines with hex offsets.
  */
 public class DumpUtils
 {
-    public static final int DUMP_AS_HEX = 1;
-    public static final int DUMP_AS_ALPHA = 2;
-    public static final int DUMP_AS_STRING = 3;
-    public static final int DUMP_AS_HEX_AND_ALPHA = 4;
-	public static final int ROW_LEN = 16;
+   public static final int DUMP_AS_HEX = 1;
+   public static final int DUMP_AS_ALPHA = 2;
+   public static final int DUMP_AS_STRING = 3;
+   public static final int DUMP_AS_HEX_AND_ALPHA = 4;
+   public static final int ROW_LEN = 16;
 
-    public static String dumpBinary(byte[] data, int mode)
-    {
-        return mode == DUMP_AS_STRING ? TextUtils.toAsciiString(data) : dumpBinaryEx(data, mode);
-    }
+   public static String dumpBinary(byte[] data, int mode)
+   {
+      int maxSize = 5 * 1024 * 1024 ;
+      
+      return mode == DUMP_AS_STRING ? TextUtils.toAsciiString(data) : dumpBinaryEx(data, mode, maxSize);
+   }
 
-    private static String dumpBinaryEx(byte[] data, int mode)
-    {
-        StringBuffer b = new StringBuffer();
+   private static String dumpBinaryEx(byte[] data, int mode, int maxSize)
+   {
+      StringWriter b = new StringWriter();
 
-        int c = 0;
+      int c = 0;
 
-        if (data != null)
-        {
-            while (c < data.length)
+      if (data != null)
+      {
+         while (c < data.length)
+         {
+            int max = Math.min(ROW_LEN, data.length - c);
+
+            byte[] row = new byte[max];
+            for (int i = 0; i < row.length; i++)
+               row[i] = data[c + i];
+
+            switch (mode)
             {
-                int max = Math.min(ROW_LEN, data.length - c);
-
-                byte[] row = new byte[max];
-                for (int i = 0; i < row.length; i++)
-                    row[i] = data[c + i];
-
-                switch (mode)
-                {
-                    case DUMP_AS_ALPHA:
-                        b.append(dumpBinaryLineAsAlpha(c, row));
-                        break;
-                    case DUMP_AS_HEX:
-                        b.append(dumpBinaryLineAsHex(c, row));
-                        break;
-                    case DUMP_AS_HEX_AND_ALPHA:
-                        b.append(dumpBinaryLineAsHexAndAlpha(c, row));
-                        break;
-                }
-                c += ROW_LEN;
+               case DUMP_AS_ALPHA:
+                  dumpBinaryLineAsAlpha(b, c, row);
+                  break;
+               case DUMP_AS_HEX:
+                  dumpBinaryLineAsHex(b, c, row);
+                  break;
+               case DUMP_AS_HEX_AND_ALPHA:
+                  dumpBinaryLineAsHexAndAlpha(b, c, row);
+                  break;
             }
-        }
-        else
-        {
-            b.append("No payload.");
-        }
+            c += ROW_LEN;
+            
+            if (c > maxSize)
+            {
+               b.append("Message too big");
+               break ;
+            }
+         }
+      }
+      else
+      {
+         b.append("No payload.");
+      }
 
-        return b.toString();
-    }
+      return b.toString();
+   }
 
-    public static String dumpBinaryLineAsHexAndAlpha(long offset, byte[] data)
-    {
-        StringBuffer b = new StringBuffer();
+   public static void dumpBinaryLineAsHexAndAlpha(StringWriter b, long offset, byte[] data)
+   {
+      b.append(TextUtils.leftPadLong(offset, 8));
+      b.append(" - ");
+      b.append(TextUtils.leftAlign(TextUtils.toHexString(data, true), ROW_LEN * 3));
+      b.append(" - ");
+      b.append(TextUtils.toAsciiString(data));
+      b.append("\r\n");
+   }
 
-        b.append(TextUtils.leftPadLong(offset, 8));
-        b.append(" - ");
-        b.append(TextUtils.leftAlign(TextUtils.toHexString(data, true), 
-        	ROW_LEN * 3));
-        b.append(" - ");
-        b.append(TextUtils.toAsciiString(data));
-        b.append("\r\n");
+   public static void dumpBinaryLineAsHex(StringWriter b, long offset, byte[] data)
+   {
+      b.append(TextUtils.leftPadLong(offset, 8));
+      b.append(" - ");
+      b.append(TextUtils.toHexString(data, true));
+      b.append("\r\n");
+   }
 
-        return b.toString();
-    }
-
-    public static String dumpBinaryLineAsHex(long offset, byte[] data)
-    {
-        StringBuffer b = new StringBuffer();
-
-        b.append(TextUtils.leftPadLong(offset, 8));
-        b.append(" - ");
-        b.append(TextUtils.toHexString(data, true));
-        b.append("\r\n");
-
-        return b.toString();
-    }
-
-    public static String dumpBinaryLineAsAlpha(long offset, byte[] data)
-    {
-        StringBuffer b = new StringBuffer();
-
-        b.append(TextUtils.leftPadLong(offset, 8));
-        b.append(" - ");
-        b.append(TextUtils.toAsciiString(data));
-        b.append("\r\n");
-
-        return b.toString();
-    }
-
+   public static void dumpBinaryLineAsAlpha(StringWriter b, long offset, byte[] data)
+   {
+      b.append(TextUtils.leftPadLong(offset, 8));
+      b.append(" - ");
+      b.append(TextUtils.toAsciiString(data));
+      b.append("\r\n");
+   }
 }

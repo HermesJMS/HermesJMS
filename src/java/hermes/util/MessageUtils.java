@@ -20,6 +20,9 @@ package hermes.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,11 +80,13 @@ public class MessageUtils
       if (s != null)
       {
          char[] chars = s.toCharArray();
-
-         bytes = new byte[chars.length];
-
-         for (int i = 0; i < chars.length; i++)
-            bytes[i] = (byte) chars[i];
+      Charset cs = Charset.forName ("UTF-8");
+        CharBuffer cb = CharBuffer.allocate (chars.length);
+        cb.put (chars);
+                 cb.flip ();
+        ByteBuffer bb = cs.encode (cb);
+        
+        return bb.array();
       }
       else
          bytes = new byte[0];

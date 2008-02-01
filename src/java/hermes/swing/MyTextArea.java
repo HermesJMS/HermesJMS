@@ -20,6 +20,7 @@ package hermes.swing;
 import java.awt.Dimension;
 
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.text.Document;
 
 /**
