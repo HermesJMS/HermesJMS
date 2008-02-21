@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -237,7 +238,7 @@ public abstract class TextUtils
 
    public static String toAsciiString(byte[] b)
    {
-      StringBuffer buff = new StringBuffer(b.length * 2);
+      StringWriter buff = new StringWriter(b.length * 2);
       for (int i = 0; i < b.length; i++)
       {
          buff.append(toAsciiChar(b[i]));
@@ -249,7 +250,7 @@ public abstract class TextUtils
    /**
     *  
     */
-   public static StringBuffer toHexString(byte b)
+   public static StringWriter toHexString(byte b)
    {
       int n = b;
       if (n < 0)
@@ -258,7 +259,7 @@ public abstract class TextUtils
       int d1 = n / 16;
       int d2 = n % 16;
 
-      StringBuffer buff = new StringBuffer(2);
+      StringWriter buff = new StringWriter(2);
       buff.append(hexDigits[d1]);
       buff.append(hexDigits[d2]);
 
@@ -267,10 +268,10 @@ public abstract class TextUtils
 
    public static String toHexString(byte[] b, boolean spacePad)
    {
-      StringBuffer buff = new StringBuffer(b.length * 3);
+      StringWriter buff = new StringWriter(b.length * 3);
       for (int i = 0; i < b.length; i++)
       {
-         buff.append(toHexString(b[i]));
+         buff.append(toHexString(b[i]).toString());
          if (spacePad)
             buff.append(' ');
       }

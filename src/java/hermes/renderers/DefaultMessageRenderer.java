@@ -249,16 +249,19 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer
       // then drop it onto another queue/topic.
 
       final String text = textMessage.getText() ;
-      final JTextArea textPane = new JTextArea(text) ;
+      final JTextArea textPane = new JTextArea() ;
+      
+      
       
       //final CharBuffer bytes = CharBuffer.wrap(text.subSequence(0, text.length())) ;
       //final JTextArea textPane = new MyTextArea(new PlainDocument(new MappedStringContent(bytes))) ; 
 
-      textPane.setEditable(true);
+      textPane.setEditable(false);
       textPane.setFont(Font.decode("Monospaced-PLAIN-12"));
       textPane.setLineWrap(true) ;
       textPane.setWrapStyleWord(true);
       
+      textPane.append(text) ;      
  
       textPane.getDocument().addDocumentListener(new DocumentListener()
       {

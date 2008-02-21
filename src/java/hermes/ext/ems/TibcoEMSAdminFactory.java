@@ -148,7 +148,7 @@ public class TibcoEMSAdminFactory implements HermesAdminFactory
             rval.put(TibjmsSSL.PRIVATE_KEY, BeanUtils.getProperty(tibCF, "SSLPrivateKey")) ;
             rval.put(TibjmsSSL.PRIVATE_KEY_ENCODING, BeanUtils.getProperty(tibCF, "SSLPrivateKeyEncoding")) ;
             rval.put(TibjmsSSL.TRACE, BeanUtils.getProperty(tibCF, "SSLTrace")) ;
-            rval.put(TibjmsSSL.TRUSTED_CERTIFICATES, BeanUtils.getProperty(tibCF, "SSLTrustedertificate")) ;
+            rval.put(TibjmsSSL.TRUSTED_CERTIFICATES, BeanUtils.getProperty(tibCF, "SSLTrustedCertificate")) ;
             rval.put(TibjmsSSL.VENDOR, BeanUtils.getProperty(tibCF, "SSLVendor")) ;            
          }
 
