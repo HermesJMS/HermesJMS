@@ -73,7 +73,7 @@ set HERMES_LIBS=%HERMES_WEAVED_LIBS%
 goto launch
 
 noWeave:
-set CLASSPATH=%CLASSPATH%;%HERMES_LIBS%\hermes.jar;%HERMES_LIBS%\cglib-2.1_3.jar;%HERMES_LIBS%\commons-beanutils.jar
+set CLASSPATH=%CLASSPATH%;%HERMES_LIBS%\hermes.jar;%HERMES_LIBS%\cglib-2.2_beta1.jar;%HERMES_LIBS%\commons-beanutils.jar
 goto launch
 
 :launch

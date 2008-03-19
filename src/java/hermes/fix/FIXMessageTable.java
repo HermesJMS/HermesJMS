@@ -82,7 +82,7 @@ public class FIXMessageTable extends SortableTable
       this.selectorModel.setRowValueProvider(model);
       this.sessionKey = sessionKey;
 
-      setSortable(false);
+      setSortable(true);
 
       setModel(selectorModel);
       setDragEnabled(true);

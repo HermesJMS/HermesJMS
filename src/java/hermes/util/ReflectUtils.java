@@ -210,6 +210,8 @@ public class ReflectUtils
       {
          log.debug("found a non Java Bean compliant class, " + clazz.getName() + ", generating a new class and implementing an around advice to mixin getters");
 
+         //return factory ;
+         
          return (ConnectionFactory) mixinGetterMethodsAndInstantiate(clazz) ;
       }
       else
