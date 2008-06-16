@@ -79,7 +79,7 @@ public class ReflectUtils
     */
    public static boolean isGetter(Method m)
    {
-      return m.getName().startsWith("get") && isPublicAndNonStatic(m) && m.getParameterTypes().length == 1 && !m.getParameterTypes()[0].isArray();
+      return m.getName().startsWith("get") && isPublicAndNonStatic(m) && m.getParameterTypes().length == 0 ;
    }
 
    /**

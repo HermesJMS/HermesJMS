@@ -192,4 +192,4 @@ fi
 #
 # Run main()
 
-"$JAVACMD" $HERMES_OPTS -Dhermes.home=$HERMES_HOME -Dhermes=$HERMES_CFG -Dhermes.libs=$HERMES_LIB_PROPERTY -classpath $LOCALCLASSPATH  hermes.browser.HermesBrowser
+"$JAVACMD" -XX:NewSize=256m -Xmx1024m $HERMES_OPTS -Dhermes.home=$HERMES_HOME -Dhermes=$HERMES_CFG -Dhermes.libs=$HERMES_LIB_PROPERTY -classpath $LOCALCLASSPATH  hermes.browser.HermesBrowser

@@ -53,6 +53,8 @@ import hermes.config.DestinationConfig;
 import hermes.config.HermesConfig;
 import hermes.config.NamingConfig;
 import hermes.config.WatchConfig;
+import hermes.fix.FIXPrettyPrinter;
+import hermes.fix.FIXUtils;
 import hermes.impl.ConfigDAO;
 import hermes.impl.ConfigDAOImpl;
 import hermes.impl.FileRepositoryManager;
@@ -1439,6 +1441,16 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       HermesBrowser.getBrowser().getActionFactory().createQueueBrowseAction(hermes, config);
    }
 
+   public void setFIXPrettyPrinter(FIXPrettyPrinter printer)
+   {
+      FIXUtils.setPrettyPrinter(printer) ;
+   }
+   
+   public FIXPrettyPrinter getFIXPrettyPrinter()
+   {
+      return FIXUtils.getPrettyPrinter() == null ? FIXUtils.getDefaultPrettyPrinter() : FIXUtils.getPrettyPrinter() ;
+   }
+   
    public Collection<Message> getSelectedMessages()
    {
       if (getDocumentPane().getActiveDocument() instanceof BrowserAction)

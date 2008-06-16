@@ -19,17 +19,11 @@ package hermes.fix;
 
 import hermes.util.ByteUtils;
 
-import java.util.Map;
-
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.swing.JComponent;
-
-import quickfix.Field;
-import quickfix.field.SenderCompID;
-import quickfix.field.TargetCompID;
 
 /**
  * @author colincrist@hermesjms.com
@@ -38,8 +32,8 @@ import quickfix.field.TargetCompID;
 
 public class FIXUtils
 {
-
-  
+   private static FIXPrettyPrinter defaultPrettyPrinter = new CompactFIXPrettyPrinter() ;
+   private static FIXPrettyPrinter prettyPrinter = null ;
 
    public FIXUtils()
    {
@@ -50,59 +44,33 @@ public class FIXUtils
    {
       return new FIXMessageViewTable(new FIXMessageViewTableModel(message));
    }
-   
-  
-
+ 
    public static String prettyPrint(FIXMessage message)
    {
-      StringBuffer rval = new StringBuffer();
-      StringBuffer line = new StringBuffer() ;
-            
-      line.append(message.getString(SenderCompID.FIELD)).append(" -> ").append(message.getString(TargetCompID.FIELD)).append(":") ;
-      
-      Map<Integer, Field> fields =  message.getAllFields() ;
-      for (final Map.Entry<Integer, Field>  entry : fields.entrySet())
+      if (prettyPrinter != null)
       {
-         
-         if (line.length() > 80)
-         {
-            rval.append(line).append("\n") ;
-            line = new StringBuffer() ;
-         }
-         final Field field = entry.getValue() ;
-         
-         Object fieldValue = message.getObject(entry.getValue());
-         String fieldValueName = message.getDictionary().getValueName(field.getTag(), fieldValue.toString()) ;
-         
-         String tagText = message.getDictionary().getFieldName(field.getTag()) + "<" + field.getTag() + ">=" + fieldValue.toString() ;
-         
-         if (fieldValueName != null)
-         {
-            tagText = tagText + "<" + fieldValueName + ">" ;
-         }
-         
-         
-         if (line.length() != 0)
-         {
-            line.append(" ") ;
-         }
-         else
-         {
-            line.append("    ") ;
-         }
-         
-         line.append(tagText) ;
+         return prettyPrinter.print(message) ;
       }
-      
-      if (line.length() > 0)
+      else
       {
-         rval.append(line) ;
+         return defaultPrettyPrinter.print(message) ;
       }
-      
-      return rval.toString() ;
    }
-
-  
+   
+   public static FIXPrettyPrinter getPrettyPrinter()
+   {
+      return prettyPrinter ;
+   }
+   
+   public static void setPrettyPrinter(FIXPrettyPrinter prettyPrinter) 
+   {
+      FIXUtils.prettyPrinter = prettyPrinter ;
+   }
+   
+   public static FIXPrettyPrinter getDefaultPrettyPrinter()
+   {
+      return defaultPrettyPrinter ;      
+   } 
 
    public static boolean isFIX(Message message) throws JMSException
    {
