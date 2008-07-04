@@ -54,7 +54,7 @@ public class MessageStoreBrowserAction extends QueueBrowseAction
     */
    public MessageStoreBrowserAction(Hermes hermes, MessageStore messageStore, Destination destination) throws JMSException
    {
-      super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(messageStore.getId() + destination, Domain.QUEUE), -1);
+      super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(messageStore.getId() + destination, Domain.QUEUE), -1, null);
 
       this.messageStore = messageStore;
       this.destination = destination;
@@ -62,7 +62,7 @@ public class MessageStoreBrowserAction extends QueueBrowseAction
    
    public MessageStoreBrowserAction(Hermes hermes, MessageStore messageStore, Destination destination, String selector) throws JMSException
    {
-      super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(messageStore.getId() + destination, Domain.QUEUE), -1);
+      super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(messageStore.getId() + destination, Domain.QUEUE), -1, null);
 
       this.messageStore = messageStore;
       this.destination = destination;

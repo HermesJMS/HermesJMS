@@ -127,42 +127,42 @@ public class ActionFactory
    public BrowserAction createQueueBrowseAction(Hermes hermes, DestinationConfig dConfig) throws javax.jms.JMSException
    {
       int maxCachedMessages = hermesBrowser.getMaxMessagesInBrowserPane();
-      BrowserAction rval = new QueueBrowseAction(hermes, dConfig, maxCachedMessages);
+      BrowserAction rval = new QueueBrowseAction(hermes, dConfig, maxCachedMessages, null);
       rval.init();
       return rval;
    }
 
-   public BrowserAction createRegexQueueBrowseAction(Hermes hermes, String destination, Domain domain, String regex) throws javax.jms.JMSException
+   public BrowserAction createRegexQueueBrowseAction(Hermes hermes, DestinationConfig config, String regex) throws javax.jms.JMSException
    {
       int maxCachedMessages = hermesBrowser.getMaxMessagesInBrowserPane();
       BrowserAction rval = null;
 
-      if (destination != null)
+      if (config != null)
       {
-         rval = new RegexQueueBrowseAction(hermes, destination, domain, regex, maxCachedMessages);
+         rval = new RegexQueueBrowseAction(hermes, config, regex, maxCachedMessages);
       }
       else
       {
-         rval = new RegexQueueBrowseAction(hermes, domain, regex, maxCachedMessages);
+         rval = new RegexQueueBrowseAction(hermes, regex, maxCachedMessages);
       }
 
       rval.init();
       return rval;
    }
 
-   public BrowserAction createStringSeachQueueBrowseAction(Hermes hermes, String destination, Domain domain, String regex, boolean seachUserHeader)
+   public BrowserAction createStringSeachQueueBrowseAction(Hermes hermes, DestinationConfig config, String regex, boolean seachUserHeader)
          throws JMSException
    {
       int maxCachedMessages = hermesBrowser.getMaxMessagesInBrowserPane();
       BrowserAction rval = null;
 
-      if (destination != null)
+      if (config != null)
       {
-         rval = new StringSearchQueueBrowseAction(hermes, destination, domain, regex, seachUserHeader, maxCachedMessages);
+         rval = new StringSearchQueueBrowseAction(hermes, config, regex, seachUserHeader, maxCachedMessages);
       }
       else
       {
-         rval = new StringSearchQueueBrowseAction(hermes, domain, regex, seachUserHeader, maxCachedMessages);
+         rval = new StringSearchQueueBrowseAction(hermes, regex, seachUserHeader, maxCachedMessages);
       }
 
       rval.init();

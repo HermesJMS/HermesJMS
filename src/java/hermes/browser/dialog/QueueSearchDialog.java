@@ -114,16 +114,14 @@ public class QueueSearchDialog extends StandardDialog
             {
                 BrowserAction action;
 
-                String destinationName = destinationConfig != null ? destinationConfig.getName() : null ;
-                Domain domain = destinationConfig != null ? Domain.getDomain(destinationConfig.getDomain()) : Domain.QUEUE ;
                 
                 if (regexCheckBox.isSelected())
                 {
-                    action = HermesBrowser.getBrowser().getActionFactory().createRegexQueueBrowseAction(hermes, destinationName, domain, selection);
+                    action = HermesBrowser.getBrowser().getActionFactory().createRegexQueueBrowseAction(hermes, destinationConfig, selection);
                 }
                 else
                 {
-                    action = HermesBrowser.getBrowser().getActionFactory().createStringSeachQueueBrowseAction(hermes, destinationName, domain, selection,
+                    action = HermesBrowser.getBrowser().getActionFactory().createStringSeachQueueBrowseAction(hermes, destinationConfig, selection,
                             userHeaderCheckBox.isSelected());
                 }
 

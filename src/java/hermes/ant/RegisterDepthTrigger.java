@@ -36,7 +36,7 @@ import org.apache.tools.ant.Target;
 public class RegisterDepthTrigger extends AbstractTask implements HermesWatchListener
 {
    private HermesWatchManager watchManager;
-   private List selections = new ArrayList();
+   private List<HermesSelectionType> selections = new ArrayList<HermesSelectionType>();
    private int depth = 0;
    private String target;
    private String exception;
@@ -62,9 +62,9 @@ public class RegisterDepthTrigger extends AbstractTask implements HermesWatchLis
          throw new BuildException("target " + target + " does not exist in build file");
       }
 
-      for (Iterator iter = selections.iterator(); iter.hasNext();)
+      for (Iterator<HermesSelectionType> iter = selections.iterator(); iter.hasNext();)
       {
-         HermesSelectionType hermesSelection = (HermesSelectionType) iter.next();
+         HermesSelectionType hermesSelection = iter.next();
 
          watch(hermesSelection);
       }

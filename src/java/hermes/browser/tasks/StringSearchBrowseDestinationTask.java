@@ -32,30 +32,32 @@ public class StringSearchBrowseDestinationTask extends BrowseDestinationTask
 {
     private String string ;
     private boolean searchUserHeader ;
-    
+    private String title ;
     /**
      * @param hermes
      * @param dConfig
      */
-    public StringSearchBrowseDestinationTask(Hermes hermes, DestinationConfig dConfig, String string, boolean seachUserHeader)
+    public StringSearchBrowseDestinationTask(Hermes hermes, DestinationConfig dConfig, String string, boolean seachUserHeader, String title)
     {
         super(hermes, dConfig);
         
         this.string = string ;
         this.searchUserHeader = seachUserHeader ;
+        this.title = title ;
     }
     
-    public StringSearchBrowseDestinationTask(Hermes hermes, String string, boolean seachUserHeader)
+    public StringSearchBrowseDestinationTask(Hermes hermes, String string, boolean seachUserHeader, String title)
     {
         super(hermes, hermes.getDestinations());
         
         this.string = string ;
         this.searchUserHeader = seachUserHeader ;
+        this.title = title ;
     }
     
     public String getTitle()
     {
-       return "String" ;
+       return "Searching " + title ;
     }
 
     /* (non-Javadoc)

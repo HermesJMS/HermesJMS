@@ -22,6 +22,7 @@ import hermes.Hermes;
 import hermes.browser.HermesBrowser;
 import hermes.browser.tasks.RegexBrowseDestinationTask;
 import hermes.browser.tasks.Task;
+import hermes.config.DestinationConfig;
 
 import javax.jms.JMSException;
 
@@ -41,16 +42,16 @@ public class RegexQueueBrowseAction extends QueueBrowseAction
      * @param maxMessages
      * @throws JMSException
      */
-    public RegexQueueBrowseAction(Hermes hermes, Domain domain, String regex, int maxMessages) throws JMSException
+    public RegexQueueBrowseAction(Hermes hermes, String regex, int maxMessages) throws JMSException
     {
-        super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig("*", domain), maxMessages);
+        super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig("*", Domain.QUEUE), maxMessages, regex);
         
         this.regex = regex ;
     }
     
-    public RegexQueueBrowseAction(Hermes hermes, String destinationName, Domain domain, String regex, int maxMessages) throws JMSException
+    public RegexQueueBrowseAction(Hermes hermes, DestinationConfig config, String regex, int maxMessages) throws JMSException
     {
-        super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(destinationName, domain), maxMessages);
+        super(hermes, config, maxMessages, regex);
         
         this.regex = regex ;
     }
@@ -62,11 +63,11 @@ public class RegexQueueBrowseAction extends QueueBrowseAction
     {
         if (getDestination() == null)
         {
-            return new RegexBrowseDestinationTask(getHermes(), getHermes().getDestinations(), regex) ;
+            return new RegexBrowseDestinationTask(getHermes(), getHermes().getDestinations(), regex, getTitle()) ;
         }
         else
         {
-            return new RegexBrowseDestinationTask(getHermes(), getHermes().getDestinationConfig(getDestination(), getDomain()), regex) ;
+            return new RegexBrowseDestinationTask(getHermes(), getHermes().getDestinationConfig(getDestination(), getDomain()), regex, getTitle()) ;
         }
     }
 }

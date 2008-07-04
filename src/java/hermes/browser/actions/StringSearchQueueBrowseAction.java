@@ -22,6 +22,7 @@ import hermes.Hermes;
 import hermes.browser.HermesBrowser;
 import hermes.browser.tasks.StringSearchBrowseDestinationTask;
 import hermes.browser.tasks.Task;
+import hermes.config.DestinationConfig;
 
 import javax.jms.JMSException;
 
@@ -42,17 +43,17 @@ public class StringSearchQueueBrowseAction extends QueueBrowseAction
      * @param maxMessages
      * @throws JMSException
      */
-    public StringSearchQueueBrowseAction(Hermes hermes, String destinationName, Domain domain,  String string, boolean searchUserHeader, int maxMessages) throws JMSException
+    public StringSearchQueueBrowseAction(Hermes hermes, DestinationConfig config,  String string, boolean searchUserHeader, int maxMessages) throws JMSException
     {
-        super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(destinationName, domain), maxMessages);
+        super(hermes, config, maxMessages, string);
         
         this.string = string ;
         this.searchUserHeader = searchUserHeader ;
     }
     
-    public StringSearchQueueBrowseAction(Hermes hermes, Domain domain, String string, boolean searchUserHeader, int maxMessages) throws JMSException
+    public StringSearchQueueBrowseAction(Hermes hermes, String string, boolean searchUserHeader, int maxMessages) throws JMSException
     {
-        super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig("*", domain),  maxMessages);
+        super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig("*", Domain.QUEUE),  maxMessages, string);
         
         this.string = string ;
         this.searchUserHeader = searchUserHeader ;
@@ -66,11 +67,11 @@ public class StringSearchQueueBrowseAction extends QueueBrowseAction
     {
         if (getDestination() == null)
         {
-            return new StringSearchBrowseDestinationTask(getHermes(), string, searchUserHeader) ;
+            return new StringSearchBrowseDestinationTask(getHermes(), string, searchUserHeader, getTitle()) ;
         }
         else
         {
-            return new StringSearchBrowseDestinationTask(getHermes(), getHermes().getDestinationConfig(getDestination(), getDomain()), string, searchUserHeader) ;
+            return new StringSearchBrowseDestinationTask(getHermes(), getHermes().getDestinationConfig(getDestination(), getDomain()), string, searchUserHeader, getTitle()) ;
         }
     }
 }

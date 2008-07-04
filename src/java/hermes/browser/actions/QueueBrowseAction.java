@@ -44,10 +44,9 @@ public class QueueBrowseAction extends BrowserAction
      * @param maxMessages
      * @throws javax.jms.JMSException
      */
-    public QueueBrowseAction(Hermes hermes, DestinationConfig dConfig, int maxMessages) throws JMSException
+    public QueueBrowseAction(Hermes hermes, DestinationConfig dConfig, int maxMessages, String postfix) throws JMSException
     {
-        super(hermes, dConfig, maxMessages);
-       
+        super(hermes, dConfig, maxMessages, postfix);       
     }
     
     /* (non-Javadoc)

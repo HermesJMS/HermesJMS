@@ -33,32 +33,34 @@ import javax.jms.QueueBrowser;
 public class RegexBrowseDestinationTask extends BrowseDestinationTask
 {
     private String regex;
-
+    private String title ;
     /**
      * @param hermes
      * @param iter
      */
-    public RegexBrowseDestinationTask(Hermes hermes, Iterator iter, String regex)
+    public RegexBrowseDestinationTask(Hermes hermes, Iterator iter, String regex, String title)
     {
         super(hermes, iter);
 
         this.regex = regex;
+        this.title = title ;
     }
 
     public String getTitle()
     {
-       return "Search (Regex)" ;
+       return "Searching " + title ;
     }
     
     /**
      * @param hermes
      * @param dConfig
      */
-    public RegexBrowseDestinationTask(Hermes hermes, DestinationConfig dConfig, String regex)
+    public RegexBrowseDestinationTask(Hermes hermes, DestinationConfig dConfig, String regex, String title)
     {
         super(hermes, dConfig);
 
         this.regex = regex;
+        this.title = title ;
     }
 
     /*

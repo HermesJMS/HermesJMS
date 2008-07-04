@@ -49,14 +49,14 @@ public class RepositoryFileBrowserAction extends QueueBrowseAction
      */
     public RepositoryFileBrowserAction(Hermes hermes, HermesRepository repository, int maxMessages) throws JMSException
     {
-       super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(repository.getId(), Domain.QUEUE), maxMessages) ;
+       super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(repository.getId(), Domain.QUEUE), maxMessages, null) ;
         
        this.repository = repository;
     }
     
     public RepositoryFileBrowserAction(HermesRepository repository, int maxMessages) throws JMSException
     {
-       super(null, HermesBrowser.getConfigDAO().createDestinationConfig(repository.getId(), Domain.QUEUE), maxMessages) ;
+       super(null, HermesBrowser.getConfigDAO().createDestinationConfig(repository.getId(), Domain.QUEUE), maxMessages, null) ;
        
        this.repository = repository;  
     }

@@ -89,17 +89,21 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
    /**
     * Get the name to display in the title bar.
     */
-   public static String getDisplayName(Hermes hermes, DestinationConfig config)
+   public static String getDisplayName(Hermes hermes, DestinationConfig config, String postfix)
    {
+      String rval = null ;
+      
       if (hermes != null)
       {
-         return hermes.getId() + " " + config.getName() + " " + (config.getSelector() != null ? config.getSelector() : "")
+          rval =  hermes.getId() + " " + config.getName() + " " + (config.getSelector() != null ? config.getSelector() : "")
                + (config.isDurable() ? " name=" + config.getClientID() : "");
       }
       else
       {
-         return config.getName() + " " + (config.getSelector() != null ? config.getSelector() : "");
+          rval =  config.getName() + " " + (config.getSelector() != null ? config.getSelector() : "") + (config.isDurable() ? " name=" + config.getClientID() : "");
       }
+      
+      return postfix == null ? rval : rval + " for " + postfix ;
    }
 
    private final List<Message> cachedRows = new ArrayList<Message>();
@@ -130,10 +134,11 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
    private int selectedRow = -1;
    private boolean taskStopped = false;
    private DestinationConfig dConfig;
+   private String postfix ;
 
-   public BrowserAction(Hermes hermes, DestinationConfig dConfig, int maxMessages) throws JMSException
+   public BrowserAction(Hermes hermes, DestinationConfig dConfig, int maxMessages, String postfix) throws JMSException
    {
-      super(new JPanel(), getDisplayName(hermes, dConfig));
+      super(new JPanel(), getDisplayName(hermes, dConfig, postfix));
 
       this.dConfig = dConfig;
       this.messageHeaderTableModel = new MessageHeaderTableModel(hermes, dConfig.getName());
@@ -141,7 +146,8 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
       this.hermes = hermes;
       this.maxMessages = maxMessages;
       this.messagePayloadPanel = new MessagePayloadPanel(dConfig.getName());
-
+      this.postfix = postfix ;
+      
       topPanel = (JPanel) getComponent();
    }
 
@@ -185,7 +191,7 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
    @Override
    public String getTitle()
    {
-      return getDisplayName(hermes, dConfig);
+      return getDisplayName(hermes, dConfig, postfix);
    }
 
    public DestinationConfig getConfig()
