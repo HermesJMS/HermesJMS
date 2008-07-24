@@ -32,6 +32,7 @@ import hermes.browser.model.tree.MessageStoreURLTreeNode;
 import hermes.browser.model.tree.NamingConfigTreeNode;
 import hermes.browser.model.tree.RepositoryTreeNode;
 import hermes.browser.tasks.AddToMessageStoreTask;
+import hermes.browser.tasks.SendMessageTask;
 import hermes.browser.transferable.BrowserTreeTransferHandler;
 import hermes.browser.transferable.HermesAdministeredObjectTransferable;
 import hermes.browser.transferable.HermesConfigGroup;
@@ -310,7 +311,7 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
          {
 
             HermesBrowser.getBrowser().getActionFactory().createSimpleSendMessageAction(getSelectedHermesNode().getHermes(), node.getDestinationName(),
-                  node.getDomain(), files, false);
+                  node.getDomain(), files, SendMessageTask.MAYBE_XML);
          }
          else
          {

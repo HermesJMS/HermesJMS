@@ -193,7 +193,7 @@ public class ActionFactory
    /**
     * Create an action to send the contents of a file to the queue/topic
     */
-   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, File file, boolean isXML)
+   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, File file, int isXML)
    {
       SendMessageTask rval = new SendMessageTask(hermes, d, domain, file, isXML);
 
@@ -211,7 +211,7 @@ public class ActionFactory
       return rval;
    }
 
-   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, List files, boolean isXML)
+   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, List files, int isXML)
    {
       SendMessageTask rval = new SendMessageTask(hermes, d, domain, files, isXML);
 

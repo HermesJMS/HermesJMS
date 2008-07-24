@@ -18,6 +18,7 @@
 package hermes.swing.actions;
 
 import hermes.browser.IconCache;
+import hermes.browser.tasks.SendMessageTask;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -46,6 +47,6 @@ public class SendTextFileAction extends AbstractSendFileAction
 
    public void actionPerformed(ActionEvent arg0)
    {
-      doSendAFile(false) ;
+      doSendAFile(SendMessageTask.IS_TEXT) ;
    }
 }

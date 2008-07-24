@@ -221,7 +221,7 @@ public class LoaderSupport
          }
          else if (lConfig.isNoFactories())
          {
-            log.debug("skipping " + lConfig.getJar());
+            log.debug("previously scanned " + lConfig.getJar());
          }
          else
          {

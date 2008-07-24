@@ -1338,7 +1338,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
                StringWriter s = new StringWriter();
                PrintWriter p = new PrintWriter(s);
                t.printStackTrace(p);
-               detail = s.toString();
+               detail = s.toString();                
             }
 
             JideOptionPane optionPane = new JideOptionPane(message, JOptionPane.ERROR_MESSAGE,
@@ -1365,7 +1365,6 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       {
          SwingUtilities.invokeLater(r);
       }
-
    }
 
    /**

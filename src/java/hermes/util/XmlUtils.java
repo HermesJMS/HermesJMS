@@ -48,21 +48,11 @@ public abstract class XmlUtils
       {
          s = XmlUtils.prettyPrintXml(r);
       }
-      catch (IOException e1)
+      catch (Exception e)
       {
-         log.error(e1.getMessage(), e1);
-         s = DumpUtils.dumpBinary(bytes, DumpUtils.DUMP_AS_STRING);
-      }
-      catch (ParserConfigurationException e1)
-      {
-         log.error(e1.getMessage(), e1);
-         s = DumpUtils.dumpBinary(bytes, DumpUtils.DUMP_AS_STRING);
-      }
-      catch (SAXException e1)
-      {
-         log.error(e1.getMessage(), e1);
-         s = DumpUtils.dumpBinary(bytes, DumpUtils.DUMP_AS_STRING);
-      }
+         log.error(e.getMessage(), e);
+         s = TextUtils.printException(e) ;
+      }      
 
       return s;
    }

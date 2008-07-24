@@ -21,6 +21,7 @@ import hermes.Hermes;
 import hermes.browser.HermesBrowser;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
 import hermes.browser.model.tree.HermesTreeNode;
+import hermes.browser.tasks.SendMessageTask;
 
 import javax.swing.JFileChooser;
 
@@ -44,11 +45,11 @@ public abstract class AbstractSendFileAction extends ActionSupport
       }
    }
 
-   public void doSendAFile(boolean isXML)
+   public void doSendAFile(int isXML)
    {
       final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) HermesBrowser.getBrowser().getBrowserTree().getLastSelectedPathComponent();
       final HermesTreeNode hermesNode = (HermesTreeNode) destinationNode.getHermesTreeNode();
-      final String text = ((isXML) ? "Send XML to " : "Send text to ") + destinationNode.getDestinationName();
+      final String text = ((isXML == SendMessageTask.IS_XML) ? "Send XML to " : "Send file to ") + destinationNode.getDestinationName();
 
       JFileChooser chooser = null;
 
