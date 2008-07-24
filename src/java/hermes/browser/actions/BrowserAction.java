@@ -151,6 +151,11 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
       topPanel = (JPanel) getComponent();
    }
 
+   public DestinationConfig getDestinationConfig()
+   {
+      return dConfig ;
+   }
+   
    public String getName()
    {
       if (dConfig.getDomain() == Domain.QUEUE.getId())

@@ -71,7 +71,7 @@ public class StringSearchQueueBrowseAction extends QueueBrowseAction
         }
         else
         {
-            return new StringSearchBrowseDestinationTask(getHermes(), getHermes().getDestinationConfig(getDestination(), getDomain()), string, searchUserHeader, getTitle()) ;
+            return new StringSearchBrowseDestinationTask(getHermes(), getDestinationConfig(), string, searchUserHeader, getTitle()) ;
         }
     }
 }

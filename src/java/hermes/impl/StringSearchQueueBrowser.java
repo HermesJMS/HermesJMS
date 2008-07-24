@@ -17,8 +17,15 @@
 
 package hermes.impl;
 
+import hermes.util.ByteUtils;
+import hermes.util.HexUtils;
+import hermes.util.JMSUtils;
+import hermes.util.MessageUtils;
+import hermes.util.TextUtils;
+
 import java.util.Enumeration;
 
+import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
@@ -28,6 +35,8 @@ import javax.jms.QueueBrowser;
 import javax.jms.TextMessage;
 
 import org.apache.log4j.Logger;
+
+
 
 /**
  * QueueBrowser that facades another QueueBrowser and does an additional level
@@ -230,8 +239,8 @@ public class StringSearchQueueBrowser implements QueueBrowser
          {
             try
             {
-               ObjectMessage om = (ObjectMessage) message;
-               String toString = om.getObject().toString();
+               final ObjectMessage om = (ObjectMessage) message;
+               final String toString = om.getObject().toString();
 
                if (toString.indexOf(string) != -1)
                {
@@ -242,6 +251,13 @@ public class StringSearchQueueBrowser implements QueueBrowser
             {
                log.error(t.getMessage(), t);
             }
+         }
+         else if (message instanceof BytesMessage)
+         {
+            final BytesMessage bm = (BytesMessage) message ;            
+            final String toString = new String(MessageUtils.asBytes(bm)) ;
+
+            return toString.indexOf(string) != -1 ;                     
          }
          
          return false;
