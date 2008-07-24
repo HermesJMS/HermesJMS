@@ -38,6 +38,17 @@ public abstract class TextUtils
 
    private static final Logger log = Logger.getLogger(TextUtils.class);
 
+   public static String crumble(String in, int max)
+   {
+      if (in.length() < max)
+      {
+         return in ;
+      }
+      else
+      {
+         return in.substring(0, max/2) + " ... " + in.substring(in.length() - (max/2) + 1 , in.length()) ;
+      }
+   }
    public static String getAge(Date oldest)
    {
       if (oldest != null)

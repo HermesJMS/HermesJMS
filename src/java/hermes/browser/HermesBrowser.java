@@ -1182,7 +1182,7 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       if (!firstLoad)
       {
          closeWatches();
-         ArrayList tmpList = new ArrayList();
+         final ArrayList tmpList = new ArrayList();
          tmpList.addAll(loader.getConfig().getWatch());
          loader.getConfig().getWatch().clear();
 
@@ -1192,7 +1192,8 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
             createWatch(wConfig);
          }
       }
-
+      
+      setTitle("HermesJMS - " + TextUtils.crumble(getCurrentConfigURL(), 100)) ;
    }
 
    /**
