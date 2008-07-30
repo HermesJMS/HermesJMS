@@ -44,6 +44,7 @@ case "`uname`" in
   Darwin*) darwin=true
            if [ -z "$JAVA_HOME" ] ; then
              JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
+	     HERMES_OPTS="-Xdock:name="HermesJMS" -Dcom.apple.mrj.application.apple.menu.about.name="HermesJMS 1.13" -Dcom.apple.mrj.application.growbox.intrudes=false -Dapple.laf.useScreenMenuBar=true $HERMES_OPTS"
            fi
            ;;
   Linux*) if [ -z "$HERMES_OPTS" ] ; then
