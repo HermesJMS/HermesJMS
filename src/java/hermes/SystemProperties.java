@@ -40,7 +40,7 @@ public interface SystemProperties
     public static final String MESSAGE_STORE_JDBC_URL = "hermes.messageStore.url" ;
     
     public static final String RENDERER_CLASSES = "hermes.renderer.classes";
-    public static final String DEFAULT_RENDERER_CLASSES = "hermes.renderers.DefaultMessageRenderer,hermes.renderers.DefaultMessageHeaderRenderer,hermes.renderers.ToStringMessageRenderer,hermes.renderers.HexMessageRenderer,hermes.renderers.XMLMessageRenderer,hermes.renderers.fix.FIXMessageRenderer";
+    public static final String DEFAULT_RENDERER_CLASSES = "hermes.renderers.DefaultMessageRenderer,hermes.renderers.DefaultMessageHeaderRenderer,hermes.renderers.ToStringMessageRenderer,hermes.renderers.HexMessageRenderer,hermes.renderers.XMLMessageRenderer,hermes.renderers.fix.FIXMessageRenderer,hermes.renderers.EBCDICMessageRenderer";
     public static final String USER_RENDERER_CLASSES = "hermes.renderer.user.classes";
     
     

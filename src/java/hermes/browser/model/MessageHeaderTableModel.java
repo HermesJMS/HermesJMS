@@ -179,7 +179,7 @@ public class MessageHeaderTableModel extends DefaultTableModel implements RowVal
 
       try
       {
-         newRow.add(new Date(message.getJMSTimestamp()));
+         newRow.add(new Date(message.getJMSTimestamp())); 
       }
       catch (Exception ex)
       {
@@ -379,7 +379,7 @@ public class MessageHeaderTableModel extends DefaultTableModel implements RowVal
          case 2:
             return String.class;
          case 3:
-            return Date.class;
+            return String.class;
          case 4:
             return String.class;
          case 5:

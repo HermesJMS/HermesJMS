@@ -64,10 +64,10 @@ public class XMLMessageRenderer extends AbstractMessageRenderer
       
       try
       {
-          byte[] bytes = MessageUtils.asBytes(m);
+          String string = MessageUtils.asString(m);
        
           textArea.setLineWrap(true) ;
-          textArea.setText(XmlUtils.prettyPrintXml(bytes));
+          textArea.setText(XmlUtils.prettyPrintXml(string));
           textArea.setCaretPosition(0) ;
       }
       catch (Throwable e)

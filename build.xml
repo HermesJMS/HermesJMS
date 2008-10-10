@@ -4,7 +4,7 @@
 
 	<property file="build.properties" />
 
-	<property name="installer.jar" value="hermes-installer-1.13.jar" />
+	<property name="installer.jar" value="hermes-installer-1.14.jar" />
 	<property name="src" value="src" />
 	<property name="src.java" value="${src}/java" />
 	<property name="resources" value="${src}/resources" />

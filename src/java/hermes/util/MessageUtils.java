@@ -44,6 +44,22 @@ public class MessageUtils
 {
    private static final Logger log = Logger.getLogger(MessageUtils.class);
 
+   
+   public static String asString(javax.jms.Message m) throws JMSException
+   {
+      if (m instanceof TextMessage)
+      {
+         return asString((TextMessage) m);
+      }     
+      else if (m instanceof BytesMessage)
+      {
+         return asString((BytesMessage) m);
+      }     
+      else
+      {
+         return null;
+      }
+   }
    public static byte[] asBytes(javax.jms.Message m) throws JMSException
    {
       if (m instanceof TextMessage)
@@ -74,7 +90,7 @@ public class MessageUtils
 
    public static byte[] asBytes(TextMessage m) throws JMSException
    {
-      String s = m.getText();
+      String s = m.getText().trim();
       byte[] bytes = null;
 
       if (s != null)
@@ -169,6 +185,20 @@ public class MessageUtils
 
    }
 
+   public static String asString(BytesMessage m) throws JMSException
+   {
+      final StringBuffer sb = new StringBuffer();
+
+      sb.append(MessageUtils.asBytes(m));
+      
+      return sb.toString() ;
+   }
+   
+   public static String asString(TextMessage m) throws JMSException
+   {
+      return m.getText().trim() ;
+   }
+   
    public static byte[] asBytes(BytesMessage m) throws JMSException
    {
       byte[] bytes = null;

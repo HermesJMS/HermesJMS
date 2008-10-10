@@ -17,6 +17,8 @@
 
 package hermes.util;
 
+import hermes.renderers.EBCDICMessageRenderer;
+
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -108,4 +110,30 @@ public class DumpUtils
       b.append(TextUtils.toAsciiString(data));
       b.append("\r\n");
    }
+
+   public static void dumpBinaryLineAsHexAndEBCDIC(StringWriter b, long offset, char[] mappings, byte[] data, int rowLen)
+   {
+      b.append(TextUtils.leftPadLong(offset, 8));
+      b.append(" - ");
+      b.append(TextUtils.leftAlign(TextUtils.toHexString(data, true), rowLen * 3));
+      b.append(" - ");
+      b.append(EBCDICtoASCII(mappings, data));
+      b.append("\r\n");
+   }
+   
+   public static String EBCDICtoASCII(char[] mappings, byte[] data)
+   {
+      StringBuffer messageBuffer = new StringBuffer();
+      for (int j = 0; j < data.length; j++)
+      {
+         int n = data[j];
+         if (n < 0)
+         {
+            n = 256 + n;
+         }
+         messageBuffer.append(mappings[n]);
+      }
+      return messageBuffer.toString();
+   }
+   
 }

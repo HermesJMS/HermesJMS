@@ -82,7 +82,7 @@ public interface Hermes extends MessageFactory, HermesAdmin
     /**
      * Version information for the entire Hermes product.
      */
-    public final String VERSION = "v1.13";
+    public final String VERSION = "v1.14";
     
     /**
      * Access to a proxy for the user interface that works even in the absense of a GUI (e.g. when running as an ant task

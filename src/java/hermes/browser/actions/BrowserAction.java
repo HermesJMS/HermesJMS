@@ -808,6 +808,8 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
                      }
                   }
 
+                  boolean autoScroll = cachedRows.size() > 0 ;
+                  
                   cachedRows.clear();
 
                   while (maxMessages > 0 && messageHeaderTableModel.getRowCount() > maxMessages)
@@ -817,7 +819,7 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
 
                   try
                   {
-                     if (HermesBrowser.getBrowser().getConfig().isScrollMessagesDuringBrowse())
+                     if (autoScroll && HermesBrowser.getBrowser().getConfig().isScrollMessagesDuringBrowse())
                      {
                         SwingUtils.scrollVertically(messageHeaderTable, SwingUtils.getRowBounds(messageHeaderTable, messageHeaderTableModel.getRowCount(),
                               messageHeaderTableModel.getRowCount()));
