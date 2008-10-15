@@ -20,7 +20,6 @@ import hermes.HermesAdmin;
 import hermes.HermesException;
 import hermes.JNDIConnectionFactory;
 import hermes.config.DestinationConfig;
-import hermes.config.impl.DestinationConfigImpl;
 import hermes.ext.HermesAdminSupport;
 
 import java.util.ArrayList;
@@ -133,7 +132,7 @@ public class ArjunaMSAdmin extends HermesAdminSupport implements HermesAdmin
     
     private DestinationConfig createDestinationConfig(Hashtable info, Domain domain)
     {
-    	DestinationConfig dConfig = new DestinationConfigImpl();
+    	DestinationConfig dConfig = new DestinationConfig();
     	String name = (String) info.get(NAME);
     	
     	dConfig.setName(name);

@@ -115,6 +115,7 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 
       setTransferHandler(new BrowserTreeTransferHandler());
       setDragEnabled(true);
+      
 
    }
 

@@ -23,7 +23,6 @@ import hermes.HermesAdmin;
 import hermes.HermesException;
 import hermes.browser.MessageRenderer;
 import hermes.config.DestinationConfig;
-import hermes.config.impl.DestinationConfigImpl;
 import hermes.ext.HermesAdminSupport;
 
 import java.io.IOException;
@@ -262,7 +261,7 @@ public class MQSeriesAdmin extends HermesAdminSupport implements HermesAdmin
 
       for (int i = 0; i < names.length; i++)
       {
-         final DestinationConfig dConfig = new DestinationConfigImpl();
+         final DestinationConfig dConfig = new DestinationConfig();
 
          dConfig.setName(names[i].trim());
          dConfig.setDomain(Domain.QUEUE.getId());

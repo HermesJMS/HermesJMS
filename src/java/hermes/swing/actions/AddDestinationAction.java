@@ -22,7 +22,6 @@ import hermes.browser.HermesBrowser;
 import hermes.browser.dialog.DestinationConfigDialog;
 import hermes.browser.model.tree.HermesTreeNode;
 import hermes.config.DestinationConfig;
-import hermes.config.impl.DestinationConfigImpl;
 
 import java.awt.event.ActionEvent;
 
@@ -64,7 +63,7 @@ public abstract class AddDestinationAction extends ActionSupport
 
    protected DestinationConfig createDestinationConfig()
    {
-      return new DestinationConfigImpl();
+      return new DestinationConfig();
    }
    
    public void actionPerformed(ActionEvent arg0)

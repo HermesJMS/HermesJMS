@@ -23,7 +23,7 @@ import hermes.MessageFactory;
 import hermes.SystemProperties;
 import hermes.browser.HermesBrowser;
 import hermes.util.JMSUtils;
-import hermes.xml.Content;
+
 import hermes.xml.Entry;
 import hermes.xml.MessageSet;
 import hermes.xml.ObjectFactory;
@@ -38,11 +38,15 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -58,9 +62,11 @@ import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import javax.naming.NamingException;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
@@ -68,8 +74,9 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 
-import com.sun.tools.xjc.generator.validator.StringOutputStream;
-import com.sun.xml.bind.StringInputStream;
+
+
+
 
 /**
  * Generic XML helper methods that are non-JMS specific. The serialisation is
@@ -131,23 +138,42 @@ public class DefaultXMLHelper implements XMLHelper
       return (Base64) base64EncoderTL.get();
    }
 
-   public Content readContent(InputStream istream) throws Exception
+   public MessageSet readContent(InputStream istream) throws Exception
    {
       JAXBContext jc = JAXBContext.newInstance("hermes.xml");
       Unmarshaller u = jc.createUnmarshaller();
-      Content node = (Content) u.unmarshal(istream);
+      JAXBElement<?> node =  (JAXBElement<?>) u.unmarshal(istream);
 
-      return node;
+      return (MessageSet) node.getValue() ;
+   }
+   
+   public MessageSet readContent(Reader reader) throws Exception
+   {
+      JAXBContext jc = JAXBContext.newInstance("hermes.xml");
+      Unmarshaller u = jc.createUnmarshaller();
+      JAXBElement<?> node =  (JAXBElement<?>) u.unmarshal(reader);
+
+      return (MessageSet) node.getValue() ;
    }
 
-   public void saveContent(Content content, OutputStream ostream) throws Exception
+   public void saveContent(MessageSet messages, OutputStream ostream) throws Exception
    {
       JAXBContext jc = JAXBContext.newInstance("hermes.xml");
       Marshaller m = jc.createMarshaller();
 
       m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-      m.marshal(content, ostream);
+      m.marshal(new JAXBElement<MessageSet> (new QName("", "content"), MessageSet.class, messages), ostream);
       ostream.flush();
+   }
+   
+   public void saveContent(MessageSet messages, Writer writer) throws Exception
+   {
+      JAXBContext jc = JAXBContext.newInstance("hermes.xml");
+      Marshaller m = jc.createMarshaller();
+
+      m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+      m.marshal(new JAXBElement<MessageSet> (new QName("", "content"), MessageSet.class, messages), writer);
+      writer.flush();
    }
 
    public void toXML(Message message, OutputStream ostream) throws JMSException, IOException
@@ -184,7 +210,7 @@ public class DefaultXMLHelper implements XMLHelper
    {
       try
       {
-         return fromMessageSet(hermes, readContent(new StringInputStream(document)));
+         return fromMessageSet(hermes, readContent(new StringReader(document))) ;
       }
       catch (Exception ex)
       {
@@ -197,12 +223,9 @@ public class DefaultXMLHelper implements XMLHelper
    public void toXML(Collection messages, OutputStream ostream) throws JMSException, IOException
    {
       try
-      {
-         Content node = (Content) factory.createContent();
+      {     
          MessageSet messageSet = toMessageSet(messages);
-
-         node.getEntry().addAll(toMessageSet(messages).getEntry());
-         saveContent(node, ostream);
+         saveContent(messageSet, ostream);
       }
       catch (Exception ex)
       {
@@ -222,32 +245,19 @@ public class DefaultXMLHelper implements XMLHelper
     */
    public void streamXML(Collection messages, OutputStream ostream) throws JMSException, IOException
    {
-      try
-      {
-         Content node = (Content) factory.createContent();
-         MessageSet messageSet = toMessageSet(messages);
-
-         node.getEntry().addAll(toMessageSet(messages).getEntry());
-         saveContent(node, ostream);
-      }
-      catch (Exception ex)
-      {
-         log.error(ex.getMessage(), ex);
-
-         throw new HermesException(ex);
-      }
+      toXML(messages, ostream) ;
    }
 
    public String toXML(Collection messages) throws JMSException
    {
       try
       {
-         Content node = (Content) factory.createContent();
+       
          StringWriter writer = new StringWriter();
          MessageSet messageSet = toMessageSet(messages);
 
-         node.getEntry().addAll(toMessageSet(messages).getEntry());
-         saveContent(node, new StringOutputStream(writer));
+       
+         saveContent(messageSet, writer);
 
          return writer.getBuffer().toString();
       }
@@ -733,7 +743,7 @@ public class DefaultXMLHelper implements XMLHelper
 
          return rval;
       }
-      catch (JAXBException ex)
+      catch (Exception ex)
       {
          throw new HermesException(ex);
       }

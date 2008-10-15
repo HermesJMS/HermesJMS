@@ -274,7 +274,7 @@ public class EBCDICMessageRenderer extends AbstractMessageRenderer
       }
       catch (Exception j)
       {
-         log.log(Level.ERROR, "Error occured while getting message bytes:" + j.toString(), j);
+         log.error(j.getMessage(), j) ;
       }
 
       try
@@ -282,10 +282,9 @@ public class EBCDICMessageRenderer extends AbstractMessageRenderer
          myRender.setText(dumpBinaryEx(messagebytes, DUMP_AS_EBCDIC, config.getMaxMessageSize()));
          myRender.setCaretPosition(0);
       }
-
       catch (Exception e)
       {
-         log.log(Level.ERROR, "Error occured while Rendering EBCDIC Message :" + e.toString());
+         log.error(e.getMessage(), e) ;
       }
 
       return myRender;

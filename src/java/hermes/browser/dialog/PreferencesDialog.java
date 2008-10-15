@@ -21,9 +21,8 @@ import hermes.browser.HermesBrowser;
 import hermes.config.ConnectionConfig;
 import hermes.config.FactoryConfig;
 import hermes.config.HermesConfig;
+import hermes.config.PropertySetConfig;
 import hermes.config.SessionConfig;
-import hermes.config.impl.ConnectionConfigImpl;
-import hermes.config.impl.PropertySetConfigImpl;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -159,12 +158,12 @@ public class PreferencesDialog extends AbstractOptionDialog
 
             if (factoryConfig.getConnection().size() == 0)
             {
-               factoryConfig.getConnection().add(new ConnectionConfigImpl());
+               factoryConfig.getConnection().add(new ConnectionConfig());
             }
 
             if (factoryConfig.getProvider().getProperties() == null)
             {
-               factoryConfig.getProvider().setProperties(new PropertySetConfigImpl());
+               factoryConfig.getProvider().setProperties(new PropertySetConfig());
             }
 
             connectionFactoryConfigPanel.setFactoryConfig(model, factoryConfig);

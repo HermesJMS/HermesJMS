@@ -136,7 +136,7 @@ public class WatchDockableFrame extends DockableFrame implements HermesWatchList
    {
       if (config.getUpdateFrequency() < 1000)
       {
-         config.setUpdateFrequency(1000);
+         config.setUpdateFrequency(1000L);
 
          Hermes.ui.getDefaultMessageSink().add("Minimum watch frequency is 1000ms");
       }

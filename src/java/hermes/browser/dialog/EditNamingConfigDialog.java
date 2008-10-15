@@ -22,7 +22,6 @@ import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
 import hermes.config.NamingConfig;
 import hermes.config.PropertySetConfig;
-import hermes.config.impl.PropertySetConfigImpl;
 import hermes.impl.LoaderSupport;
 
 import java.awt.BorderLayout;
@@ -125,7 +124,7 @@ public class EditNamingConfigDialog extends StandardDialog
 
             if (config.getProperties() == null)
             {
-                config.setProperties(new PropertySetConfigImpl());
+                config.setProperties(new PropertySetConfig());
             }
             else
             {

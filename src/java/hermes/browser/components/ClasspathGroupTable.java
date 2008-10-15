@@ -21,7 +21,6 @@ import hermes.browser.HermesBrowser;
 import hermes.browser.dialog.PreferencesDialog;
 import hermes.browser.model.ClasspathGroupTableModel;
 import hermes.config.ClasspathGroupConfig;
-import hermes.config.impl.ClasspathGroupConfigImpl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -193,7 +192,7 @@ public class ClasspathGroupTable extends HierarchicalTable
 
       if (!StringUtils.isEmpty(name))
       {
-         final ClasspathGroupConfig config = new ClasspathGroupConfigImpl();
+         final ClasspathGroupConfig config = new ClasspathGroupConfig();
 
          config.setId(name);
          getClasspathGroupTableModel().addRow(config);

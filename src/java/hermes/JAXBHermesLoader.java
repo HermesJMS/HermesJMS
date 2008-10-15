@@ -28,9 +28,6 @@ import hermes.config.NamingConfig;
 import hermes.config.QuickFIXConfig;
 import hermes.config.SessionConfig;
 import hermes.config.WatchConfig;
-import hermes.config.impl.ClasspathGroupConfigImpl;
-import hermes.config.impl.QuickFIXConfigImpl;
-import hermes.config.impl.WatchConfigImpl;
 import hermes.fix.quickfix.QuickFIXMessageCache;
 import hermes.impl.ClassLoaderManager;
 import hermes.impl.ConnectionFactoryManager;
@@ -77,6 +74,7 @@ import javax.naming.NamingException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
@@ -97,6 +95,7 @@ public class JAXBHermesLoader implements HermesLoader
    private URL url;
    private File file;
    private HermesConfig config;
+   private JAXBElement<Object> element ;
    private ClassLoaderManager classLoaderManager;
    private Hashtable properties;
    private final Set listeners = new HashSet();
@@ -161,7 +160,8 @@ public class JAXBHermesLoader implements HermesLoader
             config.setLookAndFeel(UIManager.getLookAndFeel().getClass().getName()) ;
 
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            m.marshal(config, ostream);
+            element.setValue(config) ;
+            m.marshal(element, ostream);
 
             ostream.close();
          }
@@ -331,7 +331,8 @@ public class JAXBHermesLoader implements HermesLoader
          JAXBContext jc = JAXBContext.newInstance("hermes.config");
          Unmarshaller u = jc.createUnmarshaller();
 
-         config = (HermesConfig) u.unmarshal(istream);
+         element = (JAXBElement<Object>) u.unmarshal(istream) ;
+         config = (HermesConfig) element.getValue() ;
 
          if (config.getLastEditedByHermesVersion() == null)
          {
@@ -347,7 +348,7 @@ public class JAXBHermesLoader implements HermesLoader
 
          if (config.getQuickFIX() == null)
          {
-            QuickFIXConfig quickFIXConfig = new QuickFIXConfigImpl() ;
+            QuickFIXConfig quickFIXConfig = new QuickFIXConfig() ;
             
             quickFIXConfig.setCacheSize(1024) ;
             
@@ -377,7 +378,7 @@ public class JAXBHermesLoader implements HermesLoader
 
          if (config.getLoader() != null && config.getLoader().size() > 0)
          {
-            ClasspathGroupConfig gConfig = new ClasspathGroupConfigImpl();
+            ClasspathGroupConfig gConfig = new ClasspathGroupConfig();
             gConfig.setId(SimpleClassLoaderManager.DEFAULT_LOADER);
             gConfig.getLibrary().addAll(config.getLoader());
 
@@ -417,7 +418,7 @@ public class JAXBHermesLoader implements HermesLoader
             // Maybe an upgrade from a pre-1.6 version, fill in what should
             // be there in the config.
 
-            WatchConfig wConfig = new WatchConfigImpl();
+            WatchConfig wConfig = new WatchConfig();
 
             wConfig.setShowAge(true);
             config.getWatch().add(wConfig);
@@ -570,7 +571,7 @@ public class JAXBHermesLoader implements HermesLoader
       for (Iterator iter2 = factoryConfig.getDestination().iterator(); iter2.hasNext();)
       {
          DestinationConfig destinationConfig = (DestinationConfig) iter2.next();
-
+        
          if (destinationConfig.isDurable() && destinationConfig.getClientID() == null)
          {
             log.warn("removing durable subscription to " + destinationConfig.getName() + "with a null clientID");
@@ -586,7 +587,7 @@ public class JAXBHermesLoader implements HermesLoader
       {
          ConnectionConfig connectionConfig = (ConnectionConfig) factoryConfig.getConnection().get(0);
          ConnectionManager connectionManager = null;
-
+       
          if (connectionConfig.isConnectionPerThread())
          {
             connectionManager = ConnectionManagerFactory.create(ConnectionManager.Policy.CONNECTION_PER_THREAD);
@@ -630,7 +631,7 @@ public class JAXBHermesLoader implements HermesLoader
             classLoaderManager.putClassLoaderByHermes(sessionConfig.getId(), classLoader);
             factoryConfigById.put(sessionConfig.getId(), factoryConfig);
 
-            sessionManager.setTransacted(sessionConfig.isTransacted());
+            sessionManager.setTransacted(sessionConfig.isTransacted() );
             sessionManager.setId(sessionConfig.getId());
             sessionManager.setFactoryConfig(factoryConfig);
             sessionManager.setAudit(sessionConfig.isAudit());

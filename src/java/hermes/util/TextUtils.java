@@ -27,8 +27,7 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-
-import com.sun.xml.bind.StringInputStream;
+import org.apache.tools.ant.filters.StringInputStream;
 
 /**
  * Various utilities for string formatting.

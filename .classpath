@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JMS4SQS"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/naming-java.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/namespace.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jax-qname.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jta-spec1_0_1.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/naming-factory.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/relaxngDatatype.jar"/>
@@ -15,18 +15,14 @@
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jsp-api.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/activation.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jasper-runtime.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jaxb-api.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/servlet-api.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jlfgr-1_0.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-beanutils.jar" sourcepath="/LOCAL/commons-beanutils-1.7.0-src/src/java"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-collections.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jaas.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-digester.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jaxb-impl.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jasper-compiler.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/xsdlib.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jaxb-libs.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jaxb-xjc.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-codec-1.1.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/displaytag-1.0-b2.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/javax.jms.jar"/>
@@ -100,5 +96,9 @@
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-commons.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-util.jar"/>
 	<classpathentry kind="lib" path="src/lib/cglib-2.2_beta1.jar"/>
+	<classpathentry kind="lib" path="C:/local/jaxb-ri/lib/jsr173_1.0_api.jar"/>
+	<classpathentry kind="lib" path="C:/local/jaxb-ri/lib/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="C:/local/jaxb-ri/lib/jaxb-impl.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jsyntaxpane-0.9.1.jar"/>
 	<classpathentry kind="output" path="eclipse/classes"/>
 </classpath>

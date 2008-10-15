@@ -22,7 +22,7 @@
 		</xs:sequence>
 
 		<xs:attribute name="className" type="xs:string" />
-		<xs:attribute name="trace" type="xs:boolean" />
+		<xs:attribute name="trace" type="xs:boolean" default="false"/>
 	</xs:complexType>
 
 	<xs:complexType name="PropertySetConfig">
@@ -40,19 +40,19 @@
 		<xs:attribute name="username" type="xs:string" />
 		<xs:attribute name="password" type="xs:string" />
 		<xs:attribute name="clientID" type="xs:string" />
-		<xs:attribute name="connectionPerThread" type="xs:boolean" />
+		<xs:attribute name="connectionPerThread" type="xs:boolean" default="false"/>
 	</xs:complexType>
 
 	<xs:complexType name="SessionConfig">
 		<xs:attribute name="id" type="xs:string" />
 		<xs:attribute name="reconnects" type="xs:integer" />
-		<xs:attribute name="transacted" type="xs:boolean" />
-		<xs:attribute name="audit" type="xs:boolean" />
+		<xs:attribute name="transacted" type="xs:boolean" default="true" />
+		<xs:attribute name="audit" type="xs:boolean" default="false"/>
 		<xs:attribute name="auditDirectory" type="xs:string" />
-		<xs:attribute name="checkSize" type="xs:boolean" />
-		<xs:attribute name="checkSizePeriod" type="xs:long" />
+		<xs:attribute name="checkSize" type="xs:boolean" default="false"/>
+		<xs:attribute name="checkSizePeriod" type="xs:long" default="1000"/>
 		<xs:attribute name="useConsumerForQueueBrowse"
-			type="xs:boolean" />
+			type="xs:boolean" default="false"/>
 	</xs:complexType>
 
 	<xs:complexType name="ProviderExtConfig">
@@ -74,7 +74,7 @@
 
 	<xs:complexType name="ClasspathConfig">
 		<xs:attribute name="jar" type="xs:string" />
-		<xs:attribute name="noFactories" type="xs:boolean" />
+		<xs:attribute name="noFactories" type="xs:boolean"/>
 		<xs:attribute name="factories" type="xs:string" />
 	</xs:complexType>
 
@@ -90,10 +90,10 @@
 		<xs:attribute name="shortName" type="xs:string" />
 		<xs:attribute name="domain" type="xs:int" />
 		<xs:attribute name="clientID" type="xs:string" />
-		<xs:attribute name="durable" type="xs:boolean" />
-		<xs:attribute name="unsubscribeOnClose" type="xs:boolean" />
+		<xs:attribute name="durable" type="xs:boolean" default="false"/>
+		<xs:attribute name="unsubscribeOnClose" type="xs:boolean" default="false"/>
 		<xs:attribute name="selector" type="xs:string" />
-		<xs:attribute name="useLocalRenderer" type="xs:boolean" />
+		<xs:attribute name="useLocalRenderer" type="xs:boolean" default="false"/>
 		<xs:attribute name="myHermes" type="xs:string" />
 		<xs:attribute name="username" type="xs:string" />
 		<xs:attribute name="password" type="xs:string"/>
@@ -147,26 +147,26 @@
 		<xs:attribute name="messageFilesDir" type="xs:string" />
 		<xs:attribute name="maxMessagesInBrowserPane" type="xs:int" />
 		<xs:attribute name="copyJMSProviderProperties"
-			type="xs:boolean" />
-		<xs:attribute name="copyJMSCorrelationID" type="xs:boolean" />
-		<xs:attribute name="copyJMSType" type="xs:boolean" />
-		<xs:attribute name="copyJMSExpiration" type="xs:boolean" />
-		<xs:attribute name="copyJMSReplyTo" type="xs:boolean" />
-		<xs:attribute name="copyJMSPriority" type="xs:boolean" />
+			type="xs:boolean" default="true"/>
+		<xs:attribute name="copyJMSCorrelationID" type="xs:boolean" default="true"/>
+		<xs:attribute name="copyJMSType" type="xs:boolean" default="true"/>
+		<xs:attribute name="copyJMSExpiration" type="xs:boolean" default="true"/>
+		<xs:attribute name="copyJMSReplyTo" type="xs:boolean" default="true"/>
+		<xs:attribute name="copyJMSPriority" type="xs:boolean" default="true" />
 		<xs:attribute name="embeddedMessageInBrowsePane"
-			type="xs:boolean" />
-		<xs:attribute name="displayFactoryAdmin" type="xs:boolean" />
+			type="xs:boolean" default="false"/>
+		<xs:attribute name="displayFactoryAdmin" type="xs:boolean" default="false"/>
 		<xs:attribute name="maxColumnsInStatisticsTable" type="xs:int" />
 		<xs:attribute name="autoBrowseRefreshRate" type="xs:int" />
-		<xs:attribute name="correctDropSemantics" type="xs:boolean" />
+		<xs:attribute name="correctDropSemantics" type="xs:boolean" default="false"/>
 		<xs:attribute name="selectorImpl" type="xs:string" />
 		<xs:attribute name="queueBrowseConsumerTimeout" type="xs:long" />
 		<xs:attribute name="enableJython" type="xs:boolean" default="true"/>
 		<xs:attribute name="lookAndFeel" type="xs:string"/>
 		<xs:attribute name="messageStoreSession" type="xs:string"/>
 		<xs:attribute name="scrollMessagesDuringBrowse" type="xs:boolean" default="true"/>
-		<xs:attribute name="deliveryModePersistent" type="xs:boolean"/>
-		<xs:attribute name="base64EncodeMessages" type="xs:boolean"/>
+		<xs:attribute name="deliveryModePersistent" type="xs:boolean" default="true"/>
+		<xs:attribute name="base64EncodeMessages" type="xs:boolean" default="true"/>
 		<xs:attribute name="messageStoreMessageFactory" type="xs:string"/>
 		
 	</xs:complexType>
@@ -194,7 +194,7 @@
 		<xs:attribute type="xs:string" name="id" />
 		<xs:attribute type="xs:int" name="defaultDepthAlertThreshold" />
 		<xs:attribute type="xs:long" name="defaultAgeAlertThreshold" />
-		<xs:attribute type="xs:boolean" name="showAge" />
+		<xs:attribute type="xs:boolean" name="showAge" default="true"/>
 		<xs:attribute type="xs:long" name="updateFrequency" />
 
 	</xs:complexType>

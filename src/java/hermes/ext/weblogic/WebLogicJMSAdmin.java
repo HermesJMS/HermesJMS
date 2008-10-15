@@ -22,7 +22,6 @@ import hermes.HermesAdmin;
 import hermes.HermesException;
 import hermes.JNDIConnectionFactory;
 import hermes.config.DestinationConfig;
-import hermes.config.impl.DestinationConfigImpl;
 import hermes.ext.HermesAdminSupport;
 
 import java.util.ArrayList;
@@ -289,7 +288,7 @@ public class WebLogicJMSAdmin extends HermesAdminSupport implements HermesAdmin
                 throw new RuntimeException(e);
             }
 
-            DestinationConfig dConfig = new DestinationConfigImpl();
+            DestinationConfig dConfig = new DestinationConfig();
             dConfig.setName(jndiName);
             dConfig.setShortName(destName);
             dConfig.setDomain(domain.getId());

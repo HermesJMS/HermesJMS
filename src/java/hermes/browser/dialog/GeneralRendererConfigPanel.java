@@ -24,7 +24,6 @@ import hermes.browser.MessageRenderer.Config;
 import hermes.browser.model.ListConfigTableModel;
 import hermes.config.HermesConfig;
 import hermes.config.RendererConfig;
-import hermes.config.impl.RendererConfigImpl;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -219,7 +218,7 @@ public class GeneralRendererConfigPanel extends AbstractRendererConfigPanel
 
          for (Iterator iter = configModel.getRows().iterator(); iter.hasNext();)
          {
-            RendererConfig rConfig = new RendererConfigImpl();
+            RendererConfig rConfig = new RendererConfig();
             MessageRenderer renderer = HermesBrowser.getRendererManager().getRendererByName((String) iter.next()) ;
             rConfig.setClassName(renderer.getClass().getName());
             

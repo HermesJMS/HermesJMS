@@ -22,8 +22,7 @@ import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
 import hermes.browser.dialog.EditNamingConfigDialog;
 import hermes.config.NamingConfig;
-import hermes.config.impl.NamingConfigImpl;
-import hermes.config.impl.PropertySetConfigImpl;
+import hermes.config.PropertySetConfig;
 import hermes.impl.SimpleClassLoaderManager;
 
 import java.awt.event.ActionEvent;
@@ -59,10 +58,10 @@ public class CreateNewContextAction extends ActionSupport
    {
       try
       {
-          final NamingConfig newConfig = new NamingConfigImpl();
+          final NamingConfig newConfig = new NamingConfig();
           
           newConfig.setClasspathId(SimpleClassLoaderManager.SYSTEM_LOADER);
-          newConfig.setProperties(new PropertySetConfigImpl());
+          newConfig.setProperties(new PropertySetConfig());
 
           final String newName = JOptionPane.showInputDialog(HermesBrowser.getBrowser(), "Name:", "Enter InitialContext Name", JOptionPane.PLAIN_MESSAGE);
 

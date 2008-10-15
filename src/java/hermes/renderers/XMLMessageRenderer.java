@@ -28,7 +28,11 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JTextArea;
+
+import jsyntaxpane.SyntaxStyle;
+import jsyntaxpane.SyntaxStyles;
 
 import org.apache.log4j.Logger;
 
@@ -54,31 +58,37 @@ public class XMLMessageRenderer extends AbstractMessageRenderer
       //
       // Raw Panel.
 
-      final JTextArea textArea = new MyTextArea() ; 
+      JEditorPane pane = new JEditorPane();
+      
+      //final JTextArea textArea = new MyTextArea() ; 
 
-      textArea.setEditable(false);     
-      textArea.setFont(Font.decode("Monospaced-PLAIN-12")) ;   
-      textArea.setLineWrap(true) ;
-      textArea.setWrapStyleWord(true) ;
+      pane.setEditable(false);     
+       
+      pane.setContentType("text/xml") ;
+      
+      
+      //pane.setLineWrap(true) ;
+      //pane.setWrapStyleWord(true) ;
       
       
       try
       {
           String string = MessageUtils.asString(m);
        
-          textArea.setLineWrap(true) ;
-          textArea.setText(XmlUtils.prettyPrintXml(string));
-          textArea.setCaretPosition(0) ;
+          //textArea.setLineWrap(true) ;
+          pane.setText(XmlUtils.prettyPrintXml(string));
+          pane.setCaretPosition(0) ;
+          pane.setFont(Font.decode("Monospaced-PLAIN-12")) ; 
       }
       catch (Throwable e)
       {
-         textArea.setText(e.getMessage()) ;
+         pane.setText(e.getMessage()) ;
           log.error("exception converting message to byte[]: ", e);
       }
 
-      textArea.setCaretPosition(0);
+      pane.setCaretPosition(0);
 
-      return textArea ;
+      return pane ;
    }
 
 

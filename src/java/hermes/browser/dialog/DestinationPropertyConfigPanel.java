@@ -20,7 +20,7 @@ import hermes.Domain;
 import hermes.HermesRuntimeException;
 import hermes.browser.HermesBrowser;
 import hermes.config.DestinationConfig;
-import hermes.config.impl.PropertySetConfigImpl;
+import hermes.config.PropertySetConfig;
 
 import java.awt.BorderLayout;
 import java.lang.reflect.InvocationTargetException;
@@ -263,7 +263,7 @@ public class DestinationPropertyConfigPanel extends JPanel
             {
                // @@TODO Fix.
 
-               config.setProperties(new PropertySetConfigImpl());
+               config.setProperties(new PropertySetConfig());
             }
 
             try

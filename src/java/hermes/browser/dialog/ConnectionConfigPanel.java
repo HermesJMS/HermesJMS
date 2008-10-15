@@ -18,7 +18,7 @@
 package hermes.browser.dialog;
 
 import hermes.config.ConnectionConfig;
-import hermes.config.impl.SessionConfigImpl;
+import hermes.config.SessionConfig;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -154,7 +154,7 @@ public class ConnectionConfigPanel extends JPanel
 
         if (connectionConfig.getSession().size() == 0)
         {
-            connectionConfig.getSession().add(new SessionConfigImpl());
+            connectionConfig.getSession().add(new SessionConfig());
         }
     }
 

@@ -51,11 +51,11 @@ import com.jidesoft.grid.TreeLikeHierarchicalPanel;
 public class QueueWatchTableModel extends DefaultTableModel implements HierarchicalTableModel, PropertyChangeListener, HierarchicalTableComponentFactory
 {
     private static final Logger log = Logger.getLogger(QueueWatchTableModel.class);
-    private static final int HERMES_POS = 0;
-    private static final int DESTINATION_POS = 1;
-    private static final int DURABLE_POS = 2 ;
-    private static final int DEPTH_POS = 3;
-    private static final int OLDEST_POS = 4;
+    public static final int HERMES_POS = 0;
+    public static final int DESTINATION_POS = 1;
+    public static final int DURABLE_POS = 2 ;
+    public static final int DEPTH_POS = 3;
+    public static final int OLDEST_POS = 4;
     private Map<DestinationConfigKeyWrapper, WatchInfo> watchInfoByKey = new HashMap<DestinationConfigKeyWrapper, WatchInfo>();
     private Map childComponentByWatchInfo = new HashMap();
 

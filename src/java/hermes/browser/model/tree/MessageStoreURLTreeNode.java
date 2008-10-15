@@ -19,7 +19,6 @@ package hermes.browser.model.tree;
 
 import hermes.browser.IconCache;
 import hermes.config.JDBCStore;
-import hermes.config.impl.JDBCStoreImpl;
 /**
  * @author colincrist@hermesjms.com
  * @version $Id: MessageStoreURLTreeNode.java,v 1.2 2006/07/13 07:35:33 colincrist Exp $
@@ -47,7 +46,7 @@ public class MessageStoreURLTreeNode extends AbstractTreeNode
    {
       super(alias, jdbcURL);
       
-      storeConfig = new JDBCStoreImpl() ;
+      storeConfig = new JDBCStore() ;
       storeConfig.setAlias(alias) ;
       storeConfig.setUrl(jdbcURL) ;
       

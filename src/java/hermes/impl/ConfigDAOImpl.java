@@ -37,13 +37,6 @@ import hermes.config.ProviderExtConfig;
 import hermes.config.RendererConfig;
 import hermes.config.SessionConfig;
 import hermes.config.WatchConfig;
-import hermes.config.impl.ConnectionConfigImpl;
-import hermes.config.impl.DestinationConfigImpl;
-import hermes.config.impl.FactoryConfigImpl;
-import hermes.config.impl.PropertySetConfigImpl;
-import hermes.config.impl.ProviderConfigImpl;
-import hermes.config.impl.SessionConfigImpl;
-import hermes.config.impl.WatchConfigImpl;
 import hermes.ext.DefaultHermesAdminFactory;
 
 import java.io.File;
@@ -151,7 +144,9 @@ public class ConfigDAOImpl implements ConfigDAO
       }
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#getFactory()
     */
    public ObjectFactory getFactory()
@@ -159,7 +154,9 @@ public class ConfigDAOImpl implements ConfigDAO
       return factory;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#getAdminClassForPlugIn(java.lang.String)
     */
    public String getAdminClassForPlugIn(String plugin)
@@ -174,7 +171,9 @@ public class ConfigDAOImpl implements ConfigDAO
       }
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#getPlugInName(java.lang.String)
     */
    public String getPlugInName(String adminFactoryClass)
@@ -189,7 +188,9 @@ public class ConfigDAOImpl implements ConfigDAO
       }
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#getAdminFactoryURLs()
     */
    public URL[] getAdminFactoryURLs()
@@ -197,7 +198,9 @@ public class ConfigDAOImpl implements ConfigDAO
       return adminFactoryURLs;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#getURLForAdminFactory(java.lang.String)
     */
    public URL getURLForAdminFactory(String adminFactoryClass)
@@ -205,16 +208,22 @@ public class ConfigDAOImpl implements ConfigDAO
       return adminFactoryToJARMap.get(adminFactoryClass);
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#removeJDBC(hermes.config.HermesConfig, hermes.config.JDBCStore)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#removeJDBC(hermes.config.HermesConfig,
+    *      hermes.config.JDBCStore)
     */
    public void removeJDBC(HermesConfig config, JDBCStore store)
    {
       config.getJdbcStore().remove(store);
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#addJDBCStore(hermes.config.HermesConfig, java.lang.String, java.lang.String, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#addJDBCStore(hermes.config.HermesConfig,
+    *      java.lang.String, java.lang.String, java.lang.String)
     */
    public JDBCStore addJDBCStore(HermesConfig config, String alias, String driver, String url) throws JAXBException
    {
@@ -238,8 +247,11 @@ public class ConfigDAOImpl implements ConfigDAO
       return storeConfig;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#removeNamingConfig(hermes.config.HermesConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#removeNamingConfig(hermes.config.HermesConfig,
+    *      java.lang.String)
     */
    public void removeNamingConfig(HermesConfig config, String id)
    {
@@ -254,8 +266,11 @@ public class ConfigDAOImpl implements ConfigDAO
       }
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#getClasspathGroupConfig(hermes.config.HermesConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#getClasspathGroupConfig(hermes.config.HermesConfig,
+    *      java.lang.String)
     */
    public ClasspathGroupConfig getClasspathGroupConfig(HermesConfig config, String id)
    {
@@ -272,7 +287,9 @@ public class ConfigDAOImpl implements ConfigDAO
       return null;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#duplicate(hermes.config.ClasspathConfig)
     */
    public ClasspathConfig duplicate(ClasspathConfig cConfig) throws JAXBException
@@ -286,7 +303,9 @@ public class ConfigDAOImpl implements ConfigDAO
       return newCConfig;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#duplicateClasspathGroups(java.util.List)
     */
    public List<ClasspathGroupConfig> duplicateClasspathGroups(List<?> classPathGroups) throws JAXBException
@@ -313,8 +332,11 @@ public class ConfigDAOImpl implements ConfigDAO
       return rval;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#removeHermes(hermes.config.HermesConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#removeHermes(hermes.config.HermesConfig,
+    *      java.lang.String)
     */
    public void removeHermes(HermesConfig config, String hermesId) throws HermesException
    {
@@ -355,8 +377,11 @@ public class ConfigDAOImpl implements ConfigDAO
       throw new HermesException("no session " + hermesId);
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#removeDestination(hermes.config.HermesConfig, java.lang.String, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#removeDestination(hermes.config.HermesConfig,
+    *      java.lang.String, java.lang.String)
     */
    public void removeDestination(HermesConfig config, String hermesId, String destinationName) throws HermesException
    {
@@ -398,7 +423,9 @@ public class ConfigDAOImpl implements ConfigDAO
       throw new HermesException("no destination " + destinationName + " configured for session " + hermesId);
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#getAllSessions(hermes.config.HermesConfig)
     */
    public Collection<SessionConfig> getAllSessions(HermesConfig config) throws HermesException
@@ -425,8 +452,11 @@ public class ConfigDAOImpl implements ConfigDAO
       return rval;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#getAllDestinations(hermes.config.HermesConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#getAllDestinations(hermes.config.HermesConfig,
+    *      java.lang.String)
     */
    public Collection getAllDestinations(HermesConfig config, String hermesId) throws HermesException
    {
@@ -468,7 +498,9 @@ public class ConfigDAOImpl implements ConfigDAO
       return rval;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#getRendererProperties(hermes.config.RendererConfig)
     */
    public Properties getRendererProperties(RendererConfig rConfig)
@@ -488,8 +520,11 @@ public class ConfigDAOImpl implements ConfigDAO
       return props;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#getRendererProperties(hermes.config.HermesConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#getRendererProperties(hermes.config.HermesConfig,
+    *      java.lang.String)
     */
    public Properties getRendererProperties(HermesConfig config, String className) throws HermesException
    {
@@ -508,8 +543,11 @@ public class ConfigDAOImpl implements ConfigDAO
       throw new HermesException("no such renderer " + className);
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#createRendererConfig(java.lang.String, java.util.Map)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#createRendererConfig(java.lang.String,
+    *      java.util.Map)
     */
    public RendererConfig createRendererConfig(String className, Map<?, ?> map) throws HermesException
    {
@@ -521,7 +559,7 @@ public class ConfigDAOImpl implements ConfigDAO
 
          if (properties == null)
          {
-            properties = new PropertySetConfigImpl();
+            properties = new PropertySetConfig();
             rConfig.setProperties(properties);
          }
 
@@ -535,8 +573,11 @@ public class ConfigDAOImpl implements ConfigDAO
       }
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#updatePropertySet(hermes.config.PropertySetConfig, java.util.Map)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#updatePropertySet(hermes.config.PropertySetConfig,
+    *      java.util.Map)
     */
    public void updatePropertySet(PropertySetConfig properties, Map<?, ?> map) throws JAXBException
    {
@@ -565,8 +606,11 @@ public class ConfigDAOImpl implements ConfigDAO
       }
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#populatePropertySet(java.util.Map, hermes.config.PropertySetConfig)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#populatePropertySet(java.util.Map,
+    *      hermes.config.PropertySetConfig)
     */
    public void populatePropertySet(Map<?, ?> map, PropertySetConfig properties) throws JAXBException
    {
@@ -591,23 +635,21 @@ public class ConfigDAOImpl implements ConfigDAO
       }
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#createPropertySet()
     */
    public PropertySetConfig createPropertySet() throws HermesException
    {
-      try
-      {
-         return factory.createPropertySetConfig();
-      }
-      catch (JAXBException e)
-      {
-         throw new HermesException(e);
-      }
+      return factory.createPropertySetConfig();
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#setRendererProperties(hermes.config.HermesConfig, java.lang.String, java.util.Map)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#setRendererProperties(hermes.config.HermesConfig,
+    *      java.lang.String, java.util.Map)
     */
    public void setRendererProperties(HermesConfig config, String className, Map<?, ?> props) throws HermesException, JAXBException
    {
@@ -619,7 +661,7 @@ public class ConfigDAOImpl implements ConfigDAO
          {
             if (rConfig.getProperties() == null)
             {
-               rConfig.setProperties(new PropertySetConfigImpl());
+               rConfig.setProperties(new PropertySetConfig());
             }
 
             rConfig.getProperties().getProperty().clear();
@@ -651,40 +693,49 @@ public class ConfigDAOImpl implements ConfigDAO
       throw new HermesException("no such renderer " + className);
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#createWatchConfig()
     */
    public WatchConfig createWatchConfig()
    {
-      WatchConfig rval = new WatchConfigImpl();
+      WatchConfig rval = new WatchConfig();
 
       rval.setShowAge(true);
-      rval.setUpdateFrequency(30 * 1000);
+      rval.setUpdateFrequency(30 * 1000L);
 
       return rval;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#createDestinationConfig()
     */
    public DestinationConfig createDestinationConfig()
    {
-      return new DestinationConfigImpl();
+      return new DestinationConfig();
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#createDestinationConfig(java.lang.String, hermes.Domain)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#createDestinationConfig(java.lang.String,
+    *      hermes.Domain)
     */
    public DestinationConfig createDestinationConfig(String name, Domain domain)
    {
-      DestinationConfigImpl rval = new DestinationConfigImpl();
+      DestinationConfig rval = new DestinationConfig();
       rval.setName(name);
       rval.setDomain(domain.getId());
 
       return rval;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#createDefaultProviderExtConfig(java.lang.String)
     */
    public ProviderExtConfig createDefaultProviderExtConfig(String connectionFactoryName) throws JAXBException
@@ -705,8 +756,11 @@ public class ConfigDAOImpl implements ConfigDAO
       return config;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#duplicateForWatch(hermes.config.DestinationConfig, hermes.Hermes)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#duplicateForWatch(hermes.config.DestinationConfig,
+    *      hermes.Hermes)
     */
    public DestinationConfig duplicateForWatch(DestinationConfig dConfig, Hermes hermes)
    {
@@ -716,12 +770,14 @@ public class ConfigDAOImpl implements ConfigDAO
       return rval;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#duplicate(hermes.config.DestinationConfig)
     */
    public DestinationConfig duplicate(DestinationConfig dConfig)
    {
-      DestinationConfig rval = new DestinationConfigImpl();
+      DestinationConfig rval = new DestinationConfig();
 
       rval.setName(dConfig.getName());
       rval.setShortName(dConfig.getShortName());
@@ -733,7 +789,9 @@ public class ConfigDAOImpl implements ConfigDAO
       return rval;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#getAdminFactories()
     */
    public Collection<String> getAdminFactories()
@@ -741,17 +799,21 @@ public class ConfigDAOImpl implements ConfigDAO
       return adminFactories;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#createJNDIFactoryConfig(java.lang.String, java.lang.String, java.lang.String, hermes.config.PropertySetConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#createJNDIFactoryConfig(java.lang.String,
+    *      java.lang.String, java.lang.String, hermes.config.PropertySetConfig,
+    *      java.lang.String)
     */
    public FactoryConfig createJNDIFactoryConfig(String classpathId, String sessionId, String binding, PropertySetConfig properties, String className)
          throws JAXBException
    {
-      FactoryConfig factoryConfig = new FactoryConfigImpl();
+      FactoryConfig factoryConfig = new FactoryConfig();
       factoryConfig.setClasspathId(classpathId);
-      SessionConfig sessionConfig = new SessionConfigImpl();
-      ConnectionConfig connectConfig = new ConnectionConfigImpl();
-      ProviderConfig providerConfig = new ProviderConfigImpl();
+      SessionConfig sessionConfig = new SessionConfig();
+      ConnectionConfig connectConfig = new ConnectionConfig();
+      ProviderConfig providerConfig = new ProviderConfig();
 
       sessionConfig.setId(sessionId);
       sessionConfig.setTransacted(true);
@@ -793,16 +855,18 @@ public class ConfigDAOImpl implements ConfigDAO
       return factoryConfig;
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see hermes.impl.ConfigDAO#createDefaultFactoryConfig(java.lang.String)
     */
    public FactoryConfig createDefaultFactoryConfig(String sessionId) throws JAXBException
    {
-      FactoryConfig factoryConfig = new FactoryConfigImpl();
+      FactoryConfig factoryConfig = new FactoryConfig();
       factoryConfig.setClasspathId(SimpleClassLoaderManager.SYSTEM_LOADER);
-      SessionConfig sessionConfig = new SessionConfigImpl();
-      ConnectionConfig connectConfig = new ConnectionConfigImpl();
-      ProviderConfig providerConfig = new ProviderConfigImpl();
+      SessionConfig sessionConfig = new SessionConfig();
+      ConnectionConfig connectConfig = new ConnectionConfig();
+      ProviderConfig providerConfig = new ProviderConfig();
 
       sessionConfig.setId(sessionId);
       connectConfig.getSession().add(sessionConfig);
@@ -810,16 +874,19 @@ public class ConfigDAOImpl implements ConfigDAO
       factoryConfig.setExtension(createDefaultProviderExtConfig(NullConnectionFactory.class.getName()));
       sessionConfig.setTransacted(true);
 
-      providerConfig.setProperties(new PropertySetConfigImpl());
+      providerConfig.setProperties(new PropertySetConfig());
       factoryConfig.setProvider(providerConfig);
 
       return factoryConfig;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#replaceDestinationConfigs(hermes.config.HermesConfig, java.lang.String, java.util.Collection)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#replaceDestinationConfigs(hermes.config.HermesConfig,
+    *      java.lang.String, java.util.Collection)
     */
-   public void replaceDestinationConfigs(HermesConfig config, String hermesId, Collection<?> destinationConfigs)
+   public void replaceDestinationConfigs(HermesConfig config, String hermesId, Collection<DestinationConfig> destinationConfigs)
    {
       for (Iterator<FactoryConfig> fIter = config.getFactory().iterator(); fIter.hasNext();)
       {
@@ -858,8 +925,11 @@ public class ConfigDAOImpl implements ConfigDAO
       }
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#renameSession(hermes.config.FactoryConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#renameSession(hermes.config.FactoryConfig,
+    *      java.lang.String)
     */
    public void renameSession(FactoryConfig factoryConfig, String newSessionId)
    {
@@ -869,8 +939,11 @@ public class ConfigDAOImpl implements ConfigDAO
       sessionConfig.setId(newSessionId);
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#getFactoryConfig(hermes.config.HermesConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#getFactoryConfig(hermes.config.HermesConfig,
+    *      java.lang.String)
     */
    public FactoryConfig getFactoryConfig(HermesConfig config, String hermesId) throws HermesException
    {
@@ -893,8 +966,11 @@ public class ConfigDAOImpl implements ConfigDAO
       throw new HermesException("no such session " + hermesId);
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#duplicate(hermes.config.SessionConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#duplicate(hermes.config.SessionConfig,
+    *      java.lang.String)
     */
    public SessionConfig duplicate(SessionConfig sourceSession, String newId) throws JAXBException
    {
@@ -911,8 +987,11 @@ public class ConfigDAOImpl implements ConfigDAO
       return rval;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#duplicate(hermes.config.ConnectionConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#duplicate(hermes.config.ConnectionConfig,
+    *      java.lang.String)
     */
    public ConnectionConfig duplicate(ConnectionConfig sourceConnection, String newSessionId) throws JAXBException
    {
@@ -927,8 +1006,11 @@ public class ConfigDAOImpl implements ConfigDAO
       return rval;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#duplicate(hermes.config.FactoryConfig, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#duplicate(hermes.config.FactoryConfig,
+    *      java.lang.String)
     */
    public FactoryConfig duplicate(FactoryConfig sourceFactory, String newSessionId) throws JAXBException
    {
@@ -944,8 +1026,11 @@ public class ConfigDAOImpl implements ConfigDAO
       return rval;
    }
 
-   /* (non-Javadoc)
-    * @see hermes.impl.ConfigDAO#duplicateSession(hermes.config.HermesConfig, java.lang.String, java.lang.String)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see hermes.impl.ConfigDAO#duplicateSession(hermes.config.HermesConfig,
+    *      java.lang.String, java.lang.String)
     */
    public void duplicateSession(HermesConfig config, String hermesId, String newHermesId) throws JAXBException, HermesException
    {

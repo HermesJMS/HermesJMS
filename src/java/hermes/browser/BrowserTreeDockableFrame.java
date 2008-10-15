@@ -17,6 +17,9 @@
 
 package hermes.browser;
 
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+
 import hermes.HermesException;
 import hermes.HermesLoader;
 import hermes.browser.components.BrowserTree;
@@ -47,11 +50,11 @@ public class BrowserTreeDockableFrame extends DockableFrame
       browserTree = new BrowserTree(); 
       
       getContext().setInitSide(DockContext.DOCK_SIDE_WEST);
-      getContext().setInitMode(DockContext.STATE_FRAMEDOCKED);
+      getContext().setInitMode(DockContext.STATE_FRAMEDOCKED);      
       
       setAvailableButtons(DockableFrame.BUTTON_AUTOHIDE | DockableFrame.BUTTON_FLOATING);
 
-      getContentPane().add(new JideScrollPane(browserTree));
+      getContentPane().add(new JideScrollPane(browserTree));      
    }
 
    public void setLoader(HermesLoader loader)

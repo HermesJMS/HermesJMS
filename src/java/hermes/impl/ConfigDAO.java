@@ -115,7 +115,7 @@ public interface ConfigDAO
 
    public abstract FactoryConfig createDefaultFactoryConfig(String sessionId) throws JAXBException;
 
-   public abstract void replaceDestinationConfigs(HermesConfig config, String hermesId, Collection<?> destinationConfigs);
+   public abstract void replaceDestinationConfigs(HermesConfig config, String hermesId, Collection<DestinationConfig> destinationConfigs);
 
    public abstract void renameSession(FactoryConfig factoryConfig, String newSessionId);
 

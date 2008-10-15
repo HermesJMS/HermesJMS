@@ -26,7 +26,7 @@ import hermes.browser.HermesBrowser;
 import hermes.browser.model.PropertySetTableModel;
 import hermes.config.FactoryConfig;
 import hermes.config.HermesConfig;
-import hermes.config.impl.ProviderConfigImpl;
+import hermes.config.ProviderConfig;
 import hermes.impl.ClassLoaderManager;
 import hermes.impl.SimpleClassLoaderManager;
 import hermes.providers.file.FileConnectionFactory;
@@ -309,7 +309,7 @@ public class ConnectionFactoryConfigPanel extends JPanel
 
       if (newFactory.getProvider() == null)
       {
-         newFactory.setProvider(new ProviderConfigImpl());
+         newFactory.setProvider(new ProviderConfig());
          newFactory.getProvider().setClassName(factoryConfig.getProvider().getClassName());
       }
 

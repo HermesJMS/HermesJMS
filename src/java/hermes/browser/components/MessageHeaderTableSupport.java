@@ -102,7 +102,7 @@ class MessageHeaderTableSupport
       if (!table.isCellSelected(row, column))
       {
          if (row % 2 == 1)
-         {
+         {            
             c.setBackground(Color.LIGHT_GRAY);
          }
          else

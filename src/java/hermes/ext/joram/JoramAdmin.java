@@ -24,7 +24,6 @@ import hermes.HermesException;
 import hermes.JNDIConnectionFactory;
 import hermes.browser.HermesBrowser;
 import hermes.config.DestinationConfig;
-import hermes.config.impl.DestinationConfigImpl;
 import hermes.ext.HermesAdminSupport;
 
 import java.net.ConnectException;
@@ -126,7 +125,7 @@ public class JoramAdmin extends HermesAdminSupport implements HermesAdmin
 	    List destList =  AdminModule.getDestinations();
 	    for (int i = 0; i <destList.size(); i++)
 		{
-		    final DestinationConfig dConfig = new DestinationConfigImpl();
+		    final DestinationConfig dConfig = new DestinationConfig();
 		    
 		    dConfig.setName(((Destination)(destList.get(i))).getName());
 		    dConfig.setShortName(((Destination)(destList.get(i))).getAdminName());

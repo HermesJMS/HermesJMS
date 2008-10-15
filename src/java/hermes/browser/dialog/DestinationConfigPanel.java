@@ -26,7 +26,6 @@ import hermes.config.ConnectionConfig;
 import hermes.config.DestinationConfig;
 import hermes.config.FactoryConfig;
 import hermes.config.SessionConfig;
-import hermes.config.impl.DestinationConfigImpl;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -138,7 +137,7 @@ public class DestinationConfigPanel extends JPanel
 
                      while ((line = reader.readLine()) != null)
                      {
-                        DestinationConfig dConfig = new DestinationConfigImpl();
+                        DestinationConfig dConfig = new DestinationConfig();
                         dConfig.setName(line.trim());
                         dConfig.setDomain(Domain.QUEUE.getId());
 
@@ -164,7 +163,7 @@ public class DestinationConfigPanel extends JPanel
             {
                ConnectionConfig cConfig = (ConnectionConfig) factoryConfig.getConnection().get(0);
                SessionConfig sConfig = (SessionConfig) cConfig.getSession().get(0);
-               DestinationConfigImpl dConfig = new DestinationConfigImpl() ;
+               DestinationConfig dConfig = new DestinationConfig() ;
                dConfig.setDomain(Domain.QUEUE.getId()) ;
                dConfig.setName("NEW") ;
                

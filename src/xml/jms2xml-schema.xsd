@@ -19,7 +19,7 @@
 		<xs:attribute name="JMSExpiration" type="xs:long"/>
 		<xs:attribute name="JMSMessageID" type="xs:string"/>
 		<xs:attribute name="JMSPriority" type="xs:int"/>
-		<xs:attribute name="JMSRedelivered" type="xs:boolean"/>
+		<xs:attribute name="JMSRedelivered" type="xs:boolean" default="false"/>
 		<xs:attribute name="JMSReplyTo" type="xs:string"/>
 		<xs:attribute name="JMSReplyToDomain" type="xs:int"/>
 		<xs:attribute name="JMSTimestamp" type="xs:long"/>

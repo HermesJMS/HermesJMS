@@ -105,6 +105,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
+import jsyntaxpane.DefaultSyntaxKit;
+
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
 import org.apache.log4j.Logger;
@@ -1005,6 +1007,8 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       ObjectComparatorManager.registerComparator(Integer.class, new IntegerComparator());
       ObjectComparatorManager.registerComparator(Long.class, new LongComparator());
 
+      DefaultSyntaxKit.initKit();
+      
       browserPane = new MainDocumentPane();
       // Shows us the memory usage and lets the user GC
 

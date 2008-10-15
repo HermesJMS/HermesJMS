@@ -25,7 +25,7 @@ import hermes.config.DestinationConfig;
 import hermes.config.HermesConfig;
 import hermes.config.RendererConfig;
 import hermes.config.SessionConfig;
-import hermes.config.impl.RendererConfigImpl;
+
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -122,7 +122,7 @@ public class RendererManager
 
       if (!gotDefaultRenderer)
       {
-         RendererConfig rConfig = new RendererConfigImpl();
+         RendererConfig rConfig = new RendererConfig();
 
          rConfig.setClassName(DefaultMessageRenderer.class.getName());
 

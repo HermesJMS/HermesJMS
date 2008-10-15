@@ -23,7 +23,6 @@ import hermes.browser.model.ClasspathConfigTableModel;
 import hermes.browser.model.ClasspathGroupTableModel;
 import hermes.config.ClasspathConfig;
 import hermes.config.ClasspathGroupConfig;
-import hermes.config.impl.ClasspathConfigImpl;
 import hermes.swing.SwingUtils;
 
 import java.awt.Rectangle;
@@ -278,7 +277,7 @@ public class ClasspathConfigTable extends JideTable
 
             for (int i = 0; i < files.length; i++)
             {
-               final ClasspathConfig lConfig = new ClasspathConfigImpl();
+               final ClasspathConfig lConfig = new ClasspathConfig();
 
                 lastDirectory = new File(files[i].getPath());
 

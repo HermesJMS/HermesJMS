@@ -340,7 +340,7 @@ public class GeneralConfigPanel extends JPanel
                   }
                   else
                   {
-                     wConfig.setDefaultAgeAlertThreshold(((Integer) watchAgeAlertProperty.getValue()).intValue());
+                     wConfig.setDefaultAgeAlertThreshold(((Long) watchAgeAlertProperty.getValue()).longValue());
                   }
                }
 
@@ -357,7 +357,7 @@ public class GeneralConfigPanel extends JPanel
                   }
                   else
                   {
-                     wConfig.setUpdateFrequency(((Integer) watchFrequenceProperty.getValue()).intValue());
+                     wConfig.setUpdateFrequency(((Long) watchFrequenceProperty.getValue()).longValue());
                   }
                }
 

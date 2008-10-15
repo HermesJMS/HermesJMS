@@ -23,6 +23,7 @@
 	<property name="classes.ext.selectors" value="${build.classes}/classes-ext/selectors" />
 	<property name="classes.ext.mq" value="${build.classes}/classes-ext/mq" />
 	<property name="classes.ext.sonic" value="${build.classes}/classes-ext/sonicmq" />
+	<property name="classes.ext.sqs" value="${build.classes}/classes-ext/sqs" />
 	<property name="classes.ext.jbossmq" value="${build.classes}/classes-ext/jbossmq" />
 	<property name="classes.ext.arjuna" value="${build.classes}/classes-ext/arjuna" />
 	<property name="classes.ext.weblogic" value="${build.classes}/classes-ext/weblogic" />
@@ -91,7 +92,8 @@
 		<available file="${fiorano.lib}/fmq-client-all.jar" property="fiorano.present" />
 		<available file="${ems.lib}/tibjms.jar" property="ems.present" />
 		<available file="${sonic.lib}/sonic_Client.jar" property="sonic.present" />
-		<available file="${activemq.root}/incubator-activemq-4.1-SNAPSHOT.jar" property="activemq.present" />
+		<available file="${sonic.lib}/sonic_Client.jar" property="sonic.present" />
+		<available file="${sqs/lib}/jms4sqs.jar" property="sqs.present" />
 		<available file="${mx4j.lib}/mx4j.jar" property="mx4j.present" />
 
 		<mkdir dir="${build}" />
@@ -106,6 +108,7 @@
 		<mkdir dir="${classes.ext.openjms}" />
 		<mkdir dir="${classes.ext.fiorano}" />
 		<mkdir dir="${classes.ext.ems}" />
+		<mkdir dir="${classes.ext.sqs}" />
 		<mkdir dir="${classes.ext.sonic}" />
 		<mkdir dir="${classes.ext.activemq}" />
 		<mkdir dir="${classes.ext.seebeyond}" />
@@ -174,6 +177,14 @@
 				<include name="mgmt_agent.jar" />
 				<include name="mgmt_config.jar" />
 				<include name="jmxri.jar" />
+			</fileset>
+		</path>
+
+		<path id="sqs.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${sqs.lib}">
+				<include name="jms4sqs.jar" />
 			</fileset>
 		</path>
 
@@ -306,17 +317,19 @@
 	</target>
 
 	<target name="compile-main" depends="init">
-		<xjc schema="${config.schema}" target="${src.java}" package="${config.package}" removeOldOutput="yes">
+		<xjc schema="${config.schema}" destdir="${src.java}" package="${config.package}" removeOldOutput="yes">
 			<produces dir="${src.java}/hermes/config" includes="* impl/**" />
 		</xjc>
 
-		<xjc schema="${jms2xml.schema}" target="${src.java}" package="${jms2xml.package}" removeOldOutput="yes">
+		<xjc schema="${jms2xml.schema}" destdir="${src.java}" package="${jms2xml.package}" removeOldOutput="yes">
 			<produces dir="${src.java}/hermes/xml" includes="**/*.java" />
 		</xjc>
 
 		<javac destdir="${classes}" deprecation="on" debug="true">
 			<src path="${src.java}" />
+			<exclude name="hermes/ext/sqs/*.java"/>
 			<exclude name="hermes/ext/sonicmq/*.java" />
+			<exclude name="hermes/ext/sqs/*.java" />
 			<exclude name="hermes/ext/mq/*.java" />
 			<exclude name="hermes/ext/jbossmq/*.java" />
 			<exclude name="hermes/ext/weblogic/*.java" />
@@ -335,7 +348,7 @@
 		</javac>
 	</target>
 
-	<target name="compile-ext" depends="jar,compile-activemq,compile-mq,compile-jbossmq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond" />
+	<target name="compile-ext" depends="jar,compile-activemq,compile-mq,compile-jbossmq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond,compile-sqs" />
 
 
 	<target name="compile-seebeyond" depends="jar" if="mx4j.present">
@@ -352,6 +365,14 @@
 		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.activemq}" deprecation="on" debug="true">
 			<include name="**/ext/activemq/*.java" />
 			<classpath refid="activemq.classpath" />
+		</javac>
+	</target>
+
+	
+	<target name="compile-sqs" depends="jar" if="sqs.present">
+		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.sqs}" deprecation="on" debug="true">
+			<include name="**/ext/sqs/*.java" />
+			<classpath refid="sqs.classpath" />
 		</javac>
 	</target>
 
@@ -448,6 +469,10 @@
 
 		<jar jarfile="${lib}/hermes-sonicmq.jar">
 			<fileset dir="${classes.ext.sonic}" />
+		</jar>
+
+		<jar jarfile="${lib}/hermes-sqs.jar">
+			<fileset dir="${classes.ext.sqs}" />
 		</jar>
 
 		<jar jarfile="${lib}/hermes-ems.jar">

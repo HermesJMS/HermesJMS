@@ -48,8 +48,7 @@ import javax.swing.ProgressMonitor;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.log4j.Logger;
-
-import com.sun.xml.bind.StringInputStream;
+import org.apache.tools.ant.filters.StringInputStream;
 
 /**
  * @author colincrist@hermesjms.com

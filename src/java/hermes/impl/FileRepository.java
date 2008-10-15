@@ -20,7 +20,6 @@ package hermes.impl;
 import hermes.Hermes;
 import hermes.HermesException;
 import hermes.HermesRepository;
-import hermes.xml.Content;
 import hermes.xml.MessageSet;
 
 import java.io.File;
@@ -48,7 +47,7 @@ public class FileRepository implements HermesRepository
     private static final Logger log = Logger.getLogger(FileRepository.class);
     private static final String SEPARATOR = System.getProperty("file.separator");
     private File file;
-    private Content xmlMessages;
+    private MessageSet xmlMessages;
     private DefaultXMLHelper xmlSupport = new DefaultXMLHelper();
 
     public FileRepository(File file) throws IOException
@@ -82,7 +81,7 @@ public class FileRepository implements HermesRepository
 
         if (xmlMessages == null)
         {
-            xmlMessages = xmlSupport.getFactory().createContent();
+            xmlMessages = new MessageSet() ;
         }
 
     }
