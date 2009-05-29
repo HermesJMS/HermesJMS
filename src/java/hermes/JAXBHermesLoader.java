@@ -330,10 +330,12 @@ public class JAXBHermesLoader implements HermesLoader
 
          JAXBContext jc = JAXBContext.newInstance("hermes.config");
          Unmarshaller u = jc.createUnmarshaller();
-
+         
          element = (JAXBElement<Object>) u.unmarshal(istream) ;
          config = (HermesConfig) element.getValue() ;
 
+         Hermes.ui.setConfig(config) ;
+         
          if (config.getLastEditedByHermesVersion() == null)
          {
             //

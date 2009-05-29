@@ -34,4 +34,7 @@ public interface HermesUI
     public ThreadPool getThreadPool() ;
     
     public HermesConfig getConfig() throws HermesException;
+    
+    public void setConfig(HermesConfig config) ;
+    
 }

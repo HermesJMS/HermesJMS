@@ -174,6 +174,13 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       return rendererManager;
    }
 
+   @Override
+   public void setConfig(HermesConfig config)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
    public static void main(String[] args)
    {
       log.debug("Hermes Browser " + Hermes.VERSION + " starting...");

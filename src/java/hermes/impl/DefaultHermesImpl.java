@@ -595,7 +595,7 @@ public class DefaultHermesImpl implements Hermes
       
       // http://hermesjms.com/jira/browse/HJMS-50
       
-      if (HermesBrowser.getBrowser().getConfig().isDeliveryModePersistent())
+      if (Hermes.ui.getConfig().isDeliveryModePersistent())
       {
          m.setJMSDeliveryMode(DeliveryMode.PERSISTENT) ;
       }

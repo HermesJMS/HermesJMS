@@ -29,7 +29,8 @@ import hermes.config.HermesConfig;
 public class ProxyHermesUI implements HermesUI
 {
     private UIMessageSink defaultMessageSink ;
-
+    private HermesConfig config ;
+    
     /**
      * 
      */
@@ -77,11 +78,20 @@ public class ProxyHermesUI implements HermesUI
         return (ThreadPool) SingletonManager.get(ThreadPool.class) ;
     }
 
+   public void setConfig(HermesConfig config)
+   {
+      this.config = config ;
+   }
+   
    public HermesConfig getConfig() throws HermesException
    {
-      // TODO Auto-generated method stub
-      return null;
+      if (HermesBrowser.getBrowser() != null)
+      {
+         return HermesBrowser.getBrowser().getConfig() ;
+      }
+      else
+      {
+         return config ;
+      }
    }
-    
-    
 }

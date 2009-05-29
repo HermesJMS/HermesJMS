@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.xml.bind.JAXBException;
 
@@ -46,10 +47,10 @@ public class SimpleClassLoaderManager implements ClassLoaderManager
     public static final String SYSTEM_LOADER = "System";
 
     private final Collection emptySet = new HashSet();
-    private final Map loaderById = new HashMap();
-    private final Map configById = new HashMap();
-    private final Map factoriesById = new HashMap();
-    private final Map loaderByHermes = new HashMap();
+    private final Map loaderById = new TreeMap();
+    private final Map configById = new TreeMap();
+    private final Map factoriesById = new TreeMap();
+    private final Map loaderByHermes = new TreeMap();
 
     public SimpleClassLoaderManager(List classPathGroups) throws IOException
     {
