@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config autoBrowseRefreshRate="10" displayFactoryAdmin="true" lastEditedByHermesVersion="v1.9" lastEditedByUser="Colin" maxColumnsInStatisticsTable="10" maxMessagesInBrowserPane="1000" maxThreadPoolSize="5">
+    <renderer className="hermes.renderers.DefaultMessageRenderer"/>
+    <factory classpathId="System">
+        <provider className="hermes.providers.file.FileConnectionFactory">
+            <properties>
+                <property name="baseDirectory" value=""/>
+            </properties>
+        </provider>
+        <connection>
+            <session audit="false" id="Files" reconnects="0"/>
+        </connection>
+  
+        <extension className="hermes.ext.DefaultHermesAdminFactory">
+            <properties/>
+        </extension>
+    </factory>
+</config>

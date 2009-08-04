@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<content>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSMessageID="ID:414d5120514d20202020202020202020af10da4220003c16" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="1121695565379">
+            <headerProperty name="MyProperty"/>
+            <text>This is a test message.</text>
+        </textMessage>
+    </entry>
+</content>
+

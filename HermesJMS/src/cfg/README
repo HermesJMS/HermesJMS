@@ -1,0 +1,10 @@
+File			Content
+
+hermes-config.xml 	Basic configuration with just a file provider.
+web-hermes-config.xml 	Configuration used for the screenshots on the website.
+ems-hermes-config.xml 	Example Tibco EMS configuration. See also http://www.hermesjms.com/demos/ems_1_9.html
+jboss-hermes-config.xml Example JBossMQ with their own JNDI provider and the Sun reference filesystem provider.
+
+log4j.ant.props 	Log4j settings when usign Hermes Ant tasks
+
+sonicmq.jndi.properties Example provider property file for use when configuring SonicMQ with JNDI.

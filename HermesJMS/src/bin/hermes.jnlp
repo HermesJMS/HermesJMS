@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jnlp spec="1.0+" codebase="http://www.hermesjms.com" href="webstart/hermes-1.9/bin/hermes.jnlp">
+
+  <information>
+     <title>Hermes</title>
+     <vendor>Colin Crist</vendor>
+     <homepage href="index.html" />
+     <description>Hermes is an interactive JMS browser and administration tool</description>
+     <offline-allowed />
+   </information>
+
+  <resources>
+     <j2se version="1.5+"/>
+     <jar href="hermes/lib/activation.jar"/>
+     <jar href="hermes/lib/hermes.jar" main="true"/>
+     <jar href="hermes/lib/relaxngDataType.jar"/>	
+     <jar href="hermes/lib/jaas.jar"/>
+     <jar href="hermes/lib/activation.jar"/>
+     <jar href="hermes/lib/jaxb-libs.jar"/>
+     <jar href="hermes/lib/jaxb-api.jar"/>
+     <jar href="hermes/lib/jaxb-xjc.jar"/>
+     <jar href="hermes/lib/jaxb-impl.jar"/>
+     <jar href="hermes/lib/commons-digester.jar"/>
+     <jar href="hermes/lib/commons-codec-1.1.jar"/>
+     <jar href="hermes/lib/log4j-1.2.8.jar"/>
+     <jar href="hermes/lib/j2ee.jar"/>
+     <jar href="hermes/lib/commons-logging.jar"/>
+     <jar href="hermes/lib/jlfgr-1_0.jar"/>
+     <jar href="hermes/lib/commons-collections.jar"/>
+     <jar href="hermes/lib/commons-beanutils.jar"/>
+     <jar href="hermes/lib/namespace.jar"/>
+     <jar href="hermes/lib/xsdlib.jar"/>
+
+     <property name="hermes" value="hermes-config.xml"/>
+     <property name="log4j.configuration" value="file:log4j.props"/>
+   </resources>
+
+  <offline-allowed/>
+
+  <application-desc main-class="hermes.browser.HermesBrowser"/>
+
+  <security>
+     <all-permissions/>
+  </security>
+
+</jnlp>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config auditDirectory="c:\temp" autoBrowseRefreshRate="10" copyJMSCorrelationID="false" copyJMSExpiration="false" copyJMSPriority="false" copyJMSReplyTo="true" copyJMSType="false" correctDropSemantics="false" displayFactoryAdmin="true" embeddedMessageInBrowsePane="false" lastEditedByHermesVersion="v1.10 build 191005" lastEditedByUser="Colin" maxColumnsInStatisticsTable="10" maxMessagesInBrowserPane="1000" maxThreadPoolSize="5" messageFilesDir="C:\local\hermes-v1.9.5\bin\messages" selectorImpl="hermes.selector.ActiveMQMessageSelectorFactory">
+    <classpathGroup id="EMS">
+        <library jar="${ems.home}\clients\java\crimson.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\jaxp.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\jcert.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\jms.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\jndi.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\jnet.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\jsse.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\jta-spec1_0_1.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\tibcrypt.jar" noFactories="true"/>
+        <library factories="com.tibco.tibjms.TibjmsConnectionFactory,com.tibco.tibjms.TibjmsQueueConnectionFactory,com.tibco.tibjms.TibjmsTopicConnectionFactory,com.tibco.tibjms.TibjmsXAQueueConnectionFactory,com.tibco.tibjms.TibjmsXATopicConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedQueueConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedTopicConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedXAQueueConnectionFactory,com.tibco.tibjms.naming.TibjmsFederatedXATopicConnectionFactory" jar="${ems.home}\clients\java\tibjms.jar" noFactories="false"/>
+        <library jar="${ems.home}\clients\java\tibjmsadmin.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\tibjmsapps.jar" noFactories="true"/>
+        <library jar="${ems.home}\clients\java\tibrvjms.jar" noFactories="true"/>
+    </classpathGroup>
+    <renderer className="hermes.renderers.DefaultMessageRenderer" name="Default Renderer">
+        <properties>
+            <property name="toStringOnObjectMessage" value="false"/>
+            <property name="messageCache" value="100"/>
+            <property name="bytesIsString" value="false"/>
+            <property name="bytesIsObjectBufferSize" value="65536"/>
+            <property name="bytesIsObject" value="false"/>
+        </properties>
+    </renderer>
+    <factory classpathId="EMS">
+        <provider className="hermes.JNDIConnectionFactory">
+            <properties>
+                <property name="binding" value="GenericConnectionFactory"/>
+                <property name="initialContextFactory" value="com.tibco.tibjms.naming.TibjmsInitialContextFactory"/>
+                <property name="providerURL" value="tcp://redhat:7222"/>
+                <property name="securityCredentials" value="hermes"/>
+                <property name="securityPrincipal" value="colin"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false"/>
+        <destination domain="1" name="queue"/>
+        <destination domain="2" name="topic"/>
+        <extension className="hermes.ext.ems.TibcoEMSAdminFactory">
+            <properties>
+                <property name="password" value="thinkpad"/>
+                <property name="username" value="admin"/>
+            </properties>
+        </extension>
+    </factory>
+    <factory classpathId="EMS">
+        <provider className="com.tibco.tibjms.TibjmsConnectionFactory">
+            <properties>
+                <property name="serverUrl" value="tcp://redhat:7222"/>
+                <property name="userName" value="colin"/>
+                <property name="userPassword" value="hermes"/>
+            </properties>
+        </provider>
+        <connection clientID="" connectionPerThread="false">
+            <session audit="false" checkSize="false" checkSizePeriod="0" id="EMS on redhat" reconnects="0" transacted="true"/>
+        </connection>
+        <destination domain="1" name="$TMP$.EMS-SERVER.12A443567C232.1"/>
+        <destination domain="1" name="$TMP$.EMS-SERVER.12A443567C23A.1"/>
+        <destination domain="1" name="$sys.admin"/>
+        <destination domain="1" name="$sys.lookup"/>
+        <destination domain="1" name="$sys.undelivered"/>
+        <destination domain="1" name="&gt;"/>
+        <destination domain="1" name="queue.sample"/>
+        <destination domain="1" name="sample"/>
+        <destination domain="2" name="&gt;"/>
+        <destination domain="2" name="sample"/>
+        <destination domain="2" name="topic.sample"/>
+        <destination domain="2" name="topic.sample.exported"/>
+        <destination domain="2" name="topic.sample.imported"/>
+        <extension className="hermes.ext.ems.TibcoEMSAdminFactory">
+            <properties>
+                <property name="password" value="thinkpad"/>
+                <property name="serverURL" value="tcp://redhat:7222"/>
+                <property name="username" value="admin"/>
+            </properties>
+        </extension>
+    </factory>
+</config>
+

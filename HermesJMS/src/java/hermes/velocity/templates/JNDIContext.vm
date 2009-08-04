@@ -1,0 +1,14 @@
+##
+## Velocity Template for a JNDI Context
+##
+## $beanId:
+## $properties@
+
+<bean id="$beanId"
+          class="org.springframework.jndi.JndiTemplate">
+    <property name="environment">
+    #foreach ($property in $properties)    
+    <props key="$property.name">$property.value</props>
+    #end
+    </property>
+</bean>

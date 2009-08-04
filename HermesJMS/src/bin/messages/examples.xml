@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<content>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="Hello"/>
+            <text>
+Message #1
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="Bonjour"/>
+            <text>
+Message #2
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="Guten Tag"/>
+            <text>
+Message #3
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="G'day"/>
+            <text>
+Message #4
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="G'day"/>
+            <text>
+Message #5
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="Guten Tag"/>
+            <text>
+Message #6
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="2" JMSExpiration="0" JMSPriority="4" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="G'day"/>
+            <text>
+Message #7
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="Guten Tag"/>
+            <text>
+Message #8
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="Guten Tag"/>
+            <text>
+Message #9
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="G'day"/>
+            <text>
+Message #10
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="Guten Tag"/>
+            <text>
+Message #11
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="G'day"/>
+            <text>
+Message #12
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="G'day"/>
+            <text>
+Message #13
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="Guten Tag"/>
+            <text>
+Message #14
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="G'day"/>
+            <text>
+Message #15
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="G'day"/>
+            <text>
+Message #16
+</text>
+        </textMessage>
+    </entry>
+    <entry type="1">
+        <textMessage JMSDeliveryMode="0" JMSExpiration="0" JMSPriority="0" JMSRedelivered="false" JMSTimestamp="0">
+            <headerProperty name="MyProperty" type="java.lang.String" value="Guten Tag"/>
+            <text>
+Message #17
+</text>
+        </textMessage>
+    </entry>
+</content>
+

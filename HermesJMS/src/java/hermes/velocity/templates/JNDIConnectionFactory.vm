@@ -1,0 +1,18 @@
+##
+## Velocity Template for a JNDI accessed ConnectionFactory
+##
+## $beanId:
+## $jndiBeanId:
+## $binding:
+
+<bean id="$beanId"
+          class="org.springframework.jndi.JndiObjectFactoryBean">
+          
+    <property name="jndiTemplate">
+     	<ref brean="$jndiBeanId"/>
+    </property>
+   
+    <property name="jndiName">
+     	<value>$binding</value>
+    </property>
+</bean>

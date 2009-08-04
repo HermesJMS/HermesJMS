@@ -1,0 +1,44 @@
+
+Hermes is an interactive tool for JMS
+
+We recommend you keep your hermes-config.xml separate from the install 
+so you can easily upgrade without affecting existing configuration. 
+
+Follow the steps below:
+
+1. Be careful not to overwrite any previous hermes-config.xml file. 
+
+2. In your home directory (e.g. C:\Documents and Settings\Colin for 
+Windows or /home/colin for Unix), Hermes create a .hermes directory 
+and creates a default hermes-config.xml if one does not exist. Once 
+you have run Hermes for the first time, copy any existing 
+configuration to this directory.
+
+3. If you wish to store your configuration elsewhere, set the 
+HERMES_CONFIG environment variable to that directory.
+
+4. This directory is the working directory for Hermes where hermes.log,
+message stores and the default message directory will be written. 
+You may wish to copy the MessageStores directory from an existing 
+Hermes installation to migrate message stores to this new installation. 
+
+i.e:
+
+   All users:
+
+   $HERMES_HOME/bin
+   $HERMES_HOME/lib
+   etc
+   
+   Per user:
+
+   $HOME/.hermes/hermes-config.xml
+   $HOME/.hermes/hermes.log
+   $HOME/.hermes/MessageStores
+
+5. To run, click on the shortcut in the start menu or run either the 
+$HERMES_HOME/bin/hermes.bat or $HERMES_HOME/bin/hermes.sh scripts.
+
+You can find additional installation instructions on the web at
+http://www.hermesjms.com/confluence/display/HJMS/Installing
+
