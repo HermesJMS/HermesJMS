@@ -35,6 +35,9 @@
 	<property name="classes.ext.activemq" value="${build.classes}/classes-ext/activemq" />
 	<property name="classes.ext.seebeyond" value="${build.classes}/classes-ext/seebeyond" />
 	<property name="classes.webstart" value="${build.classes}/webstart" />
+	<property name="classes.ext.oracleaq" value="${build.classes}/classes-ext/oracle-aq" />
+	<property name="classes.ext.imq" value="${build.classes}/classes-ext/imq" />
+
 
 
 	<property name="lib" value="${build}/lib" />
@@ -92,9 +95,10 @@
 		<available file="${fiorano.lib}/fmq-client-all.jar" property="fiorano.present" />
 		<available file="${ems.lib}/tibjms.jar" property="ems.present" />
 		<available file="${sonic.lib}/sonic_Client.jar" property="sonic.present" />
-		<available file="${sonic.lib}/sonic_Client.jar" property="sonic.present" />
 		<available file="${sqs/lib}/jms4sqs.jar" property="sqs.present" />
 		<available file="${mx4j.lib}/mx4j.jar" property="mx4j.present" />
+		<available file="${oracleaq.lib}/aqapi.jar" property="oracleaq.present" />
+		<available file="${imq.lib}/imq.jar" property="imq.present" />
 
 		<mkdir dir="${build}" />
 		<mkdir dir="${classes}" />
@@ -113,6 +117,8 @@
 		<mkdir dir="${classes.ext.activemq}" />
 		<mkdir dir="${classes.ext.seebeyond}" />
 		<mkdir dir="${classes.webstart}" />
+		<mkdir dir="${classes.ext.oracleaq}" />
+		<mkdir dir="${classes.ext.imq}" />
 		<mkdir dir="${webstart}" />
 		<mkdir dir="${webstart.retro}" />
 		<mkdir dir="${lib}" />
@@ -163,6 +169,25 @@
 
 			<fileset dir="${activemq.lib}">
 				<include name="activemq-core-3.1.jar" />
+			</fileset>
+		</path>
+		
+		<!-- Classpath for OracleAQ -->
+
+			<path id="oracleaq.classpath">
+				<path refid="plugin.classpath" />
+
+				<fileset dir="${oracleaq.lib}">
+					<include name="*.jar"/>
+				</fileset>
+			</path>
+		
+
+		<path id="imq.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${imq.lib}">
+				<include name="*.jar"/>
 			</fileset>
 		</path>
 
@@ -308,8 +333,15 @@
 			</fileset>
 		</path>
 
+		<path id="xjc.classpath">
+		        <path refid="project.classpath"/>
+			<fileset dir="${jaxb.lib}">
+			<include name="*.jar"/>
+			</fileset>
+		</path>
+
 		<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
-			<classpath refid="project.classpath" />
+			<classpath refid="xjc.classpath" />
 		</taskdef>
 	</target>
 
@@ -327,6 +359,8 @@
 
 		<javac destdir="${classes}" deprecation="on" debug="true">
 			<src path="${src.java}" />
+			<exclude name="hermes/ext/imq/*.java"/>	
+			<exclude name="hermes/ext/oracle/aq/*.java"/>
 			<exclude name="hermes/ext/sqs/*.java"/>
 			<exclude name="hermes/ext/sonicmq/*.java" />
 			<exclude name="hermes/ext/sqs/*.java" />
@@ -348,8 +382,23 @@
 		</javac>
 	</target>
 
-	<target name="compile-ext" depends="jar,compile-activemq,compile-mq,compile-jbossmq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond,compile-sqs" />
+	<target name="compile-ext" depends="jar,compile-imq,compile-oracleaq,compile-activemq,compile-mq,compile-jbossmq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond,compile-sqs" />
 
+	
+	<target name="compile-oracleaq" depends="jar" if="oracleaq.present">
+			<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.oracleaq}" deprecation="on" debug="true">
+				<include name="**/ext/oracle/aq/*.java" />
+				<classpath refid="oracleaq.classpath" />
+			</javac>
+		</target>
+	
+	<target name="compile-imq" depends="jar" if="imq.present">
+				<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.imq}" deprecation="on" debug="true">
+					<include name="**/ext/imq/*.java" />
+					<classpath refid="imq.classpath" />
+				</javac>
+			</target>
+	
 
 	<target name="compile-seebeyond" depends="jar" if="mx4j.present">
 		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.seebeyond}" deprecation="on" debug="true">
@@ -459,6 +508,10 @@
 
 	<target name="jar-ext" depends="compile-ext">
 
+		<jar jarfile="${lib}/hermes-imq.jar">
+					<fileset dir="${classes.ext.imq}" />
+				</jar>
+		
 		<jar jarfile="${lib}/hermes-seebeyond.jar">
 				<fileset dir="${classes.ext.seebeyond}" />
 			</jar>
@@ -509,12 +562,16 @@
 
 		<jar jarfile="${lib}/hermes-wme.jar">
 			<fileset dir="${classes.ext.wme}" />
+		</jar>		
+		
+		<jar jarfile="${lib}/hermes-aq.jar">
+					<fileset dir="${classes.ext.oracleaq}" />
 		</jar>
 
 		<copy todir="${lib}">
 			<fileset dir="${src.lib}">
 				<include name="**/*.jar" />
-				<exclude name="ant.jar" />
+<!--				<exclude name="ant.jar" /> -->
 			</fileset>
 		</copy>
 

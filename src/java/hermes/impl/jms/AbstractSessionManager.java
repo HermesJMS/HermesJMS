@@ -78,21 +78,19 @@ public abstract class AbstractSessionManager extends JMSManagerImpl implements S
    private int acknowledgeMode = Session.CLIENT_ACKNOWLEDGE;
    private DestinationManager destinationManager;
    private Map destinationToConfigMap = new HashMap();
-   private SessionConfig config ;
+   private SessionConfig config;
 
    public AbstractSessionManager(DestinationManager destinationManager, SessionConfig config)
    {
       this.destinationManager = destinationManager;
-      this.config = config ;
+      this.config = config;
    }
 
-  
-   public SessionConfig getConfig()  
+   public SessionConfig getConfig()
    {
-      return config ;
+      return config;
    }
 
-   
    /**
     * Get the session, creating is as needed.
     * 
@@ -205,7 +203,9 @@ public abstract class AbstractSessionManager extends JMSManagerImpl implements S
 
    public int getAcknowledgeMode()
    {
-      return acknowledgeMode;
+      log.debug("acknowledgeMode = " + (isTransacted() ? "Session.CLIENT_ACKNOWLEDGE" : "Session.AUTO_ACKNOWLEDGE"));
+
+      return isTransacted() ? Session.CLIENT_ACKNOWLEDGE : Session.AUTO_ACKNOWLEDGE;
    }
 
    /**
@@ -341,11 +341,6 @@ public abstract class AbstractSessionManager extends JMSManagerImpl implements S
       return reconnects;
    }
 
-   public void setAcknowledgeMode(int acknowledgeMode)
-   {
-      this.acknowledgeMode = acknowledgeMode;
-   }
-
    public void setFactoryConfig(FactoryConfig factoryConfig)
    {
       this.factoryConfig = factoryConfig;
@@ -376,7 +371,7 @@ public abstract class AbstractSessionManager extends JMSManagerImpl implements S
    {
       if (config.getDomain() == Domain.QUEUE.getId())
       {
-         final Queue queue= (Queue) destinationManager.getDestination(getSession(), config.getName(), Domain.QUEUE) ;
+         final Queue queue = (Queue) destinationManager.getDestination(getSession(), config.getName(), Domain.QUEUE);
 
          try
          {
@@ -401,7 +396,7 @@ public abstract class AbstractSessionManager extends JMSManagerImpl implements S
 
          if (!(getSession() instanceof QueueSession))
          {
-            throw new HermesException("Session is 1.0.2 and not in the queue domain") ;
+            throw new HermesException("Session is 1.0.2 and not in the queue domain");
          }
 
          if (config.getSelector() != null)
@@ -415,11 +410,11 @@ public abstract class AbstractSessionManager extends JMSManagerImpl implements S
       }
       else if (config.getDomain() == Domain.TOPIC.getId())
       {
-         return new TopicBrowser(hermes.getSession(), destinationManager, config);  
+         return new TopicBrowser(hermes.getSession(), destinationManager, config);
       }
       else
       {
-         throw new HermesException("The domain for " + config.getName() + " is not defined, configure it as a queue or a topic") ;
+         throw new HermesException("The domain for " + config.getName() + " is not defined, configure it as a queue or a topic");
       }
 
    }
@@ -429,14 +424,14 @@ public abstract class AbstractSessionManager extends JMSManagerImpl implements S
     */
    public QueueBrowser createBrowser(Hermes hermes, Destination destination, String selector) throws JMSException
    {
-      final DestinationConfig dConfig = HermesBrowser.getConfigDAO().duplicate(getDestinationConfig(destination)) ;
-      
+      final DestinationConfig dConfig = HermesBrowser.getConfigDAO().duplicate(getDestinationConfig(destination));
+
       if (dConfig.getSelector() == null)
       {
-         dConfig.setSelector(selector) ;
+         dConfig.setSelector(selector);
       }
-      
-      return createBrowser(hermes, dConfig) ;
+
+      return createBrowser(hermes, dConfig);
    }
 
    /**
@@ -520,8 +515,9 @@ public abstract class AbstractSessionManager extends JMSManagerImpl implements S
 
    public DestinationManager getDestinationManager()
    {
-      return destinationManager ;
+      return destinationManager;
    }
+
    /**
     * Return a verbose description of this session.
     */

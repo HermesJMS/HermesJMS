@@ -81,6 +81,11 @@ public class ProxyHermesUI implements HermesUI
    public void setConfig(HermesConfig config)
    {
       this.config = config ;
+      
+      if (HermesBrowser.getBrowser() != null)
+      {
+         HermesBrowser.getBrowser().setConfig(config) ;
+      }      
    }
    
    public HermesConfig getConfig() throws HermesException

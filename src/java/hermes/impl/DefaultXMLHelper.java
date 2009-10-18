@@ -23,7 +23,6 @@ import hermes.MessageFactory;
 import hermes.SystemProperties;
 import hermes.browser.HermesBrowser;
 import hermes.util.JMSUtils;
-
 import hermes.xml.Entry;
 import hermes.xml.MessageSet;
 import hermes.xml.ObjectFactory;
@@ -38,7 +37,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -63,16 +61,17 @@ import javax.jms.TextMessage;
 import javax.naming.NamingException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.util.ReaderInputStream;
 
 
 
@@ -142,16 +141,16 @@ public class DefaultXMLHelper implements XMLHelper
    {
       JAXBContext jc = JAXBContext.newInstance("hermes.xml");
       Unmarshaller u = jc.createUnmarshaller();
-      JAXBElement<?> node =  (JAXBElement<?>) u.unmarshal(istream);
+      JAXBElement<MessageSet> node =  (JAXBElement<MessageSet>) u.unmarshal(new StreamSource(istream), MessageSet.class);
 
-      return (MessageSet) node.getValue() ;
+      return node.getValue() ;
    }
    
    public MessageSet readContent(Reader reader) throws Exception
    {
       JAXBContext jc = JAXBContext.newInstance("hermes.xml");
       Unmarshaller u = jc.createUnmarshaller();
-      JAXBElement<?> node =  (JAXBElement<?>) u.unmarshal(reader);
+      JAXBElement<MessageSet> node =  (JAXBElement<MessageSet>) u.unmarshal(new StreamSource(new ReaderInputStream(reader)), MessageSet.class);
 
       return (MessageSet) node.getValue() ;
    }

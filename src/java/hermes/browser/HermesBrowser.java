@@ -174,10 +174,10 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       return rendererManager;
    }
 
-   @Override
+   
    public void setConfig(HermesConfig config)
    {
-      // TODO Auto-generated method stub
+      
       
    }
 
@@ -253,12 +253,12 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
                {
                   log.fatal("cannot initialise hermes: " + ex.getMessage(), ex);
 
-                  return;
+                  System.exit(1) ;
                }
                catch (HeadlessException ex)
                {
                   log.fatal("cannot initialise hermes browser, no head: " + ex.getMessage(), ex);
-                  return;
+                  System.exit(1) ;
                }
 
                ui.initUI();

@@ -79,6 +79,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 
@@ -95,13 +96,13 @@ public class JAXBHermesLoader implements HermesLoader
    private URL url;
    private File file;
    private HermesConfig config;
-   private JAXBElement<Object> element ;
+   private JAXBElement<HermesConfig> element;
    private ClassLoaderManager classLoaderManager;
    private Hashtable properties;
    private final Set listeners = new HashSet();
    private final Map<String, FactoryConfig> factoryConfigById = new HashMap<String, FactoryConfig>();
-   private boolean ignoreClasspathGroups ;
-   
+   private boolean ignoreClasspathGroups;
+
    private Context context;
    private String extensionLoaderClass = DEFAULT_EXTENSION_LOADER;
 
@@ -157,10 +158,10 @@ public class JAXBHermesLoader implements HermesLoader
 
             config.setLastEditedByHermesVersion(Hermes.VERSION);
             config.setLastEditedByUser(System.getProperty("user.name"));
-            config.setLookAndFeel(UIManager.getLookAndFeel().getClass().getName()) ;
+            config.setLookAndFeel(UIManager.getLookAndFeel().getClass().getName());
 
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            element.setValue(config) ;
+            element.setValue(config);
             m.marshal(element, ostream);
 
             ostream.close();
@@ -329,13 +330,15 @@ public class JAXBHermesLoader implements HermesLoader
          rval = new ArrayList<Hermes>();
 
          JAXBContext jc = JAXBContext.newInstance("hermes.config");
-         Unmarshaller u = jc.createUnmarshaller();
-         
-         element = (JAXBElement<Object>) u.unmarshal(istream) ;
-         config = (HermesConfig) element.getValue() ;
 
-         Hermes.ui.setConfig(config) ;
-         
+         Unmarshaller u = jc.createUnmarshaller();
+
+         element = (JAXBElement<HermesConfig>) u.unmarshal(new StreamSource(istream), HermesConfig.class);
+
+         config = (HermesConfig) element.getValue();
+
+         Hermes.ui.setConfig(config);
+
          if (config.getLastEditedByHermesVersion() == null)
          {
             //
@@ -345,18 +348,17 @@ public class JAXBHermesLoader implements HermesLoader
             config.setDisplayFactoryAdmin(true);
          }
 
-         
          // This is for the 1.10 upgrade
 
          if (config.getQuickFIX() == null)
          {
-            QuickFIXConfig quickFIXConfig = new QuickFIXConfig() ;
-            
-            quickFIXConfig.setCacheSize(1024) ;
-            
-            config.setQuickFIX(quickFIXConfig) ;
+            QuickFIXConfig quickFIXConfig = new QuickFIXConfig();
+
+            quickFIXConfig.setCacheSize(1024);
+
+            config.setQuickFIX(quickFIXConfig);
          }
-         
+
          config.setSelectorImpl(SelectorImpl.JAMSEL.getClazz().getName());
 
          // This is for the 1.9 upgrdfe
@@ -397,15 +399,15 @@ public class JAXBHermesLoader implements HermesLoader
          {
             classLoaderManager = new NullClassLoaderManager();
          }
-         
+
          SingletonManager.put(ClassLoaderManager.class, classLoaderManager);
 
          //
          // QuickFIX
-         
-         QuickFIXMessageCache cache = (QuickFIXMessageCache) SingletonManager.get(QuickFIXMessageCache.class) ;
-         cache.setSize(config.getQuickFIX().getCacheSize()) ;
-         
+
+         QuickFIXMessageCache cache = (QuickFIXMessageCache) SingletonManager.get(QuickFIXMessageCache.class);
+         cache.setSize(config.getQuickFIX().getCacheSize());
+
          //
          // Deal with any renderers
 
@@ -573,7 +575,7 @@ public class JAXBHermesLoader implements HermesLoader
       for (Iterator iter2 = factoryConfig.getDestination().iterator(); iter2.hasNext();)
       {
          DestinationConfig destinationConfig = (DestinationConfig) iter2.next();
-        
+
          if (destinationConfig.isDurable() && destinationConfig.getClientID() == null)
          {
             log.warn("removing durable subscription to " + destinationConfig.getName() + "with a null clientID");
@@ -589,7 +591,7 @@ public class JAXBHermesLoader implements HermesLoader
       {
          ConnectionConfig connectionConfig = (ConnectionConfig) factoryConfig.getConnection().get(0);
          ConnectionManager connectionManager = null;
-       
+
          if (connectionConfig.isConnectionPerThread())
          {
             connectionManager = ConnectionManagerFactory.create(ConnectionManager.Policy.CONNECTION_PER_THREAD);
@@ -633,7 +635,7 @@ public class JAXBHermesLoader implements HermesLoader
             classLoaderManager.putClassLoaderByHermes(sessionConfig.getId(), classLoader);
             factoryConfigById.put(sessionConfig.getId(), factoryConfig);
 
-            sessionManager.setTransacted(sessionConfig.isTransacted() );
+            sessionManager.setTransacted(sessionConfig.isTransacted());
             sessionManager.setId(sessionConfig.getId());
             sessionManager.setFactoryConfig(factoryConfig);
             sessionManager.setAudit(sessionConfig.isAudit());
@@ -653,9 +655,9 @@ public class JAXBHermesLoader implements HermesLoader
             connectionManager.addChild(sessionManager);
 
             hermes = new DefaultHermesImpl(factoryConfig.getExtension(), sessionManager, classLoader);
-            
+
             connectionFactoryManager.addChild(connectionManager);
-            connectionManager.setHermes(hermes) ;
+            connectionManager.setHermes(hermes);
          }
 
       }
@@ -825,7 +827,7 @@ public class JAXBHermesLoader implements HermesLoader
 
    /**
     * @param extensionLoaderClass
-    *           The extensionLoaderClass to set.
+    *            The extensionLoaderClass to set.
     */
    public void setExtensionLoaderClass(String extensionLoader)
    {

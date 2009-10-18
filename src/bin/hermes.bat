@@ -60,23 +60,12 @@ copy "%HERMES_HOME%\cfg\hermes-config.xml" "%HERMES_CONFIG%\hermes-config.xml"
 set HERMES_WEAVED_LIBS=%HERMES_HOME%\lib.weaved
 set HERMES_LIBS=%HERMES_HOME%\lib
 set HERMES_BIN=%HERMES_HOME%\bin
+set JAXB=%HERMES_LIBS%\jaxb-api.jar
 
+set CLASSPATH=%JAXB%;%HERMES_LIBS%/jta-spec1_0_1.jar;%HERMES_LIBS%\xml-apis.jar;%HERMES_LIBS%\jms.jar;%HERMES_LIBS%\relaxngDatatype.jar;%HERMES_LIBS%\jaas.jar;%HERMES_LIBS%\activation.jar;%HERMES_LIBS%\commons-digester.jar;%HERMES_LIBS%\commons-codec-1.1.jar;%HERMES_LIBS%\log4j-1.2.15.jar;%HERMES_LIBS%\j2ee.jar;%HERMES_LIBS%\commons-logging.jar;%HERMES_LIBS%\jlfgr-1_0.jar;%HERMES_LIBS%\commons-lang-2.1.jar;%HERMES_LIBS%\xercesImpl.jar;%HERMES_LIBS%\namespace.jar;%HERMES_LIBS%\xsdlib.jar;%HERMES_LIBS%\datatips.jar;%HERMES_LIBS%\derby.jar;%HERMES_LIBS%\commons-dbutils-1.0.jar;%HERMES_LIBS%\ant.jar;%HERMES_LIBS%\db2cc.jar;%HERMES_LIBS%\hermes-selector.jar;%HERMES_LIBS%\jms-jmx.jar;%HERMES_LIBS%\selector-1.1.jar;%HERMES_LIBS%\asm.jar;%HERMES_LIBS%\asm-attrs.jar;%HERMES_LIBS%\asm-util.jar;%HERMES_LIBS%\quickfixj.jar;%HERMES_LIBS%\jython.jar;%HERMES_LIBS%\ArtTk.jar;%HERMES_LIBS%\JyConsole.jar;%HERMES_LIBS%\mina-core-1.1.0-SNAPSHOT.jar;%HERMES_LIBS%\slf4j-jdk14-1.0.1.jar;%HERMES_LIBS%\commons-collections.jar;%HERMES_LIBS%\jsyntaxpane-0.9.1.jar
 
-set CLASSPATH=%HERMES_LIBS%/jta-spec1_0_1.jar;%HERMES_LIBS%\xml-apis.jar;%HERMES_LIBS%\jms.jar;%HERMES_LIBS%\jax-qname.jar;%HERMES_LIBS%\relaxngDatatype.jar;%HERMES_LIBS%\jaas.jar;%HERMES_LIBS%\activation.jar;%HERMES_LIBS%\jaxb-libs.jar;%HERMES_LIBS%\jaxb-api.jar;%HERMES_LIBS%\jaxb-xjc.jar;%HERMES_LIBS%\jaxb-impl.jar;%HERMES_LIBS%\commons-digester.jar;%HERMES_LIBS%\commons-codec-1.1.jar;%HERMES_LIBS%\log4j-1.2.15.jar;%HERMES_LIBS%\j2ee.jar;%HERMES_LIBS%\commons-logging.jar;%HERMES_LIBS%\jlfgr-1_0.jar;%HERMES_LIBS%\commons-lang-2.1.jar;%HERMES_LIBS%\xercesImpl.jar;%HERMES_LIBS%\namespace.jar;%HERMES_LIBS%\xsdlib.jar;%HERMES_LIBS%\datatips.jar;%HERMES_LIBS%\derby.jar;%HERMES_LIBS%\commons-dbutils-1.0.jar;%HERMES_LIBS%\ant.jar;%HERMES_LIBS%\db2cc.jar;%HERMES_LIBS%\hermes-selector.jar;%HERMES_LIBS%\jms-jmx.jar;%HERMES_LIBS%\selector-1.1.jar;%HERMES_LIBS%\asm.jar;%HERMES_LIBS%\asm-attrs.jar;%HERMES_LIBS%\asm-util.jar;%HERMES_LIBS%\quickfixj.jar;%HERMES_LIBS%\jython.jar;%HERMES_LIBS%\ArtTk.jar;%HERMES_LIBS%\JyConsole.jar;%HERMES_LIBS%\mina-core-1.1.0-SNAPSHOT.jar;%HERMES_LIBS%\slf4j-jdk14-1.0.1.jar;%HERMES_LIBS%\commons-collections.jar
-
-
-if USE_WEAVED_CLASES=="" goto noWeave
-
-:weave
-set CLASSPATH=%HERMES_WEAVED_LIBS%\cglib-2.2_beta1.jar;%HERMES_WEAVED_LIBS%\commons-beanutils.jar;%HERMES_WEAVED_LIBS%\hermes.jar;%HERMES_LIBS%\backport-util-concurrent.jar;%HERMES_LIBS%\retrotranslator-runtime-1.0.7.jar;%CLASSPATH%;
-set HERMES_LIBS=%HERMES_WEAVED_LIBS%
-goto launch
-
-noWeave:
 set CLASSPATH=%CLASSPATH%;%HERMES_LIBS%\hermes.jar;%HERMES_LIBS%\cglib-2.2_beta1.jar;%HERMES_LIBS%\commons-beanutils.jar
-goto launch
 
-:launch
 cd %HERMES_CONFIG%
 
 start "HermesJMS" "%JAVA_HOME%\bin\javaw" -XX:NewSize=256m -Xmx1024m -Dhermes.home="%HERMES_HOME%" %HERMES_OPTS% -Dlog4j.configuration="file:%HERMES_HOME%\bin\log4j.props" -Dsun.java2d.noddraw=true -Dhermes="%HERMES_CONFIG%\hermes-config.xml" -Dhermes.libs="%HERMES_LIBS%" hermes.browser.HermesBrowser

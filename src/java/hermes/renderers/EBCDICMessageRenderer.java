@@ -49,7 +49,7 @@ public class EBCDICMessageRenderer extends AbstractMessageRenderer
    {
       private int maxMessageSize = 5 * 1024 * 1024;;
       private int rowLength = 16;
-      private boolean active = true;
+      private boolean active = false;
       private String name = "EBCDIC";
       private String undisplayableChar = "." ;
 
@@ -136,10 +136,7 @@ public class EBCDICMessageRenderer extends AbstractMessageRenderer
 
    }
 
-   public boolean isActive()
-   {
-      return true;
-   }
+   
 
    @Override
    public Config createConfig()
@@ -253,11 +250,7 @@ public class EBCDICMessageRenderer extends AbstractMessageRenderer
       chart[248] = '8';
       chart[249] = '9';
    }
-   public void setActive(boolean inActive)
-   {
-      super.setActive(inActive);
-   }
-
+ 
    public JComponent render(Message m)
    {
 

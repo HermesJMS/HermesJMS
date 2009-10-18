@@ -100,11 +100,12 @@ public class ConfigDAOImpl implements ConfigDAO
                   String library = SystemProperties.EXT_LIBRARY_PATH + "/" + split[0];
                   String libraryLongName = split[1];
 
+                  adminFactoryToPlugIn.put(adminFactoryClass, libraryLongName);
+                  
                   if (library.startsWith("http"))
                   {
                      log.debug(libraryLongName + "(" + adminFactoryClass + ") lives in " + library);
-                     adminFactoryToJARMap.put(adminFactoryClass, new URL(library));
-                     adminFactoryToPlugIn.put(adminFactoryClass, libraryLongName);
+                     adminFactoryToJARMap.put(adminFactoryClass, new URL(library));                    
                      plugInToAdminFactory.put(libraryLongName, adminFactoryClass);
                   }
                   else
@@ -114,8 +115,7 @@ public class ConfigDAOImpl implements ConfigDAO
                      if (libraryFile.exists())
                      {
                         log.debug(libraryLongName + "(" + adminFactoryClass + ") lives in " + library);
-                        adminFactoryToJARMap.put(adminFactoryClass, libraryFile.toURL());
-                        adminFactoryToPlugIn.put(adminFactoryClass, libraryLongName);
+                        adminFactoryToJARMap.put(adminFactoryClass, libraryFile.toURL());                      
                         plugInToAdminFactory.put(libraryLongName, adminFactoryClass);
 
                         adminFactoryList.add(libraryFile.toURL());

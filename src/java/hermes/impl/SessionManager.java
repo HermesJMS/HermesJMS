@@ -175,7 +175,7 @@ public interface SessionManager extends JMSManager
 
     public int getReconnects();
 
-    public void setAcknowledgeMode(int acknowledgeMode);
+  
 
     public void setFactoryConfig(FactoryConfig factoryConfig);
 

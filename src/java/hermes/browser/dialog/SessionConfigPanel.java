@@ -49,193 +49,201 @@ import org.apache.log4j.Category;
  */
 public class SessionConfigPanel extends JPanel
 {
-    private static final Category cat = Category.getInstance(SessionConfigPanel.class);
-    public static final String NEWSESSION = "<new>";
+   private static final Category cat = Category.getInstance(SessionConfigPanel.class);
+   public static final String NEWSESSION = "<new>";
 
-    private PreferencesDialog dialog;
-    private SessionConfig sessionConfig;
+   private PreferencesDialog dialog;
+   private SessionConfig sessionConfig;
 
-    //private JCheckBox transactedCB = new JCheckBox();
-    private JCheckBox auditCB = new JCheckBox();
-    private JCheckBox useConsumerForQueueBrowseCB = new JCheckBox() ;
-    private JTextField reconnectsTF = new JTextField();
-    private JComboBox sessionCombo = new JComboBox();
+   private JCheckBox transactedCB = new JCheckBox();
+   private JCheckBox auditCB = new JCheckBox();
+   private JCheckBox useConsumerForQueueBrowseCB = new JCheckBox();
+   // private JTextField reconnectsTF = new JTextField();
+   private JComboBox sessionCombo = new JComboBox();
 
-    private Map sessionConfigs = new HashMap();
+   private Map sessionConfigs = new HashMap();
 
-    private DefaultComboBoxModel sessionComboModel = new DefaultComboBoxModel();
+   private DefaultComboBoxModel sessionComboModel = new DefaultComboBoxModel();
 
-    public SessionConfigPanel(PreferencesDialog dialog)
-    {
-        this.dialog = dialog;
+   public SessionConfigPanel(PreferencesDialog dialog)
+   {
+      this.dialog = dialog;
 
-        init();
-    }
+      init();
+   }
 
-    public void init()
-    {
-        //
-        // Basic layout and L&F
+   public void init()
+   {
+      //
+      // Basic layout and L&F
 
-        Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+      Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED);
 
-        setLayout(new GridLayout(2, 4));
-        setBorder(BorderFactory.createTitledBorder(border, "Session"));
+      setLayout(new GridLayout(2, 4));
+      setBorder(BorderFactory.createTitledBorder(border, "Session"));
 
-        sessionCombo.setModel(sessionComboModel);
+      sessionCombo.setModel(sessionComboModel);
 
-        JLabel l1 = new JLabel("Session: ");
-        l1.setHorizontalAlignment(JLabel.RIGHT);
-        add(l1);
+      JLabel l1 = new JLabel("Session: ");
+      l1.setHorizontalAlignment(JLabel.RIGHT);
+      add(l1);
 
-        add(sessionCombo);
+      add(sessionCombo);
 
-        JLabel l2 = new JLabel("Use Consumer: ");
-        l2.setHorizontalAlignment(JLabel.RIGHT);
-        add(l2);
-        
-        l2.setToolTipText("Check this if you wish to use a MessageConsumer instead of a QueueBrowser") ;
+      JLabel l2 = new JLabel("Use Consumer: ");
+      l2.setHorizontalAlignment(JLabel.RIGHT);
+      add(l2);
 
-        add(useConsumerForQueueBrowseCB);
+      l2.setToolTipText("Check this if you wish to use a MessageConsumer instead of a QueueBrowser");
 
-        JLabel l3 = new JLabel("Audit: ");
-        l3.setHorizontalAlignment(JLabel.RIGHT);
-        add(l3);
+      add(useConsumerForQueueBrowseCB);
 
-        add(auditCB);
+      JLabel l3 = new JLabel("Audit: ");
+      l3.setHorizontalAlignment(JLabel.RIGHT);
+      add(l3);
 
-        JLabel l4 = new JLabel("Reconnects: ");
-        l4.setHorizontalAlignment(JLabel.RIGHT);
-        add(l4);
+      add(auditCB);
 
-        add(reconnectsTF);
+      JLabel l4 = new JLabel("Transacted: ");
+      l4.setHorizontalAlignment(JLabel.RIGHT);
+      add(l4);
 
-        sessionCombo.setEditable(true);
+      add(transactedCB);
 
-        // 
-        // Eventing
+      sessionCombo.setEditable(true);
 
-        auditCB.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent arg0)
+      // 
+      // Eventing
+
+      auditCB.addActionListener(new ActionListener()
+      {
+         public void actionPerformed(ActionEvent arg0)
+         {
+            sessionConfig.setAudit(auditCB.isSelected());
+            dialog.setDirty();
+         }
+      });
+
+      transactedCB.addActionListener(new ActionListener()
+      {
+         public void actionPerformed(ActionEvent arg0)
+         {
+            sessionConfig.setTransacted(transactedCB.isSelected());
+            dialog.setDirty();
+         }
+      });
+
+   }
+
+   public void addListeners()
+   {
+      sessionComboModel.addListDataListener(new ListDataListener()
+      {
+         public void contentsChanged(ListDataEvent arg0)
+         {
+            String sessionId = (String) sessionComboModel.getSelectedItem();
+
+            if (sessionComboModel.getSize() != 0 && dialog.getFactoryConfigBySessionId(sessionId) == null)
             {
-                sessionConfig.setAudit(auditCB.isSelected());
-                dialog.setDirty();
+               if (sessionConfig.getId().equals(NEWSESSION) || isSessionRename())
+               {
+                  sessionConfig.setId(sessionId);
+               }
+               else
+               {
+                  dialog.refocus(sessionId);
+               }
             }
-        });
-
-    }
-
-    public void addListeners()
-    {
-        sessionComboModel.addListDataListener(new ListDataListener()
-        {
-            public void contentsChanged(ListDataEvent arg0)
+            else
             {
-                String sessionId = (String) sessionComboModel.getSelectedItem();
-
-                if (sessionComboModel.getSize() != 0 && dialog.getFactoryConfigBySessionId(sessionId) == null)
-                {
-                    if (sessionConfig.getId().equals(NEWSESSION) || isSessionRename())
-                    {
-                        sessionConfig.setId(sessionId);
-                    }
-                    else
-                    {
-                        dialog.refocus(sessionId);
-                    }
-                }
-                else
-                {
-                    dialog.refocus(sessionId);
-                }
+               dialog.refocus(sessionId);
             }
+         }
 
-            public void intervalAdded(ListDataEvent arg0)
-            {
-                // NOP
-            }
+         public void intervalAdded(ListDataEvent arg0)
+         {
+            // NOP
+         }
 
-            public void intervalRemoved(ListDataEvent arg0)
-            {
-                // NOP
-            }
-        });
-    }
+         public void intervalRemoved(ListDataEvent arg0)
+         {
+            // NOP
+         }
+      });
+   }
 
-    public boolean isSessionRename()
-    {
-        Object options[] = { "New", "Rename"};
+   public boolean isSessionRename()
+   {
+      Object options[] = { "New", "Rename" };
 
-        int n = JOptionPane.showOptionDialog(HermesBrowser.getBrowser(), "Rename this session or create a new one?", "Please select...",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+      int n = JOptionPane.showOptionDialog(HermesBrowser.getBrowser(), "Rename this session or create a new one?", "Please select...",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 
-        if (n == JOptionPane.YES_OPTION)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+      if (n == JOptionPane.YES_OPTION)
+      {
+         return false;
+      }
+      else
+      {
+         return true;
+      }
+   }
 
-    public void addSessionConfig(SessionConfig sessionConfig)
-    {
-        if (sessionConfig.getId() != null && !sessionConfig.getId().equals(""))
-        {
-            this.sessionConfig = sessionConfig;
+   public void addSessionConfig(SessionConfig sessionConfig)
+   {
+      if (sessionConfig.getId() != null && !sessionConfig.getId().equals(""))
+      {
+         this.sessionConfig = sessionConfig;
 
-            if (!sessionConfigs.containsKey(sessionConfig.getId()))
-            {
-                sessionConfigs.put(sessionConfig.getId(), sessionConfig);
-                sessionComboModel.addElement(sessionConfig.getId());
-            }
-        }
-    }
+         if (!sessionConfigs.containsKey(sessionConfig.getId()))
+         {
+            sessionConfigs.put(sessionConfig.getId(), sessionConfig);
+            sessionComboModel.addElement(sessionConfig.getId());
+         }
+      }
+   }
 
-    public void setSessionConfig(SessionConfig sessionConfig)
-    {
-        if (sessionConfig.getId() != null && !sessionConfig.getId().equals(""))
-        {
-            this.sessionConfig = sessionConfig;
+   public void setSessionConfig(SessionConfig sessionConfig)
+   {
+      if (sessionConfig.getId() != null && !sessionConfig.getId().equals(""))
+      {
+         this.sessionConfig = sessionConfig;
 
-            if (!sessionConfigs.containsKey(sessionConfig.getId()))
-            {
-                sessionConfigs.put(sessionConfig.getId(), sessionConfig);
-                sessionComboModel.addElement(sessionConfig.getId());
-            }
+         if (!sessionConfigs.containsKey(sessionConfig.getId()))
+         {
+            sessionConfigs.put(sessionConfig.getId(), sessionConfig);
+            sessionComboModel.addElement(sessionConfig.getId());
+         }
 
-            sessionCombo.setSelectedItem(sessionConfig.getId());
+         sessionCombo.setSelectedItem(sessionConfig.getId());
 
-            
-            //transactedCB.setName("Transacted");
-            useConsumerForQueueBrowseCB.setSelected(sessionConfig.isUseConsumerForQueueBrowse());
+         // transactedCB.setName("Transacted");
+         useConsumerForQueueBrowseCB.setSelected(sessionConfig.isUseConsumerForQueueBrowse());
 
-            if (sessionConfig.getReconnects() == null)
-            {
-                sessionConfig.setReconnects(new BigInteger("0"));
-            }
+         if (sessionConfig.getReconnects() == null)
+         {
+            sessionConfig.setReconnects(new BigInteger("0"));
+         }
 
-            reconnectsTF.setText(sessionConfig.getReconnects().toString());
-            reconnectsTF.setEnabled(false);
+         transactedCB.setSelected(sessionConfig.isTransacted());
 
-            auditCB.setSelected(sessionConfig.isAudit());
-        }
-    }
+         auditCB.setSelected(sessionConfig.isAudit());
+      }
+   }
 
-    public SessionConfig getSessionConfig()
-    {
-        return sessionConfig;
-    }
+   public SessionConfig getSessionConfig()
+   {
+      return sessionConfig;
+   }
 
-    public void updateModel()
-    {
-        if (sessionConfig != null)
-        {
-            sessionConfig.setId((String) sessionCombo.getSelectedItem());
-            sessionConfig.setAudit(sessionConfig.isAudit());
-            sessionConfig.setUseConsumerForQueueBrowse(useConsumerForQueueBrowseCB.isSelected()) ;
-        }
-    }
+   public void updateModel()
+   {
+      if (sessionConfig != null)
+      {
+         sessionConfig.setId((String) sessionCombo.getSelectedItem());
+         sessionConfig.setAudit(sessionConfig.isAudit());
+         sessionConfig.setUseConsumerForQueueBrowse(useConsumerForQueueBrowseCB.isSelected());
+
+      }
+   }
 }
