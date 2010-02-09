@@ -47,6 +47,6 @@ public class SendTextFileAction extends AbstractSendFileAction
 
    public void actionPerformed(ActionEvent arg0)
    {
-      doSendAFile(SendMessageTask.IS_TEXT) ;
+      doSendAFile(SendMessageTask.IS_TEXT, false) ;
    }
 }

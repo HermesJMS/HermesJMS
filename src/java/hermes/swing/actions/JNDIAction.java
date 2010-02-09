@@ -17,6 +17,8 @@
 
 package hermes.swing.actions;
 
+import java.awt.event.ActionEvent;
+
 import hermes.browser.HermesBrowser;
 import hermes.browser.actions.BrowseContextAction;
 
@@ -43,6 +45,24 @@ public abstract class JNDIAction extends ActionSupport implements DocumentCompon
    }
 
    protected abstract boolean checkEnabled(TreePath path);
+
+   public void documentComponentDocked(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void documentComponentFloated(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void actionPerformed(ActionEvent e)
+   {
+      // TODO Auto-generated method stub
+      
+   }
 
    public void documentComponentMoved(DocumentComponentEvent arg0)
    {

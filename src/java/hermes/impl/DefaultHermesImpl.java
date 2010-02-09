@@ -593,6 +593,7 @@ public class DefaultHermesImpl implements Hermes
          throw new JMSException("Hermes is in read-only mode");
       }
       
+      // http://hermesjms.com/jira/browse/HJMS-86
       // http://hermesjms.com/jira/browse/HJMS-50
       
       if (Hermes.ui.getConfig().isDeliveryModePersistent())

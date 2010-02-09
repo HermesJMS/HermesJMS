@@ -89,9 +89,6 @@
 	<classpathentry kind="lib" path="src/lib/mina-core-1.1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="WEBLOGIC_ROOT/modules/com.bea.core.utils.full_1.0.0.0.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/log4j-1.2.15.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-commons.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-util.jar"/>
 	<classpathentry kind="lib" path="src/lib/cglib-2.2_beta1.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jsyntaxpane-0.9.1.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/hermes-sapjms.jar"/>
@@ -102,5 +99,8 @@
 	<classpathentry kind="var" path="ORACLEAQ_ROOT/castor-1.0.5-xml.jar"/>
 	<classpathentry kind="var" path="ORACLEAQ_ROOT/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="C:/local/imq/mq/lib/imq.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-2.1.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-commons-2.1.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-util-2.1.jar"/>
 	<classpathentry kind="output" path="eclipse/classes"/>
 </classpath>

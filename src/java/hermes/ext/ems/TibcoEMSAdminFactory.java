@@ -138,11 +138,10 @@ public class TibcoEMSAdminFactory implements HermesAdminFactory
             rval.put(TibjmsSSL.AUTH_ONLY, BeanUtils.getProperty(tibCF, "SSLAuthOnly")) ;
             rval.put(TibjmsSSL.CIPHER_SUITES, BeanUtils.getProperty(tibCF, "SSLCipherSuites")) ;
             rval.put(TibjmsSSL.DEBUG_TRACE, BeanUtils.getProperty(tibCF, "SSLDebugTrace")) ;
-            rval.put(TibjmsSSL.ENABLE_VERIFY_HOST, BeanUtils.getProperty(tibCF, "SSLEnableVerifyHost")) ;
+            rval.put(TibjmsSSL.ENABLE_VERIFY_HOST, BeanUtils.getProperty(tibCF, "SSLEnableVerifyHost")) ;            
             rval.put(TibjmsSSL.ENABLE_VERIFY_HOST_NAME, BeanUtils.getProperty(tibCF, "SSLEnableVerifyHostName")) ;
             rval.put(TibjmsSSL.EXPECTED_HOST_NAME, BeanUtils.getProperty(tibCF, "SSLExpectedHostName")) ;          
             rval.put(TibjmsSSL.IDENTITY_ENCODING, BeanUtils.getProperty(tibCF, "SSLIdentityEncoding")) ;
-            rval.put(TibjmsSSL.ENABLE_VERIFY_HOST_NAME, BeanUtils.getProperty(tibCF, "SSLEnableVerifyHostName")) ;
             rval.put(TibjmsSSL.ISSUER_CERTIFICATES, BeanUtils.getProperty(tibCF, "SSLIssuerCertificate")) ;
             rval.put(TibjmsSSL.PASSWORD, BeanUtils.getProperty(tibCF, "SSLPassword")) ;
             rval.put(TibjmsSSL.PRIVATE_KEY, BeanUtils.getProperty(tibCF, "SSLPrivateKey")) ;

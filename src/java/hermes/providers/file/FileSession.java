@@ -178,27 +178,7 @@ public class FileSession extends FileMessageFactory implements QueueSession
         return new FileQueueBrowser(this, (FileQueue) arg0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.jms.QueueSession#createQueue(java.lang.String)
-     */
-    public Queue createQueue(String queueName) throws JMSException
-    {
-        try
-        {
-            if (getConnection().getFactory().getBaseDirectory() != null)
-            {
-                queueName = getConnection().getFactory().getBaseDirectory() + SEPARATOR + queueName;
-            }
-
-            return (Queue) super.getDestination(queueName, Domain.QUEUE);
-        }
-        catch (NamingException ex)
-        {
-            throw new HermesException(ex);
-        }
-    }
+   
 
     /*
      * (non-Javadoc)
@@ -382,16 +362,7 @@ public class FileSession extends FileMessageFactory implements QueueSession
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.jms.Session#createTopic(java.lang.String)
-     */
-    public Topic createTopic(String arg0) throws JMSException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+   
 
     /*
      * (non-Javadoc)

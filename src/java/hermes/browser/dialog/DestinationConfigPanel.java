@@ -37,6 +37,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -265,7 +266,7 @@ public class DestinationConfigPanel extends JPanel
 
    public Collection getDestinations()
    {
-      return destinationTableModel.getRows();
+      return destinationTableModel == null ? Collections.EMPTY_LIST : destinationTableModel.getRows();
    }
 
    public void updateModel()

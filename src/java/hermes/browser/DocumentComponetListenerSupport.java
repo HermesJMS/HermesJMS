@@ -28,6 +28,18 @@ import com.jidesoft.document.DocumentComponentListener;
 public class DocumentComponetListenerSupport implements DocumentComponentListener
 {
 
+   public void documentComponentDocked(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void documentComponentFloated(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
    public void documentComponentOpened(DocumentComponentEvent arg0)
    {
 

@@ -932,13 +932,15 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
       
       LookAndFeelFactory.UIDefaultsCustomizer uiDefaultsCustomizer = new LookAndFeelFactory.UIDefaultsCustomizer() {
          public void customize(UIDefaults defaults) {
-             ThemePainter painter = (ThemePainter) defaults.get("Theme.painter");
+             Map painter = (Map) defaults.get("Theme.painter");
+             //ThemePainter painter = (ThemePainter) defaults.get("Theme.painter");
+
              defaults.put("OptionPaneUI", "com.jidesoft.plaf.basic.BasicJideOptionPaneUI");
              defaults.put("OptionPane.showBanner", Boolean.FALSE); // show banner or not. default is true
              
-             // set both bannerBackgroundDk and // set both bannerBackgroundLt to null if you don't want gradient
-             defaults.put("OptionPane.bannerBackgroundDk", painter != null ? painter.getOptionPaneBannerDk() : null);
-             defaults.put("OptionPane.bannerBackgroundLt", painter != null ? painter.getOptionPaneBannerLt() : null);
+             defaults.put( "OptionPane.bannerBackgroundDk", painter.get("OptionPane.bannerBackgroundDk")) ;
+             defaults.put( "OptionPane.bannerBackgroundLt", painter.get("OptionPane.bannerBackgroundLt")) ;
+             
              defaults.put("OptionPane.bannerBackgroundDirection", Boolean.TRUE); // default is true
 
              // optionally, you can set a Paint object for BannerPanel. If so, the three UIDefaults related to banner background above will be ignored.

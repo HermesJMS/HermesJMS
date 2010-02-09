@@ -231,6 +231,18 @@ public class FilterInputPanel extends DockableFrame implements DocumentComponent
       getContentPane().add(new JScrollPane(panes), BorderLayout.CENTER);
    }
 
+   public void documentComponentDocked(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void documentComponentFloated(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
    private void doFilter(String filter)
    {
       if (HermesBrowser.getBrowser().getDocumentPane().getActiveDocument() instanceof FilterableAction)

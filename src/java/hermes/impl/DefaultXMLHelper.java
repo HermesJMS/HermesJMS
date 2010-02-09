@@ -56,6 +56,7 @@ import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageEOFException;
+import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import javax.naming.NamingException;
@@ -72,10 +73,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.util.ReaderInputStream;
-
-
-
-
 
 /**
  * Generic XML helper methods that are non-JMS specific. The serialisation is
@@ -141,18 +138,18 @@ public class DefaultXMLHelper implements XMLHelper
    {
       JAXBContext jc = JAXBContext.newInstance("hermes.xml");
       Unmarshaller u = jc.createUnmarshaller();
-      JAXBElement<MessageSet> node =  (JAXBElement<MessageSet>) u.unmarshal(new StreamSource(istream), MessageSet.class);
+      JAXBElement<MessageSet> node = (JAXBElement<MessageSet>) u.unmarshal(new StreamSource(istream), MessageSet.class);
 
-      return node.getValue() ;
+      return node.getValue();
    }
-   
+
    public MessageSet readContent(Reader reader) throws Exception
    {
       JAXBContext jc = JAXBContext.newInstance("hermes.xml");
       Unmarshaller u = jc.createUnmarshaller();
-      JAXBElement<MessageSet> node =  (JAXBElement<MessageSet>) u.unmarshal(new StreamSource(new ReaderInputStream(reader)), MessageSet.class);
+      JAXBElement<MessageSet> node = (JAXBElement<MessageSet>) u.unmarshal(new StreamSource(new ReaderInputStream(reader)), MessageSet.class);
 
-      return (MessageSet) node.getValue() ;
+      return (MessageSet) node.getValue();
    }
 
    public void saveContent(MessageSet messages, OutputStream ostream) throws Exception
@@ -161,17 +158,17 @@ public class DefaultXMLHelper implements XMLHelper
       Marshaller m = jc.createMarshaller();
 
       m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-      m.marshal(new JAXBElement<MessageSet> (new QName("", "content"), MessageSet.class, messages), ostream);
+      m.marshal(new JAXBElement<MessageSet>(new QName("", "content"), MessageSet.class, messages), ostream);
       ostream.flush();
    }
-   
+
    public void saveContent(MessageSet messages, Writer writer) throws Exception
    {
       JAXBContext jc = JAXBContext.newInstance("hermes.xml");
       Marshaller m = jc.createMarshaller();
 
       m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-      m.marshal(new JAXBElement<MessageSet> (new QName("", "content"), MessageSet.class, messages), writer);
+      m.marshal(new JAXBElement<MessageSet>(new QName("", "content"), MessageSet.class, messages), writer);
       writer.flush();
    }
 
@@ -209,7 +206,7 @@ public class DefaultXMLHelper implements XMLHelper
    {
       try
       {
-         return fromMessageSet(hermes, readContent(new StringReader(document))) ;
+         return fromMessageSet(hermes, readContent(new StringReader(document)));
       }
       catch (Exception ex)
       {
@@ -222,7 +219,7 @@ public class DefaultXMLHelper implements XMLHelper
    public void toXML(Collection messages, OutputStream ostream) throws JMSException, IOException
    {
       try
-      {     
+      {
          MessageSet messageSet = toMessageSet(messages);
          saveContent(messageSet, ostream);
       }
@@ -234,28 +231,14 @@ public class DefaultXMLHelper implements XMLHelper
       }
    }
 
-   /**
-    * @@TODO
-    * @param hermes
-    * @param messages
-    * @param ostream
-    * @throws JMSException
-    * @throws IOException
-    */
-   public void streamXML(Collection messages, OutputStream ostream) throws JMSException, IOException
-   {
-      toXML(messages, ostream) ;
-   }
-
    public String toXML(Collection messages) throws JMSException
    {
       try
       {
-       
+
          StringWriter writer = new StringWriter();
          MessageSet messageSet = toMessageSet(messages);
 
-       
          saveContent(messageSet, writer);
 
          return writer.getBuffer().toString();
@@ -477,7 +460,7 @@ public class DefaultXMLHelper implements XMLHelper
          {
             log.error("unable to set JMSPriority: " + ex.getMessage(), ex);
          }
-         
+
          try
          {
             rval.setJMSTimestamp(message.getJMSTimestamp());
@@ -500,6 +483,18 @@ public class DefaultXMLHelper implements XMLHelper
          if (message.getJMSType() != null)
          {
             rval.setJMSType(message.getJMSType());
+         }
+
+         if (message.getJMSDestination() != null)
+         {
+            if (message.isFromQueue())
+            {
+               rval.setJMSDestination(hermes.getDestination(message.getJMSDestination(), Domain.QUEUE)) ;
+            }
+            else
+            {
+               rval.setJMSDestination(hermes.getDestination(message.getJMSDestination(), Domain.TOPIC)) ;
+            }
          }
 
          for (Iterator iter = message.getHeaderProperty().iterator(); iter.hasNext();)
@@ -688,7 +683,7 @@ public class DefaultXMLHelper implements XMLHelper
          catch (IllegalStateException ex)
          {
             // http://hermesjms.com/forum/viewtopic.php?f=4&t=346
-            
+
             log.error(ex.getMessage(), ex);
          }
 
@@ -713,6 +708,19 @@ public class DefaultXMLHelper implements XMLHelper
          try
          {
             rval.setJMSCorrelationID(message.getJMSCorrelationID());
+         }
+         catch (JMSException ex)
+         {
+            log.error(ex.getMessage(), ex);
+         }
+
+         try
+         {
+            if (message.getJMSDestination() != null)
+            {
+               rval.setJMSDestination(JMSUtils.getDestinationName(message.getJMSDestination()));
+               rval.setFromQueue(JMSUtils.isQueue(message.getJMSDestination()));
+            }
          }
          catch (JMSException ex)
          {

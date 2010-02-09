@@ -25,8 +25,10 @@ import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
+import javax.jms.Topic;
 import javax.naming.NamingException;
 
 /**
@@ -85,5 +87,8 @@ public interface MessageFactory
      * Get the destination name
      */
     public String getDestinationName(Destination to) throws JMSException;
+    
+    
+   
 
 }

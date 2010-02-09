@@ -24,6 +24,7 @@
 		<xs:attribute name="JMSReplyToDomain" type="xs:int"/>
 		<xs:attribute name="JMSTimestamp" type="xs:long"/>
 		<xs:attribute name="JMSType" type="xs:string"/>
+		<xs:attribute name="fromQueue" type="xs:boolean" default="true"/> 
 		<xs:attribute name="codec" type="xs:string"/>
 		<xs:attribute name="loader" type="xs:string"/>
 	</xs:complexType>

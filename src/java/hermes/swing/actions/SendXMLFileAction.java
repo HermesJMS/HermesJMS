@@ -47,6 +47,6 @@ public class SendXMLFileAction extends AbstractSendFileAction
 
    public void actionPerformed(ActionEvent arg0)
    {
-      doSendAFile(SendMessageTask.IS_XML) ;
+      doSendAFile(SendMessageTask.IS_XML, false) ;
    }
 }

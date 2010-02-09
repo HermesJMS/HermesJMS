@@ -193,27 +193,27 @@ public class ActionFactory
    /**
     * Create an action to send the contents of a file to the queue/topic
     */
-   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, File file, int isXML)
+   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, File file, int isXML, boolean preserveDestination)
    {
-      SendMessageTask rval = new SendMessageTask(hermes, d, domain, file, isXML);
+      SendMessageTask rval = new SendMessageTask(hermes, d, domain, file, isXML, preserveDestination);
 
       rval.start();
 
       return rval;
    }
 
-   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, String xml)
+   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, String xml, boolean preserveDestination)
    {
-      SendMessageTask rval = new SendMessageTask(hermes, d, domain, xml);
+      SendMessageTask rval = new SendMessageTask(hermes, d, domain, xml, preserveDestination);
 
       rval.start();
 
       return rval;
    }
 
-   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, List files, int isXML)
+   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, List files, int isXML, boolean preserveDestination)
    {
-      SendMessageTask rval = new SendMessageTask(hermes, d, domain, files, isXML);
+      SendMessageTask rval = new SendMessageTask(hermes, d, domain, files, isXML, preserveDestination);
 
       rval.start();
 

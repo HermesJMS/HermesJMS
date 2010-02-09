@@ -36,6 +36,7 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import quickfix.DataDictionary;
 import quickfix.Field;
 import quickfix.FieldNotFound;
+import quickfix.InvalidMessage;
 import quickfix.Message;
 import quickfix.field.MsgSeqNum;
 import quickfix.field.MsgType;
@@ -142,17 +143,23 @@ public abstract class AbstractQuickFIXMessage implements FIXMessage
    }
 
    public Map<Integer, Field> getAllFields()
-   {
-      lock.lock();
+   {     
 
       try
       {
+         lock.lock();
+         
          if (allFields == null)
          {
             allFields = new LinkedHashMap<Integer, Field>();
 
             final Message message = getMessage();
 
+            if (message == null)
+            {
+               return new HashMap<Integer, Field> () ;
+            }
+            
             for (final Iterator iterator = message.getHeader().iterator(); iterator.hasNext();)
             {
                Field field = (Field) iterator.next();
@@ -300,7 +307,7 @@ public abstract class AbstractQuickFIXMessage implements FIXMessage
          {
             try
             {
-               Message message = new Message(new String(getBytes()), dictionary);
+               Message message = new Message(new String(getBytes()), dictionary, false);
 
                getCache().put(this, message);
 
@@ -310,6 +317,11 @@ public abstract class AbstractQuickFIXMessage implements FIXMessage
                }
 
                return message;
+            }
+            catch (InvalidMessage e)
+            {
+               log.error("Ignoring invalid message: " + e.getMessage(), e) ;
+               return null ;
             }
             catch (Exception e)
             {

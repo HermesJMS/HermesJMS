@@ -40,9 +40,6 @@
 <jar href="javax.jms.jar"/>
 <jar href="jax-qname.jar"/>
 <jar href="jaxb-api.jar"/>
-<jar href="jaxb-impl.jar"/>
-<jar href="jaxb-libs.jar"/>
-<jar href="jaxb-xjc.jar"/>
 <jar href="jlfgr-1_0.jar"/>
 <jar href="jms-jmx.jar"/>
 <jar href="jms.jar"/>

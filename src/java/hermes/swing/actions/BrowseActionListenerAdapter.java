@@ -31,6 +31,7 @@ import hermes.browser.HermesBrowser;
 import hermes.browser.actions.BrowseContextAction;
 import hermes.browser.actions.BrowserAction;
 
+import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -69,6 +70,24 @@ public abstract class BrowseActionListenerAdapter extends AbstractAction impleme
       this();
       this.tableListener = tableListener;
       this.checkSelection = checkSelection;
+   }
+
+   public void documentComponentDocked(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void documentComponentFloated(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void actionPerformed(ActionEvent e)
+   {
+      // TODO Auto-generated method stub
+      
    }
 
    protected void checkEnabled(Object object)

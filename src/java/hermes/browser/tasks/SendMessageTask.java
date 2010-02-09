@@ -54,10 +54,10 @@ public class SendMessageTask extends TaskSupport
 {
    private static final Logger cat = Logger.getLogger(SendMessageTask.class);
 
-   public static final int IS_XML = 0 ;
-   public static final int IS_TEXT = 1 ;
-   public static final int MAYBE_XML = 2 ;
-      
+   public static final int IS_XML = 0;
+   public static final int IS_TEXT = 1;
+   public static final int MAYBE_XML = 2;
+
    private Hermes hermes;
    private String destinationName;
    private String content;
@@ -66,9 +66,10 @@ public class SendMessageTask extends TaskSupport
    private Domain domain;
    private int isXML = IS_XML;
    private int uploaded = 0;
-   private int persistence = HermesBrowser.getBrowser().getSendPersistence() ;
+   private int persistence = HermesBrowser.getBrowser().getSendPersistence();
+   private boolean preserveDestination = false;
 
-   public SendMessageTask(Hermes hermes, String destinationName, Domain domain, String content)
+   public SendMessageTask(Hermes hermes, String destinationName, Domain domain, String content, boolean preserveDestination)
    {
       super(IconCache.getIcon("hermes.messages.send"));
 
@@ -76,9 +77,10 @@ public class SendMessageTask extends TaskSupport
       this.destinationName = destinationName;
       this.content = content;
       this.domain = domain;
+      this.preserveDestination = preserveDestination;
    }
 
-   public SendMessageTask(Hermes hermes, String destinationName, Domain domain, File file, int isXML)
+   public SendMessageTask(Hermes hermes, String destinationName, Domain domain, File file, int isXML, boolean preserveDestination)
    {
       super(IconCache.getIcon("hermes.messages.send"));
 
@@ -87,6 +89,8 @@ public class SendMessageTask extends TaskSupport
       this.files = new ArrayList();
       this.isXML = isXML;
       this.domain = domain;
+      this.preserveDestination = preserveDestination;
+
       files.add(file);
    }
 
@@ -95,7 +99,7 @@ public class SendMessageTask extends TaskSupport
       return "Send";
    }
 
-   public SendMessageTask(Hermes hermes, String destinationName, Domain domain, List files, int isXML)
+   public SendMessageTask(Hermes hermes, String destinationName, Domain domain, List files, int isXML, boolean preserveDestination)
    {
       super(IconCache.getIcon("hermes.messages.send"));
 
@@ -103,16 +107,24 @@ public class SendMessageTask extends TaskSupport
       this.destinationName = destinationName;
       this.files = files;
       this.isXML = isXML;
-      this.domain = domain ;
+      this.domain = domain;
+      this.preserveDestination = preserveDestination;
+
    }
 
    private void doUpload(Destination to, Iterator<Message> messages) throws JMSException
    {
       while (messages.hasNext())
       {
-         Message m = (Message) messages.next();
-
-         hermes.send(to, m);
+         final Message m = (Message) messages.next();
+         if (preserveDestination && m.getJMSDestination() != null)
+         {
+            hermes.send(m.getJMSDestination(), m);
+         }
+         else
+         {
+            hermes.send(to, m);
+         }
          uploaded++;
       }
    }
@@ -136,13 +148,10 @@ public class SendMessageTask extends TaskSupport
                final File file = (File) iter.next();
                Collection<Message> messages = null;
 
-               
-
-               
                if (isXML == IS_XML || isXML == MAYBE_XML)
                {
                   istream = new FileInputStream(file);
-                  
+
                   try
                   {
                      messages = hermes.fromXML(istream);
@@ -151,23 +160,23 @@ public class SendMessageTask extends TaskSupport
                   {
                      if (isXML != MAYBE_XML)
                      {
-                       throw ex ;
+                        throw ex;
                      }
                      else
                      {
-                        cat.info("file was not XML, trying as a normal text: " + ex.getMessage(), ex) ;
+                        cat.info("file was not XML, trying as a normal text: " + ex.getMessage(), ex);
                      }
                   }
                   finally
                   {
-                     istream.close() ;
+                     istream.close();
                   }
                }
-               
-               if (isXML == IS_TEXT || (isXML == MAYBE_XML && messages.size() == 0))
+
+               if (isXML == IS_TEXT || (isXML == MAYBE_XML && (messages == null || messages.size() == 0)))
                {
                   istream = new FileInputStream(file);
-                  
+
                   BufferedReader reader = new BufferedReader(new InputStreamReader(istream));
                   StringWriter payload = new StringWriter();
                   String line;
@@ -180,7 +189,9 @@ public class SendMessageTask extends TaskSupport
                   reader.close();
 
                   messages = new ArrayList<Message>();
-                  messages.add(hermes.createTextMessage(payload.toString()));
+                  final Message message = hermes.createTextMessage(payload.toString());
+                  message.setJMSDestination(to);
+                  messages.add(message);
                }
 
                doUpload(to, messages.iterator());
@@ -230,7 +241,7 @@ public class SendMessageTask extends TaskSupport
                   // Nah...
                }
             }
-            doUpload(to, messages.iterator()) ;
+            doUpload(to, messages.iterator());
          }
 
          hermes.commit();

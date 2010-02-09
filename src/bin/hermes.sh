@@ -44,7 +44,7 @@ case "`uname`" in
   Darwin*) darwin=true
            if [ -z "$JAVA_HOME" ] ; then
              JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
-	     HERMES_OPTS="-Xdock:name="HermesJMS" -Dcom.apple.mrj.application.apple.menu.about.name="HermesJMS 1.13" -Dcom.apple.mrj.application.growbox.intrudes=false -Dapple.laf.useScreenMenuBar=true $HERMES_OPTS"
+	     HERMES_OPTS="-Xdock:name=HermesJMS -Dcom.apple.mrj.application.apple.menu.about.name=HermesJMS -Dcom.apple.mrj.application.growbox.intrudes=false -Dapple.laf.useScreenMenuBar=true $HERMES_OPTS"
            fi
            ;;
   Linux*) if [ -z "$HERMES_OPTS" ] ; then
@@ -99,7 +99,6 @@ fi
 # Set HERMES_LIB location
 
 HERMES_LIB="${HERMES_HOME}/lib"
-HERMES_LIB_WEAVED="${HERMES_HOME}/lib.weaved"
 
 #
 # Setup the Java VM
@@ -138,19 +137,6 @@ do
   fi
 done
 
-#
-# If we're using the weaved code, add all the weaved libs to the start of the CLASSPATH
-
-if $hermes_weaved ; then
-  HERMES_LIB_PROPERTY=$HERMES_LIB_WEAVED
-
-  for F in `ls $HERMES_LIB_WEAVED`
-  do    
-    LOCALCLASSPATH=$HERMES_LIB_WEAVED/$F:$LOCALCLASSPATH
-  done
-else
-  HERMES_LIB_PROPERTY=$HERMES_LIB
-fi
 
 #
 # See if we can find a config file.
@@ -191,6 +177,6 @@ if $cygwin; then
 fi
 
 #
-# Run main()
+# Run main(). 
 
-"$JAVACMD" -XX:NewSize=256m -Xmx1024m $HERMES_OPTS -Dhermes.home=$HERMES_HOME -Dhermes=$HERMES_CFG -Dhermes.libs=$HERMES_LIB_PROPERTY -classpath $LOCALCLASSPATH  hermes.browser.HermesBrowser
+"$JAVACMD" -XX:NewSize=256m -Xmx1024m $HERMES_OPTS -Dlog4j.configuration=file:$HERMES_HOME/bin/log4j.props -Dhermes.home=$HERMES_HOME -Dhermes=$HERMES_CFG -Dhermes.libs=$HERMES_LIB -classpath $LOCALCLASSPATH  hermes.browser.HermesBrowser

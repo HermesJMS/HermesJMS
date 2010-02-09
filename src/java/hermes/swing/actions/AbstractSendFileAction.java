@@ -45,7 +45,7 @@ public abstract class AbstractSendFileAction extends ActionSupport
       }
    }
 
-   public void doSendAFile(int isXML)
+   public void doSendAFile(int isXML, boolean preserveDestination)
    {
       final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) HermesBrowser.getBrowser().getBrowserTree().getLastSelectedPathComponent();
       final HermesTreeNode hermesNode = (HermesTreeNode) destinationNode.getHermesTreeNode();
@@ -66,7 +66,7 @@ public abstract class AbstractSendFileAction extends ActionSupport
       {
          DirectoryCache.lastUploadDirectory = chooser.getSelectedFile().getParentFile();
          HermesBrowser.getBrowser().getActionFactory().createSimpleSendMessageAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(),
-               chooser.getSelectedFile(), isXML);
+               chooser.getSelectedFile(), isXML, preserveDestination);
       }
       else
       {

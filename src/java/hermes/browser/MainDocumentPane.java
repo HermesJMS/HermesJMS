@@ -29,7 +29,7 @@ public class MainDocumentPane extends DocumentPane implements DocumentPane.Tabbe
 {
    public MainDocumentPane()
    {
-      setTabbedPaneCustomer(this) ;
+      setTabbedPaneCustomizer(this) ;
    }
    
    public void customize(JideTabbedPane tabbedPane)

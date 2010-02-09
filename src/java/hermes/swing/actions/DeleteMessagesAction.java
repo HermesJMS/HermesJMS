@@ -136,6 +136,18 @@ public class DeleteMessagesAction extends AbstractAction implements DocumentComp
       checkEnabled() ;
    }
 
+   public void documentComponentDocked(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void documentComponentFloated(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
    public void tableChanged(TableModelEvent e)
    {
       checkEnabled() ;

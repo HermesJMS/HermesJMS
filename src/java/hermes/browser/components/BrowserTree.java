@@ -312,11 +312,11 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
          {
 
             HermesBrowser.getBrowser().getActionFactory().createSimpleSendMessageAction(getSelectedHermesNode().getHermes(), node.getDestinationName(),
-                  node.getDomain(), files, SendMessageTask.MAYBE_XML);
+                  node.getDomain(), files, SendMessageTask.MAYBE_XML, false);
          }
          else
          {
-            Hermes.ui.getDefaultMessageSink().add("File upload canclled.");
+            Hermes.ui.getDefaultMessageSink().add("File upload cancelled.");
          }
       }
 

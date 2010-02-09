@@ -38,6 +38,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
+import quickfix.FieldNotFound;
+
 /**
  * @author colincrist@hermesjms.com
  * @version $Id: NIOFIXFileReader.java,v 1.5 2006/08/25 11:33:48 colincrist Exp $
@@ -58,13 +60,13 @@ public class NIOFIXFileReader implements FIXReader, Runnable
 
    private QuickFIXMessageCache messageCache;
 
- private FIXMessageFilter filter = new FIXMessageFilter() ;
-   
+   private FIXMessageFilter filter = new FIXMessageFilter();
+
    public FIXMessageFilter getFilter()
    {
-      return filter ;
+      return filter;
    }
-   
+
    public NIOFIXFileReader(QuickFIXMessageCache messageCache, FileInputStream istream) throws IOException
    {
       this.istream = istream;
@@ -129,9 +131,16 @@ public class NIOFIXFileReader implements FIXReader, Runnable
 
                final FIXMessage m = readMessage();
 
-               if (m != null && filter.filter(m.getMsgType()))
+               try
                {
-                  messages.put(m);
+                  if (m != null && filter.filter(m.getMsgType()))
+                  {
+                     messages.put(m);
+                  }
+               }
+               catch (HermesRuntimeException ex)
+               {
+                  log.error("ignoring invalid message: " + ex.getMessage(), ex);
                }
 
             }
@@ -266,7 +275,7 @@ public class NIOFIXFileReader implements FIXReader, Runnable
    }
 
    private final void clean(final MappedByteBuffer buffer)
-   {    
+   {
       AccessController.doPrivileged(new PrivilegedAction()
       {
          public Object run()
@@ -293,8 +302,8 @@ public class NIOFIXFileReader implements FIXReader, Runnable
       {
          if (readBuffer != null)
          {
-            log.debug("releasing read memory map") ;
-            
+            log.debug("releasing read memory map");
+
             clean(readBuffer);
             readBuffer = null;
          }
@@ -321,9 +330,9 @@ public class NIOFIXFileReader implements FIXReader, Runnable
 
                if (parseBuffer != null)
                {
-                  log.debug("releasing parse memory map") ;
-                  
-                  clean(parseBuffer);                  
+                  log.debug("releasing parse memory map");
+
+                  clean(parseBuffer);
                }
 
                parseBuffer = null;

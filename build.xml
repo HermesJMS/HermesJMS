@@ -41,7 +41,6 @@
 
 
 	<property name="lib" value="${build}/lib" />
-	<property name="lib.weaved" value="${build}/lib.weaved" />
 	<property name="providers" value="${build}/providers" />
 
 	<property name="cfg" value="${build}/cfg" />
@@ -52,7 +51,6 @@
 	<property name="jms2xml.schema" value="${src}/xml/jms2xml-schema.xsd" />
 	<property name="jms2xml.package" value="hermes.xml" />
 	<property name="webstart" value="${build}/webstart" />
-	<property name="webstart.retro" value="${build}/retrowebstart" />
 
 	<macrodef name="convertUnixLineEndings">
 		<element name="files" implicit="true" />
@@ -74,17 +72,12 @@
 
 	<target name="init">
 
-		<path id="retrotranslator.classpath">
-			<fileset dir="${retrotranslator.lib}" includes="**/*.jar" />
-		</path>
-
-		<taskdef name="retrotranslator" classpathref="retrotranslator.classpath" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" />
-
 		<taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${src.lib}/jarjar-0.6.jar" />
 		<taskdef name="izpack" classpath="${src.libext}/standalone-compiler.jar" classname="com.izforge.izpack.ant.IzPackTask" />
 
 		<tstamp />
 
+		<available file="${activemq.root}/incubator-activemq-4.1-SNAPSHOT.jar" property="activemq.present" />
 		<available file="${websphere.lib}/com.ibm.mqjms.jar" property="mq.present" />
 		<available file="${jboss.lib}/jbossall-client.jar" property="jbossmq.present" />
 		<available file="${weblogic.lib}/weblogic.jar" property="weblogic.present" />
@@ -120,9 +113,7 @@
 		<mkdir dir="${classes.ext.oracleaq}" />
 		<mkdir dir="${classes.ext.imq}" />
 		<mkdir dir="${webstart}" />
-		<mkdir dir="${webstart.retro}" />
 		<mkdir dir="${lib}" />
-		<mkdir dir="${lib.weaved}" />
 		<mkdir dir="${bin}" />
 		<mkdir dir="${cfg}" />
 		<mkdir dir="${providers}" />
@@ -357,7 +348,7 @@
 			<produces dir="${src.java}/hermes/xml" includes="**/*.java" />
 		</xjc>
 
-		<javac destdir="${classes}" deprecation="on" debug="true">
+		<javac target="1.5" destdir="${classes}" deprecation="on" debug="true">
 			<src path="${src.java}" />
 			<exclude name="hermes/ext/imq/*.java"/>	
 			<exclude name="hermes/ext/oracle/aq/*.java"/>
@@ -386,14 +377,14 @@
 
 	
 	<target name="compile-oracleaq" depends="jar" if="oracleaq.present">
-			<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.oracleaq}" deprecation="on" debug="true">
+			<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.oracleaq}" deprecation="on" debug="true">
 				<include name="**/ext/oracle/aq/*.java" />
 				<classpath refid="oracleaq.classpath" />
 			</javac>
 		</target>
 	
 	<target name="compile-imq" depends="jar" if="imq.present">
-				<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.imq}" deprecation="on" debug="true">
+				<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.imq}" deprecation="on" debug="true">
 					<include name="**/ext/imq/*.java" />
 					<classpath refid="imq.classpath" />
 				</javac>
@@ -401,7 +392,7 @@
 	
 
 	<target name="compile-seebeyond" depends="jar" if="mx4j.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.seebeyond}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.seebeyond}" deprecation="on" debug="true">
 			<include name="**/ext/seebeyond/*.java" />
 			<include name="**/ext/seebeyond/model/*.java" />
 			<include name="**/ext/seebeyond/ican/*.java" />
@@ -411,7 +402,7 @@
 	</target>
 
 	<target name="compile-activemq" depends="jar" if="activemq.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.activemq}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.activemq}" deprecation="on" debug="true">
 			<include name="**/ext/activemq/*.java" />
 			<classpath refid="activemq.classpath" />
 		</javac>
@@ -419,7 +410,7 @@
 
 	
 	<target name="compile-sqs" depends="jar" if="sqs.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.sqs}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.sqs}" deprecation="on" debug="true">
 			<include name="**/ext/sqs/*.java" />
 			<classpath refid="sqs.classpath" />
 		</javac>
@@ -427,70 +418,70 @@
 
 
 	<target name="compile-sonic" depends="jar" if="sonic.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.sonic}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.sonic}" deprecation="on" debug="true">
 			<include name="**/ext/sonicmq/*.java" />
 			<classpath refid="sonic.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-ems" depends="jar" if="ems.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.ems}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.ems}" deprecation="on" debug="true">
 			<include name="**/ext/ems/*.java" />
 			<classpath refid="ems.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-fiorano" depends="compile-main" if="fiorano.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.fiorano}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.fiorano}" deprecation="on" debug="true">
 			<include name="**/ext/fiorano/*.java" />
 			<classpath refid="fiorano.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-mq" depends="compile-main" if="mq.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.mq}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.mq}" deprecation="on" debug="true">
 			<include name="**/ext/mq/*.java" />
 			<classpath refid="websphere.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-openjms" depends="compile-main" if="openjms.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.openjms}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.openjms}" deprecation="on" debug="true">
 			<include name="**/ext/openjms/*.java" />
 			<classpath refid="openjms.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-joram" depends="compile-main" if="joram.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.joram}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.joram}" deprecation="on" debug="true">
 			<include name="**/ext/joram/*.java" />
 			<classpath refid="joram.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-jbossmq" depends="compile-main" if="jbossmq.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.jbossmq}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.jbossmq}" deprecation="on" debug="true">
 			<include name="**/ext/jbossmq/*.java" />
 			<classpath refid="jboss.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-weblogic" depends="compile-main" if="weblogic.present">
-		<javac sourcepath="" srcdir="${src.java}" destdir="${classes.ext.weblogic}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.weblogic}" deprecation="on" debug="true">
 			<include name="**/ext/weblogic/*.java" />
 			<classpath refid="weblogic.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-arjuna" depends="compile-main" if="arjuna.present">
-		<javac sourcepath="" srcdir="${src.java}" failonerror="false" destdir="${classes.ext.arjuna}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" failonerror="false" destdir="${classes.ext.arjuna}" deprecation="on" debug="true">
 			<include name="**/ext/arjuna/*.java" />
 			<classpath refid="arjuna.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-wme" depends="compile-main" if="wme.present">
-		<javac sourcepath="" srcdir="${src.java}" failonerror="false" destdir="${classes.ext.wme}" deprecation="on" debug="true">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" failonerror="false" destdir="${classes.ext.wme}" deprecation="on" debug="true">
 			<include name="**/ext/wme/*.java" />
 			<classpath refid="wme.classpath" />
 		</javac>
@@ -498,8 +489,7 @@
 
 	<target name="jar" depends="compile">
 		<jar jarfile="${lib}/hermes.jar">
-			<fileset dir="${classes}" />
-			<fileset dir="${jide.classes}" />
+			<fileset dir="${classes}" />		
 			<fileset dir="${src.java}" excludes="**/*.java" />
 			<fileset dir="${resources}" />
 
@@ -573,9 +563,10 @@
 				<include name="**/*.jar" />
 <!--				<exclude name="ant.jar" /> -->
 			</fileset>
+			<fileset dir="${jide.lib}">
+							<include name="*.jar" />
+			</fileset>
 		</copy>
-
-
 
 		<copy todir="${bin}">
 			<fileset dir="${src.bin}" />
@@ -591,42 +582,19 @@
 
 	</target>
 
-	<target name="weave" depends="jar-ext">
-		<retrotranslator srcjar="${lib}/hermes.jar" destjar="${lib.weaved}/hermes.jar" />
-		<retrotranslator srcjar="${lib}/hermes-activemq.jar" destjar="${lib.weaved}/hermes-activemq.jar" />
-		  <retrotranslator srcjar="${lib}/hermes-seebeyond.jar" destjar="${lib.weaved}/hermes-seebeyond.jar" />
-		<retrotranslator srcjar="${lib}/hermes-arjuna.jar" destjar="${lib.weaved}/hermes-arjuna.jar" />
-		<retrotranslator srcjar="${lib}/hermes-ems.jar" destjar="${lib.weaved}/hermes-ems.jar" />
-		<retrotranslator srcjar="${lib}/hermes-fiorano.jar" destjar="${lib.weaved}/hermes-fiorano.jar" />
-		<retrotranslator srcjar="${lib}/hermes-jbossmq.jar" destjar="${lib.weaved}/hermes-jbossmq.jar" />
-		<retrotranslator srcjar="${lib}/hermes-joram.jar" destjar="${lib.weaved}/hermes-joram.jar" />
-		<retrotranslator srcjar="${lib}/hermes-openjms.jar" destjar="${lib.weaved}/hermes-openjms.jar" />
-		<retrotranslator srcjar="${lib}/hermes-sapjms.jar" destjar="${lib.weaved}/hermes-sapjms.jar" />
-		<retrotranslator srcjar="${lib}/hermes-sonicmq.jar" destjar="${lib.weaved}/hermes-sonicmq.jar" />
-		<retrotranslator srcjar="${lib}/hermes-weblogic.jar" destjar="${lib.weaved}/hermes-weblogic.jar" />
-		<retrotranslator srcjar="${lib}/hermes-webspheremq.jar" destjar="${lib.weaved}/hermes-webspheremq.jar" />
-		<retrotranslator srcjar="${lib}/hermes-wme.jar" destjar="${lib.weaved}/hermes-wme.jar" />
-		<retrotranslator srcjar="${src.lib}/commons-beanutils.jar" destjar="${lib.weaved}/commons-beanutils.jar" />
-		<retrotranslator srcjar="${src.lib}/cglib-2.2_beta1.jar" destjar="${lib.weaved}/cglib-2.2_beta1.jar" />
-	</target>
 
-<!--  <target name="webstart" depends="weave"> -->
 
-	<target name="webstart" depends="weave">
+	<target name="webstart" depends="jar-ext">
 		<copy todir="${webstart}">
 			<fileset dir="${lib}" includes="*.jar" />
 			<fileset dir="${src.webstart}" />
 		</copy>
 
-		<copy todir="${webstart.retro}">
-			<fileset dir="${lib.weaved}" includes="*.jar" />
-		</copy>
 
 		<input message="Keystore password:" addproperty="keystore.password" />
 
 		<signjar keystore="${keystore}" alias="${keystore.alias}" storepass="${keystore.password}">
 			<fileset dir="${webstart}" includes="*.jar" />
-			<fileset dir="${webstart.retro}" includes="*.jar" />
 		</signjar>
 	</target>
 
@@ -648,11 +616,9 @@
 		</zip>
 	</target>
 
-	<target name="izpack" depends="weave">
+	<target name="izpack" depends="jar-ext">
 		<izpack input="izpack-install.xml" output="${installer.jar}" installerType="standard" basedir="." izPackDir="${izpack.dir}" />
-
-		<izpack input="izpack-install-with-source.xml" output="hermes-installer-with-source-1.13.jar" installerType="standard" basedir="." izPackDir="${izpack.dir}" />
-
+		<izpack input="izpack-install-with-source.xml" output="hermes-installer-with-source-1.14.jar" installerType="standard" basedir="." izPackDir="${izpack.dir}" />
 	</target>
 
 	<target name="release" depends="zip">

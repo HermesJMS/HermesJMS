@@ -17,7 +17,7 @@
     -->
     <info>
         <appname>HermesJMS</appname>
-        <appversion>1.14</appversion>
+        <appversion>1.14 SoapUI</appversion>
         <authors>
             <author name="Colin Crist" email="colincrist@hermesjms.com"/>
         </authors>
@@ -87,7 +87,6 @@
 	    <file src="build/cfg" targetdir="$INSTALL_PATH"/>
 	    <file src="build/javadoc" targetdir="$INSTALL_PATH"/>
 	    <file src="build/lib" targetdir="$INSTALL_PATH"/>
-	    <file src="build/lib.weaved" targetdir="$INSTALL_PATH"/>
 	    <file src="build/providers" targetdir="$INSTALL_PATH"/>
 
 	    <executable targetfile="$INSTALL_PATH/bin/hermes.sh" os="unix" stage="never"/>

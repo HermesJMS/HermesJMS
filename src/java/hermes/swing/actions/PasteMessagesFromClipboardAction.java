@@ -111,7 +111,7 @@ public class PasteMessagesFromClipboardAction extends BrowseActionListenerAdapte
                      else
                      {
                         HermesBrowser.getBrowser().getActionFactory().createSimpleSendMessageAction(browserAction.getHermes(), browserAction.getDestination(),
-                              browserAction.getDomain(), xml);
+                              browserAction.getDomain(), xml, false);
                      }
                   }
                   catch (Exception e)

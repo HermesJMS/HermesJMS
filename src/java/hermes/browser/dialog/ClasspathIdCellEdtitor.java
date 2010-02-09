@@ -74,6 +74,8 @@ public class ClasspathIdCellEdtitor extends ContextSensitiveCellEditor
 
                     items.add(config.getId());
                 }
+                
+                items.add("System") ;
 
                 final JComboBox combo = new JComboBox(items);
 

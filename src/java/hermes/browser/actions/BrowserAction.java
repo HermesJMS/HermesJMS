@@ -471,7 +471,7 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
          headerScrollPane.setViewportView(hTable);
 
          hTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-         hTable.setExpandableColumn(-1);
+         //hTable.setExpandableColumn(-1);
          hTable.setSingleExpansion(false);
       }
       else
@@ -898,6 +898,18 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
             messagePayloadPanel.setMessage(hermes, m);
          }
       }
+   }
+
+   public void documentComponentDocked(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void documentComponentFloated(DocumentComponentEvent arg0)
+   {
+      // TODO Auto-generated method stub
+      
    }
 
    public void delete()
