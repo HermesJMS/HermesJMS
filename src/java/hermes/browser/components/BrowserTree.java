@@ -798,7 +798,7 @@ private static final Logger log = Logger.getLogger(BrowserTree.class);
 
          public void mousePressed(MouseEvent e)
          {
-            // NOP
+             maybeDoPopup(e);
          }
 
          public void mouseReleased(MouseEvent e)
