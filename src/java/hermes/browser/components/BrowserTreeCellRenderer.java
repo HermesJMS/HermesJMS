@@ -34,7 +34,12 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 public class BrowserTreeCellRenderer extends DefaultTreeCellRenderer
 {
-   public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus)
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5392104518674813977L;
+
+public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus)
    {
       super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 

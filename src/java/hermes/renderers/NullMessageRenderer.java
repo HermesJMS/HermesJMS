@@ -17,8 +17,6 @@
 
 package hermes.renderers;
 
-import hermes.browser.MessageRenderer;
-
 import javax.jms.Message;
 import javax.swing.JComponent;
 

@@ -41,7 +41,11 @@ import com.jidesoft.swing.JideSwingUtilities;
 
 public abstract class AddDestinationAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(AddDestinationAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6849289409637817933L;
+private static final Logger log = Logger.getLogger(AddDestinationAction.class);
    private Domain domain;
 
    public AddDestinationAction(Domain domain)

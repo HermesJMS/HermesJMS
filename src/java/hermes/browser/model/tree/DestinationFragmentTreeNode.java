@@ -33,7 +33,11 @@ import javax.swing.tree.MutableTreeNode;
 
 public class DestinationFragmentTreeNode extends AbstractTreeNode
 {
-   private Hermes hermes;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2063762264140498380L;
+private Hermes hermes;
 
    public DestinationFragmentTreeNode(Hermes hermes, String id)
    {

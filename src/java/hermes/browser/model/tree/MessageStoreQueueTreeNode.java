@@ -29,7 +29,12 @@ import javax.jms.Queue;
 
 public class MessageStoreQueueTreeNode extends MessageStoreDestinationTreeNode
 {
-   public MessageStoreQueueTreeNode(MessageStore store, String id, Queue bean)
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8772319873019540486L;
+
+public MessageStoreQueueTreeNode(MessageStore store, String id, Queue bean)
    {
       super(store, id, bean);
       

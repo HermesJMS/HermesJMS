@@ -56,6 +56,10 @@ import javax.swing.JPanel;
 abstract public class AbstractOptionDialog extends JDialog
 {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5881175544998150130L;
+	/**
      * Constant for declaring the OK button. Used in the setDialogProperties()
      * method.
      */

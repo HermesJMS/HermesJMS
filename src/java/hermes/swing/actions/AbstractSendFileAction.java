@@ -35,7 +35,12 @@ import javax.swing.JFileChooser;
 
 public abstract class AbstractSendFileAction extends ActionSupport
 {
-   public AbstractSendFileAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7964360849799569657L;
+
+public AbstractSendFileAction()
    {
       setEnabled(false);
 

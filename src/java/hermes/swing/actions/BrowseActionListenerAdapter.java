@@ -48,7 +48,11 @@ import com.jidesoft.document.DocumentComponentListener;
 
 public abstract class BrowseActionListenerAdapter extends AbstractAction implements DocumentComponentListener, ListSelectionListener, TableModelListener
 {
-   private static final Logger log = Logger.getLogger(BrowseActionListenerAdapter.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2062440164714409247L;
+private static final Logger log = Logger.getLogger(BrowseActionListenerAdapter.class);
    private boolean tableListener = false;
    private boolean checkSelection = true;
    private boolean checkRunning = false;

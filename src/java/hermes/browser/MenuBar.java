@@ -51,7 +51,11 @@ import com.jidesoft.swing.JideMenu;
  */
 public class MenuBar extends CommandMenuBar
 {
-   private static final Logger log = Logger.getLogger(MenuBar.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -9141225979536359572L;
+private static final Logger log = Logger.getLogger(MenuBar.class);
    private HermesBrowser hermesBrowser;
 
    private JideMenu fileMenu = new JideMenu("File");

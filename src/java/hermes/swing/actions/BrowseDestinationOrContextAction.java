@@ -56,7 +56,11 @@ import org.apache.log4j.Logger;
 
 public class BrowseDestinationOrContextAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(BrowseDestinationOrContextAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2261691717762103310L;
+private static final Logger log = Logger.getLogger(BrowseDestinationOrContextAction.class);
 
    public BrowseDestinationOrContextAction()
    {

@@ -39,7 +39,12 @@ import javax.swing.tree.TreePath;
 
 public class CreateNewSessionFromJNDIAction extends JNDIAction
 {
-   public CreateNewSessionFromJNDIAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1012282319352405353L;
+
+public CreateNewSessionFromJNDIAction()
    {
      
       putValue(Action.NAME, "Create new session...");

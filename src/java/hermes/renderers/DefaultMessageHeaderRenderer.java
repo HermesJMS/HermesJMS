@@ -18,7 +18,6 @@
 package hermes.renderers;
 
 import hermes.browser.ConfigDialogProxy;
-import hermes.browser.MessageRenderer;
 import hermes.swing.SwingUtils;
 import hermes.util.JMSUtils;
 
@@ -58,7 +57,12 @@ public class DefaultMessageHeaderRenderer extends AbstractMessageRenderer
       final DefaultTableModel tableModel = new DefaultTableModel()
       {
       
-         @Override
+         /**
+		 * 
+		 */
+		private static final long serialVersionUID = 5702541447000695825L;
+
+		@Override
          public boolean isCellEditable(int row, int column)
          {
             return false ;

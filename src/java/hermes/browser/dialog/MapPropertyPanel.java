@@ -17,6 +17,8 @@
 package hermes.browser.dialog;
 
 import java.awt.BorderLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.CellEditor;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.border.BevelBorder;
 
 import org.apache.log4j.Logger;
@@ -97,7 +101,8 @@ public class MapPropertyPanel extends JPanel
       }
    }
 
-   protected JComponent createCenterComponent()
+   @SuppressWarnings("unchecked")
+protected JComponent createCenterComponent()
    {
       List model = new ArrayList();
 
@@ -124,7 +129,12 @@ public class MapPropertyPanel extends JPanel
                final JidePropertyImpl pConfig = new JidePropertyImpl(propertyName, propertyName + " [" + getPropertyType(propertyName).getName() + "]",
                      getPropertyType(propertyName), propertyValue)
                {
-                  public void setValue(final Object newValue)
+                  /**
+				 * 
+				 */
+				private static final long serialVersionUID = -1529987569514922256L;
+
+				public void setValue(final Object newValue)
                   {
                      super.setValue(newValue);
 
@@ -175,6 +185,25 @@ public class MapPropertyPanel extends JPanel
 
       PropertyTableModel propertyTableModel = new PropertyTableModel(model);
       PropertyTable propertyTable = new PropertyTable(propertyTableModel);
+      propertyTable.addFocusListener(new FocusListener()
+      {      
+         public void focusLost(FocusEvent e)
+         {
+            if (!e.isTemporary()) {
+               JTable t = (JTable) e.getSource() ;
+               CellEditor ce = t.getCellEditor() ;
+               if (ce != null) {
+                  ce.stopCellEditing() ;
+               }
+            }      
+         }
+      
+         public void focusGained(FocusEvent e)
+         {
+            
+         }      
+      } ) ;
+      
       propertyTable.expandAll();
       PropertyPane propertyPane = new PropertyPane(propertyTable);
 

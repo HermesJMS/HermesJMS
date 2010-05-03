@@ -41,7 +41,11 @@ import org.apache.log4j.Category;
  */
 public class ConnectionConfigPanel extends JPanel
 {
-    private static final String CLIENTID = "ClientID: " ;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6476633587707010668L;
+	private static final String CLIENTID = "ClientID: " ;
     private static final String PASSWORD = "Password: ";
     private static final String USERNAME = "User: ";
     private static final String REQUIRES_AUTHENTICATION = "Authenticate: ";

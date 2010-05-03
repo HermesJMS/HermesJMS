@@ -41,7 +41,11 @@ import com.jidesoft.swing.JideTabbedPane;
  */
 public class MessagePayloadPanel extends JPanel
 {
-   private static final Logger log = Logger.getLogger(MessagePayloadPanel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7962228996637817501L;
+private static final Logger log = Logger.getLogger(MessagePayloadPanel.class);
    private final JTabbedPane tabbedPane = new JideTabbedPane();
 
    private String destinationName;

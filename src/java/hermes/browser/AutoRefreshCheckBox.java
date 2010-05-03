@@ -29,7 +29,11 @@ import com.jidesoft.document.DocumentComponentListener;
 
 public class AutoRefreshCheckBox extends JCheckBox implements DocumentComponentListener
 {
-   private static AutoRefreshCheckBox singleton = new AutoRefreshCheckBox();
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5175293195735313150L;
+private static AutoRefreshCheckBox singleton = new AutoRefreshCheckBox();
 
    private AutoRefreshCheckBox()
    {

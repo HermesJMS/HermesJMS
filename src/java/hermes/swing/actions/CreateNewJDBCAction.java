@@ -36,7 +36,12 @@ import javax.swing.Action;
 
 public class CreateNewJDBCAction extends ActionSupport
 {
-   public CreateNewJDBCAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6886184039646547926L;
+
+public CreateNewJDBCAction()
    {
       super();
 

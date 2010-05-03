@@ -77,7 +77,12 @@ public class RendererHelper
             {
                 Property displayProperty = new Property(propertyName, theConfig.getPropertyDescription(propertyName), propertyValue.getClass())
                 {
-                    public void setValue(Object value)
+                    /**
+					 * 
+					 */
+					private static final long serialVersionUID = -4650355524853942976L;
+
+					public void setValue(Object value)
                     {
                         try
                         {

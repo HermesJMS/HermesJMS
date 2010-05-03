@@ -36,7 +36,11 @@ import javax.swing.tree.TreePath;
 
 public class CascadeBrowserTreeAction extends ActionSupport
 {
-   private BrowserTree browserTree;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4225976230120661015L;
+private BrowserTree browserTree;
 
    public CascadeBrowserTreeAction(BrowserTree browserTree)
    {

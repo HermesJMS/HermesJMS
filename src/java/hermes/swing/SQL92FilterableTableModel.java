@@ -44,7 +44,11 @@ import com.jidesoft.grid.FilterableTableModel;
 
 public class SQL92FilterableTableModel extends FilterableTableModel
 {
-   private static final Logger log = Logger.getLogger(SQL92FilterableTableModel.class) ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6078216473511901668L;
+private static final Logger log = Logger.getLogger(SQL92FilterableTableModel.class) ;
    private RowValueProvider rowValueProvider;
    private ISelector selector;
    private IIdentifierExtension extension ;
@@ -88,7 +92,12 @@ public class SQL92FilterableTableModel extends FilterableTableModel
                  
          Filter filter = new AbstractTableFilter()
          {
-            public boolean isValueFiltered(Object arg0)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 7094288732603611045L;
+
+			public boolean isValueFiltered(Object arg0)
             {              
                final IValueProvider values = rowValueProvider.getValueProviderForRow(getRowIndex()) ;
              

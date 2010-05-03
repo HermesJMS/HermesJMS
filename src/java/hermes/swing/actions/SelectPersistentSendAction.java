@@ -27,7 +27,12 @@ import javax.swing.Action;
 
 public class SelectPersistentSendAction extends ActionSupport
 {
-   public SelectPersistentSendAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 294181756169588247L;
+
+public SelectPersistentSendAction()
    {
       super();
 

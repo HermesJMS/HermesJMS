@@ -64,7 +64,11 @@ import com.jidesoft.grid.SortableTable;
  */
 public class DestinationConfigPanel extends JPanel
 {
-   private static final String IMPORT = "Import...";
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -9161130471970874426L;
+private static final String IMPORT = "Import...";
    private static final String REMOVE = "Remove";
    private static final String ADD_SIMPLE = "Add...";
    private static final String EDIT_SIMPLE = "Edit...";

@@ -40,7 +40,11 @@ import org.apache.log4j.Logger;
 
 public class MessagesTransferHandler extends TransferHandler
 {
-   private static final Logger log = Logger.getLogger(MessagesTransferHandler.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5563525230406256117L;
+private static final Logger log = Logger.getLogger(MessagesTransferHandler.class);
    private FIXMessageTable table;
 
   

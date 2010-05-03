@@ -24,7 +24,12 @@ package hermes.browser.model.tree;
 
 public class UnknownTreeNode extends AbstractTreeNode
 {
-   public UnknownTreeNode(String id, Object bean)
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3291645118304831234L;
+
+public UnknownTreeNode(String id, Object bean)
    {
       super(id, bean);
    }

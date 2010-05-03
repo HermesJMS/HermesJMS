@@ -40,7 +40,12 @@ import javax.swing.tree.TreePath;
 
 public class CreateNewJNDIContextAction extends JNDIAction
 {
-   public CreateNewJNDIContextAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7671492715045694328L;
+
+public CreateNewJNDIContextAction()
    {
       putValue(Action.NAME, "Create new context...");
       putValue(Action.SHORT_DESCRIPTION, "Create a new context at this point in the tree.");

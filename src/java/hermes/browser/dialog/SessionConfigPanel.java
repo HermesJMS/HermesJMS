@@ -34,7 +34,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.event.ListDataEvent;
@@ -49,7 +48,11 @@ import org.apache.log4j.Category;
  */
 public class SessionConfigPanel extends JPanel
 {
-   private static final Category cat = Category.getInstance(SessionConfigPanel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5706451976524287590L;
+private static final Category cat = Category.getInstance(SessionConfigPanel.class);
    public static final String NEWSESSION = "<new>";
 
    private PreferencesDialog dialog;

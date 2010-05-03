@@ -45,7 +45,11 @@ import com.jidesoft.swing.FolderChooser;
 
 public class SaveMessagesAsTextAction extends BrowseActionListenerAdapter
 {
-   private static final Logger log = Logger.getLogger(SaveMessagesAsTextAction.class) ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5949023455568660495L;
+private static final Logger log = Logger.getLogger(SaveMessagesAsTextAction.class) ;
 
    public SaveMessagesAsTextAction()
    {

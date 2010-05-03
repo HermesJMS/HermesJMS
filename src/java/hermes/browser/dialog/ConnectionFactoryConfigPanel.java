@@ -77,7 +77,11 @@ import com.jidesoft.swing.JideScrollPane;
 
 public class ConnectionFactoryConfigPanel extends JPanel
 {
-   private static final String CLASS = "class";
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8695311283530530183L;
+private static final String CLASS = "class";
    private static final String CONNECTION_FACTORY = "Connection Factory";
    private static final String REMOVE_PROPERTY = "Remove property";
    private static final String ADD_PROPERTY = "Add property";

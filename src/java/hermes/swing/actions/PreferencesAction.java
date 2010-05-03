@@ -34,7 +34,12 @@ import javax.swing.Action;
 
 public class PreferencesAction extends ActionSupport
 {
-   public PreferencesAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5628725407722664279L;
+
+public PreferencesAction()
    {
       putValue(Action.NAME, "Configuration...");
       putValue(Action.SHORT_DESCRIPTION, "Configuration.");

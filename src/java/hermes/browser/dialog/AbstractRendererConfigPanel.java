@@ -29,6 +29,11 @@ public class AbstractRendererConfigPanel extends JPanel
 {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5396435230901109135L;
+
+	/**
      * 
      */
     public AbstractRendererConfigPanel()

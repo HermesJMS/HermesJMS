@@ -47,7 +47,12 @@ import com.jidesoft.grid.HierarchicalTable;
  */
 public class ClasspathGroupTable extends HierarchicalTable
 {
-   private static final Logger log = Logger.getLogger(ClasspathGroupTable.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6816153288315919899L;
+
+private static final Logger log = Logger.getLogger(ClasspathGroupTable.class);
 
    private ClasspathGroupTableModel model;
    private PreferencesDialog dialog;

@@ -17,17 +17,18 @@
 
 package hermes.impl;
 
+import hermes.Hermes;
+import hermes.HermesException;
+import hermes.ProviderMetaData;
+import hermes.config.FactoryConfig;
+import hermes.config.PropertyConfig;
+
 import java.util.Iterator;
 
 import javax.jms.ConnectionMetaData;
 import javax.jms.JMSException;
 
 import org.apache.log4j.Category;
-import hermes.Hermes;
-import hermes.HermesException;
-import hermes.ProviderMetaData;
-import hermes.config.FactoryConfig;
-import hermes.config.PropertyConfig;
 
 /**
  * A Default implementation for accessing meta data related to a JMS provider.

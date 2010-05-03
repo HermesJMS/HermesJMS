@@ -26,7 +26,6 @@ import hermes.config.HermesConfig;
 import hermes.config.RendererConfig;
 import hermes.config.SessionConfig;
 
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -17,7 +17,6 @@
 
 package hermes.providers.file;
 
-import hermes.Domain;
 import hermes.HermesException;
 
 import java.io.IOException;
@@ -39,7 +38,6 @@ import javax.jms.TemporaryQueue;
 import javax.jms.TemporaryTopic;
 import javax.jms.Topic;
 import javax.jms.TopicSubscriber;
-import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 

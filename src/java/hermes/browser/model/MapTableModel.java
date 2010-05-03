@@ -30,7 +30,12 @@ import javax.swing.table.DefaultTableModel;
 public abstract class MapTableModel extends DefaultTableModel
 {
    
-   public MapTableModel()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3351082537562251893L;
+
+public MapTableModel()
    {
       super();
       // TODO Auto-generated constructor stub

@@ -27,6 +27,11 @@ public class FIXException extends HermesException
 {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6194554603874829867L;
+
+	/**
      * 
      */
     public FIXException()

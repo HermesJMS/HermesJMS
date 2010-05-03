@@ -48,7 +48,11 @@ import com.jidesoft.swing.JideMenu;
 
 public class ChainByClOrdIDAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(ChainByClOrdIDAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1158910405875983784L;
+private static final Logger log = Logger.getLogger(ChainByClOrdIDAction.class);
    private FIXMessageTable table;
    private ChainByClOrdID chain ;
    

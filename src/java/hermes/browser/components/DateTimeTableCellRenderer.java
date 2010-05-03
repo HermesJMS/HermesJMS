@@ -19,8 +19,6 @@ package hermes.browser.components;
 
 import java.awt.Component;
 import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -35,7 +33,11 @@ import org.apache.commons.lang.time.FastDateFormat;
 public class DateTimeTableCellRenderer extends DefaultTableCellRenderer
 {
 
-   private FastDateFormat formatter ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1413187082412431777L;
+private FastDateFormat formatter ;
   
    
    public DateTimeTableCellRenderer()

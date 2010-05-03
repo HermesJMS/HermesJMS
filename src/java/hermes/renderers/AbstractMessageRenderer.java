@@ -17,11 +17,10 @@
 
 package hermes.renderers;
 
-import javax.swing.JComponent;
-
 import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
-import hermes.browser.MessageRenderer.Config;
+
+import javax.swing.JComponent;
 
 /**
  * @author colincrist@hermesjms.com

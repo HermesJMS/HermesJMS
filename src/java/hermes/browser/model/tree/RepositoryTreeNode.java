@@ -28,7 +28,12 @@ import hermes.browser.IconCache;
 
 public class RepositoryTreeNode extends AbstractTreeNode
 {
-   public RepositoryTreeNode(HermesRepository repository)
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2205497528119432012L;
+
+public RepositoryTreeNode(HermesRepository repository)
    {
       super(repository.getId(), repository);
 

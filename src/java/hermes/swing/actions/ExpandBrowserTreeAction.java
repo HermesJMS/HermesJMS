@@ -34,7 +34,11 @@ import javax.swing.event.TreeSelectionListener;
 
 public class ExpandBrowserTreeAction extends ActionSupport
 {
-   private BrowserTree browserTree ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2848811547735769952L;
+private BrowserTree browserTree ;
    public ExpandBrowserTreeAction(BrowserTree browserTree)
    {
       this.browserTree = browserTree ;   

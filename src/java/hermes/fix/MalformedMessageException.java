@@ -27,7 +27,12 @@ import hermes.HermesException;
 public class MalformedMessageException extends HermesException
 {
 
-   public MalformedMessageException()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3338613059877075465L;
+
+public MalformedMessageException()
    {
       super();
       // TODO Auto-generated constructor stub

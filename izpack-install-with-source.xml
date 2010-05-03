@@ -48,8 +48,8 @@
     <resources>
         <res id="LicencePanel.licence" src="build/bin/LICENCE.TXT"/>
         <res id="InfoPanel.info" src="build/bin/README"/>
-	<res src="installer\shortcutSpec.xml" id="shortcutSpec.xml"/>
-	<res src="installer\userInputSpec.xml" id="userInputSpec.xml" parse="yes"/>
+	<res src="installer/shortcutSpec.xml" id="shortcutSpec.xml"/>
+	<res src="installer/userInputSpec.xml" id="userInputSpec.xml" parse="yes"/>
     </resources>
     
     <variables>

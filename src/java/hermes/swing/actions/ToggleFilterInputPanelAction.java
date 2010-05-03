@@ -32,7 +32,11 @@ import javax.swing.Action;
 
 public class ToggleFilterInputPanelAction extends ActionSupport
 {
-   private FilterInputPanel filterInputPanel = new FilterInputPanel() ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3516419589436668885L;
+private FilterInputPanel filterInputPanel = new FilterInputPanel() ;
    
    public ToggleFilterInputPanelAction()
    {

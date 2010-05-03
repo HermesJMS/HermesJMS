@@ -33,7 +33,11 @@ import javax.swing.table.TableColumnModel;
 
 public class ListConfigTableModel extends AbstractTableModel
 {
-    private Vector rows = new Vector();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 673479572522683550L;
+	private Vector rows = new Vector();
 
     public ListConfigTableModel()
     {

@@ -44,7 +44,11 @@ import com.jidesoft.action.DockableBarContext;
 
 public class MainToolBar extends CommandBar
 {
-   private static final Category cat = Category.getInstance(MainToolBar.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5492900168433188166L;
+private static final Category cat = Category.getInstance(MainToolBar.class);
 
    /**
     * BrowserToolBar constructor.

@@ -70,7 +70,11 @@ import com.jidesoft.swing.JideScrollPane;
 
 public class WatchDockableFrame extends DockableFrame implements HermesWatchListener
 {
-   private static final Timer flashingTimer = new Timer();
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2892316512453404493L;
+private static final Timer flashingTimer = new Timer();
    private static final Logger log = Logger.getLogger(WatchDockableFrame.class);
    private static final long DEFAULT_AGE_ALERT = 0;
    private static final int DEFAULT_DEPTH_ALERT = 0;

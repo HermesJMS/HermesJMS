@@ -68,7 +68,11 @@ import com.jidesoft.swing.JideScrollPane;
 
 public class HermesAdminFactoryConfigPanel extends JPanel
 {
-   private static final Logger log = Logger.getLogger(HermesAdminFactoryConfigPanel.class) ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7390647381706740828L;
+private static final Logger log = Logger.getLogger(HermesAdminFactoryConfigPanel.class) ;
    private static final String ADMIN_FACTORY = "Plug In";
    private static final String REMOVE_PROPERTY = "Remove property";
    private static final String ADD_PROPERTY = "Add property";

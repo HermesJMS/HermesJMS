@@ -32,7 +32,11 @@ import javax.swing.Action;
 
 public class ExportSpringXMLAction extends ActionSupport
 {
-   public ExportSpringXMLAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1652506152086647823L;
+public ExportSpringXMLAction()
    {
       putValue(Action.NAME, "Export as Spring") ;
       putValue(Action.SHORT_DESCRIPTION, "Export the selected sessions and destinations as Spring") ;

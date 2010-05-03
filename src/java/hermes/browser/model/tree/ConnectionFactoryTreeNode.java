@@ -29,6 +29,11 @@ import javax.jms.ConnectionFactory;
 public class ConnectionFactoryTreeNode extends AbstractTreeNode
 {  
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2753125672313320798L;
+
+	/**
      * @param id
      * @param icon
      */

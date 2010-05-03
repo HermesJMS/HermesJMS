@@ -94,7 +94,11 @@ import com.xduke.xswing.DataTipManager;
 
 public class BrowserTree extends JTree implements TreeSelectionListener, DropTargetListener
 {
-   private static final Logger log = Logger.getLogger(BrowserTree.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4898641148498137544L;
+private static final Logger log = Logger.getLogger(BrowserTree.class);
    private List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
    private BrowserTreeModel model;
    private DataFlavor[] myFlavours;
@@ -240,6 +244,12 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
             MessageStoreDestinationTreeNode dNode = (MessageStoreDestinationTreeNode) getSelectionPath().getLastPathComponent();
 
             return ((MessageStoreTreeNode) dNode.getParent()).getMessageStore();
+         }
+         else if (getSelectionPath().getLastPathComponent() instanceof RepositoryTreeNode)
+         {
+            RepositoryTreeNode dNode = (RepositoryTreeNode) getSelectionPath().getLastPathComponent();
+            return dNode.getRepository() ;
+            
          }
       }
 

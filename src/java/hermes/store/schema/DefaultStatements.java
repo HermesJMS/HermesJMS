@@ -28,13 +28,14 @@ public class DefaultStatements implements Statements
    /* (non-Javadoc)
     * @see hermes.store.schema.Statements#getCreateDatabaseStatements(int)
     */
-   public String[] getCreateDatabaseStatements(int maxMessageSize)
+   public String[] getCreateDatabaseStatements(int maxMessageSize, int maxDestinationSize)
    {
       return new String[] { "create table storeInfo (storeid varchar (64) not null constraint storeInfo_cid unique )",
-            "create table stores (storeid varchar(64) not null, destination varchar(256) not null, domain integer not null, messageid varchar(256) not null)",
+            "create table stores (storeid varchar(64) not null, destination varchar(" + maxDestinationSize + ") not null, domain integer not null, messageid varchar(256) not null)",
             "create index stores_didx on stores(destination)", "create index stores_sidx on stores(storeid)", "create index stores_midx on stores(messageid)", "create index stores_smidx on stores(storeid, messageid)",
             "create table messages (messageid varchar(256) not null, message clob(" + maxMessageSize + ") not null)",
-            "create index messages_midx on messages(messageid)" };
+            "create index messages_midx on messages(messageid)",
+            "alter table stores alter destination set data type varchar (" + maxDestinationSize +")" };
    
    }
 

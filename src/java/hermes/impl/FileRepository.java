@@ -20,6 +20,10 @@ package hermes.impl;
 import hermes.Hermes;
 import hermes.HermesException;
 import hermes.HermesRepository;
+import hermes.MessageFactory;
+import hermes.providers.file.FileQueue;
+import hermes.providers.file.FileQueueBrowser;
+import hermes.store.MessageStoreListener;
 import hermes.xml.MessageSet;
 
 import java.io.File;
@@ -28,10 +32,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.QueueBrowser;
 
 import org.apache.log4j.Logger;
 
@@ -46,23 +53,24 @@ public class FileRepository implements HermesRepository
 {
     private static final Logger log = Logger.getLogger(FileRepository.class);
     private static final String SEPARATOR = System.getProperty("file.separator");
-    private File file;
+    private String fileName ;    
     private MessageSet xmlMessages;
     private DefaultXMLHelper xmlSupport = new DefaultXMLHelper();
 
     public FileRepository(File file) throws IOException
     {
-        this.file = file;
+        this.fileName = file.getAbsolutePath() ;
 
     }
 
     public String getToolTipText()
     {
-        return file.getPath();
+        return fileName;
     }
 
     private void read() throws Exception
     {
+       File file = new File(fileName) ;
         if (!file.exists())
         {
             file.createNewFile();
@@ -90,12 +98,15 @@ public class FileRepository implements HermesRepository
     {
         if (xmlMessages != null)
         {
-            xmlSupport.saveContent(xmlMessages, new FileOutputStream(file));
+           File file = new File(fileName) ;
+           xmlSupport.saveContent(xmlMessages, new FileOutputStream(file));
         }
     }
 
     public String getId()
     {
+       File file = new File(fileName) ;
+
         return file.getName();
     }
 
@@ -184,6 +195,7 @@ public class FileRepository implements HermesRepository
      */
     public void delete()
     {
+       File file = new File(fileName) ;
         if (file != null)
         {
             file.delete();
@@ -209,5 +221,99 @@ public class FileRepository implements HermesRepository
         }
 
     }
+
+    
+    /**
+     * This supports the minimum interface of a MessageStore so it can be browsed in the same way.
+     * 
+     */
+   public void addMessageListener(MessageStoreListener listener)
+   {
+   }
+
+   public void checkpoint() throws JMSException
+   {
+      throw new HermesException("Not Implemented") ;            
+   }
+
+   public void close() throws JMSException
+   {
+      throw new HermesException("Not Implemented") ;            
+      
+   }
+
+   public void delete(Destination d) throws JMSException
+   {
+      throw new HermesException("Not Implemented") ;            
+      
+   }
+
+   public void delete(Message m) throws JMSException
+   {
+      throw new HermesException("Not Implemented") ;            
+      
+   }
+
+   public int getDepth(Destination d) throws JMSException
+   {
+      return 0 ;
+   }
+
+   public Collection<Destination> getDestinations() throws JMSException
+   {
+     return Collections.EMPTY_LIST ;
+   }
+
+   public String getTooltipText()
+   {
+      File file = new File(fileName) ;
+      return file.getName() ;
+   }
+
+   public String getURL()
+   {
+     File file = new File(fileName) ;
+     return file.getName() ;
+   }
+
+   public void removeMessageListener(MessageStoreListener listener)
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
+   public void rollback() throws JMSException
+   {
+      throw new HermesException("Not Implemented") ;            
+   }
+
+   public void store(Message m) throws JMSException
+   {      
+      throw new HermesException("Not Implemented") ;            
+
+   }
+
+   public QueueBrowser visit() throws JMSException
+   {
+      throw new HermesException("Not Implemented") ;            
+   }
+
+   public QueueBrowser visit(Destination d) throws JMSException
+   {
+      throw new HermesException("Not Implemented") ;            
+   }
+
+   public QueueBrowser visit(MessageFactory factory, Destination d, HeaderPolicy headerPolicy) throws JMSException
+   {
+      File file = new File(fileName) ;
+      return new FileQueueBrowser(factory, new FileQueue(file)) ;
+   }
+
+   public QueueBrowser visit(MessageFactory factory, HeaderPolicy headerPolicy) throws JMSException
+   {
+      return visit(factory, null, headerPolicy) ;
+   }
+    
+    
 
 }

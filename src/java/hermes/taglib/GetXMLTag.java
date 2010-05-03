@@ -32,7 +32,12 @@ import org.apache.log4j.Logger;
 
 public class GetXMLTag extends TagSupport
 {
-    private static final Logger log = Logger.getLogger(GetXMLTag.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4411357673938326778L;
+
+	private static final Logger log = Logger.getLogger(GetXMLTag.class);
 
     private String message;
 

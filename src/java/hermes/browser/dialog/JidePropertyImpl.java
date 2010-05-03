@@ -26,7 +26,11 @@ import com.jidesoft.grid.Property;
  */
 public class JidePropertyImpl extends Property 
 {
-    private Object value;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6623858418427241496L;
+	private Object value;
 
     /*
      * (non-Javadoc)

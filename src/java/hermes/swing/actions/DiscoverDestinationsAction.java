@@ -38,7 +38,12 @@ import javax.swing.tree.TreeNode;
 public class DiscoverDestinationsAction extends ActionSupport
 {
 
-   public DiscoverDestinationsAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 544318334963945654L;
+
+public DiscoverDestinationsAction()
    {
       putValue(Action.NAME, "Discover...");
       putValue(Action.SHORT_DESCRIPTION, "Discover queues and topics from the provider");

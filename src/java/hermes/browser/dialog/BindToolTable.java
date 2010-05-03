@@ -27,7 +27,12 @@ import com.jidesoft.grid.JideTable;
 
 public class BindToolTable extends JideTable
 {
-    public BindToolTable(BindToolTableModel model)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6141993553358788905L;
+
+	public BindToolTable(BindToolTableModel model)
     {
         super(model) ;
 

@@ -40,7 +40,11 @@ import org.apache.log4j.Logger;
 
 public class SaveMessagesAsXMLAction extends BrowseActionListenerAdapter
 {
-   private static final Logger log = Logger.getLogger(SaveMessagesAsXMLAction.class) ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7718784305773773366L;
+private static final Logger log = Logger.getLogger(SaveMessagesAsXMLAction.class) ;
    
    public SaveMessagesAsXMLAction()
    {

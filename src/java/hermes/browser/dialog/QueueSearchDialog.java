@@ -17,7 +17,6 @@
 
 package hermes.browser.dialog;
 
-import hermes.Domain;
 import hermes.Hermes;
 import hermes.browser.HermesBrowser;
 import hermes.browser.actions.BrowserAction;
@@ -54,7 +53,11 @@ import com.jidesoft.dialog.StandardDialog;
  */
 public class QueueSearchDialog extends StandardDialog
 {
-    private static final Logger log = Logger.getLogger(QueueSearchDialog.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1241201218711233617L;
+	private static final Logger log = Logger.getLogger(QueueSearchDialog.class);
     private static Vector selectionHistory = new Vector();
 
     private JPanel topPanel = new JPanel();
@@ -82,7 +85,12 @@ public class QueueSearchDialog extends StandardDialog
 
         setDefaultAction(new AbstractAction()
         {
-            public void actionPerformed(ActionEvent e)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -6422887636600458052L;
+
+			public void actionPerformed(ActionEvent e)
             {
                 onOK();
             }
@@ -97,7 +105,12 @@ public class QueueSearchDialog extends StandardDialog
 
         setDefaultAction(new AbstractAction()
         {
-            public void actionPerformed(ActionEvent e)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -3434398395757886417L;
+
+			public void actionPerformed(ActionEvent e)
             {
                 onOK();
             }

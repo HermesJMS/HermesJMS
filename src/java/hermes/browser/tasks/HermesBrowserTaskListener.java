@@ -19,10 +19,8 @@ package hermes.browser.tasks;
 
 import hermes.HermesConstants;
 import hermes.browser.HermesBrowser;
-import hermes.swing.SwingRunner;
 
 import javax.jms.JMSException;
-import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 

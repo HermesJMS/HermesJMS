@@ -28,7 +28,11 @@ import javax.swing.table.AbstractTableModel;
 
 public class FIXMessageViewTableModel extends AbstractTableModel
 {
-   public static final String FIELD = "Field" ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7400479603426161337L;
+public static final String FIELD = "Field" ;
    public static final String NAME = "Name" ;
    public static final String VALUE = "Value" ;
    public static final String DESCRIPTION = "Description" ;

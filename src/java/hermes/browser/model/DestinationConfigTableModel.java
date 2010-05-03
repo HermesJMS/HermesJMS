@@ -39,7 +39,11 @@ import org.apache.log4j.Logger;
 
 public class DestinationConfigTableModel extends DefaultTableModel
 {
-   private static final Logger log = Logger.getLogger(DestinationConfigTableModel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7156548642269559562L;
+private static final Logger log = Logger.getLogger(DestinationConfigTableModel.class);
    private Vector rows = new Vector();
    private Map queues = new HashMap();
    private Map topics = new HashMap();

@@ -17,7 +17,6 @@
 
 package hermes.renderers.fix;
 
-import hermes.browser.MessageRenderer;
 import hermes.fix.FIXException;
 import hermes.fix.FIXMessage;
 import hermes.fix.FIXUtils;

@@ -17,9 +17,6 @@
 
 package hermes.browser;
 
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-
 import hermes.HermesException;
 import hermes.HermesLoader;
 import hermes.browser.components.BrowserTree;

@@ -56,7 +56,11 @@ import com.jidesoft.swing.JidePopupMenu;
 
 public class FIXMessageTable extends SortableTable
 {
-   private static final Logger log = Logger.getLogger(FIXMessageTable.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2044612567082104913L;
+private static final Logger log = Logger.getLogger(FIXMessageTable.class);
    private SQL92FilterableTableModel selectorModel;
    private FIXMessageTableModel model;
    private JidePopupMenu popup;
@@ -93,7 +97,12 @@ public class FIXMessageTable extends SortableTable
 
       getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer()
       {
-         @Override
+         /**
+		 * 
+		 */
+		private static final long serialVersionUID = -2075897579194001018L;
+
+		@Override
          public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
          {
             FIXMessage message = model.getMessageAt(selectorModel.getActualRowAt(row));

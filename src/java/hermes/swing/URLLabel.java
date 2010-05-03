@@ -28,7 +28,11 @@ import javax.swing.JLabel;
 
 public class URLLabel extends JLabel
 {
-   private URL url ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1795585156383512660L;
+private URL url ;
    
    public URLLabel(String label, URL url) 
    {

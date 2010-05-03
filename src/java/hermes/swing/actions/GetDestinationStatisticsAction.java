@@ -43,7 +43,12 @@ import com.jidesoft.swing.JideSwingUtilities;
 
 public class GetDestinationStatisticsAction extends ActionSupport
 {
-   public GetDestinationStatisticsAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -747244830270525466L;
+
+public GetDestinationStatisticsAction()
    {
       putValue(Action.NAME, "Properties...");
       putValue(Action.SHORT_DESCRIPTION, "Get properties and statistics from provider.");

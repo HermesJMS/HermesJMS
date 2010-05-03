@@ -30,6 +30,11 @@ import javax.jms.Destination;
 public class QueueTopicTreeNode extends AbstractTreeNode
 {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6782750968585788843L;
+
+	/**
      * @param id
      * @param icon
      */

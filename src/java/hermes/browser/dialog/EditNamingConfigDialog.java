@@ -67,7 +67,11 @@ import com.jidesoft.swing.JideScrollPane;
  */
 public class EditNamingConfigDialog extends StandardDialog
 {
-    private static final Logger log = Logger.getLogger(EditNamingConfigDialog.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3108020658142737582L;
+	private static final Logger log = Logger.getLogger(EditNamingConfigDialog.class);
     private static Vector selectionHistory = new Vector();
 
     private JPanel topPanel = new JPanel();
@@ -96,7 +100,12 @@ public class EditNamingConfigDialog extends StandardDialog
 
         setDefaultAction(new AbstractAction()
         {
-            public void actionPerformed(ActionEvent e)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -8231223040278773071L;
+
+			public void actionPerformed(ActionEvent e)
             {
                 onOK();
             }
@@ -236,7 +245,8 @@ public class EditNamingConfigDialog extends StandardDialog
         return topPanel;
     }
 
-    public void doSelectionChanged()
+    @SuppressWarnings("unchecked")
+	public void doSelectionChanged()
     {
         try
         {
@@ -257,7 +267,11 @@ public class EditNamingConfigDialog extends StandardDialog
 
                 classpathIdProperty = new Property("loader", "Classpath Loader to use.", String.class)
                 {
-                    private String classpathId = config.getClasspathId();
+                    /**
+					 * 
+					 */
+					private static final long serialVersionUID = -3071689960943636606L;
+					private String classpathId = config.getClasspathId();
 
                     public void setValue(Object value)
                     {
@@ -289,7 +303,12 @@ public class EditNamingConfigDialog extends StandardDialog
                     {
                         Property displayProperty = new Property(propertyName, propertyName, PropertyUtils.getPropertyType(bean, propertyName))
                         {
-                            public void setValue(Object value)
+                            /**
+							 * 
+							 */
+							private static final long serialVersionUID = 1751773758147906036L;
+
+							public void setValue(Object value)
                             {
                                 try
                                 {

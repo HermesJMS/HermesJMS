@@ -31,7 +31,11 @@ import com.jidesoft.swing.JideTabbedPane;
  */
 public class DockableToolPanel extends DockableFrame
 {
-    private JideTabbedPane tabbedPane = new JideTabbedPane();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3673476126952995906L;
+	private JideTabbedPane tabbedPane = new JideTabbedPane();
 
     public DockableToolPanel()
     {

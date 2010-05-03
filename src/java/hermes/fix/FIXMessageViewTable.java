@@ -38,7 +38,11 @@ import com.jidesoft.grid.SortableTable;
 
 public class FIXMessageViewTable extends SortableTable
 {
-   private FIXMessageViewTableModel model;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7557105531629435884L;
+private FIXMessageViewTableModel model;
 
    public FIXMessageViewTable(FIXMessageViewTableModel model)
    {

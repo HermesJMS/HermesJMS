@@ -45,7 +45,11 @@ import org.apache.log4j.Logger;
 
 public class DurableUnsubscribeAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(DurableUnsubscribeAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3804327883154973660L;
+private static final Logger log = Logger.getLogger(DurableUnsubscribeAction.class);
 
    public DurableUnsubscribeAction()
    {

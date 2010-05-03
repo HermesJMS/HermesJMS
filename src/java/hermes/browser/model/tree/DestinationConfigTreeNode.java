@@ -36,7 +36,12 @@ import javax.swing.tree.TreeNode;
 
 public class DestinationConfigTreeNode extends AbstractTreeNode
 {
-   public static class NodeComparator implements Comparator
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3563622432843142350L;
+
+public static class NodeComparator implements Comparator
    {
       public int compare(Object arg0, Object arg1)
       {

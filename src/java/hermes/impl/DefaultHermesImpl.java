@@ -67,11 +67,9 @@ import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicPublisher;
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.ProgressMonitor;
 
-import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 
 /**

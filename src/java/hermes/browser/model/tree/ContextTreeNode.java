@@ -48,7 +48,11 @@ import org.apache.log4j.Logger;
  */
 public class ContextTreeNode extends AbstractTreeNode
 {
-   private static final Logger log = Logger.getLogger(ContextTreeNode.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7895410031540318744L;
+private static final Logger log = Logger.getLogger(ContextTreeNode.class);
    private NamingConfig config;
    private boolean isNameInNamespaceCheck = true ;
 
@@ -98,9 +102,9 @@ public class ContextTreeNode extends AbstractTreeNode
            isNameInNamespaceCheck = false ;
         }
 
-         for (final NamingEnumeration<NameClassPair> iter = context.list(""); iter.hasMore();)
+         for (final NamingEnumeration iter = context.list(""); iter.hasMore();)
          {
-            final NameClassPair entry = iter.next();
+            final NameClassPair entry = (NameClassPair) iter.next();
 
             AbstractTreeNode child = null;
 

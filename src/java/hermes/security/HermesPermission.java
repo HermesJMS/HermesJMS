@@ -27,7 +27,12 @@ import java.security.Permission;
 public class HermesPermission extends Permission
 {
 
-   public HermesPermission(String name)
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7080239568822100792L;
+
+public HermesPermission(String name)
    {
       super(name);
       // TODO Auto-generated constructor stub

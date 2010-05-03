@@ -101,8 +101,7 @@ public class JoramAdmin extends HermesAdminSupport implements HermesAdmin
     {
 	checkConnected();
 	try{
-	    for (Iterator iter = AdminModule.getUsers().iterator(); iter.hasNext();) {
-		User u = (User) iter.next();
+	    for (User u : AdminModule.getUsers()) {
 
 		if (u.getName().equals(userName)) {
 		    return u;
@@ -122,18 +121,17 @@ public class JoramAdmin extends HermesAdminSupport implements HermesAdmin
 	checkConnected();
 	final Collection rval = new ArrayList();
 	try{
-	    List destList =  AdminModule.getDestinations();
-	    for (int i = 0; i <destList.size(); i++)
+	    for (Destination d : AdminModule.getDestinations())
 		{
 		    final DestinationConfig dConfig = new DestinationConfig();
 		    
-		    dConfig.setName(((Destination)(destList.get(i))).getName());
-		    dConfig.setShortName(((Destination)(destList.get(i))).getAdminName());
+		    dConfig.setName(d.getName());
+		    dConfig.setShortName(d.getAdminName());
 		   
-		    if (((Destination)(destList.get(i))).getType()=="queue"){
+		    if (d.getType() == Destination.QUEUE_TYPE){
 			dConfig.setDomain(Domain.QUEUE.getId());
 			rval.add(dConfig);
-		    }  else if(((Destination)(destList.get(i))).getType()=="topic"){
+		    }  else if(d.getType()==Destination.TOPIC_TYPE){
 			dConfig.setDomain(Domain.TOPIC.getId());
 			rval.add(dConfig);
 			rval.addAll(discoverDurableSubscriptions(dConfig.getName(),dConfig.getName()));
@@ -162,8 +160,7 @@ public class JoramAdmin extends HermesAdminSupport implements HermesAdmin
 	checkConnected();
       
 	try {
-	    for (Iterator iter = AdminModule.getUsers().iterator(); iter.hasNext();) {
-		final User u = (User) iter.next();
+	    for (User u : AdminModule.getUsers()) {
 		if(u.getName() != factory.getUsername()){
 		    final Subscription[] subs = u.getSubscriptions() ;
             

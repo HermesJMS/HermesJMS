@@ -28,7 +28,11 @@ import javax.swing.table.TableColumn;
 
 public class HideableTableColumn extends TableColumn
 {
-   private boolean visible = true;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5734446336194089640L;
+private boolean visible = true;
    private int visibleWidth = 0;
 
    public HideableTableColumn()

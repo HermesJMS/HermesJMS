@@ -67,7 +67,11 @@ import org.apache.log4j.Category;
 
 public class BrowserTreeModel extends DefaultTreeModel implements HermesConfigurationListener, HermesRepositoryListener, ConnectionListener
 {
-   private static final Category cat = Category.getInstance(BrowserTreeModel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6549632581191585022L;
+private static final Category cat = Category.getInstance(BrowserTreeModel.class);
    private static final Timer timer = new Timer();
    private DefaultMutableTreeNode ctxRootNode = new DefaultMutableTreeNode("contexts");
    private Map<DestinationConfigKeyWrapper, DestinationConfigTreeNode> destinationMap = new HashMap<DestinationConfigKeyWrapper, DestinationConfigTreeNode>();

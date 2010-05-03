@@ -41,7 +41,11 @@ import org.apache.log4j.Logger;
 public class InquireTag extends TagSupport
 {
 
-    private static final Logger log = Logger.getLogger(InquireTag.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3339716717982782012L;
+	private static final Logger log = Logger.getLogger(InquireTag.class);
     private static FastDateFormat dateFormat = FastDateFormat.getInstance("MM/dd/yyyy HH:mm:ss");
     private String hermes;
     private String destination;

@@ -41,7 +41,6 @@ import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.jms.Topic;
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
@@ -82,7 +81,7 @@ public interface Hermes extends MessageFactory, HermesAdmin
     /**
      * Version information for the entire Hermes product.
      */
-    public final String VERSION = "v1.14 SoapUI"; 
+    public final String VERSION = "v1.14"; 
     
     /**
      * Access to a proxy for the user interface that works even in the absense of a GUI (e.g. when running as an ant task

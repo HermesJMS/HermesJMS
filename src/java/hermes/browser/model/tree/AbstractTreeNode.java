@@ -28,7 +28,11 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractTreeNode extends DefaultMutableTreeNode
 {
-   private static final Logger log = Logger.getLogger(AbstractTreeNode.class) ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3652000066106328801L;
+private static final Logger log = Logger.getLogger(AbstractTreeNode.class) ;
    private String id;
    private Object bean;
    private Icon icon;

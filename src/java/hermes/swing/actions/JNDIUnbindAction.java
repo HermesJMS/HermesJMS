@@ -43,7 +43,12 @@ import javax.swing.tree.TreePath;
 public class JNDIUnbindAction extends JNDIAction
 {
 
-   public JNDIUnbindAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6379549604583851291L;
+
+public JNDIUnbindAction()
    {
       putValue(Action.NAME, "Unbind...");
       putValue(Action.SHORT_DESCRIPTION, "Unbind object.");

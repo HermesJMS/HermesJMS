@@ -34,7 +34,12 @@ import com.jidesoft.grid.HierarchicalTable;
 
 public class FIXSessionTable extends HierarchicalTable
 {
-   private static final Logger log = Logger.getLogger(FIXSessionTable.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6072049287321615441L;
+
+private static final Logger log = Logger.getLogger(FIXSessionTable.class);
 
    private FIXSessionTableModel model;
 

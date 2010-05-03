@@ -24,8 +24,9 @@ package hermes.util;
 
 
 
-import java.lang.*;
-import java.io.*;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 
 
 public class HexUtils

@@ -38,8 +38,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
-import quickfix.FieldNotFound;
-
 /**
  * @author colincrist@hermesjms.com
  * @version $Id: NIOFIXFileReader.java,v 1.5 2006/08/25 11:33:48 colincrist Exp $

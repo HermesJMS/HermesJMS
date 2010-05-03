@@ -40,7 +40,12 @@ import com.jidesoft.swing.JideButton;
 
 public class ConfigurationToolBar extends CommandBar
 {
-   public ConfigurationToolBar()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7106014299869433789L;
+
+public ConfigurationToolBar()
    {
       super("Configuration");
       

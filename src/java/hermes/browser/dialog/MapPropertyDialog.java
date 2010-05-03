@@ -41,7 +41,11 @@ import com.jidesoft.dialog.StandardDialog;
 
 public class MapPropertyDialog extends StandardDialog
 {
-    private MapPropertyPanel mapPanel;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2201822635263036312L;
+	private MapPropertyPanel mapPanel;
 
     /**
      * @throws java.awt.HeadlessException
@@ -89,7 +93,12 @@ public class MapPropertyDialog extends StandardDialog
 
         AbstractAction okButtonAction = new AbstractAction(UIManager.getString("OptionPane.okButtonText"))
         {
-            public void actionPerformed(ActionEvent arg0)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -7972988497933837263L;
+
+			public void actionPerformed(ActionEvent arg0)
             {
                 mapPanel.doOK();
                 setDialogResult(RESULT_AFFIRMED);
@@ -100,7 +109,12 @@ public class MapPropertyDialog extends StandardDialog
 
         AbstractAction cancelButtonAction = new AbstractAction(UIManager.getString("OptionPane.cancelButtonText"))
         {
-            public void actionPerformed(ActionEvent arg0)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -4199961023918150328L;
+
+			public void actionPerformed(ActionEvent arg0)
             {
                 mapPanel.doCancel();
                 setDialogResult(RESULT_CANCELLED);

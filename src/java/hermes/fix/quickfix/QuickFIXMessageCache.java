@@ -75,7 +75,12 @@ public class QuickFIXMessageCache
    {
       return new LRUMap(size)
       {
-         @Override
+         /**
+		 * 
+		 */
+		private static final long serialVersionUID = -3353399913762901038L;
+
+		@Override
          protected boolean removeLRU(LinkEntry entry)
          {
             //

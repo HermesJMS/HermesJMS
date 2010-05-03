@@ -35,7 +35,12 @@ import com.jidesoft.action.DockableBarContext;
 
 public class JNDIToolBar extends CommandBar
 {
-   public JNDIToolBar()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3916903448783084099L;
+
+public JNDIToolBar()
    {
       super("JNDI");
 

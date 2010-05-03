@@ -33,7 +33,11 @@ import javax.swing.event.TreeSelectionListener;
 
 public class CollapseBrowserTreeAction extends ActionSupport
 {
-   private BrowserTree browserTree;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6597934395907554641L;
+private BrowserTree browserTree;
 
    public CollapseBrowserTreeAction(BrowserTree browserTree)
    {

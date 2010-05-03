@@ -34,7 +34,11 @@ import org.apache.log4j.Logger;
  */
 public class HermesAdministeredObjectTransferHandler extends TransferHandler
 {
-   private static final Logger log = Logger.getLogger(HermesAdministeredObjectTransferHandler.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3250317070022202875L;
+private static final Logger log = Logger.getLogger(HermesAdministeredObjectTransferHandler.class);
 
    public boolean canImport(JComponent component, DataFlavor[] flavors)
    {

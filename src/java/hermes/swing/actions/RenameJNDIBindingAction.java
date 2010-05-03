@@ -40,7 +40,12 @@ import javax.swing.tree.TreePath;
 
 public class RenameJNDIBindingAction extends JNDIAction
 {
-   public RenameJNDIBindingAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6794595496519263679L;
+
+public RenameJNDIBindingAction()
    {
       putValue(Action.NAME, "Rename...");
       putValue(Action.SHORT_DESCRIPTION, "Rename the binding.");

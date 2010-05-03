@@ -40,7 +40,12 @@ import javax.swing.event.TreeSelectionListener;
 
 public class TruncateAction extends ActionSupport
 {
-   public TruncateAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 139535445442209172L;
+
+public TruncateAction()
    {
       putValue(Action.NAME, "Truncate");
       putValue(Action.SHORT_DESCRIPTION, "Truncate a queue, durable subscription or file.");

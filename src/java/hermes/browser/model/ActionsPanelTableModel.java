@@ -31,7 +31,11 @@ import javax.swing.table.AbstractTableModel;
 
 public class ActionsPanelTableModel extends AbstractTableModel
 {
-    private final String[] columnNames = { "", "", "Destination"};
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7911468164031798856L;
+	private final String[] columnNames = { "", "", "Destination"};
     private final Vector rows = new Vector();
 
     public boolean isCellEditable(int row, int column)

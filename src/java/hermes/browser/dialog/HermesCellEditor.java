@@ -64,9 +64,9 @@ public class HermesCellEditor extends ContextSensitiveCellEditor
          final Vector<String> options = new Vector<String>();
          final Context ctx = HermesBrowser.getBrowser().getContext();
 
-         for (NamingEnumeration<Binding> names = ctx.listBindings(""); names.hasMore();)
+         for (NamingEnumeration names = ctx.listBindings(""); names.hasMore();)
          {
-            final Binding b = names.next();
+            final Binding b = (Binding) names.next();
 
             if (b.getObject() instanceof Hermes)
             {

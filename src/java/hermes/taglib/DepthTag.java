@@ -34,7 +34,11 @@ import org.apache.log4j.Logger;
  */
 public class DepthTag extends TagSupport
 {
-    private static final Logger log = Logger.getLogger(DepthTag.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7829971391666350696L;
+	private static final Logger log = Logger.getLogger(DepthTag.class);
     private String hermes;
     private String destination;
 

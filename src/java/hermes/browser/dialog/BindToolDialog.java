@@ -74,7 +74,12 @@ public class BindToolDialog extends StandardDialog
 
         setDefaultAction(new AbstractAction()
         {
-            public void actionPerformed(ActionEvent e)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 2286153497219380938L;
+
+			public void actionPerformed(ActionEvent e)
             {
                 doBind();
             }

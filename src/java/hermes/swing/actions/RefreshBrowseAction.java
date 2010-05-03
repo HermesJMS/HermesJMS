@@ -37,7 +37,12 @@ import javax.swing.KeyStroke;
 
 public class RefreshBrowseAction extends BrowseActionListenerAdapter
 {
-   public RefreshBrowseAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1926506471510004472L;
+
+public RefreshBrowseAction()
    {
       super(false, false, true);
       putValue(Action.NAME, "Refresh");

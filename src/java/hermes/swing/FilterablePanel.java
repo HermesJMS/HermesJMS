@@ -44,7 +44,11 @@ import com.jidesoft.swing.JideButton;
 
 public class FilterablePanel extends JPanel
 {
-   private JideButton deleteButton = new JideButton(IconCache.getIcon("hermes.delete"));
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6097493431451128176L;
+private JideButton deleteButton = new JideButton(IconCache.getIcon("hermes.delete"));
    private JideButton saveButton = new JideButton(IconCache.getIcon("hermes.save"));
    private JideButton clearButton = new JideButton(IconCache.getIcon("hermes.clear"));
 

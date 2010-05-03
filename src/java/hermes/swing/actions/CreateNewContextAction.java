@@ -43,7 +43,11 @@ import com.jidesoft.swing.JideSwingUtilities;
 
 public class CreateNewContextAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(CreateNewContextAction.class) ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3973144959048802490L;
+private static final Logger log = Logger.getLogger(CreateNewContextAction.class) ;
    
    public CreateNewContextAction()
    {

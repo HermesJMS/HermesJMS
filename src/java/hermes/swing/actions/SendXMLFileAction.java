@@ -36,7 +36,12 @@ import javax.swing.KeyStroke;
 
 public class SendXMLFileAction extends AbstractSendFileAction
 {
-   public SendXMLFileAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7834256532368356738L;
+
+public SendXMLFileAction()
    {
       putValue(Action.NAME, "Send XML Encoded Messages");
       putValue(Action.SHORT_DESCRIPTION, "Send a group of messages encoded as XML.");

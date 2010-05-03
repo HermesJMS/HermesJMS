@@ -24,7 +24,7 @@ package hermes.store.schema;
 
 public interface Statements
 {
-   public String[] getCreateDatabaseStatements(int maxMessageSize);
+   public String[] getCreateDatabaseStatements(int maxMessageSize, int maxDestinationSize) ;
 
    public String[] getDeleteDatabaseStatements();
 

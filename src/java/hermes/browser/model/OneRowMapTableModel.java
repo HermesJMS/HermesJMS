@@ -29,7 +29,11 @@ import org.apache.log4j.Logger;
  */
 public class OneRowMapTableModel extends MapTableModel 
 {
-    private static final Logger log = Logger.getLogger(OneRowMapTableModel.class) ;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4853546469858409225L;
+	private static final Logger log = Logger.getLogger(OneRowMapTableModel.class) ;
     private Vector row = new Vector();
     private Vector headers = new Vector();
 

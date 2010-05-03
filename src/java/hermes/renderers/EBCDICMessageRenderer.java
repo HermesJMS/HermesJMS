@@ -1,7 +1,5 @@
 package hermes.renderers;
 
-import hermes.browser.MessageRenderer.Config;
-import hermes.renderers.DefaultMessageRenderer.MyConfig;
 import hermes.util.DumpUtils;
 import hermes.util.MessageUtils;
 
@@ -12,8 +10,6 @@ import javax.jms.Message;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 
-import org.apache.commons.collections.map.LRUMap;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**

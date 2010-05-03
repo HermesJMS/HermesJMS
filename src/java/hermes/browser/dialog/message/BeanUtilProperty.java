@@ -30,7 +30,11 @@ import com.jidesoft.grid.Property;
 
 public class BeanUtilProperty extends Property
 {
-   private Object bean ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3990474404489043347L;
+private Object bean ;
    private String property ;
    
    public BeanUtilProperty(Object bean, String property, Class clazz, String section) 

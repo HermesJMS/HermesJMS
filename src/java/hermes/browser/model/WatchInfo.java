@@ -35,7 +35,11 @@ import org.apache.log4j.Logger;
  */
 public class WatchInfo extends PropertyChangeSupport
 {
-    private static final Logger log = Logger.getLogger(WatchInfo.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2096382435084982714L;
+	private static final Logger log = Logger.getLogger(WatchInfo.class);
     public static final String STATISTICS = "statistics";
     public static final String DEPTH = "depth";
     public static final String EXCEPTION = "exception";

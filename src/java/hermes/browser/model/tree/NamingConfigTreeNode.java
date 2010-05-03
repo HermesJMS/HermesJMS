@@ -30,7 +30,11 @@ import java.util.Iterator;
 public class NamingConfigTreeNode extends AbstractTreeNode
 {
 
-    private StringBuffer toolTip = new StringBuffer() ;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1032045169429697948L;
+	private StringBuffer toolTip = new StringBuffer() ;
     /**
      * @param id
      * @param icon

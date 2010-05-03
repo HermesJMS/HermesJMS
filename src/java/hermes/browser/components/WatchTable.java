@@ -40,7 +40,11 @@ import com.jidesoft.grid.HierarchicalTable;
  */
 public class WatchTable extends HierarchicalTable
 {
-   private static final Logger log = Logger.getLogger(WatchTable.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1072138733454263145L;
+private static final Logger log = Logger.getLogger(WatchTable.class);
    private QueueWatchTableModel watchModel;
 
    public WatchTable(QueueWatchTableModel model, final boolean showAge)
@@ -51,7 +55,11 @@ public class WatchTable extends HierarchicalTable
 
       DefaultTableCellRenderer dateRenderer = new DefaultTableCellRenderer()
       {
-         private FastDateFormat formatter = FastDateFormat.getInstance("EEE, d MMM yyyy HH:mm:ss");
+         /**
+		 * 
+		 */
+		private static final long serialVersionUID = 2791021835238102467L;
+		private FastDateFormat formatter = FastDateFormat.getInstance("EEE, d MMM yyyy HH:mm:ss");
 
          public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
          {

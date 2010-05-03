@@ -45,7 +45,11 @@ import com.codestreet.selector.parser.IValueProvider;
 
 public class MessageHeaderTableModel extends DefaultTableModel implements RowValueProvider
 {
-   private static final Logger log = Logger.getLogger(MessageHeaderTableModel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5348456596625232189L;
+private static final Logger log = Logger.getLogger(MessageHeaderTableModel.class);
    private final Vector<Vector> rows = new Vector<Vector>();
    private final Vector<Message> messages = new Vector<Message>();
    private final Hermes hermes;

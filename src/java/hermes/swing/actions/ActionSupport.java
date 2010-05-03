@@ -35,7 +35,11 @@ import org.apache.log4j.Logger;
  */
 public abstract class ActionSupport extends AbstractAction
 {
-   private static final Logger log = Logger.getLogger(ActionSupport.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -114546657147204951L;
+private static final Logger log = Logger.getLogger(ActionSupport.class);
 
    public ActionSupport()
    {

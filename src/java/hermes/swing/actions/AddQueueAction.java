@@ -24,7 +24,12 @@ import javax.swing.Action;
 
 public class AddQueueAction extends AddDestinationAction
 {
-   public AddQueueAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 9046197733864965704L;
+
+public AddQueueAction()
    {
       super(Domain.QUEUE) ;
       

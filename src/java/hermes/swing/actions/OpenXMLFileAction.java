@@ -41,7 +41,12 @@ import javax.swing.KeyStroke;
 
 public class OpenXMLFileAction extends ActionSupport
 {
-   public OpenXMLFileAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5218866220981487463L;
+
+public OpenXMLFileAction()
    {
       putValue(Action.NAME, "Open Messages...");
       putValue(Action.SHORT_DESCRIPTION, "Open an XML messages file");

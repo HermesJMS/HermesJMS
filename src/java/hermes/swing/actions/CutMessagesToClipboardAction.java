@@ -54,7 +54,11 @@ import org.apache.log4j.Logger;
 
 public class CutMessagesToClipboardAction extends BrowseActionListenerAdapter
 {
-   private static final Logger log = Logger.getLogger(CutMessagesToClipboardAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8018363610821830799L;
+private static final Logger log = Logger.getLogger(CutMessagesToClipboardAction.class);
    private XMLHelper xml = new DefaultXMLHelper() ;
    
    public CutMessagesToClipboardAction()

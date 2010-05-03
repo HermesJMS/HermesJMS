@@ -35,7 +35,12 @@ import javax.swing.Action;
 
 public class NavigateBackwardMessageAction extends BrowseActionListenerAdapter
 {
-   public NavigateBackwardMessageAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4973866902805211124L;
+
+public NavigateBackwardMessageAction()
    {
       putValue(Action.NAME, "Previous");
       putValue(Action.SHORT_DESCRIPTION, "Previous message...");

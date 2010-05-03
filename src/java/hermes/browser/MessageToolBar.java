@@ -36,7 +36,12 @@ import com.jidesoft.action.DockableBarContext;
 
 public class MessageToolBar extends CommandBar
 {
-   public MessageToolBar()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6057550673517158374L;
+
+public MessageToolBar()
    {
       super("Messages") ;
       

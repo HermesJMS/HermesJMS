@@ -35,7 +35,12 @@ import javax.swing.event.TreeSelectionListener;
 
 public class AddDurableTopicAction extends AddDestinationAction
 {
-   public AddDurableTopicAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1595361787706939902L;
+
+public AddDurableTopicAction()
    {
       super(Domain.TOPIC);
 

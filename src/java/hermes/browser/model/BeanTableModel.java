@@ -37,7 +37,11 @@ import org.apache.log4j.Category;
 
 public class BeanTableModel extends DefaultTableModel
 {
-    private static Set ignore = new HashSet();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3773435148846671053L;
+	private static Set ignore = new HashSet();
     private static final Category cat = Category.getInstance(BeanTableModel.class);
     private Object bean;
     private Map filter;

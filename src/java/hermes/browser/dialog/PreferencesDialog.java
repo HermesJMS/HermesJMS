@@ -55,7 +55,12 @@ import com.jidesoft.swing.JideTabbedPane;
 
 public class PreferencesDialog extends AbstractOptionDialog
 {
-   private static final Category cat = Category.getInstance(PreferencesDialog.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5057331477007320264L;
+
+private static final Category cat = Category.getInstance(PreferencesDialog.class);
 
    private HermesConfig model;
    private Map sessionToFactoryMap = new HashMap();

@@ -50,7 +50,11 @@ import com.jidesoft.grid.TreeLikeHierarchicalPanel;
  */
 public class QueueWatchTableModel extends DefaultTableModel implements HierarchicalTableModel, PropertyChangeListener, HierarchicalTableComponentFactory
 {
-    private static final Logger log = Logger.getLogger(QueueWatchTableModel.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6942582606985280259L;
+	private static final Logger log = Logger.getLogger(QueueWatchTableModel.class);
     public static final int HERMES_POS = 0;
     public static final int DESTINATION_POS = 1;
     public static final int DURABLE_POS = 2 ;
@@ -262,7 +266,12 @@ public class QueueWatchTableModel extends DefaultTableModel implements Hierarchi
     {
         SortableTable table = new SortableTable()
         {
-            public boolean isCellEditable(int arg0, int arg1)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1087047228958497075L;
+
+			public boolean isCellEditable(int arg0, int arg1)
             {
                 return false;
             }

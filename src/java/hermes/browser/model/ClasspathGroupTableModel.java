@@ -42,7 +42,11 @@ import com.jidesoft.grid.TreeLikeHierarchicalPanel;
 public class ClasspathGroupTableModel extends AbstractTableModel implements HierarchicalTableModel, HierarchicalTableComponentFactory
 {
     
-    private List classpathGroups;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3863426395541296586L;
+	private List classpathGroups;
     private Map childrenByConfig = new HashMap();
     private Map childrenModelsByConfig = new HashMap();
 

@@ -44,7 +44,11 @@ import com.jidesoft.grid.EditorContext;
  */
 public class ClasspathIdCellEdtitor extends ContextSensitiveCellEditor
 {
-    private static final Logger log = Logger.getLogger(ClasspathIdCellEdtitor.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1038218166129278067L;
+	private static final Logger log = Logger.getLogger(ClasspathIdCellEdtitor.class);
     public static final EditorContext CONTEXT = new EditorContext("ClasspathId");
 
     private String selection = SimpleClassLoaderManager.SYSTEM_LOADER;

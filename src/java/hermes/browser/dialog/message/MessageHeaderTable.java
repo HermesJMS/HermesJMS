@@ -33,7 +33,12 @@ import com.jidesoft.grid.SortableTable;
 public class MessageHeaderTable extends SortableTable
 {
 
-   public MessageHeaderTable()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8679496812992723311L;
+
+public MessageHeaderTable()
    {
       super();
       // TODO Auto-generated constructor stub

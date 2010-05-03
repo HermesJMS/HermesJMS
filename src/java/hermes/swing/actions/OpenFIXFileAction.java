@@ -39,7 +39,12 @@ import javax.swing.KeyStroke;
 
 public class OpenFIXFileAction extends ActionSupport
 {
-   public OpenFIXFileAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1265030833566439864L;
+
+public OpenFIXFileAction()
    {
       putValue(Action.NAME, "Open FIX File...");
       putValue(Action.SHORT_DESCRIPTION, "Open a file containing FIX messages");

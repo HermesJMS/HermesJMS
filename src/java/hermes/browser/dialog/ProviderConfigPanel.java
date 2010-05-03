@@ -47,7 +47,11 @@ import com.jidesoft.swing.JideScrollPane;
 
 public class ProviderConfigPanel extends JPanel
 {
-    private static final Category cat = Category.getInstance(ProviderConfigPanel.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1040231054553333838L;
+	private static final Category cat = Category.getInstance(ProviderConfigPanel.class);
     private static File lastDirectory = null;
 
     private PreferencesDialog dialog;

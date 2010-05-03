@@ -40,7 +40,11 @@ import org.apache.log4j.Logger;
 
 public class AddToExistingWatchAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(AddToExistingWatchAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5349110632967857914L;
+private static final Logger log = Logger.getLogger(AddToExistingWatchAction.class);
    private WatchConfig watchConfig;
 
    public AddToExistingWatchAction(WatchConfig watchConfig)

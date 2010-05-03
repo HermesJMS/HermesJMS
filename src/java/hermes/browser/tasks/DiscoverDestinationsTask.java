@@ -26,8 +26,9 @@ import hermes.browser.model.tree.HermesTreeNode;
 import hermes.config.DestinationConfig;
 import hermes.swing.SwingRunner;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 import javax.jms.JMSException;
 import javax.swing.JOptionPane;
@@ -42,116 +43,126 @@ import org.apache.log4j.Logger;
  */
 public class DiscoverDestinationsTask extends TaskSupport
 {
-    private static final Logger log = Logger.getLogger(DiscoverDestinationsTask.class);
-    private Hermes hermes;
-    private HermesTreeNode hermesNode;
-    private BrowserTreeModel treeModel;
-    private String title ;
+   private static final Logger log = Logger.getLogger(DiscoverDestinationsTask.class);
+   private Hermes hermes;
+   private HermesTreeNode hermesNode;
+   private BrowserTreeModel treeModel;
+   private String title;
 
-    /**
-     * @param content
-     * @param title
-     * @param listener
-     */
-    public DiscoverDestinationsTask(BrowserTreeModel treeModel, HermesTreeNode hermesNode) throws JMSException
-    {
-        super(IconCache.getIcon("jms.unknown"));
+   /**
+    * @param content
+    * @param title
+    * @param listener
+    */
+   public DiscoverDestinationsTask(BrowserTreeModel treeModel, HermesTreeNode hermesNode) throws JMSException
+   {
+      super(IconCache.getIcon("jms.unknown"));
 
-        this.hermesNode = hermesNode;
-        this.treeModel = treeModel;
-        this.hermes = hermesNode.getHermes();
-        this.title = "Discover from " + hermesNode.getHermes().getId();
-    }
+      this.hermesNode = hermesNode;
+      this.treeModel = treeModel;
+      this.hermes = hermesNode.getHermes();
+      this.title = "Discover from " + hermesNode.getHermes().getId();
+   }
 
-    public String getTitle()
-    {
-       return title ;
-    }
+   public String getTitle()
+   {
+      return title;
+   }
 
-    public void invoke() throws Exception
-    {
-        try
-        {
+   public void invoke() throws Exception
+   {
+      try
+      {
 
-            final Collection destinations = hermes.discoverDestinationConfigs();
+         final ArrayList<DestinationConfig> destinations = new ArrayList<DestinationConfig>(hermes.discoverDestinationConfigs());
+         TreeMap<String, DestinationConfig> sortMap = new TreeMap<String, DestinationConfig>() ;
+         
+         for (Iterator iter = destinations.iterator(); iter.hasNext();)
+         {
+            DestinationConfig dConfig = (DestinationConfig) iter.next();
 
-            for (Iterator iter = destinations.iterator(); iter.hasNext();)
+            log.info("found name=" + dConfig.getName() + ", domain=" + Domain.getDomain(dConfig.getDomain())
+                  + (dConfig.isDurable() ? " durableName=" + dConfig.getClientID() : ""));
+            sortMap.put(dConfig.getName(), dConfig) ;
+         }
+         
+         destinations.clear() ;
+
+         for (DestinationConfig dConfig : sortMap.values()) 
+         {
+        	 destinations.add(dConfig) ;
+         }
+
+         if (isRunning())
+         {
+            final StringBuffer msg = new StringBuffer();
+
+            switch (destinations.size())
             {
-                DestinationConfig dConfig = (DestinationConfig) iter.next();
+               case 0:
+                  msg.append("No destinations found.");
+                  break;
+               case 1:
+                  msg.append("One destination found.");
+                  break;
 
-                log.info("found name=" + dConfig.getName() + ", domain=" + Domain.getDomain(dConfig.getDomain()) + (dConfig.isDurable() ? " durableName=" + dConfig.getClientID() : ""));
+               default:
+                  msg.append("Discovered " + Integer.toString(destinations.size())).append(" destinations.");
             }
 
-            if ( isRunning())
+            if (destinations.size() == 0)
             {
-                final StringBuffer msg = new StringBuffer();
-
-                switch (destinations.size())
-                {
-                case 0:
-                    msg.append("No destinations found.");
-                    break;
-                case 1:
-                    msg.append("One destination found.");
-                    break ;
-
-                default:
-                    msg.append("Discovered " + Integer.toString(destinations.size())).append(" destinations.");
-                }
-
-                if ( destinations.size() == 0)
-                {
-                    SwingRunner.invokeLater(new Runnable()
-                    {
-                        public void run()
-                        {
-                            JOptionPane.showMessageDialog(HermesBrowser.getBrowser(), msg.toString(), "Discover.", JOptionPane.OK_OPTION);
-                        }
-                    });
-                }
-                else
-                {
-                    msg.append("\nWould you like to replace the current set of destinations for ").append(hermes.getId()).append(".");
-
-                    
-                    SwingRunner.invokeLater(new Runnable()
-                    {
-                        public void run()
-                        {
-                            if (hermesNode.getChildCount() == 0 || JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), msg.toString(), "Discover.", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
-                            {
-                                try
-                                {
-                                    HermesBrowser.getBrowser().replaceDestinationConfigs(hermes, destinations);
-                                    HermesBrowser.getBrowser().saveConfig();
-                                    treeModel.nodeStructureChanged(hermesNode);
-                                    HermesBrowser.getBrowser().getBrowserTree().expandPath(new TreePath(hermesNode.getPath())) ;
-
-                                    Hermes.ui.getDefaultMessageSink().add("Destinations updated for " + hermes.getId());
-                                }
-                                catch (Exception ex)
-                                {
-                                   
-                                    HermesBrowser.getBrowser().showErrorDialog("Adding destinations to tree", ex) ;
-                                }
-                            }
-                            else
-                            {
-                                Hermes.ui.getDefaultMessageSink().add("Update of destinations for " + hermes.getId() + " cancelled.");
-                            }
-                        }
-                    });
-                }
+               SwingRunner.invokeLater(new Runnable()
+               {
+                  public void run()
+                  {
+                     JOptionPane.showMessageDialog(HermesBrowser.getBrowser(), msg.toString(), "Discover.", JOptionPane.OK_OPTION);
+                  }
+               });
             }
             else
             {
-                Hermes.ui.getDefaultMessageSink().add("Discover on " + hermes.getId() + " cancelled");
+               msg.append("\nWould you like to replace the current set of destinations for ").append(hermes.getId()).append(".");
+
+               SwingRunner.invokeLater(new Runnable()
+               {
+                  public void run()
+                  {
+                     if (hermesNode.getChildCount() == 0
+                           || JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), msg.toString(), "Discover.", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                     {
+                        try
+                        {
+                           HermesBrowser.getBrowser().replaceDestinationConfigs(hermes, destinations);
+                           HermesBrowser.getBrowser().saveConfig();
+                           treeModel.nodeStructureChanged(hermesNode);
+                           HermesBrowser.getBrowser().getBrowserTree().expandPath(new TreePath(hermesNode.getPath()));
+
+                           Hermes.ui.getDefaultMessageSink().add("Destinations updated for " + hermes.getId());
+                        }
+                        catch (Exception ex)
+                        {
+
+                           HermesBrowser.getBrowser().showErrorDialog("Adding destinations to tree", ex);
+                        }
+                     }
+                     else
+                     {
+                        Hermes.ui.getDefaultMessageSink().add("Update of destinations for " + hermes.getId() + " cancelled.");
+                     }
+                  }
+               });
             }
-        }
-        finally
-        {
-            hermes.close();
-        }
-    }
+         }
+         else
+         {
+            Hermes.ui.getDefaultMessageSink().add("Discover on " + hermes.getId() + " cancelled");
+         }
+      }
+      finally
+      {
+         hermes.close();
+      }
+   }
 
 }

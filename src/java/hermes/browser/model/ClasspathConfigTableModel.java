@@ -32,7 +32,11 @@ import org.apache.log4j.Logger;
  */
 public class ClasspathConfigTableModel extends DefaultTableModel
 {
-    private static final Logger log = Logger.getLogger(ClasspathConfigTableModel.class) ;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3566589829758021732L;
+	private static final Logger log = Logger.getLogger(ClasspathConfigTableModel.class) ;
     private List rows ;
  
     public ClasspathConfigTableModel(List rows)

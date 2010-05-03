@@ -29,7 +29,11 @@ import org.apache.log4j.Logger;
  */
 public class KeyValueMapTableModel extends  MapTableModel 
 {
-    private static final Logger log = Logger.getLogger(KeyValueMapTableModel.class) ;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2553024436665624466L;
+	private static final Logger log = Logger.getLogger(KeyValueMapTableModel.class) ;
     private Map map ;
     private TreeList headers = new TreeList() ;
 

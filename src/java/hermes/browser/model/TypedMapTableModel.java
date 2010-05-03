@@ -30,7 +30,11 @@ import org.apache.log4j.Logger;
  */
 public class TypedMapTableModel extends AbstractTableModel
 {
-   private static final Logger log = Logger.getLogger(TypedMapTableModel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4893386901349475808L;
+private static final Logger log = Logger.getLogger(TypedMapTableModel.class);
    private static String[] header = { "Name", "Type", "Value" };
 
    private static class Row

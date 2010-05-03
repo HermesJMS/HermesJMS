@@ -30,7 +30,12 @@ import javax.jms.Queue;
 
 public class QueueTreeNode extends AbstractTreeNode
 {
-   public QueueTreeNode(String id, Queue queue)
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4691913216493396062L;
+
+public QueueTreeNode(String id, Queue queue)
    {
       super(id, queue);
 

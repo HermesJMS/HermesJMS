@@ -29,7 +29,12 @@ import javax.jms.Topic;
 
 public class MessageStoreTopicTreeNode extends MessageStoreDestinationTreeNode
 {
-   public MessageStoreTopicTreeNode(MessageStore store, String id, Topic bean)
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8866393123897226809L;
+
+public MessageStoreTopicTreeNode(MessageStore store, String id, Topic bean)
    {
       super(store, id, bean);
       

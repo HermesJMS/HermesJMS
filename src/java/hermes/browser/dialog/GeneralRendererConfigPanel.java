@@ -57,7 +57,11 @@ import org.apache.log4j.Logger;
  */
 public class GeneralRendererConfigPanel extends AbstractRendererConfigPanel
 {
-   private static final Logger log = Logger.getLogger(GeneralRendererConfigPanel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6544267911909301502L;
+private static final Logger log = Logger.getLogger(GeneralRendererConfigPanel.class);
    private JScrollPane bottomSP = new JScrollPane();
    private JTable classTable = new JTable();
    private Map configChanges = new HashMap();

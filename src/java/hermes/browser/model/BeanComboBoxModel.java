@@ -34,7 +34,11 @@ import org.apache.log4j.Category;
  */
 public class BeanComboBoxModel extends DefaultComboBoxModel
 {
-    private static Set ignore = new HashSet();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 511257801205550807L;
+	private static Set ignore = new HashSet();
     private static final Category cat = Category.getInstance(BeanTableModel.class);
 
     static

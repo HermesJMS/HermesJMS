@@ -20,7 +20,6 @@ package hermes.swing;
 import java.awt.Dimension;
 
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.text.Document;
 
 /**
@@ -32,7 +31,12 @@ import javax.swing.text.Document;
 
 public class MyTextArea extends JTextArea
 {
-   public MyTextArea()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8434015467309784115L;
+
+public MyTextArea()
    {
      
    }

@@ -46,7 +46,12 @@ import com.jidesoft.grid.SortableTable;
 
 public class MessageHeaderTable extends SortableTable
 {
-   private static final Logger log = Logger.getLogger(MessageHeaderTable.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1796772055963195768L;
+
+private static final Logger log = Logger.getLogger(MessageHeaderTable.class);
 
    private DataFlavor[] myFlavours;
    private Map<String, HideableTableColumn> userPropertyColumns = new HashMap<String, HideableTableColumn>();

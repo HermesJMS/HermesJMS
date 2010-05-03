@@ -30,6 +30,11 @@ import javax.jms.Topic;
 public class TopicTreeNode extends AbstractTreeNode
 {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5383636774713842764L;
+
+	/**
      * @throws JMSException
      * 
      */

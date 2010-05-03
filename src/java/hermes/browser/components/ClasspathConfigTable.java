@@ -58,7 +58,11 @@ import com.jidesoft.grid.JideTable;
  */
 public class ClasspathConfigTable extends JideTable
 {
-    private static final Logger log = Logger.getLogger(ClasspathConfigTable.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5703903917003583038L;
+	private static final Logger log = Logger.getLogger(ClasspathConfigTable.class);
     private static final int COPY = 1;
     private static final int MOVE = 2;
     private ClasspathConfigTableModel model;

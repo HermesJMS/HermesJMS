@@ -38,7 +38,12 @@ import javax.swing.table.AbstractTableModel;
 
 public class DestinationStatisticsTableModel extends AbstractTableModel
 {
-    private static class Statistics
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -314506314892024208L;
+
+	private static class Statistics
     {
         public String destination;
         public int messagesRead;

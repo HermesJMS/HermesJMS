@@ -39,7 +39,11 @@ import org.apache.log4j.Logger;
 
 public class SaveConfigAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(SaveConfigAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7310639151291257991L;
+private static final Logger log = Logger.getLogger(SaveConfigAction.class);
    private Domain domain;
 
    public SaveConfigAction()

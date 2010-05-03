@@ -48,7 +48,11 @@ import org.apache.log4j.Logger;
 
 public class MessageStoreTreeNode extends AbstractTreeNode implements MessageStoreListener
 {
-   private static final Logger log = Logger.getLogger(MessageStoreTreeNode.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2283132470316933038L;
+private static final Logger log = Logger.getLogger(MessageStoreTreeNode.class);
    private static final Timer timer = new Timer();
    private TimerTask timerTask;
    private BrowserTreeModel model;

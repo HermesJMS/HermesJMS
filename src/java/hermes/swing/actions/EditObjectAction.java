@@ -46,7 +46,11 @@ import com.jidesoft.swing.JideSwingUtilities;
 
 public class EditObjectAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(EditObjectAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2245596929230905682L;
+private static final Logger log = Logger.getLogger(EditObjectAction.class);
 
    public EditObjectAction()
    {

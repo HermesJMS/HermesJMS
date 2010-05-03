@@ -15,15 +15,15 @@
 
 package hermes.ext.ems;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import hermes.Hermes;
 import hermes.HermesAdmin;
 import hermes.HermesAdminFactory;
 import hermes.HermesException;
 import hermes.HermesRuntimeException;
 import hermes.JNDIConnectionFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;

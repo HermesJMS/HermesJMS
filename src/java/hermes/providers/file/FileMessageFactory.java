@@ -25,7 +25,6 @@ import hermes.providers.messages.MessageImpl;
 import hermes.providers.messages.ObjectMessageImpl;
 import hermes.providers.messages.TextMessageImpl;
 
-import java.io.File;
 import java.io.Serializable;
 
 import javax.jms.BytesMessage;

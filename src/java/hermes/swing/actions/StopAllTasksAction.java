@@ -31,7 +31,12 @@ import javax.swing.KeyStroke;
 
 public class StopAllTasksAction extends ActionSupport
 {
-   public StopAllTasksAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -882986851096340308L;
+
+public StopAllTasksAction()
    {
       putValue(Action.NAME, "Stop all") ;
       putValue(Action.SHORT_DESCRIPTION, "Stop all running tasks.") ;

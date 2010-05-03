@@ -43,7 +43,11 @@ import org.apache.log4j.Logger;
 
 public class Log4JOutputViewer extends JComponent
 {
-    private SwingAppender swingAppender  ;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4667200695639877103L;
+	private SwingAppender swingAppender  ;
     
     public Log4JOutputViewer(String filter)
     {

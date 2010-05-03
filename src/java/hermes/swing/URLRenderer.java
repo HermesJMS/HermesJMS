@@ -29,7 +29,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class URLRenderer extends DefaultTableCellRenderer
 {
-   private String data;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1969274471478195698L;
+private String data;
 
    public URLRenderer()
    {

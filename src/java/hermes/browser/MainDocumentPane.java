@@ -27,7 +27,12 @@ import com.jidesoft.swing.JideTabbedPane;
 
 public class MainDocumentPane extends DocumentPane implements DocumentPane.TabbedPaneCustomizer
 {
-   public MainDocumentPane()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3341716163846520437L;
+
+public MainDocumentPane()
    {
       setTabbedPaneCustomizer(this) ;
    }

@@ -68,7 +68,12 @@ import com.jidesoft.swing.JideSwingUtilities;
  */
 public class ContextTree extends JTree
 {
-   private static final Logger log = Logger.getLogger(ContextTree.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7260213971170750304L;
+
+private static final Logger log = Logger.getLogger(ContextTree.class);
 
    private JidePopupMenu popupMenu;
 

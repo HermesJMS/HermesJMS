@@ -77,7 +77,7 @@
 
 		<tstamp />
 
-		<available file="${activemq.root}/incubator-activemq-4.1-SNAPSHOT.jar" property="activemq.present" />
+		<available file="${activemq.root}" property="activemq.present" />
 		<available file="${websphere.lib}/com.ibm.mqjms.jar" property="mq.present" />
 		<available file="${jboss.lib}/jbossall-client.jar" property="jbossmq.present" />
 		<available file="${weblogic.lib}/weblogic.jar" property="weblogic.present" />
@@ -91,7 +91,7 @@
 		<available file="${sqs/lib}/jms4sqs.jar" property="sqs.present" />
 		<available file="${mx4j.lib}/mx4j.jar" property="mx4j.present" />
 		<available file="${oracleaq.lib}/aqapi.jar" property="oracleaq.present" />
-		<available file="${imq.lib}/imq.jar" property="imq.present" />
+		<available file="${imq.lib}" property="imq.present" />
 
 		<mkdir dir="${build}" />
 		<mkdir dir="${classes}" />
@@ -130,15 +130,14 @@
 				<include name="*.jar" />
 			</fileset>
 
+<!--
 			<fileset dir="${ant.lib}">
 				<include name="ant.jar" />
 			</fileset>
-
+-->
 			<fileset dir="${jamsel.lib}">
 				<include name="selector-1.1.jar" />
 			</fileset>
-
-			<fileset file="${activemq.lib.selector}" />
 		</path>
 
 		<!-- Base classpath for all plugins-->
@@ -156,10 +155,6 @@
 			<path refid="plugin.classpath" />
 			<fileset dir="${jamsel.lib}">
 				<include name="jamsel.jar" />
-			</fileset>
-
-			<fileset dir="${activemq.lib}">
-				<include name="activemq-core-3.1.jar" />
 			</fileset>
 		</path>
 		

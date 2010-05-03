@@ -88,7 +88,12 @@ class MessageHeaderTableSupport
 
       final DefaultTableCellRenderer dateRenderer = new DefaultTableCellRenderer()
       {
-         protected void setValue(Object value)
+         /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1967620759224151946L;
+
+		protected void setValue(Object value)
          {
             super.setText((value == null) ? "" : value.toString());
          }

@@ -44,7 +44,11 @@ import com.jidesoft.dialog.StandardDialog;
 
 public class BeanPropertyDialog extends StandardDialog
 {
-    private BeanPropertyPanel beanPanel;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3921945865610783296L;
+	private BeanPropertyPanel beanPanel;
 
     /**
      * @throws java.awt.HeadlessException
@@ -104,7 +108,12 @@ public class BeanPropertyDialog extends StandardDialog
 
         AbstractAction okButtonAction = new AbstractAction(UIManager.getString("OptionPane.okButtonText"))
         {
-            public void actionPerformed(ActionEvent arg0)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 2353403995331123497L;
+
+			public void actionPerformed(ActionEvent arg0)
             {
                 beanPanel.doOK();
                 setDialogResult(RESULT_AFFIRMED);
@@ -115,7 +124,12 @@ public class BeanPropertyDialog extends StandardDialog
 
         AbstractAction cancelButtonAction = new AbstractAction(UIManager.getString("OptionPane.cancelButtonText"))
         {
-            public void actionPerformed(ActionEvent arg0)
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 3126103743620232352L;
+
+			public void actionPerformed(ActionEvent arg0)
             {
                 beanPanel.doCancel();
                 setDialogResult(RESULT_CANCELLED);

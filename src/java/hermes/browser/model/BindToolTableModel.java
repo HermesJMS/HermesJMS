@@ -36,7 +36,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class BindToolTableModel extends DefaultTableModel
 {
-    public interface Visitor
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6362677440822858665L;
+
+	public interface Visitor
     {
         public void onDestination(Hermes hermes, String destinationName, Domain domain, String binding);
 

@@ -44,7 +44,12 @@ import com.jidesoft.dialog.StandardDialog;
 
 public class DestinationConfigDialog extends StandardDialog
 {
-   private static final Logger log = Logger.getLogger(DestinationConfigDialog.class) ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -829039165944259693L;
+
+private static final Logger log = Logger.getLogger(DestinationConfigDialog.class) ;
    
    private DestinationPropertyConfigPanel configPanel;
 
@@ -93,7 +98,12 @@ public class DestinationConfigDialog extends StandardDialog
       
       AbstractAction okButtonAction = new AbstractAction(UIManager.getString("OptionPane.okButtonText"))
       {
-         public void actionPerformed(ActionEvent arg0)
+         /**
+		 * 
+		 */
+		private static final long serialVersionUID = 6700170688321726600L;
+
+		public void actionPerformed(ActionEvent arg0)
          {
             configPanel.doOK();
             setDialogResult(RESULT_AFFIRMED);
@@ -105,7 +115,12 @@ public class DestinationConfigDialog extends StandardDialog
       
       AbstractAction cancelButtonAction = new AbstractAction(UIManager.getString("OptionPane.cancelButtonText"))
       {
-         public void actionPerformed(ActionEvent arg0)
+         /**
+		 * 
+		 */
+		private static final long serialVersionUID = -2716459494822521628L;
+
+		public void actionPerformed(ActionEvent arg0)
          {
             configPanel.doCancel();
             setDialogResult(RESULT_CANCELLED);

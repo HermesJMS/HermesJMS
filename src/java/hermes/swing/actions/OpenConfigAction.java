@@ -37,7 +37,12 @@ import javax.xml.bind.Unmarshaller;
 
 public class OpenConfigAction extends ActionSupport
 {
-   public OpenConfigAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1923859101231554781L;
+
+public OpenConfigAction()
    {
       putValue(Action.NAME, "Open Configuration...");
       putValue(Action.SHORT_DESCRIPTION, "Open another Hermes configuration.");

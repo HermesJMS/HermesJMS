@@ -17,6 +17,8 @@
 
 package hermes;
 
+import hermes.store.MessageStore;
+
 import java.util.Collection;
 
 import javax.jms.JMSException;
@@ -29,7 +31,7 @@ import javax.jms.Message;
  * @version $Id: HermesRepository.java,v 1.4 2005/06/28 15:36:21 colincrist Exp $
  */
 
-public interface HermesRepository
+public interface HermesRepository extends MessageStore
 {
     /**
      * Get all the JMS messages in the repository as a Collection. Note you

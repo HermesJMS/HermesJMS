@@ -34,7 +34,12 @@ import javax.swing.tree.TreePath;
 
 public class RefreshJNDIAction extends JNDIAction
 {
-   public RefreshJNDIAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5470242527904681716L;
+
+public RefreshJNDIAction()
    {
       putValue(Action.NAME, "Refresh.");
       putValue(Action.SHORT_DESCRIPTION, "Refresh tree from the context.");

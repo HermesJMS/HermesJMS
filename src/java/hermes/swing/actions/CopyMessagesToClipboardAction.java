@@ -52,7 +52,11 @@ import org.apache.log4j.Logger;
  */
 public class CopyMessagesToClipboardAction extends BrowseActionListenerAdapter
 {
-   private static final Logger log = Logger.getLogger(CopyMessagesToClipboardAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1226101535325577946L;
+private static final Logger log = Logger.getLogger(CopyMessagesToClipboardAction.class);
    private XMLHelper xmlHelper = new DefaultXMLHelper() ;
    public CopyMessagesToClipboardAction()
    {

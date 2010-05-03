@@ -27,6 +27,7 @@ import hermes.browser.model.tree.MessageStoreDestinationTreeNode;
 import hermes.browser.model.tree.MessageStoreTreeNode;
 import hermes.browser.model.tree.QueueTopicTreeNode;
 import hermes.browser.model.tree.QueueTreeNode;
+import hermes.browser.model.tree.RepositoryTreeNode;
 import hermes.browser.model.tree.TopicTreeNode;
 import hermes.browser.tasks.RecordDestinationTask;
 import hermes.browser.tasks.ReplayMessagesFromStoreTask;
@@ -328,9 +329,10 @@ public class PopupMenuFactory
             {
                try
                {
+                  Object lastComponent = tree.getSelectionPath().getLastPathComponent() ;
+                  
                   final boolean isEnabled = tree.getSelectionPath() != null
-                  && (tree.getSelectionPath().getLastPathComponent() instanceof MessageStoreDestinationTreeNode || tree.getSelectionPath()
-                        .getLastPathComponent() instanceof MessageStoreTreeNode) ;
+                  && (lastComponent instanceof MessageStoreDestinationTreeNode || lastComponent instanceof MessageStoreTreeNode || lastComponent instanceof RepositoryTreeNode) ;
                   
                   final MessageStore messageStore = tree.getSelectedMessageStore() ; ;
                   final Destination messageStoreDestination = tree.getSelectedMessageStoreDestination() ;

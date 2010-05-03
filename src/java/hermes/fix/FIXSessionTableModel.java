@@ -44,7 +44,11 @@ import com.jidesoft.grid.HierarchicalTableModel;
 
 public class FIXSessionTableModel extends AbstractTableModel implements HierarchicalTableModel
 {
-   private static final Logger log = Logger.getLogger(FIXSessionTableModel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5260089561095808288L;
+private static final Logger log = Logger.getLogger(FIXSessionTableModel.class);
    private final Vector<SessionKey> sessions = new Vector<SessionKey>();
 
    private final Map<SessionKey, FIXMessageTableModel> tableModels = new HashMap<SessionKey, FIXMessageTableModel>();

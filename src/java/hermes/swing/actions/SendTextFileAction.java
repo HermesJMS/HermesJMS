@@ -37,7 +37,12 @@ import javax.swing.KeyStroke;
 
 public class SendTextFileAction extends AbstractSendFileAction
 {
-   public SendTextFileAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5332422858213360837L;
+
+public SendTextFileAction()
    {
       putValue(Action.NAME, "Send TextMessage");
       putValue(Action.SHORT_DESCRIPTION, "Read a file and send it as a TextMessage");

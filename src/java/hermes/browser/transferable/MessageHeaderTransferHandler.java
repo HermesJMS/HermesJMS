@@ -47,7 +47,11 @@ import org.apache.log4j.Logger;
 
 public class MessageHeaderTransferHandler extends TransferHandler
 {
-   private static final Logger log = Logger.getLogger(MessageHeaderTransferHandler.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 9119588407284612146L;
+private static final Logger log = Logger.getLogger(MessageHeaderTransferHandler.class);
    private BrowserAction action;
 
    public static Action getCutAction()

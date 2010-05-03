@@ -17,9 +17,7 @@
 
 package hermes.renderers;
 
-import hermes.browser.MessageRenderer;
 import hermes.swing.MyTextArea;
-import hermes.util.MappedStringContent;
 import hermes.util.MessageUtils;
 
 import java.awt.Font;
@@ -30,10 +28,6 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
@@ -52,7 +46,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.PlainDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.commons.beanutils.PropertyUtils;

@@ -33,7 +33,11 @@ import com.jidesoft.docking.DockableFrame;
 
 public class JythonDockableFrame extends DockableFrame
 {
-   private JPanel topPanel;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8761593690410020132L;
+private JPanel topPanel;
   
    public JythonDockableFrame()
    {

@@ -45,7 +45,12 @@ import org.apache.log4j.Logger;
 
 public class HermesTreeNode extends AbstractTreeNode
 {
-   private static final Logger log = Logger.getLogger(HermesTreeNode.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3555009647735943302L;
+
+private static final Logger log = Logger.getLogger(HermesTreeNode.class);
 
    private BrowserTreeModel model;
    private boolean cascadeNamespace = false;

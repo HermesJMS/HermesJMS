@@ -40,7 +40,11 @@ import com.jidesoft.swing.JideSwingUtilities;
 
 public class CreateNewSessionAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(CreateNewSessionAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5744748734635515190L;
+private static final Logger log = Logger.getLogger(CreateNewSessionAction.class);
 
    public CreateNewSessionAction()
    {

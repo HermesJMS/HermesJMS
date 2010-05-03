@@ -26,7 +26,12 @@ import hermes.HermesException;
 
 public class NoSuchFieldException extends HermesException
 {
-   public NoSuchFieldException(int tag)
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6627797745830297443L;
+
+public NoSuchFieldException(int tag)
    {
       super ("No such field, tag=" + tag) ;
    }

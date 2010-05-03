@@ -49,7 +49,11 @@ import org.apache.log4j.Logger;
 
 public class PasteMessagesFromClipboardAction extends BrowseActionListenerAdapter
 {
-   private static final Logger log = Logger.getLogger(PasteMessagesFromClipboardAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 315578006254064372L;
+private static final Logger log = Logger.getLogger(PasteMessagesFromClipboardAction.class);
 
    public PasteMessagesFromClipboardAction()
    {

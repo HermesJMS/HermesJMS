@@ -43,7 +43,12 @@ import org.apache.log4j.Logger;
  */
 public class HermesBrowseTag extends TagSupport
 {
-    private static final Logger log = Logger.getLogger(HermesBrowseTag.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1924937071561397743L;
+
+	private static final Logger log = Logger.getLogger(HermesBrowseTag.class);
 
     private String hermes;
     private String destination;

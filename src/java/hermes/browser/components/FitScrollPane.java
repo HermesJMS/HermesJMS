@@ -33,7 +33,12 @@ import javax.swing.JScrollPane;
  */
 public class FitScrollPane extends JScrollPane implements ComponentListener
 {
-   public FitScrollPane()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2992851393266585658L;
+
+public FitScrollPane()
    {
       initScrollPane();
    }

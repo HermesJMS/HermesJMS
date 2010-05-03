@@ -55,7 +55,11 @@ import com.jidesoft.swing.MultilineLabel;
 
 public class FilterInputPanel extends DockableFrame implements DocumentComponentListener
 {
-   private static final Logger log = Logger.getLogger(FilterInputPanel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -525161612413763300L;
+private static final Logger log = Logger.getLogger(FilterInputPanel.class);
    private JideButton comboFilterButton = new JideButton(IconCache.getIcon("hermes.filter.sql"));
    private JideButton comboRemoveFilterButton = new JideButton(IconCache.getIcon("hermes.delete"));
    private JideButton textFilterButton = new JideButton(IconCache.getIcon("hermes.filter.sql"));

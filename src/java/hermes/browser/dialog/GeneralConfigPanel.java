@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.naming.NamingException;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
@@ -49,7 +48,12 @@ import com.jidesoft.grid.PropertyTableModel;
 
 public class GeneralConfigPanel extends JPanel
 {
-   private static final Logger log = Logger.getLogger(GeneralConfigPanel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -9018285256630098833L;
+
+private static final Logger log = Logger.getLogger(GeneralConfigPanel.class);
 
    private static final String AUDIT_DIRECTORY = "AuditDirectory";
    private static final String MESSAGES_DIRECTORY = "MessageDirectory";
@@ -137,7 +141,11 @@ public class GeneralConfigPanel extends JPanel
 
    public static class PropertyImpl extends Property
    {
-      public Object value;
+      /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7034262407063777751L;
+	public Object value;
 
       /*
        * (non-Javadoc)
@@ -258,7 +266,8 @@ public class GeneralConfigPanel extends JPanel
       }
    }
 
-   public void setHermesConfig(HermesConfig config)
+   @SuppressWarnings("unchecked")
+public void setHermesConfig(HermesConfig config)
    {
       this.config = config;
 

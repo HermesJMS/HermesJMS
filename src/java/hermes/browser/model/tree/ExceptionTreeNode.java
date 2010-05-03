@@ -27,6 +27,11 @@ public class ExceptionTreeNode extends AbstractTreeNode
 {
    
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2174603371958642110L;
+
+	/**
      * @param id
      * @param icon
      */

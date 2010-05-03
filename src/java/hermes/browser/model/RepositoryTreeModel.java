@@ -35,7 +35,11 @@ import javax.swing.tree.DefaultTreeModel;
 
 public class RepositoryTreeModel extends DefaultTreeModel implements HermesRepositoryListener
 {
-    private DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Repositories");
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5409506182491087034L;
+	private DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Repositories");
     private Map rep2Node = new HashMap();
 
     public RepositoryTreeModel()

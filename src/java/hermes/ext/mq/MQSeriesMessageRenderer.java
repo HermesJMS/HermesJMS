@@ -17,7 +17,6 @@
 
 package hermes.ext.mq;
 
-import hermes.browser.MessageRenderer;
 import hermes.browser.model.OneRowMapTableModel;
 import hermes.renderers.AbstractMessageRenderer;
 import hermes.util.TextUtils;

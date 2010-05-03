@@ -27,4 +27,9 @@ import com.jidesoft.grid.PropertyTable;
 public class MessageHeaderPropertyTable extends PropertyTable
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3892461785871173563L;
+
 }

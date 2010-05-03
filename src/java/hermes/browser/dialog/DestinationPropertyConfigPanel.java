@@ -143,7 +143,8 @@ public class DestinationPropertyConfigPanel extends JPanel
       }
    }
 
-   public void init()
+   @SuppressWarnings("unchecked")
+public void init()
    {
       nameProperty = new JidePropertyImpl(NAME, NAME_INFO, String.class, config.getName());
       shortNameProperty = new JidePropertyImpl(SHORT_NAME, SHORT_NAME_INFO, String.class, config.getShortName());

@@ -46,7 +46,11 @@ import org.apache.log4j.Logger;
 
 public class PropertySetTableModel extends AbstractTableModel
 {
-    private static Set ignore = new HashSet();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6861616752274437531L;
+	private static Set ignore = new HashSet();
     private static final Logger log = Logger.getLogger(BeanTableModel.class);
     private PropertySetConfig propertySet;
     private Map filter;

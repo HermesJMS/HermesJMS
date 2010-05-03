@@ -17,8 +17,6 @@
 
 package hermes.renderers;
 
-import hermes.browser.MessageRenderer;
-import hermes.swing.MyTextArea;
 import hermes.util.MessageUtils;
 import hermes.util.XmlUtils;
 
@@ -29,10 +27,6 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
-import javax.swing.JTextArea;
-
-import jsyntaxpane.SyntaxStyle;
-import jsyntaxpane.SyntaxStyles;
 
 import org.apache.log4j.Logger;
 

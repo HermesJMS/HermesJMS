@@ -26,7 +26,11 @@ import hermes.config.JDBCStore;
 
 public class MessageStoreURLTreeNode extends AbstractTreeNode
 {
-   private JDBCStore storeConfig ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8685096885815703582L;
+private JDBCStore storeConfig ;
    
    public MessageStoreURLTreeNode(JDBCStore storeConfig) throws ClassNotFoundException
    {

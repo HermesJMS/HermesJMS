@@ -36,7 +36,11 @@ import com.jidesoft.grid.HierarchicalTable;
  */
 public class HierarchicalMessageHeaderTable extends HierarchicalTable
 {
-    private static final Category cat = Category.getInstance(HierarchicalMessageHeaderTable.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8786420675973839638L;
+	private static final Category cat = Category.getInstance(HierarchicalMessageHeaderTable.class);
     private DataFlavor[] myFlavours;
 
     public HierarchicalMessageHeaderTable(BrowserAction action, TableModel model)

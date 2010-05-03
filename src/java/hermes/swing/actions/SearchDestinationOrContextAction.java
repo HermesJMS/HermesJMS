@@ -41,7 +41,11 @@ import com.jidesoft.swing.JideSwingUtilities;
 
 public class SearchDestinationOrContextAction extends ActionSupport
 {
-   private boolean searchUserHeader = true ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3691177566297585905L;
+private boolean searchUserHeader = true ;
    
    public SearchDestinationOrContextAction()
    {

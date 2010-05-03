@@ -27,7 +27,11 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public class ContextTreeModel extends DefaultTreeModel
 {
-    private JNDIContextFactory contextFactory ; 
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 994513315795815088L;
+	private JNDIContextFactory contextFactory ; 
     /**
      * @param root
      */

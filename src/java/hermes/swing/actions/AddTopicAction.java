@@ -24,7 +24,12 @@ import javax.swing.Action;
 
 public class AddTopicAction extends AddDestinationAction
 {
-   public AddTopicAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3138329573923737028L;
+
+public AddTopicAction()
    {
       super(Domain.TOPIC) ;
       

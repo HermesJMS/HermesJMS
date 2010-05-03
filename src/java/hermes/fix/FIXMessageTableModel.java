@@ -20,7 +20,6 @@ package hermes.fix;
 import hermes.swing.RowValueProvider;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -47,7 +46,11 @@ import com.codestreet.selector.parser.IValueProvider;
 
 public class FIXMessageTableModel extends AbstractTableModel implements RowValueProvider
 {
-   private static final Logger log = Logger.getLogger(FIXMessageTableModel.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3958105974757909932L;
+private static final Logger log = Logger.getLogger(FIXMessageTableModel.class);
    public static final String DIRECTION = " ";
 
    // public static final String RAW_MESSAGE = "Raw Message" ;

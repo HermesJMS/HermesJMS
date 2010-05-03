@@ -29,7 +29,11 @@ import javax.jms.JMSException;
 
 public abstract class MessageStoreDestinationTreeNode extends AbstractTreeNode
 {
-   private MessageStore store ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5220351275516033766L;
+private MessageStore store ;
    
    public MessageStoreDestinationTreeNode(MessageStore store, String id, Object bean)
    {

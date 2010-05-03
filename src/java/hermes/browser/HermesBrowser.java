@@ -127,7 +127,6 @@ import com.jidesoft.document.DocumentPane;
 import com.jidesoft.grid.CellEditorManager;
 import com.jidesoft.grid.CellRendererManager;
 import com.jidesoft.plaf.LookAndFeelFactory;
-import com.jidesoft.plaf.basic.ThemePainter;
 import com.jidesoft.status.MemoryStatusBarItem;
 import com.jidesoft.status.ProgressStatusBarItem;
 import com.jidesoft.status.StatusBar;

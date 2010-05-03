@@ -26,7 +26,11 @@ import com.jidesoft.swing.FolderChooser;
 
 public class SaveMessagesIndividuallyAsXMLAction extends BrowseActionListenerAdapter
 {
-   private static final Logger log = Logger.getLogger(SaveMessagesIndividuallyAsXMLAction.class) ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6774035003413105583L;
+private static final Logger log = Logger.getLogger(SaveMessagesIndividuallyAsXMLAction.class) ;
    
    public SaveMessagesIndividuallyAsXMLAction()
    {

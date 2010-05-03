@@ -37,7 +37,11 @@ import org.apache.log4j.Logger;
 
 public class NavigateForwardMessageAction extends BrowseActionListenerAdapter
 {
-   private static final Logger log = Logger.getLogger(NavigateForwardMessageAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7921160389818048857L;
+private static final Logger log = Logger.getLogger(NavigateForwardMessageAction.class);
 
    public NavigateForwardMessageAction()
    {

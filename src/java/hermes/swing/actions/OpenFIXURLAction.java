@@ -38,7 +38,11 @@ import javax.swing.JOptionPane;
 
 public class OpenFIXURLAction extends ActionSupport
 {
-   private String previousURL ;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3899006069665484333L;
+private String previousURL ;
    
    public OpenFIXURLAction()
    {

@@ -31,6 +31,11 @@ public class NoProviderExtensionException extends HermesException
 {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 9193751141295505381L;
+
+	/**
      *  
      */
     public NoProviderExtensionException()

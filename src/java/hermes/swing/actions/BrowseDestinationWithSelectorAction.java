@@ -51,7 +51,11 @@ import org.apache.log4j.Logger;
 
 public class BrowseDestinationWithSelectorAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(BrowseDestinationWithSelectorAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3361291057724640916L;
+private static final Logger log = Logger.getLogger(BrowseDestinationWithSelectorAction.class);
    public BrowseDestinationWithSelectorAction()
    {
       putValue(Action.NAME, "Browse with selector...");

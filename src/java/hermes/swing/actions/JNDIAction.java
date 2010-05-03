@@ -17,10 +17,10 @@
 
 package hermes.swing.actions;
 
-import java.awt.event.ActionEvent;
-
 import hermes.browser.HermesBrowser;
 import hermes.browser.actions.BrowseContextAction;
+
+import java.awt.event.ActionEvent;
 
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -36,7 +36,12 @@ import com.jidesoft.document.DocumentComponentListener;
 
 public abstract class JNDIAction extends ActionSupport implements DocumentComponentListener, TreeSelectionListener
 {
-   public JNDIAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8111305524139190732L;
+
+public JNDIAction()
    {
       if (!HermesBrowser.getBrowser().isRestricted())
       {

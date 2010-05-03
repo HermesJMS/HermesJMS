@@ -45,7 +45,12 @@ import com.jidesoft.document.DocumentComponentListener;
 
 public class DeleteMessagesAction extends AbstractAction implements DocumentComponentListener, ListSelectionListener, TableModelListener
 {
-   public DeleteMessagesAction()
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3857033196276911772L;
+
+public DeleteMessagesAction()
    { 
       putValue(Action.NAME, "Delete");
       putValue(Action.SHORT_DESCRIPTION, "Delete selected messages");

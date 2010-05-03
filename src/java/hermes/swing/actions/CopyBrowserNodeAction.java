@@ -39,7 +39,11 @@ import org.apache.log4j.Logger;
 
 public class CopyBrowserNodeAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(CopyBrowserNodeAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1011777265952714196L;
+private static final Logger log = Logger.getLogger(CopyBrowserNodeAction.class);
 
    public CopyBrowserNodeAction()
    {

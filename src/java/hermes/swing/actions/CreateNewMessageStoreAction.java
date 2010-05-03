@@ -43,7 +43,11 @@ import org.apache.log4j.Logger;
 
 public class CreateNewMessageStoreAction extends ActionSupport
 {
-   private static final Logger log = Logger.getLogger(CreateNewMessageStoreAction.class);
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -828252351484708820L;
+private static final Logger log = Logger.getLogger(CreateNewMessageStoreAction.class);
 
    public CreateNewMessageStoreAction()
    {

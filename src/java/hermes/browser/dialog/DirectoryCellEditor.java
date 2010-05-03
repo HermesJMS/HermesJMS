@@ -34,7 +34,12 @@ import com.jidesoft.swing.FolderChooser;
  */
 public class DirectoryCellEditor extends ContextSensitiveCellEditor
 {
-   public static final EditorContext CONTEXT = new EditorContext("Directory");
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6692802620713140973L;
+
+public static final EditorContext CONTEXT = new EditorContext("Directory");
 
    private FolderChooser chooser;
    private File file ;

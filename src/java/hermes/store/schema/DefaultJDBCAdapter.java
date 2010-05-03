@@ -61,6 +61,8 @@ public class DefaultJDBCAdapter implements JDBCAdapter
    private static final Logger log = Logger.getLogger(DefaultJDBCAdapter.class);
    private XMLHelper xmlHelper = new DefaultXMLHelper();
    private int maxMessageSize = 1024 * 1024;
+   private int maxDestinationSize = 5000 ;
+
    private long messageIdSequence = System.currentTimeMillis();
    private Statements statements;
 
@@ -329,7 +331,7 @@ public class DefaultJDBCAdapter implements JDBCAdapter
    {
       Hermes.ui.getDefaultMessageSink().add("Initialising message stores...");
 
-      executeStatements(connection, statements.getCreateDatabaseStatements(maxMessageSize));
+      executeStatements(connection, statements.getCreateDatabaseStatements(maxMessageSize, maxDestinationSize));
 
       connection.commit();
 

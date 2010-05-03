@@ -17,10 +17,7 @@
 
 package hermes.util;
 
-import hermes.renderers.EBCDICMessageRenderer;
-
 import java.io.StringWriter;
-import java.io.Writer;
 
 /**
  * Utilities for displaying byte[]s in lines with hex offsets.

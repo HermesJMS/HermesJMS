@@ -17,7 +17,6 @@
 
 package hermes.renderers;
 
-import hermes.browser.MessageRenderer;
 import hermes.swing.MyTextArea;
 import hermes.util.DumpUtils;
 import hermes.util.MessageUtils;

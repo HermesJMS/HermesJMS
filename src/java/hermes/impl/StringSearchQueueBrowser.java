@@ -17,11 +17,7 @@
 
 package hermes.impl;
 
-import hermes.util.ByteUtils;
-import hermes.util.HexUtils;
-import hermes.util.JMSUtils;
 import hermes.util.MessageUtils;
-import hermes.util.TextUtils;
 
 import java.util.Enumeration;
 

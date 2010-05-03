@@ -57,9 +57,10 @@ public class HermesInitialContextFactory implements InitialContextFactory
     /*
      * (non-Javadoc)
      * 
-     * @see javax.naming.spi.InitialContextFactory#getInitialContext(java.util.Hashtable)
+     * @see #getInitialContext(java.util.Hashtable)
      */
-    public Context getInitialContext(Hashtable<?, ?> map) throws NamingException
+    @Override
+    public Context getInitialContext(Hashtable  map) throws NamingException
     {
         String className = (String) map.get(LOADER);
 

@@ -42,7 +42,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 
 /**
