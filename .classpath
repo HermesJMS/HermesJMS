@@ -58,28 +58,15 @@
 	<classpathentry kind="var" path="WEBSPHERE_ROOT/java/com.ibm.mq.jar"/>
 	<classpathentry kind="var" path="WEBSPHERE_ROOT/java/com.ibm.mqjms.jar"/>
 	<classpathentry kind="var" path="WEBSPHERE_ROOT/java/commonservices.jar"/>
-	<classpathentry kind="lib" path="src/lib/ant.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/selector-1.1.jar" sourcepath="/LOCAL/jamsel/selector-1.1.jar"/>
-	<classpathentry kind="lib" path="src/lib/jython.jar"/>
-	<classpathentry kind="lib" path="src/lib/ArtTk.jar"/>
-	<classpathentry kind="lib" path="src/lib/JyConsole.jar"/>
-	<classpathentry kind="lib" path="src/lib/tools.jar"/>
-	<classpathentry kind="lib" path="src/lib/quickfixj.jar" sourcepath="C:/local/quickfixj/src"/>
 	<classpathentry kind="src" path="src/resources"/>
-	<classpathentry kind="lib" path="src/lib/commons-lang-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/swing-layout-1.0.jar"/>
-	<classpathentry kind="lib" path="src/lib/datatips.jar"/>
-	<classpathentry kind="lib" path="src/lib/jaas.jar"/>
-	<classpathentry kind="lib" path="src/lib/mina-core-1.1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="WEBLOGIC_ROOT/com.bea.core.utils.full_1.0.0.0.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/log4j-1.2.15.jar"/>
-	<classpathentry kind="lib" path="src/lib/cglib-2.2_beta1.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jsyntaxpane-0.9.1.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/hermes-sapjms.jar"/>
 	<classpathentry kind="var" path="ORACLEAQ_ROOT/aqapi.jar"/>
 	<classpathentry kind="var" path="ORACLEAQ_ROOT/castor-1.0.5-xml.jar"/>
 	<classpathentry kind="var" path="ORACLEAQ_ROOT/ojdbc6.jar"/>
-	<classpathentry kind="lib" path="/Users/colin/work/workspaces/default/HermesJMS/providers/imq/lib/imq.jar"/>
 	<classpathentry kind="var" path="ACTIVEMQ_ROOT"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="ACTIVEMQ_ROOT/lib/activemq-core-5.3.1.jar"/>
@@ -94,5 +81,16 @@
 	<classpathentry kind="var" path="MX4J_ROOT/lib/mx4j.jar"/>
 	<classpathentry kind="var" path="MX4J_ROOT/lib/mx4j-tools.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="output" path="eclipse/classes"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/ant.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/ArtTk.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/cglib-2.2_beta1.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/datatips.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/providers/imq/lib/imq.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/JyConsole.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jython.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/mina-core-1.1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/quickfixj.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/tools.jar"/>
+	<classpathentry kind="output" path="ebuild/classes"/>
 </classpath>
