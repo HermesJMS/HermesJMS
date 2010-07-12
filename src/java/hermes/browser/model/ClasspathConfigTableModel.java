@@ -122,6 +122,23 @@ public class ClasspathConfigTableModel extends DefaultTableModel
         fireTableRowsUpdated(y, y) ;
     }
 
+    public void removeRows(int[] r)
+    {
+    	Object[] objects = new Object[r.length] ;
+    	
+    	for (int i = 0 ; i < r.length ; i++)
+    	{
+    		objects[i] = rows.get(r[i]) ;
+    	}
+    	
+    	for (int i = 0 ; i < objects.length ; i++)
+    	{
+    		rows.remove(objects[i]) ;
+    	}
+
+    	fireTableDataChanged() ;
+    }
+    
     public void removeRow(int y)
     {
         Object element = rows.remove(y);

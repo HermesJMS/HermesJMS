@@ -72,8 +72,6 @@ public class HermesAdminAdapter implements HermesAdmin
         return admin;
     }
     
-    
-    
     public Enumeration createBrowserProxy(Enumeration iter) throws JMSException
     {
        return getAdmin().createBrowserProxy(iter) ;

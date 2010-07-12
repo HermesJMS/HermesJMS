@@ -781,7 +781,6 @@ private static final Logger log = Logger.getLogger(BrowserTree.class);
    {
       getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
       DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) getCellRenderer();
-
       setCellRenderer(new BrowserTreeCellRenderer());
 
       //

@@ -18,6 +18,8 @@
 package hermes.browser.dialog;
 
 import hermes.HermesAdminFactory;
+import hermes.HermesException;
+import hermes.HermesRuntimeException;
 import hermes.SingletonManager;
 import hermes.browser.HermesBrowser;
 import hermes.browser.model.PropertySetTableModel;
@@ -254,6 +256,17 @@ private static final Logger log = Logger.getLogger(HermesAdminFactoryConfigPanel
 
       try
       {
+    	  
+    	if (config.getProperties() == null) {
+      		try
+      		{
+      			config.setProperties(HermesBrowser.getBrowser().getConfigDAO().createPropertySet()) ;
+      		}
+      		catch (HermesException ex) {
+      			throw new HermesRuntimeException(ex) ;
+      		}
+      	}
+    	  
          propertyTableModel = new PropertySetTableModel(bean, config.getProperties(), new HashSet());
          propertyTable.setModel(propertyTableModel);
 

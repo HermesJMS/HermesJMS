@@ -333,7 +333,11 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer
          StringBuffer buffer = new StringBuffer();
          MyConfig currentConfig = (MyConfig) getConfig() ;
          
-         if (currentConfig.isToStringOnObjectMessage())
+         if (obj == null)
+         {
+        	 buffer.append("Payload is null") ;
+         }
+         else if (currentConfig.isToStringOnObjectMessage())
          {
             buffer.append(obj.toString());
          }

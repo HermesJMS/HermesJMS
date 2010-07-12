@@ -22,6 +22,7 @@ import hermes.Hermes;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
 import hermes.swing.SwingRunner;
+import hermes.util.IoUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,6 +31,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -130,7 +133,7 @@ public class SendMessageTask extends TaskSupport
 
    public void invoke() throws Exception
    {
-      InputStream istream = null;
+	   FileInputStream istream = null;
 
       try
       {
@@ -174,28 +177,15 @@ public class SendMessageTask extends TaskSupport
 
                if (isXML == IS_TEXT || (isXML == MAYBE_XML && (messages == null || messages.size() == 0)))
                {
-                  istream = new FileInputStream(file);
-
-                  BufferedReader reader = new BufferedReader(new InputStreamReader(istream));
-                  StringWriter payload = new StringWriter();
-                  String line;
-
-                  while ((line = reader.readLine()) != null)
-                  {
-                     payload.append(line).append('\n');
-                  }
-
-                  reader.close();
-
+            	  String payload = IoUtils.read(file) ;
+            	   
                   messages = new ArrayList<Message>();
-                  final Message message = hermes.createTextMessage(payload.toString());
+                  final Message message = hermes.createTextMessage(payload);
                   message.setJMSDestination(to);
                   messages.add(message);
                }
 
                doUpload(to, messages.iterator());
-
-               istream.close();
             }
          }
          else if (content != null)

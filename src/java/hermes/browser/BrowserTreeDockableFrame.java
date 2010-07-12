@@ -50,7 +50,7 @@ public class BrowserTreeDockableFrame extends DockableFrame
       getContext().setInitMode(DockContext.STATE_FRAMEDOCKED);      
       
       setAvailableButtons(DockableFrame.BUTTON_AUTOHIDE | DockableFrame.BUTTON_FLOATING);
-
+ 
       getContentPane().add(new JideScrollPane(browserTree));      
    }
 

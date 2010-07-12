@@ -17,6 +17,8 @@
 
 package hermes.browser.model;
 
+import hermes.HermesException;
+import hermes.HermesRuntimeException;
 import hermes.browser.HermesBrowser;
 import hermes.config.PropertyConfig;
 import hermes.config.PropertySetConfig;
@@ -67,8 +69,11 @@ public class PropertySetTableModel extends AbstractTableModel
     public PropertySetTableModel(Object bean, PropertySetConfig propertySet, Set filter) throws IllegalAccessException, InvocationTargetException,
             NoSuchMethodException
     {
-        this.propertySet = propertySet;
+    	
+    	
 
+    	this.propertySet = propertySet;
+    	
         Set iterSet = null;
         SortedMap sortMap = new TreeMap();
 

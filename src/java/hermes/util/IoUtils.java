@@ -17,78 +17,79 @@
 
 package hermes.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 import org.apache.log4j.Logger;
 
 /**
  * Various utilities for java.io.
  */
-public abstract class IoUtils
-{
-   private static final Logger log = Logger.getLogger(IoUtils.class);
+public abstract class IoUtils {
+	private static final Logger log = Logger.getLogger(IoUtils.class);
 
-   public static void closeQuietly(Reader o)
-   {
-      try
-      {
-         if (o != null)
-         {
-            o.close();
-         }
-      }
-      catch (IOException e)
-      {
-         // NOP
-      }
-   }
+	public static void closeQuietly(Reader o) {
+		try {
+			if (o != null) {
+				o.close();
+			}
+		} catch (IOException e) {
+			// NOP
+		}
+	}
 
-   public static void closeQuietly(Writer o)
-   {
-      try
-      {
-         if (o != null)
-         {
-            o.close();
-         }
-      }
-      catch (IOException e)
-      {
-         // NOP
-      }
-   }
+	public static void closeQuietly(Writer o) {
+		try {
+			if (o != null) {
+				o.close();
+			}
+		} catch (IOException e) {
+			// NOP
+		}
+	}
 
-   public static void closeQuietly(OutputStream o)
-   {
-      try
-      {
-         if (o != null)
-         {
-            o.close();
-         }
-      }
-      catch (IOException e)
-      {
-         // NOP
-      }
-   }
+	public static void closeQuietly(OutputStream o) {
+		try {
+			if (o != null) {
+				o.close();
+			}
+		} catch (IOException e) {
+			// NOP
+		}
+	}
 
-   public static void closeQuietly(InputStream o)
-   {
-      try
-      {
-         if (o != null)
-         {
-            o.close();
-         }
-      }
-      catch (IOException e)
-      {
-         // NOP
-      }
-   }
+	public static void closeQuietly(InputStream o) {
+		try {
+			if (o != null) {
+				o.close();
+			}
+		} catch (IOException e) {
+			// NOP
+		}
+	}
+
+	public static String read(File from) throws Exception
+	{
+
+		final FileInputStream istream = new FileInputStream(from);
+		final FileChannel channel = istream.getChannel();
+		final StringWriter writer = new StringWriter();
+		final ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
+		int read = 0;
+		while ((read = channel.read(buffer)) > 0)
+		{
+			writer.append(new String(buffer.array(), 0, read));
+		}
+
+		return writer.getBuffer().toString();
+	}
 }

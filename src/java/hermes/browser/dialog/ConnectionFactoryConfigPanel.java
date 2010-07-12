@@ -17,6 +17,8 @@
 
 package hermes.browser.dialog;
 
+import hermes.HermesException;
+import hermes.HermesRuntimeException;
 import hermes.JNDIConnectionFactory;
 import hermes.JNDIQueueConnectionFactory;
 import hermes.JNDITopicConnectionFactory;
@@ -389,6 +391,17 @@ private static final String CLASS = "class";
       {
          try
          {
+        	  
+         	if (factoryConfig.getProvider().getProperties() == null) {
+           		try
+           		{
+           			factoryConfig.getProvider().setProperties(HermesBrowser.getBrowser().getConfigDAO().createPropertySet()) ;
+           		}
+           		catch (HermesException ex) {
+           			throw new HermesRuntimeException(ex) ;
+           		}
+           	}
+         	
             propertyTableModel = new PropertySetTableModel(bean, factoryConfig.getProvider().getProperties(), new HashSet());
             propertyTable.setModel(propertyTableModel);
 

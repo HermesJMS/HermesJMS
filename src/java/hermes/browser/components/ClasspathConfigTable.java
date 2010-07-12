@@ -181,12 +181,8 @@ public class ClasspathConfigTable extends JideTable
             {
                 if (getSelectedRowCount() != -1)
                 {
-                   int[] rows = getSelectedRows() ;
-                   
-                    for (int i = 0; i < rows.length; i++)
-                    {
-                        model.removeRow(rows[i]);
-                    }
+                	model.removeRows(getSelectedRows()) ;
+                	
                     
                     dialog.setDirty();
                 }

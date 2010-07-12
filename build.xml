@@ -25,6 +25,7 @@
 	<property name="classes.ext.sonic" value="${build.classes}/classes-ext/sonicmq" />
 	<property name="classes.ext.sqs" value="${build.classes}/classes-ext/sqs" />
 	<property name="classes.ext.jbossmq" value="${build.classes}/classes-ext/jbossmq" />
+	<property name="classes.ext.hornetq" value="${build.classes}/classes-ext/hornetq" />
 	<property name="classes.ext.arjuna" value="${build.classes}/classes-ext/arjuna" />
 	<property name="classes.ext.weblogic" value="${build.classes}/classes-ext/weblogic" />
 	<property name="classes.ext.joram" value="${build.classes}/classes-ext/joram" />
@@ -77,6 +78,7 @@
 
 		<tstamp />
 
+		<available file="${hornetq.lib}/hornetq-jms-client.jar" property="hornetq.present" />
 		<available file="${activemq.root}" property="activemq.present" />
 		<available file="${websphere.lib}/com.ibm.mqjms.jar" property="mq.present" />
 		<available file="${jboss.lib}/jbossall-client.jar" property="jbossmq.present" />
@@ -98,6 +100,7 @@
 		<mkdir dir="${classes.ext.selectors}" />
 		<mkdir dir="${classes.ext.mq}" />
 		<mkdir dir="${classes.ext.jbossmq}" />
+		<mkdir dir="${classes.ext.hornetq}" />
 		<mkdir dir="${classes.ext.arjuna}" />
 		<mkdir dir="${classes.ext.weblogic}" />
 		<mkdir dir="${classes.ext.joram}" />
@@ -157,6 +160,17 @@
 				<include name="jamsel.jar" />
 			</fileset>
 		</path>
+		
+		<!-- Classpath for HornetQ -->
+
+			<path id="hornetq.classpath">
+				<path refid="plugin.classpath" />
+
+				<fileset dir="${hornetq.lib}">
+					<include name="*.jar" />
+				</fileset>
+			</path>
+			
 		
 		<!-- Classpath for OracleAQ -->
 
@@ -351,6 +365,7 @@
 			<exclude name="hermes/ext/sonicmq/*.java" />
 			<exclude name="hermes/ext/sqs/*.java" />
 			<exclude name="hermes/ext/mq/*.java" />
+			<exclude name="hermes/ext/hornetq/*.java" />
 			<exclude name="hermes/ext/jbossmq/*.java" />
 			<exclude name="hermes/ext/weblogic/*.java" />
 			<exclude name="hermes/ext/arjuna/*.java" />
@@ -368,7 +383,7 @@
 		</javac>
 	</target>
 
-	<target name="compile-ext" depends="jar,compile-imq,compile-oracleaq,compile-activemq,compile-mq,compile-jbossmq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond,compile-sqs" />
+	<target name="compile-ext" depends="jar,compile-imq,compile-oracleaq,compile-activemq,compile-mq,compile-jbossmq,compile-hornetq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond,compile-sqs" />
 
 	
 	<target name="compile-oracleaq" depends="jar" if="oracleaq.present">
@@ -386,6 +401,13 @@
 			</target>
 	
 
+	<target name="compile-hornetq" depends="compile-main" if="hornetq.present">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.hornetq}" deprecation="on" debug="true">
+			<include name="**/ext/hornetq/*.java" />
+			<classpath refid="hornetq.classpath" />
+		</javac>
+	</target>
+			
 	<target name="compile-seebeyond" depends="jar" if="mx4j.present">
 		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.seebeyond}" deprecation="on" debug="true">
 			<include name="**/ext/seebeyond/*.java" />
@@ -519,6 +541,10 @@
 
 		<jar jarfile="${lib}/hermes-fiorano.jar">
 			<fileset dir="${classes.ext.fiorano}" />
+		</jar>
+		
+		<jar jarfile="${lib}/hermes-hornetq.jar">
+				<fileset dir="${classes.ext.hornetq}" />
 		</jar>
 
 		<jar jarfile="${lib}/hermes-jbossmq.jar">

@@ -92,5 +92,9 @@
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/mina-core-1.1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/quickfixj.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/tools.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/client/hornetq-jms-client.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/client/jnp-client.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/client/hornetq-core-client.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/lib/netty.jar"/>
 	<classpathentry kind="output" path="ebuild/classes"/>
 </classpath>

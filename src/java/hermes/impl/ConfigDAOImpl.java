@@ -116,7 +116,6 @@ public class ConfigDAOImpl implements ConfigDAO
                      {
                         log.debug(libraryLongName + "(" + adminFactoryClass + ") lives in " + library);
                         adminFactoryToJARMap.put(adminFactoryClass, libraryFile.toURL());                      
-                        plugInToAdminFactory.put(libraryLongName, adminFactoryClass);
 
                         adminFactoryList.add(libraryFile.toURL());
                      }
@@ -124,6 +123,7 @@ public class ConfigDAOImpl implements ConfigDAO
                      {
                         log.error("cannot find " + library + " for " + adminFactoryClass);
                      }
+                     plugInToAdminFactory.put(libraryLongName, adminFactoryClass);
                   }
                }
             }
