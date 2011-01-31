@@ -43,7 +43,7 @@ public class SwingAppender extends AppenderSkeleton
 {
    private static Timer timer = new Timer();
    private FastDateFormat format = FastDateFormat.getInstance("yyyy.MM.dd HH:mm:ss");
-   private List cachedRows = new ArrayList();
+   private List<String> cachedRows = new ArrayList<String>();
    private long updateInterval = 500;
    private TimerTask timerTask;
    private boolean active = false;
@@ -69,11 +69,11 @@ public class SwingAppender extends AppenderSkeleton
          return;
       }
 
-      if (event.categoryName.startsWith(filter))
+      if (event.getLoggerName().startsWith(filter))
       {
          synchronized (cachedRows)
          {
-            cachedRows.add(format.format(new Date(event.timeStamp)) + " " + event.getLevel() + " [" + event.getThreadName() + "] " + event.categoryName + " " + event.getMessage());
+            cachedRows.add(format.format(new Date(event.timeStamp)) + " " + event.getLevel() + " [" + event.getThreadName() + "] " + event.getLoggerName() + " " + event.getMessage());
          }
 
          if (timerTask == null)

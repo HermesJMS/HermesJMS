@@ -17,8 +17,6 @@
 
 package hermes.browser.model;
 
-import hermes.HermesException;
-import hermes.HermesRuntimeException;
 import hermes.browser.HermesBrowser;
 import hermes.config.PropertyConfig;
 import hermes.config.PropertySetConfig;

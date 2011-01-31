@@ -246,6 +246,7 @@ public void init()
       propertyTable.expandAll();
 
       propertyPane = new PropertyPane(propertyTable);
+     
       generalPanel.add(propertyPane, BorderLayout.CENTER);
 
    }
