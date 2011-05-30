@@ -73,17 +73,13 @@
 	<classpathentry kind="var" path="JORAM_ROOT/lib/joram-client.jar"/>
 	<classpathentry kind="var" path="JORAM_ROOT/lib/joram-shared.jar"/>
 	<classpathentry kind="var" path="JORAM_ROOT/lib/ow_monolog.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-3.2.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-commons-3.2.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-util-3.2.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/derby.jar"/>
 	<classpathentry kind="var" path="WEBSPHERE_ROOT/java/com.ibm.mq.pcf.jar"/>
 	<classpathentry kind="var" path="MX4J_ROOT/lib/mx4j.jar"/>
 	<classpathentry kind="var" path="MX4J_ROOT/lib/mx4j-tools.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/ant.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/ArtTk.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/cglib-2.2_beta1.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/datatips.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/providers/imq/lib/imq.jar"/>
@@ -96,5 +92,7 @@
 	<classpathentry kind="var" path="HORNETQ_ROOT/client/jnp-client.jar"/>
 	<classpathentry kind="var" path="HORNETQ_ROOT/client/hornetq-core-client.jar"/>
 	<classpathentry kind="var" path="HORNETQ_ROOT/lib/netty.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/cglib-nodep-2.2.2.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-all-4.0_RC1.jar"/>
 	<classpathentry kind="output" path="ebuild/classes"/>
 </classpath>

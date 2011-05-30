@@ -176,15 +176,13 @@ public class ReflectUtils
             beanGenerator.addProperty(ReflectUtils.getPropertyName(m), ReflectUtils.getPropertyType(m));
          }
       }
-
-      final Class newClazz = (Class) beanGenerator.createClass();
       
       //
       // Enhance the class by placing a GetCachingMethodInterceptor intercepter on all the getter and setter methods.
       
       final Callback[] callbacks = new Callback[] { new GetCachingMethodInterceptor(), NoOp.INSTANCE };
 
-      return (ConnectionFactory) Enhancer.create(newClazz, new Class[] { ConnectionFactory.class, QueueConnectionFactory.class, TopicConnectionFactory.class }, new CallbackFilter()
+      return (ConnectionFactory) Enhancer.create(clazz, new Class[] { ConnectionFactory.class, QueueConnectionFactory.class, TopicConnectionFactory.class }, new CallbackFilter()
       {
          public int accept(Method m)
          {

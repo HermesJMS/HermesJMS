@@ -214,6 +214,30 @@ public class JAXBHermesLoader implements HermesLoader
    {
       boolean keepDurableSubscriptions = true, keepDurableSubscriptionsDialogShown = false;
 
+      // HJMS-139
+      
+      for (final Iterator iter = dConfigs.iterator(); iter.hasNext();)
+      {
+			final DestinationConfig dConfig = (DestinationConfig) iter.next();
+			DestinationConfig oldConfig = null;
+			
+			try {
+				if (dConfig.getDomain() == Domain.TOPIC.getId()) {
+					oldConfig = hermes.getDestinationConfig(dConfig.getName(), Domain.TOPIC);
+				} else {
+					oldConfig = hermes.getDestinationConfig(dConfig.getName(), Domain.QUEUE);
+				}
+			} catch (Throwable t) {
+				log.error(t.getMessage(), t);
+			}
+
+			if (oldConfig != null) {
+				dConfig.setProperties(oldConfig.getProperties());
+			}
+      }
+      
+      // End HJMS-139
+
       if (factoryConfigById.containsKey(hermes.getId()))
       {
          final FactoryConfig fConfig = factoryConfigById.get(hermes.getId());
