@@ -231,7 +231,7 @@ public class JAXBHermesLoader implements HermesLoader
 				log.error(t.getMessage(), t);
 			}
 
-			if (oldConfig != null) {
+			if (oldConfig != null && oldConfig.getProperties() != null) {
 				dConfig.setProperties(oldConfig.getProperties());
 			}
       }
