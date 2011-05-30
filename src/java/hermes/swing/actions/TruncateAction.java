@@ -20,6 +20,7 @@ package hermes.swing.actions;
 import hermes.Hermes;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
+import hermes.browser.actions.BrowserAction;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
 import hermes.browser.model.tree.HermesTreeNode;
 import hermes.browser.model.tree.RepositoryTreeNode;
@@ -82,7 +83,8 @@ public TruncateAction()
 
             try
             {
-               HermesBrowser.getBrowser().getActionFactory().createTruncateAction(hermesNode.getHermes(), destinationNode.getConfig());
+               BrowserAction browserAction = (BrowserAction) HermesBrowser.getBrowser().getDocumentPane().getActiveDocument();
+               HermesBrowser.getBrowser().getActionFactory().createTruncateAction(hermesNode.getHermes(), destinationNode.getConfig(), browserAction);
             }
             catch (JMSException ex)
             {

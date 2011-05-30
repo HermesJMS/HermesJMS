@@ -31,4 +31,4 @@ public interface MessagesDeleteable
    public void delete() ;
    
    public TableModel getTableModel() ;
-}
+  }

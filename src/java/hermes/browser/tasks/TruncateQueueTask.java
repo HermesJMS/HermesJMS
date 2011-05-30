@@ -21,6 +21,7 @@ import hermes.Domain;
 import hermes.Hermes;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
+import hermes.browser.actions.BrowserAction;
 import hermes.config.DestinationConfig;
 import hermes.swing.SwingRunner;
 
@@ -53,23 +54,27 @@ public class TruncateQueueTask extends TaskSupport
    private boolean showWarning = true;
    private ProgressMonitor monitor ;
 
-   public TruncateQueueTask(Hermes hermes, DestinationConfig dConfig, boolean showWarning)
+
+private BrowserAction action;
+
+   public TruncateQueueTask(Hermes hermes, DestinationConfig dConfig, BrowserAction action, boolean showWarning)
    {
       super(IconCache.getIcon("hermes.messages.delete"));
 
       this.dConfig = dConfig;
       this.hermes = hermes;
       this.showWarning = showWarning;
+      this.action = action ;
    }
 
-   public TruncateQueueTask(Hermes hermes, DestinationConfig dConfig, Collection messageIds, boolean showWarning)
+   public TruncateQueueTask(Hermes hermes, DestinationConfig dConfig, Collection messageIds, BrowserAction action, boolean showWarning)
    {
       super(IconCache.getIcon("hermes.messages.delete"));
 
       this.dConfig = dConfig;
       this.hermes = hermes;
       this.messageIds = messageIds;
-    
+      this.action = action ;
       this.showWarning = showWarning;
    }
 
@@ -88,7 +93,6 @@ public class TruncateQueueTask extends TaskSupport
       {
          doDelete();
       }
-
       hermes.close();
    }
 
@@ -152,6 +156,9 @@ public class TruncateQueueTask extends TaskSupport
          {
             Hermes.ui.getDefaultMessageSink().add(
                   "Deleted " + size + " messages from " + dConfig.getName() + (dConfig.isDurable() ? " durableName=" + dConfig.getClientID() : ""));
+         }
+         if (action != null) {
+        	 action.refresh() ;
          }
       }
    }
@@ -225,6 +232,10 @@ public class TruncateQueueTask extends TaskSupport
             {
                hermes.rollback();
                message.append("Messages rolledback");
+            }
+
+            if (action != null) {
+            	action.refresh() ;
             }
 
             hermes.close();

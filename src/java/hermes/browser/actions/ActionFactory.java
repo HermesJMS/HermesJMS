@@ -223,9 +223,9 @@ public class ActionFactory
    /**
     * Create an action to truncate all messages on a queue.
     */
-   public TruncateQueueTask createTruncateAction(Hermes hermes, DestinationConfig destination) throws JMSException
+   public TruncateQueueTask createTruncateAction(Hermes hermes, DestinationConfig destination, BrowserAction action) throws JMSException
    {
-      TruncateQueueTask rval = new TruncateQueueTask(hermes, destination, true);
+      TruncateQueueTask rval = new TruncateQueueTask(hermes, destination, action, true);
 
       rval.start();
 
@@ -242,9 +242,9 @@ public class ActionFactory
    /**
     * Create action to truncate a set of messages from a queue
     */
-   public TruncateQueueTask createTruncateAction(Hermes hermes, DestinationConfig destination, Collection messageIds, boolean warning) throws JMSException
+   public TruncateQueueTask createTruncateAction(Hermes hermes, DestinationConfig destination, Collection messageIds, boolean warning, BrowserAction action) throws JMSException
    {
-      TruncateQueueTask rval = new TruncateQueueTask(hermes, destination, messageIds, warning);
+      TruncateQueueTask rval = new TruncateQueueTask(hermes, destination, messageIds, action, warning);
 
       rval.start();
 

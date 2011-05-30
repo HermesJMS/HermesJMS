@@ -32,6 +32,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import com.jidesoft.document.DocumentComponent;
 import com.jidesoft.document.DocumentComponentEvent;
 import com.jidesoft.document.DocumentComponentListener;
 
@@ -43,118 +44,99 @@ import com.jidesoft.document.DocumentComponentListener;
  *          Exp $
  */
 
-public class DeleteMessagesAction extends AbstractAction implements DocumentComponentListener, ListSelectionListener, TableModelListener
-{
-   /**
+public class DeleteMessagesAction extends AbstractAction implements DocumentComponentListener, ListSelectionListener, TableModelListener {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3857033196276911772L;
 
-public DeleteMessagesAction()
-   { 
-      putValue(Action.NAME, "Delete");
-      putValue(Action.SHORT_DESCRIPTION, "Delete selected messages");
-      putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.messages.delete"));
-      putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0, false)) ; 
-      
+	public DeleteMessagesAction() {
+		putValue(Action.NAME, "Delete");
+		putValue(Action.SHORT_DESCRIPTION, "Delete selected messages");
+		putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.messages.delete"));
+		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0, false));
 
-      setEnabled(false);
-      
-      HermesBrowser.getBrowser().addDocumentComponentListener(this);
-      HermesBrowser.getBrowser().addMessageSelectionListener(this);
-   }
+		setEnabled(false);
 
-   private final void attachListener(final Object source)
-   {
-      if (source instanceof MessagesDeleteable)
-      {
-         MessagesDeleteable action = (MessagesDeleteable) source;
-         action.getTableModel().addTableModelListener(this);
-      }
-   }
+		HermesBrowser.getBrowser().addDocumentComponentListener(this);
+		HermesBrowser.getBrowser().addMessageSelectionListener(this);
+	}
 
-   private final void detachListener(final Object source)
-   {
-      if (source instanceof MessagesDeleteable)
-      {
-         MessagesDeleteable action = (MessagesDeleteable) source;
-         action.getTableModel().removeTableModelListener(this);
-      }
-   }
-   
-   public void actionPerformed(ActionEvent event)
-   {
-      if (HermesBrowser.getBrowser().getDocumentPane().getActiveDocument() instanceof MessagesDeleteable)
-      {
-         final MessagesDeleteable d = (MessagesDeleteable) HermesBrowser.getBrowser().getDocumentPane().getActiveDocument();
+	private final void attachListener(final Object source) {
+		if (source instanceof MessagesDeleteable) {
+			MessagesDeleteable action = (MessagesDeleteable) source;
+			action.getTableModel().addTableModelListener(this);
+		}
+	}
 
-         d.delete();
-      }
-   }
+	private final void detachListener(final Object source) {
+		if (source instanceof MessagesDeleteable) {
+			MessagesDeleteable action = (MessagesDeleteable) source;
+			action.getTableModel().removeTableModelListener(this);
+		}
+	}
 
-   private void checkEnabled()
-   {     
-      setEnabled(HermesBrowser.getBrowser().getDocumentPane().getActiveDocument() instanceof MessagesDeleteable) ;
-   }
-   
-   public void valueChanged(ListSelectionEvent e)
-   {
-      checkEnabled() ;
-   }
+	public void actionPerformed(ActionEvent event) {
+		if (HermesBrowser.getBrowser().getDocumentPane().getActiveDocument() instanceof MessagesDeleteable) {
+			final MessagesDeleteable d = (MessagesDeleteable) HermesBrowser.getBrowser().getDocumentPane().getActiveDocument();
 
-   public void documentComponentActivated(DocumentComponentEvent event)
-   {
-      attachListener(event.getSource()) ;
-      checkEnabled() ;
-   }
+			d.delete();
+		}
+	}
 
-   public void documentComponentClosed(DocumentComponentEvent event)
-   {
-      detachListener(event.getSource()) ;
-      checkEnabled() ;
-   }
+	private void checkEnabled() {
+		DocumentComponent document = HermesBrowser.getBrowser().getDocumentPane().getActiveDocument() ;
+		
+		setEnabled(document instanceof MessagesDeleteable);
+	}
 
-   public void documentComponentClosing(DocumentComponentEvent event)
-   {
-      checkEnabled() ;
-   }
+	public void valueChanged(ListSelectionEvent e) {
+		checkEnabled();
+	}
 
-   public void documentComponentDeactivated(DocumentComponentEvent event)
-   {
-      detachListener(event.getSource()) ;
-      checkEnabled() ;
-   }
+	public void documentComponentActivated(DocumentComponentEvent event) {
+		attachListener(event.getSource());
+		checkEnabled();
+	}
 
-   public void documentComponentMoved(DocumentComponentEvent event)
-   {
-      checkEnabled() ;      
-   }
+	public void documentComponentClosed(DocumentComponentEvent event) {
+		detachListener(event.getSource());
+		checkEnabled();
+	}
 
-   public void documentComponentMoving(DocumentComponentEvent event)
-   {
-      checkEnabled() ;
-   }
+	public void documentComponentClosing(DocumentComponentEvent event) {
+		checkEnabled();
+	}
 
-   public void documentComponentOpened(DocumentComponentEvent event)
-   {
-      attachListener(event.getSource()) ;
-      checkEnabled() ;
-   }
+	public void documentComponentDeactivated(DocumentComponentEvent event) {
+		detachListener(event.getSource());
+		checkEnabled();
+	}
 
-   public void documentComponentDocked(DocumentComponentEvent arg0)
-   {
-      // TODO Auto-generated method stub
-      
-   }
+	public void documentComponentMoved(DocumentComponentEvent event) {
+		checkEnabled();
+	}
 
-   public void documentComponentFloated(DocumentComponentEvent arg0)
-   {
-      // TODO Auto-generated method stub
-      
-   }
+	public void documentComponentMoving(DocumentComponentEvent event) {
+		checkEnabled();
+	}
 
-   public void tableChanged(TableModelEvent e)
-   {
-      checkEnabled() ;
-   }
+	public void documentComponentOpened(DocumentComponentEvent event) {
+		attachListener(event.getSource());
+		checkEnabled();
+	}
+
+	public void documentComponentDocked(DocumentComponentEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void documentComponentFloated(DocumentComponentEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void tableChanged(TableModelEvent e) {
+		checkEnabled();
+	}
 }

@@ -17,6 +17,9 @@
 
 package hermes.browser.actions;
 
+import java.util.Collection;
+import java.util.Set;
+
 import hermes.Domain;
 import hermes.Hermes;
 import hermes.HermesRepository;
@@ -26,59 +29,66 @@ import hermes.browser.tasks.BrowseRepositoryFileTask;
 import hermes.browser.tasks.Task;
 
 import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.swing.Icon;
 
 import org.apache.log4j.Logger;
 
 /**
  * @author colincrist@hermesjms.com last changed by: $Author: colincrist $
- * @version $Id: RepositoryFileBrowserAction.java,v 1.9 2006/04/28 09:59:37 colincrist Exp $
+ * @version $Id: RepositoryFileBrowserAction.java,v 1.9 2006/04/28 09:59:37
+ *          colincrist Exp $
  */
 
-public class RepositoryFileBrowserAction extends QueueBrowseAction
-{
-    private static final Logger log = Logger.getLogger(RepositoryFileBrowserAction.class) ;
-    private HermesRepository repository;
-    
-    /**
-     * @param hermes
-     * @param repository
-     * @param listener
-     * @param maxMessages
-     * @throws javax.jms.JMSException
-     */
-    public RepositoryFileBrowserAction(Hermes hermes, HermesRepository repository, int maxMessages) throws JMSException
-    {
-       super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(repository.getId(), Domain.QUEUE), maxMessages, null) ;
-        
-       this.repository = repository;
-    }
-    
-    public RepositoryFileBrowserAction(HermesRepository repository, int maxMessages) throws JMSException
-    {
-       super(null, HermesBrowser.getConfigDAO().createDestinationConfig(repository.getId(), Domain.QUEUE), maxMessages, null) ;
-       
-       this.repository = repository;  
-    }
-    
-    @Override
-    public boolean isRefreshable()
-    {
-      return false ;
-    }
- 
- 
-    /* (non-Javadoc)
-     * @see hermes.browser.actions.BrowserAction#createTask()
-     */
-    protected Task createTask() throws Exception
-    {
-        return new BrowseRepositoryFileTask(getHermes(), repository) ;
-    }
-    
-    public Icon getIcon()
-    {
-       return IconCache.getIcon("hermes.file.xml") ;
-       
-    }
+public class RepositoryFileBrowserAction extends QueueBrowseAction {
+	private static final Logger log = Logger.getLogger(RepositoryFileBrowserAction.class);
+	private HermesRepository repository;
+
+	/**
+	 * @param hermes
+	 * @param repository
+	 * @param listener
+	 * @param maxMessages
+	 * @throws javax.jms.JMSException
+	 */
+	public RepositoryFileBrowserAction(Hermes hermes, HermesRepository repository, int maxMessages) throws JMSException {
+		super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(repository.getId(), Domain.QUEUE), maxMessages, null);
+
+		this.repository = repository;
+	}
+
+	public RepositoryFileBrowserAction(HermesRepository repository, int maxMessages) throws JMSException {
+		super(null, HermesBrowser.getConfigDAO().createDestinationConfig(repository.getId(), Domain.QUEUE), maxMessages, null);
+
+		this.repository = repository;
+	}
+
+	@Override
+	public boolean isRefreshable() {
+		return false;
+	}
+
+	public void delete() {
+		try {
+			Set<String> messages = getSelectedMessageIDs() ;
+			repository.delete(messages) ;
+			refresh() ;
+		} catch (JMSException e) {
+			log.error(e) ;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.browser.actions.BrowserAction#createTask()
+	 */
+	protected Task createTask() throws Exception {
+		return new BrowseRepositoryFileTask(getHermes(), repository);
+	}
+
+	public Icon getIcon() {
+		return IconCache.getIcon("hermes.file.xml");
+
+	}
 }

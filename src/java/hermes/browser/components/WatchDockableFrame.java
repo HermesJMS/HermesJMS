@@ -469,7 +469,7 @@ private static final Timer flashingTimer = new Timer();
             {
                Hermes hermes = (Hermes) HermesBrowser.getBrowser().getContext().lookup(info.getHermesId());
 
-               HermesBrowser.getBrowser().getActionFactory().createTruncateAction(hermes, info.getConfig());
+               HermesBrowser.getBrowser().getActionFactory().createTruncateAction(hermes, info.getConfig(), null);
             }
             catch (Throwable t)
             {

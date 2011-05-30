@@ -20,6 +20,7 @@ package hermes;
 import hermes.store.MessageStore;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -89,4 +90,6 @@ public interface HermesRepository extends MessageStore
      * @return
      */
     public String getToolTipText();
+
+	public void delete(Set<String> messages) throws JMSException;
 }

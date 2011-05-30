@@ -104,7 +104,7 @@ private static final Logger log = Logger.getLogger(CutMessagesToClipboardAction.
                else
                {
                   HermesBrowser.getBrowser().getActionFactory().createTruncateAction(browserAction.getHermes(), browserAction.getConfig(),
-                        browserAction.getSelectedMessageIDs(),  false);
+                        browserAction.getSelectedMessageIDs(),  false, browserAction);
                }
             }
             else
