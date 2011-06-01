@@ -19,9 +19,12 @@ package hermes.browser.components;
 
 import hermes.Hermes;
 import hermes.HermesRuntimeException;
+import hermes.browser.HermesBrowser;
 import hermes.browser.actions.BrowserAction;
+import hermes.browser.dialog.message.MessageEditorDialog;
 import hermes.browser.model.MessageHeaderTableModel;
 import hermes.swing.HideableTableColumn;
+import hermes.swing.SQL92FilterableTableModel;
 
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
@@ -32,11 +35,13 @@ import java.util.Map;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.swing.JDialog;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.log4j.Logger;
 
 import com.jidesoft.grid.SortableTable;
+import com.jidesoft.grid.SortableTableModel;
 
 /**
  * @author colincrist@hermesjms.com
@@ -44,88 +49,72 @@ import com.jidesoft.grid.SortableTable;
  *          Exp $
  */
 
-public class MessageHeaderTable extends SortableTable
-{
-   /**
+public class MessageHeaderTable extends SortableTable {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1796772055963195768L;
 
-private static final Logger log = Logger.getLogger(MessageHeaderTable.class);
+	private static final Logger log = Logger.getLogger(MessageHeaderTable.class);
 
-   private DataFlavor[] myFlavours;
-   private Map<String, HideableTableColumn> userPropertyColumns = new HashMap<String, HideableTableColumn>();
-   private Hermes hermes;
+	private DataFlavor[] myFlavours;
+	private Map<String, HideableTableColumn> userPropertyColumns = new HashMap<String, HideableTableColumn>();
+	private Hermes hermes;
 
-   public MessageHeaderTable(Hermes hermes, BrowserAction action, MessageHeaderTableModel model)
-   {
-      super(model);
-      this.hermes = hermes;
+	public MessageHeaderTable(Hermes hermes, BrowserAction action, MessageHeaderTableModel model) {
+		super(model);
+		this.hermes = hermes;
 
-      MessageHeaderTableSupport.init(action, this, myFlavours);
-      setDragEnabled(true);
+		MessageHeaderTableSupport.init(action, this, myFlavours);
+		setDragEnabled(true);
 
-     
-   }
+	}
 
-   public void onDoubleClick()
-   {
-      /**
-      int selectedRow = getSelectedRow();
-      if (selectedRow > -1)
-      {
-         try
-         {
-            SortableTableModel sortModel = (SortableTableModel) getModel() ;
-            SQL92FilterableTableModel filterModel = (SQL92FilterableTableModel) sortModel.getActualModel() ;
-            MessageHeaderTableModel model = (MessageHeaderTableModel) filterModel.getActualModel();
-            Message message = model.getMessageAt(selectedRow);
-            MessageEditor editor = new MessageEditor(hermes, message);
-            editor.edit();
+	public void onDoubleClick() {
 
-         }
-         catch (Throwable t)
-         {
-            HermesBrowser.getBrowser().showErrorDialog(t);
-         }
-      }
-      **/
-   }
+		int selectedRow = getSelectedRow();
+		if (selectedRow > -1) {
+			try {
+				SortableTableModel sortModel = (SortableTableModel) getModel();
+				SQL92FilterableTableModel filterModel = (SQL92FilterableTableModel) sortModel.getActualModel();
+				MessageHeaderTableModel model = (MessageHeaderTableModel) filterModel.getActualModel();
+				Message message = model.getMessageAt(selectedRow);
+				MessageEditorDialog dialog = new MessageEditorDialog(message);
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
+			} catch (Throwable t) {
+				HermesBrowser.getBrowser().showErrorDialog(t);
+			}
+		}
 
-   private void checkForProperties(Message message)
-   {
-      try
-      {
-         for (final Enumeration e = message.getPropertyNames(); e.hasMoreElements();)
-         {
-            String propertyName = (String) e.nextElement();
+	}
 
-            if (!userPropertyColumns.containsKey(propertyName))
-            {
-               final HideableTableColumn column = new HideableTableColumn();
-               column.setHeaderValue(propertyName);
+	private void checkForProperties(Message message) {
+		try {
+			for (final Enumeration e = message.getPropertyNames(); e.hasMoreElements();) {
+				String propertyName = (String) e.nextElement();
 
-               getColumnModel().addColumn(column);
+				if (!userPropertyColumns.containsKey(propertyName)) {
+					final HideableTableColumn column = new HideableTableColumn();
+					column.setHeaderValue(propertyName);
 
-               final MessageHeaderTableModel model = (MessageHeaderTableModel) getModel();
-               // model.displayColumn(column) ;
-            }
-         }
-      }
-      catch (JMSException e)
-      {
-         throw new HermesRuntimeException(e);
-      }
-   }
+					getColumnModel().addColumn(column);
 
-   public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
-   {
-      return MessageHeaderTableSupport.prepareRenderer(super.prepareRenderer(renderer, row, column), this, renderer, row, column);
-   }
+					final MessageHeaderTableModel model = (MessageHeaderTableModel) getModel();
+					// model.displayColumn(column) ;
+				}
+			}
+		} catch (JMSException e) {
+			throw new HermesRuntimeException(e);
+		}
+	}
 
-   @Override
-   public String getToolTipText(MouseEvent event)
-   {
-      return super.getToolTipText(event);
-   }
+	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+		return MessageHeaderTableSupport.prepareRenderer(super.prepareRenderer(renderer, row, column), this, renderer, row, column);
+	}
+
+	@Override
+	public String getToolTipText(MouseEvent event) {
+		return super.getToolTipText(event);
+	}
 }

@@ -17,6 +17,7 @@
 
 package hermes.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,40 +28,61 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.apache.log4j.Logger;
 
 /**
- * An interceptor that caches the parameter for a setter and returns it from a getter.
+ * An interceptor that caches the parameter for a setter and returns it from a
+ * getter.
  * 
  * @author colincrist@hermesjms.com
- * @version $Id: GetCachingMethodInterceptor.java,v 1.2 2006/07/13 07:35:34 colincrist Exp $
+ * @version $Id: GetCachingMethodInterceptor.java,v 1.2 2006/07/13 07:35:34
+ *          colincrist Exp $
  */
 
-public final class GetCachingMethodInterceptor implements MethodInterceptor
-{
-   private static final Logger log = Logger.getLogger(GetCachingMethodInterceptor.class) ;
-   
-   private final Map<String, Object> properties = new HashMap<String, Object>();
-   
-   public final Object intercept(final Object object, final Method method, final Object[] args, final MethodProxy proxy) throws Throwable
-   {
-      if (ReflectUtils.isGetter(method))
-      {
-         log.debug("GetCachingMethodInterceptor getter for " + ReflectUtils.getPropertyName(method) + " returns " + properties.get(ReflectUtils.getPropertyName(method))) ;
-         
-         return properties.get(ReflectUtils.getPropertyName(method));
-      }
-     
-      log.debug("superName: " + proxy.getSuperName()) ;
-      
-      final Object rval = proxy.invokeSuper(object, args);
+public final class GetCachingMethodInterceptor implements MethodInterceptor {
+	private static final Logger log = Logger.getLogger(GetCachingMethodInterceptor.class);
 
-      if (ReflectUtils.isSetter(method))
-      {
-         String propertyName = ReflectUtils.getPropertyName(method) ;
-        
-         properties.put(propertyName, args[0]);       
-         
-         log.debug("GetCachingMethodInterceptor setter for " + ReflectUtils.getPropertyName(method) + " with " + args[0]) ;         
-      }
+	private final Map<String, Object> properties = new HashMap<String, Object>();
 
-      return rval;
-   }
+	private Object altObject;
+
+	public GetCachingMethodInterceptor() {
+		
+	}
+	public GetCachingMethodInterceptor(Object altObject) {
+		this.altObject = altObject;
+	}
+
+	public final Object intercept(final Object object, final Method method, final Object[] args, final MethodProxy proxy) throws Throwable {
+		if (ReflectUtils.isGetter(method)) {
+			return properties.get(ReflectUtils.getPropertyName(method));
+		}
+
+		log.debug("superName: " + proxy.getSuperName());
+		
+
+		Object rval = null ;
+		if (altObject != null) {
+			try {
+				Method m = altObject.getClass().getMethod(method.getName(), method.getParameterTypes()) ;
+				rval = m.invoke(altObject, args) ;
+
+			} catch (NoSuchMethodException ex) {
+				log.error("ignoring: " + ex) ;
+			} catch (InvocationTargetException ex) {
+				throw ex.getCause() ;
+			}
+		} else {
+			 rval = proxy.invokeSuper(object, args);
+		}
+
+
+
+		if (ReflectUtils.isSetter(method)) {
+			String propertyName = ReflectUtils.getPropertyName(method);
+
+			properties.put(propertyName, args[0]);
+
+			log.debug("GetCachingMethodInterceptor setter for " + ReflectUtils.getPropertyName(method) + " with " + args[0]);
+		}
+
+		return rval;
+	}
 }

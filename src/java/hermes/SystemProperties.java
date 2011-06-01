@@ -45,7 +45,7 @@ public interface SystemProperties
     
     
     public static final String NON_COMPLIANT_PACKAGES = "hermes.nonComplientFactories.packagePrefix" ;
-    public static final String DEFAULT_NON_COMPLIANT_PACKAGES = "com.tibco.tibjms" ;
+    public static final String DEFAULT_NON_COMPLIANT_PACKAGES = "com.tibco.tibjms,test.jms" ;
     
     
     public static final String FILE_SEPARATOR = File.separator  ;
