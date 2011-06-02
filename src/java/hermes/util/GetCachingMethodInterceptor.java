@@ -54,10 +54,8 @@ public final class GetCachingMethodInterceptor implements MethodInterceptor {
 		if (ReflectUtils.isGetter(method)) {
 			return properties.get(ReflectUtils.getPropertyName(method));
 		}
-
 		log.debug("superName: " + proxy.getSuperName());
 		
-
 		Object rval = null ;
 		if (altObject != null) {
 			try {
@@ -65,15 +63,13 @@ public final class GetCachingMethodInterceptor implements MethodInterceptor {
 				rval = m.invoke(altObject, args) ;
 
 			} catch (NoSuchMethodException ex) {
-				log.error("ignoring: " + ex) ;
+				log.info("ignoring: " + ex) ;
 			} catch (InvocationTargetException ex) {
 				throw ex.getCause() ;
 			}
 		} else {
 			 rval = proxy.invokeSuper(object, args);
 		}
-
-
 
 		if (ReflectUtils.isSetter(method)) {
 			String propertyName = ReflectUtils.getPropertyName(method);

@@ -61,10 +61,12 @@ public class MessageHeaderTable extends SortableTable {
 	private Map<String, HideableTableColumn> userPropertyColumns = new HashMap<String, HideableTableColumn>();
 	private Hermes hermes;
 
-	public MessageHeaderTable(Hermes hermes, BrowserAction action, MessageHeaderTableModel model) {
+	private EditedMessageHandler editedMessageHander;
+
+	public MessageHeaderTable(Hermes hermes, BrowserAction action, MessageHeaderTableModel model, EditedMessageHandler editedMessageHandler) {
 		super(model);
 		this.hermes = hermes;
-
+		this.editedMessageHander = editedMessageHandler;
 		MessageHeaderTableSupport.init(action, this, myFlavours);
 		setDragEnabled(true);
 
@@ -72,18 +74,21 @@ public class MessageHeaderTable extends SortableTable {
 
 	public void onDoubleClick() {
 
-		int selectedRow = getSelectedRow();
-		if (selectedRow > -1) {
-			try {
-				SortableTableModel sortModel = (SortableTableModel) getModel();
-				SQL92FilterableTableModel filterModel = (SQL92FilterableTableModel) sortModel.getActualModel();
-				MessageHeaderTableModel model = (MessageHeaderTableModel) filterModel.getActualModel();
-				Message message = model.getMessageAt(selectedRow);
-				MessageEditorDialog dialog = new MessageEditorDialog(message);
-				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				dialog.setVisible(true);
-			} catch (Throwable t) {
-				HermesBrowser.getBrowser().showErrorDialog(t);
+		if (editedMessageHander != null) {
+			int selectedRow = getSelectedRow();
+			if (selectedRow > -1) {
+				try {
+					SortableTableModel sortModel = (SortableTableModel) getModel();
+					SQL92FilterableTableModel filterModel = (SQL92FilterableTableModel) sortModel.getActualModel();
+					MessageHeaderTableModel model = (MessageHeaderTableModel) filterModel.getActualModel();
+					Message message = model.getMessageAt(selectedRow);
+					MessageEditorDialog dialog = new MessageEditorDialog(message, editedMessageHander);
+					dialog.setLocationRelativeTo(HermesBrowser.getBrowser());
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				} catch (Throwable t) {
+					HermesBrowser.getBrowser().showErrorDialog(t);
+				}
 			}
 		}
 

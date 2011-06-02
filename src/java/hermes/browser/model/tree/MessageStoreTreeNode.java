@@ -302,4 +302,10 @@ private static final Logger log = Logger.getLogger(MessageStoreTreeNode.class);
       // NOP
    }
 
+@Override
+public void onMessageChanged(Message message) {
+	// TODO Auto-generated method stub
+	
+}
+
 }

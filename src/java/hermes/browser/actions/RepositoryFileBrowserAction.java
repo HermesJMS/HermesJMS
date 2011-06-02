@@ -25,6 +25,7 @@ import hermes.Hermes;
 import hermes.HermesRepository;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
+import hermes.browser.components.EditedMessageHandler;
 import hermes.browser.tasks.BrowseRepositoryFileTask;
 import hermes.browser.tasks.Task;
 
@@ -61,6 +62,22 @@ public class RepositoryFileBrowserAction extends QueueBrowseAction {
 		super(null, HermesBrowser.getConfigDAO().createDestinationConfig(repository.getId(), Domain.QUEUE), maxMessages, null);
 
 		this.repository = repository;
+	}
+
+	@Override
+	public EditedMessageHandler getEditedMessageHandler() {
+		return new AbstractEditedMessageHandler(getHermes()) {
+			
+			@Override
+			public void onMessage(Message message) {
+				try {
+					updateMessage(message) ;
+					repository.update(message) ;
+				} catch (Exception e) {
+					HermesBrowser.getBrowser().showErrorDialog("Cannot update message", e) ;
+				}
+			}
+		};
 	}
 
 	@Override

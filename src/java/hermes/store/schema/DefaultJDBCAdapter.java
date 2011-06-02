@@ -122,6 +122,19 @@ public class DefaultJDBCAdapter implements JDBCAdapter
       return "ID:" + storeId + "-" + messageIdSequence++;
    }
 
+
+   @Override
+   public void update(Connection connection, String id, Message message)  throws SQLException, JMSException {
+	   final String messageAsXMLString = xmlHelper.toXML(message);
+	      final InputStream messageAsXML = new StringInputStream(messageAsXMLString);   	
+	      
+	      final PreparedStatement pstmt = connection.prepareStatement("update messages set message = ? where messageid = ?");
+	      pstmt.setString(1, message.getJMSMessageID()) ;
+	      pstmt.setAsciiStream(2, messageAsXML, messageAsXMLString.length()) ;
+	      pstmt.execute() ;
+	      pstmt.close() ;
+   }
+   
    public void insert(Connection connection, String storeId, Message message) throws SQLException, JMSException
    {
       final String destinationName = message.getJMSDestination() == null ? "default" : JMSUtils.getDestinationName(message.getJMSDestination());
@@ -353,4 +366,5 @@ public class DefaultJDBCAdapter implements JDBCAdapter
                }
             });
    }
+
 }

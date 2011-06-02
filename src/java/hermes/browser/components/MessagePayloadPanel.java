@@ -49,6 +49,7 @@ private static final Logger log = Logger.getLogger(MessagePayloadPanel.class);
    private final JTabbedPane tabbedPane = new JideTabbedPane();
 
    private String destinationName;
+private Message message;
 
    public MessagePayloadPanel(String destinationName)
    {
@@ -68,6 +69,9 @@ private static final Logger log = Logger.getLogger(MessagePayloadPanel.class);
       setMessage(hermes, message);
    }
 
+   public Message getMessage() {
+	   return message ;
+   }
    private void init()
    {
       tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
@@ -104,5 +108,6 @@ private static final Logger log = Logger.getLogger(MessagePayloadPanel.class);
       }
 
       tabbedPane.setSelectedIndex(selectedIndex);
+      this.message = m ;
    }
 }

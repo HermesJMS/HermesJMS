@@ -44,218 +44,180 @@ import org.apache.log4j.Logger;
  *          colincrist Exp $
  */
 
-public class CopyOrMoveMessagesTask extends TaskSupport
-{
-   private static final Logger cat = Logger.getLogger(CopyOrMoveMessagesTask.class);
+public class CopyOrMoveMessagesTask extends TaskSupport {
+	private static final Logger cat = Logger.getLogger(CopyOrMoveMessagesTask.class);
 
-   private Collection messages;
-   private Hermes hermes;
-   private String destination;
-   private boolean keepRunning = true;
-   private int optionRval;
-   private ProgressMonitor monitor;
-   private int action;
-   private Domain target;
+	private Collection messages;
+	private Hermes hermes;
+	private String destination;
+	private boolean keepRunning = true;
+	private int optionRval;
+	private ProgressMonitor monitor;
+	private int action;
+	private Domain target;
 
-   public CopyOrMoveMessagesTask(Hermes hermes, String destination, Domain target, Collection messages, int action)
-   {
-      super(action == TransferHandler.COPY ? IconCache.getIcon("copy") : IconCache.getIcon("cut"));
+	public CopyOrMoveMessagesTask(Hermes hermes, String destination, Domain target, Collection messages, int action) {
+		super(action == TransferHandler.COPY ? IconCache.getIcon("copy") : IconCache.getIcon("cut"));
 
-      this.hermes = hermes;
-      this.messages = messages;
-      this.destination = destination;
-      this.action = action;
-      this.target = target;
-   }
+		this.hermes = hermes;
+		this.messages = messages;
+		this.destination = destination;
+		this.action = action;
+		this.target = target;
+	}
 
-   public String getTitle()
-   {
-      if (action == TransferHandler.COPY)
-      {
-         return "Copy to " + destination;
-      }
-      else
-      {
-         return "Move to " + destination;
-      }
-   }
+	public String getTitle() {
+		if (action == TransferHandler.COPY) {
+			return "Copy to " + destination;
+		} else if (action == TransferHandler.MOVE) {
+			return "Move to " + destination;
+		} else {
+			return "Send to " + destination;
+		}
+	}
 
-   private Message createMessage(Destination to, Object o, Collection ids) throws JMSException
-   {
-      if (o instanceof Message)
-      {
-      Message oldMessage = (Message) o ;
-      Message newMessage = hermes.duplicate(to, oldMessage);
+	private Message createMessage(Destination to, Object o, Collection ids) throws JMSException {
+		if (o instanceof Message) {
+			Message oldMessage = (Message) o;
+			Message newMessage = hermes.duplicate(to, oldMessage);
 
-      ids.add(oldMessage.getJMSMessageID());
-      return newMessage ;
-      }
-      else if (o instanceof byte[])
-      {
-         BytesMessage newMessage = hermes.createBytesMessage() ;
-         newMessage.writeBytes((byte[]) o) ;
-         return newMessage ;
-      }
-      else
-      {
-         return hermes.createTextMessage(o.toString()) ;
-      }
-   }
-   public void invoke() throws Exception
-   {
-      action = HermesBrowser.getBrowser().getBrowserTree().getLastDndAction(); 
+			ids.add(oldMessage.getJMSMessageID());
+			return newMessage;
+		} else if (o instanceof byte[]) {
+			BytesMessage newMessage = hermes.createBytesMessage();
+			newMessage.writeBytes((byte[]) o);
+			return newMessage;
+		} else {
+			return hermes.createTextMessage(o.toString());
+		}
+	}
 
-      
-      synchronized (this)
-      {
-         //
-         // See if the user still wants to continue...
+	public void invoke() throws Exception {
+		action = HermesBrowser.getBrowser().getBrowserTree().getLastDndAction();
 
-         SwingRunner.invokeLater(new Runnable()
-         {
-            public void run()
-            {
-               final String copyOrMove = action == TransferHandler.COPY ? "copy" : "move";
+		synchronized (this) {
+			//
+			// See if the user still wants to continue...
 
-               if (messages.size() > 1)
-               {
-                  optionRval = JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you wish to " + copyOrMove + " these " + messages.size()
-                        + " messages to " + destination + "?", "Confirm.", JOptionPane.YES_NO_OPTION);
-               }
-               else
-               {
-                  optionRval = JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you wish to " + copyOrMove + " this message to " + destination
-                        + "?", "Confirm.", JOptionPane.YES_NO_OPTION);
-               }
+			SwingRunner.invokeLater(new Runnable() {
+				public void run() {
+					String copyOrMove = "send";
+					switch (action) {
+					case TransferHandler.COPY:
+						copyOrMove = "copy";
+						break;
+					case TransferHandler.MOVE:
+						copyOrMove = "move";
+					}
 
-               synchronized (CopyOrMoveMessagesTask.this)
-               {
-                  CopyOrMoveMessagesTask.this.notifyAll();
-               }
-            }
-         });
+					if (messages.size() > 1) {
+						optionRval = JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you wish to " + copyOrMove + " these " + messages.size()
+								+ " messages to " + destination + "?", "Confirm.", JOptionPane.YES_NO_OPTION);
+					} else {
+						optionRval = JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you wish to " + copyOrMove + " this message to "
+								+ destination + "?", "Confirm.", JOptionPane.YES_NO_OPTION);
+					}
 
-         try
-         {
-            this.wait();
-         }
-         catch (InterruptedException ex)
-         {
-            // NOP
-         }
-      }
+					synchronized (CopyOrMoveMessagesTask.this) {
+						CopyOrMoveMessagesTask.this.notifyAll();
+					}
+				}
+			});
 
-      if (optionRval == JOptionPane.YES_OPTION)
-      {
-         final StringBuffer finalStatus = new StringBuffer();
-         final Collection ids = new ArrayList();
-         
-         try
-         {
-            //
-            // Add a progress monitor as this may take some time with slow
-            // transports
+			try {
+				this.wait();
+			} catch (InterruptedException ex) {
+				// NOP
+			}
+		}
 
-            final int startSize = messages.size();
-            final Destination to = hermes.getDestination(destination, target);
+		if (optionRval == JOptionPane.YES_OPTION) {
+			final StringBuffer finalStatus = new StringBuffer();
+			final Collection ids = new ArrayList();
 
-            SwingRunner.invokeAndWait(new Runnable()
-            {
-               public void run()
-               {
-                  monitor = new ProgressMonitor(HermesBrowser.getBrowser(), "Copying " + messages.size() + ((messages.size() == 1) ? " message" : " messages")
-                        + " to " + destination, "Connecting...", 0, messages.size());
+			try {
+				//
+				// Add a progress monitor as this may take some time with slow
+				// transports
 
-                  monitor.setMillisToDecideToPopup(100);
-                  monitor.setMillisToPopup(400);
-                  monitor.setProgress(1);
-               }
-            });
+				final int startSize = messages.size();
+				final Destination to = hermes.getDestination(destination, target);
 
-            for (Iterator iter = messages.iterator(); iter.hasNext() && !monitor.isCanceled();)
-            {
-               Message newMessage = createMessage(to, iter.next(), ids) ;
+				SwingRunner.invokeAndWait(new Runnable() {
+					public void run() {
+						monitor = new ProgressMonitor(HermesBrowser.getBrowser(), "Copying " + messages.size()
+								+ ((messages.size() == 1) ? " message" : " messages") + " to " + destination, "Connecting...", 0, messages.size());
 
-               hermes.send(to, newMessage);  
+						monitor.setMillisToDecideToPopup(100);
+						monitor.setMillisToPopup(400);
+						monitor.setProgress(1);
+					}
+				});
 
-               iter.remove();
+				for (Iterator iter = messages.iterator(); iter.hasNext() && !monitor.isCanceled();) {
+					Message newMessage = createMessage(to, iter.next(), ids);
 
-               final int progress = startSize - messages.size();
+					hermes.send(to, newMessage);
 
-               SwingRunner.invokeLater(new Runnable()
-               {
-                  public void run()
-                  {
-                     monitor.setProgress(progress);
-                     monitor.setNote(new Long(messages.size()) + " messages left to copy");
-                  }
-               });
-            }
+					iter.remove();
 
-            //
-            // Check to see if user cancelled
+					final int progress = startSize - messages.size();
 
-            if (monitor.isCanceled())
-            {
-               hermes.rollback();
-               Toolkit.getDefaultToolkit().beep();
+					SwingRunner.invokeLater(new Runnable() {
+						public void run() {
+							monitor.setProgress(progress);
+							monitor.setNote(new Long(messages.size()) + " messages left to copy");
+						}
+					});
+				}
 
-               finalStatus.append("Copy to ").append(destination).append(" cancelled");
-            }
-            else
-            {
-               hermes.commit();
+				//
+				// Check to see if user cancelled
 
-               if (action == TransferHandler.COPY)
-               {
-                  if (startSize == 1)
-                  {
-                     finalStatus.append("Committed. Message copied to ").append(destination);
-                  }
-                  else
-                  {
-                     finalStatus.append("Committed. ").append(startSize).append(" messages copied to ").append(destination);
-                  }
-               }
-               else if (action == TransferHandler.MOVE)
-               {
-                  BrowserAction activeAction = (BrowserAction) HermesBrowser.getBrowser().getDocumentPane().getActiveDocument();
+				if (monitor.isCanceled()) {
+					hermes.rollback();
+					Toolkit.getDefaultToolkit().beep();
 
-                  HermesBrowser.getBrowser().getActionFactory().createTruncateAction(activeAction.getHermes(), activeAction.getConfig(), ids,
-                        false, activeAction);
-               }
-            }
+					finalStatus.append("Copy to ").append(destination).append(" cancelled");
+				} else {
+					hermes.commit();
 
-            notifyStatus(finalStatus.toString());
-         }
-         catch (Exception ex)
-         {
-            //
-            // If anything went wrong, rollback and provide a popup.
+					if (action == TransferHandler.COPY) {
+						if (startSize == 1) {
+							finalStatus.append("Committed. Message copied to ").append(destination);
+						} else {
+							finalStatus.append("Committed. ").append(startSize).append(" messages copied to ").append(destination);
+						}
+					} else if (action == TransferHandler.MOVE) {
+						BrowserAction activeAction = (BrowserAction) HermesBrowser.getBrowser().getDocumentPane().getActiveDocument();
 
-            cat.error(ex.getMessage(), ex);
+						HermesBrowser.getBrowser().getActionFactory()
+								.createTruncateAction(activeAction.getHermes(), activeAction.getConfig(), ids, false, activeAction);
+					}
+				}
 
-            notifyThrowable(ex);
+				notifyStatus(finalStatus.toString());
+			} catch (Exception ex) {
+				//
+				// If anything went wrong, rollback and provide a popup.
 
-            if (monitor != null)
-            {
-               monitor.close();
-            }
+				cat.error(ex.getMessage(), ex);
 
-            try
-            {
-               hermes.rollback();
-            }
-            catch (JMSException ex2)
-            {
+				notifyThrowable(ex);
 
-               cat.error("Rollback after failed copy: " + ex2.getMessage(), ex2);
-            }
-         }
-         finally
-         {
-            hermes.close();
-         }
-      }
-   }
+				if (monitor != null) {
+					monitor.close();
+				}
+
+				try {
+					hermes.rollback();
+				} catch (JMSException ex2) {
+
+					cat.error("Rollback after failed copy: " + ex2.getMessage(), ex2);
+				}
+			} finally {
+				hermes.close();
+			}
+		}
+	}
 }

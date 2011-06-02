@@ -36,4 +36,6 @@ public interface MessageStoreListener extends MessageListener
    
    public void onMessageDeleted(Message m) ;
 
+   public void onMessageChanged(Message message);
+
 }

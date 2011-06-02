@@ -193,4 +193,6 @@ public interface MessageStore
     * @param listener
     */
    public void removeMessageListener(MessageStoreListener listener);
+   
+   public void update(Message message) throws Exception;
 }

@@ -403,4 +403,14 @@ private static final Logger log = Logger.getLogger(MessageHeaderTableModel.class
    {
       return getMessageAt(row);
    }
+
+public void updateMessage(Message message) throws JMSException {
+	for (int i = 0 ; i < messages.size() ; i++) {
+		if (messages.get(i).getJMSMessageID().equals(message.getJMSMessageID())) {
+			messages.set(i, message) ;
+			fireTableRowsUpdated(i, i) ;
+			break ;
+		}
+	}	
+}
 }

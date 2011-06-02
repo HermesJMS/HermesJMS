@@ -33,6 +33,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -304,5 +305,41 @@ public class FileRepository implements HermesRepository {
 	public void delete(Message m) throws JMSException {
 		throw new HermesException("Not Implemented");
 	}
+
+	@Override
+	public void update(Message message) throws Exception {
+		if (xmlMessages == null) {
+			read() ;
+		}
+		
+		for (int i = 0 ; i < xmlMessages.getEntry().size() ; i++) {
+			XMLMessage xmlMessage = null;
+			Entry entry = xmlMessages.getEntry().get(i) ;
+			if (entry.getBytesMessage() != null) {
+				xmlMessage = entry.getBytesMessage();
+			} else if (entry.getTextMessage() != null) {
+				xmlMessage = entry.getTextMessage();
+			} else if (entry.getMapMessage() != null) {
+				xmlMessage = entry.getMapMessage();
+			} else if (entry.getObjectMessage() != null) {
+				xmlMessage = entry.getObjectMessage();
+			}
+
+			// ikky but whatever.
+			
+			if (xmlMessage != null) {
+				if (message.getJMSMessageID().equals(xmlMessage.getJMSMessageID())) {
+					xmlMessages.getEntry().remove(i) ;
+					MessageSet messageSet = xmlSupport.toMessageSet(Arrays.asList(message)) ;
+					xmlMessages.getEntry().add(i, messageSet.getEntry().get(0)) ;
+				}
+			}
+		}
+
+		save();
+		
+	}
+
+
 
 }

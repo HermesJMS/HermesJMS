@@ -22,6 +22,7 @@ import hermes.Hermes;
 import hermes.HermesException;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
+import hermes.browser.components.EditedMessageHandler;
 import hermes.browser.components.HierarchicalMessageHeaderTable;
 import hermes.browser.components.MessageHeaderTable;
 import hermes.browser.components.MessagePayloadPanel;
@@ -134,11 +135,10 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
 
 	public BrowserAction(Hermes hermes, DestinationConfig dConfig, int maxMessages, String postfix) throws JMSException {
 		super(new JPanel(), getDisplayName(hermes, dConfig, postfix));
-
+		this.hermes = hermes;
 		this.dConfig = dConfig;
 		this.messageHeaderTableModel = new MessageHeaderTableModel(hermes, dConfig.getName());
-		this.messageHeaderTable = new MessageHeaderTable(hermes, this, messageHeaderTableModel);
-		this.hermes = hermes;
+		this.messageHeaderTable = new MessageHeaderTable(hermes, this, messageHeaderTableModel, getEditedMessageHandler());
 		this.maxMessages = maxMessages;
 		this.messagePayloadPanel = new MessagePayloadPanel(dConfig.getName());
 		this.postfix = postfix;
@@ -146,6 +146,15 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
 		topPanel = (JPanel) getComponent();
 	}
 
+	public void updateMessage(Message message) throws JMSException {
+		messageHeaderTableModel.updateMessage(message) ;
+		if (messagePayloadPanel.getMessage().getJMSMessageID().equals(message.getJMSMessageID())) {
+			updatePayloadPanel() ;
+		}
+	}
+	public EditedMessageHandler getEditedMessageHandler() {
+		return null ;
+	}
 	public DestinationConfig getDestinationConfig() {
 		return dConfig;
 	}
@@ -750,6 +759,10 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
 	 * returning a panel being the one used.
 	 */
 	public void valueChanged(ListSelectionEvent e) {
+		updatePayloadPanel();
+	}
+	
+	private void updatePayloadPanel() {
 		selectedRow = filterModel.getActualRowAt(messageHeaderTable.getSelectedRow());
 
 		if (messageHeaderTableModel.getRowCount() > selectedRow && selectedRow >= 0) {

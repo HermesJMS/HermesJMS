@@ -62,4 +62,6 @@ public interface JDBCAdapter
    
    public int getDepth(Connection connection, String storeId, Destination destination) throws SQLException, JMSException ;
 
+   public void update(Connection connection, String id, Message message) throws SQLException, JMSException;
+
 }
