@@ -11,6 +11,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.TextMessage;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -19,7 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
-public class TextMessagePayloadPanel extends JPanel {
+public class TextMessagePayloadPanel  extends MessageWriter {
 	JTextArea textArea = new JTextArea();
 
 	public TextMessagePayloadPanel() {
@@ -78,6 +81,11 @@ public class TextMessagePayloadPanel extends JPanel {
 		setText(text);
 	}
 
+	public TextMessagePayloadPanel(TextMessage message) throws JMSException {
+		this();
+		setText(message.getText()) ;
+	}
+
 	public String getText() {
 		return textArea.getText();
 	}
@@ -85,5 +93,18 @@ public class TextMessagePayloadPanel extends JPanel {
 	public void setText(String text) {
 		textArea.setText(text);
 		textArea.setCaretPosition(0);
+	}
+
+	@Override
+	public void onMessage(Message message) throws JMSException {
+		if (message instanceof TextMessage) {
+			TextMessage textMessage = (TextMessage) message ;
+			textMessage.setText(getText()) ;
+		}
+	}
+
+	@Override
+	boolean supports(MessageType type) {
+		return type == MessageType.TextMessage ;
 	}
 }

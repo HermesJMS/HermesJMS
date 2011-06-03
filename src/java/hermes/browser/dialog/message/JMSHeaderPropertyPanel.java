@@ -40,7 +40,6 @@ import javax.swing.event.ChangeListener;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.time.FastDateFormat;
 
-
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
@@ -60,9 +59,13 @@ public class JMSHeaderPropertyPanel extends JPanel {
 	private JCheckBox queueCheckBox;
 	private JCheckBox topicCheckBox;
 
+	public JComboBox getMessageTypeComboBox() {
+		return messageTypeCombo;
+	}
+
 	private void syncFromMessage() throws JMSException {
 		Calendar cal = Calendar.getInstance();
-		FastDateFormat fmt = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSSZ") ;
+		FastDateFormat fmt = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSSZ");
 
 		queueCheckBox.setSelected(message.getJMSDestination() instanceof Queue);
 		topicCheckBox.setSelected(message.getJMSDestination() instanceof Topic);
@@ -94,6 +97,12 @@ public class JMSHeaderPropertyPanel extends JPanel {
 		case TextMessage:
 			message = handler.createTextMessage();
 			break;
+		case MapMessage:
+			message = handler.createMapMessage();
+			break;
+		case Message:
+			message = handler.createMessage();
+			break;
 		default:
 			throw new JMSException("Unsupported message type " + messageType);
 		}
@@ -107,16 +116,16 @@ public class JMSHeaderPropertyPanel extends JPanel {
 		}
 
 		if (this.message != null) {
-//			message.setJMSMessageID(this.message.getJMSMessageID());
-//			message.setJMSTimestamp(this.message.getJMSTimestamp());
+			// message.setJMSMessageID(this.message.getJMSMessageID());
+			// message.setJMSTimestamp(this.message.getJMSTimestamp());
 			message.setJMSDestination(this.message.getJMSDestination());
 		}
 		if (!TextUtils.isEmpty(correlationIDField.getText())) {
 			message.setJMSCorrelationID(correlationIDField.getText());
 		}
 
-		message.setJMSPriority(((SpinnerNumberModel) priroritySpinner.getModel()).getNumber().intValue()) ;
-		message.setJMSExpiration(((SpinnerNumberModel) expirationSpinner.getModel()).getNumber().longValue()) ;
+		message.setJMSPriority(((SpinnerNumberModel) priroritySpinner.getModel()).getNumber().intValue());
+		message.setJMSExpiration(((SpinnerNumberModel) expirationSpinner.getModel()).getNumber().longValue());
 
 		return message;
 	}
@@ -129,14 +138,12 @@ public class JMSHeaderPropertyPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public JMSHeaderPropertyPanel() {
-		setLayout(new FormLayout(new ColumnSpec[] { FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
+		setLayout(new FormLayout(new ColumnSpec[] { FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("default:grow"), }, new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
 
 		JLabel jmsMessageIDLabel = new JLabel("JMS MessageID:");
 		jmsMessageIDLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -210,25 +217,26 @@ public class JMSHeaderPropertyPanel extends JPanel {
 		add(jmsCorrelationIDLabel, "2, 16, right, default");
 
 		correlationIDField = new JTextField();
-		JButton generateCorrelationIdButton = new JButton("Generate") ;
+		JButton generateCorrelationIdButton = new JButton("Generate");
 		generateCorrelationIdButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				correlationIDField.setText(UUID.randomUUID().toString()) ;
+				correlationIDField.setText(UUID.randomUUID().toString());
 			}
-		}) ;
-		cpanel.add(correlationIDField) ;
-		cpanel.add(generateCorrelationIdButton) ;
+		});
+		cpanel.add(correlationIDField);
+		cpanel.add(generateCorrelationIdButton);
 		add(cpanel, "4, 16, fill, default");
 		correlationIDField.setColumns(30);
 
-//		JLabel jmsDeliveryModeLabel = new JLabel("JMS DeliveryMode:");
-//		add(jmsDeliveryModeLabel, "2, 18, right, default");
-//
-//		deliveryModeCombo = new JComboBox();
-//		deliveryModeCombo.setModel(new DefaultComboBoxModel(DeliveryMode.values()));
-//		deliveryModeCombo.setEditable(false);
-//		add(deliveryModeCombo, "4, 18, fill, default");
+		// JLabel jmsDeliveryModeLabel = new JLabel("JMS DeliveryMode:");
+		// add(jmsDeliveryModeLabel, "2, 18, right, default");
+		//
+		// deliveryModeCombo = new JComboBox();
+		// deliveryModeCombo.setModel(new
+		// DefaultComboBoxModel(DeliveryMode.values()));
+		// deliveryModeCombo.setEditable(false);
+		// add(deliveryModeCombo, "4, 18, fill, default");
 
 		JLabel jmsPriorityLabel = new JLabel("JMS Priority:");
 		add(jmsPriorityLabel, "2, 18, right, default");

@@ -338,8 +338,9 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 
 			if (hermesNode != null && destinationNode != null) {
 				Collection<Message> selected = messages.getSelectedMessages();
+				Message[] messagesArray = messages.getSelectedMessages().toArray(new Message[selected.size()]) ;
 
-				if (selected.size() == 1 && action == TransferHandler.COPY) {
+				if (selected.size() == 1 && action == TransferHandler.COPY && MessageEditorDialog.canEdit(messagesArray[0])) {
 					try {
 						Message message = selected.iterator().next() ;
 						MessageEditorDialog dialog = new MessageEditorDialog(message, destinationNode.getDestinationName(), destinationNode.getDomain(), new AbstractEditedMessageHandler(

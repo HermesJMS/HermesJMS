@@ -25,18 +25,22 @@ public class GenericPropertyPanel extends JPanel {
 
 	/**
 	 * Create the panel.
+	 * 
+	 * @param editable
 	 */
-	public GenericPropertyPanel() {
+	public GenericPropertyPanel(boolean editable) {
 		setLayout(new BorderLayout(0, 0));
 
 		table = new GenericPropertyTable(model);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JPanel options = new JPanel(new FormLayout(new ColumnSpec[] { ColumnSpec.decode("16dlu"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
+		JPanel options = new JPanel(new FormLayout(new ColumnSpec[] { ColumnSpec.decode("16dlu"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC, }));
 
-		add(options, BorderLayout.WEST);
+		if (editable) {
+			add(options, BorderLayout.WEST);
+		}
 
 		JButton btnAdd = new JButton();
 		btnAdd.setBorderPainted(false);
@@ -90,7 +94,7 @@ public class GenericPropertyPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
-				if (row >= 0 && model.getRowCount() > row +1) {
+				if (row >= 0 && model.getRowCount() > row + 1) {
 					model.moveRow(row, row, row + 1);
 					table.getSelectionModel().setLeadSelectionIndex(row + 1);
 				}

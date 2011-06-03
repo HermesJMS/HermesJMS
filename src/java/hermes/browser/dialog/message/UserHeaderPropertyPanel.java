@@ -12,7 +12,7 @@ import javax.jms.Message;
 public class UserHeaderPropertyPanel extends GenericPropertyPanel {
 
 	public UserHeaderPropertyPanel(Message message) throws JMSException {
-		super();
+		super(true);
 
 		if (message != null) {
 			for (Enumeration<String> e = message.getPropertyNames(); e.hasMoreElements();) {

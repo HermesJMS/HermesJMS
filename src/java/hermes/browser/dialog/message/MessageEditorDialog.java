@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.swing.JButton;
@@ -17,6 +18,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 import org.apache.log4j.Logger;
 
@@ -28,7 +31,8 @@ public class MessageEditorDialog extends JDialog {
 	private UserHeaderPropertyPanel userHeaderPropertyPanel;
 	private EditedMessageHandler onOK;
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	private TextMessagePayloadPanel textMessagePanel = new TextMessagePayloadPanel();
+
+	private MessageWriter messageWriter;
 	private String destinationName;
 	private Domain domain;
 
@@ -45,13 +49,16 @@ public class MessageEditorDialog extends JDialog {
 		}
 	}
 
+	public static boolean canEdit(Message message) {
+		return message == null || message instanceof Message || message instanceof TextMessage || message instanceof MapMessage ;
+	}
+	
 	/**
 	 * Create the dialog.
 	 */
 
 	public MessageEditorDialog(final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK) throws JMSException {
 		this("Send message to " + destinationName, message, destinationName, domain, onOK);
-		
 	}
 
 	public MessageEditorDialog(final Message message, final EditedMessageHandler onOK) throws JMSException {
@@ -60,9 +67,12 @@ public class MessageEditorDialog extends JDialog {
 
 	public MessageEditorDialog(final String title, final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK) throws JMSException {
 		super(HermesBrowser.getBrowser());
+		if (!canEdit(message)) {
+			throw new JMSException("Unsupported message type") ;
+		}
 		this.onOK = onOK;
-		this.destinationName = destinationName ;
-		this.domain = domain ;
+		this.destinationName = destinationName;
+		this.domain = domain;
 		setModal(true);
 		setTitle(title);
 		setBounds(100, 100, 721, 525);
@@ -114,21 +124,58 @@ public class MessageEditorDialog extends JDialog {
 		}
 
 		if (message == null) {
-			textMessagePanel = new TextMessagePayloadPanel();
-			tabbedPane.addTab("Payload", textMessagePanel);
+			messageWriter = new TextMessagePayloadPanel();
 		} else if (message instanceof TextMessage) {
-			TextMessage t = (TextMessage) message;
-			textMessagePanel = new TextMessagePayloadPanel(t.getText());
-			tabbedPane.addTab("Payload", textMessagePanel);
+			messageWriter = new TextMessagePayloadPanel((TextMessage) message);
+			tabbedPane.addTab("Payload", messageWriter);
+		} else if (message instanceof MapMessage) {
+			messageWriter = new MapMessagePayloadPanel((MapMessage) message, true);
 		}
+
+		tabbedPane.addTab("Payload", messageWriter);
+
+		headerPropertyPanel.getMessageTypeComboBox().getModel().addListDataListener(new ListDataListener() {
+			@Override
+			public void intervalRemoved(ListDataEvent e) {
+			}
+
+			@Override
+			public void intervalAdded(ListDataEvent e) {
+			}
+
+			@Override
+			public void contentsChanged(ListDataEvent e) {
+				MessageType type = (MessageType) headerPropertyPanel.getMessageTypeComboBox().getModel().getSelectedItem();
+
+				if (messageWriter != null && !messageWriter.supports(type)) {
+					tabbedPane.remove(messageWriter);
+				}
+				try {
+					messageWriter = createWriterForType(type);
+					tabbedPane.addTab("Payload", messageWriter);
+				} catch (JMSException ex) {
+					HermesBrowser.getBrowser().showErrorDialog(ex);
+				}				
+			}
+		});
+	}
+
+	private MessageWriter createWriterForType(MessageType type) throws JMSException {
+		switch (type) {
+		case TextMessage:
+			return new TextMessagePayloadPanel();
+		case MapMessage:
+			return new MapMessagePayloadPanel();
+		}
+		return null;
 	}
 
 	protected void onOK() {
 		try {
 			Message newMessage = headerPropertyPanel.createMessage(onOK);
 			userHeaderPropertyPanel.setProperties(newMessage);
-			if (textMessagePanel != null && newMessage instanceof TextMessage) {
-				((TextMessage) newMessage).setText(textMessagePanel.getText());
+			if (messageWriter != null) {
+				messageWriter.onMessage(newMessage);
 			}
 			onOK.onMessage(newMessage);
 		} catch (Exception ex) {
