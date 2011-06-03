@@ -242,7 +242,7 @@ public class JMSHeaderPropertyPanel extends JPanel {
 
 		expirationSpinner = new JSpinner();
 
-		expirationSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		expirationSpinner.setModel(new SpinnerNumberModel(new Long(0), new Long(0), null, new Long(1)));
 		add(expirationSpinner, "4, 20");
 
 		JLabel messageTypeLabel = new JLabel("Message Type:");

@@ -26,9 +26,9 @@ import java.io.File;
  * @version $Id: DirectoryCache.java,v 1.2 2005/05/16 14:45:51 colincrist Exp $
  */
 
-class DirectoryCache
+public class DirectoryCache
 {
-   static File lastUploadDirectory = null ;
+  public static File lastUploadDirectory = null ;
    static File lastSaveAsDirectory = null ;
    static File lastOpenConfigDirectory = null ;
 }
