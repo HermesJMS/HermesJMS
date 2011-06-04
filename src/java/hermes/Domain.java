@@ -43,6 +43,7 @@ public class Domain
    public static final Domain QUEUE = new Domain("QUEUE", 1, IconCache.getIcon("jms.queue"));
    public static final Domain TOPIC = new Domain("TOPIC", 2, IconCache.getIcon("jms.topic"));
    public static final Domain UNKNOWN = new Domain("UNKNOWN", 3, IconCache.getIcon("jms.queueOrTopic"));
+   public static final Object FOLDER = new Domain("FOLDER", 4, null);
    private String text;
    private int id;
    private Icon icon;

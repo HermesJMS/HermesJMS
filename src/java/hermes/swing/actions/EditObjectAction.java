@@ -114,7 +114,7 @@ private static final Logger log = Logger.getLogger(EditObjectAction.class);
                dialog.init();
                dialog.refocus(hermesNode.getHermes().getId());
                JideSwingUtilities.centerWindow(dialog);
-               dialog.show();
+               dialog.setVisible(true) ;
             }
             else if (component instanceof NamingConfigTreeNode)
             {
@@ -124,7 +124,7 @@ private static final Logger log = Logger.getLogger(EditObjectAction.class);
 
                dialog.pack();
                JideSwingUtilities.centerWindow(dialog);
-               dialog.show();
+               dialog.setVisible(true) ;
             }
             else if (component instanceof MessageStoreURLTreeNode)
             {

@@ -12,21 +12,28 @@ import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.swing.JLabel;
 
+import com.jgoodies.forms.factories.Borders;
+
 public class MapMessagePayloadPanel extends MessageWriter {
 
 	private PanelImpl panel;
 
 	public MapMessagePayloadPanel() throws JMSException {
-		this(null, true) ;
+		this(null, true);
 	}
-	
+
 	public MapMessagePayloadPanel(MapMessage message, boolean editable) throws JMSException {
-		panel = new PanelImpl(message, editable) ;
-		setLayout(new BorderLayout()) ;
-		add(new JLabel("Edit the MapMessage"), BorderLayout.NORTH);
-		add(panel, BorderLayout.CENTER) ;
+		panel = new PanelImpl(message, editable);
+		setLayout(new BorderLayout());
+		if (false) {
+			JLabel label = new JLabel("Edit the MapMessage");
+			label.setBorder(Borders.EMPTY_BORDER);
+			add(label, BorderLayout.NORTH);
+
+		}
+		add(panel, BorderLayout.CENTER);
 	}
-	
+
 	class PanelImpl extends GenericPropertyPanel {
 		public PanelImpl(MapMessage message, boolean editable) throws JMSException {
 			super(editable);
@@ -73,11 +80,11 @@ public class MapMessagePayloadPanel extends MessageWriter {
 
 	@Override
 	void onMessage(Message message) throws JMSException {
-		panel.setProperties((MapMessage) message) ;
+		panel.setProperties((MapMessage) message);
 	}
 
 	@Override
 	boolean supports(MessageType type) {
-		return type == MessageType.MapMessage ;
+		return type == MessageType.MapMessage;
 	}
 }

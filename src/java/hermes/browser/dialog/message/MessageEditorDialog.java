@@ -23,6 +23,8 @@ import javax.swing.event.ListDataListener;
 
 import org.apache.log4j.Logger;
 
+import com.jidesoft.swing.JideTabbedPane;
+
 public class MessageEditorDialog extends JDialog {
 	private static final Logger log = Logger.getLogger(MessageEditorDialog.class);
 
@@ -30,7 +32,7 @@ public class MessageEditorDialog extends JDialog {
 	private JMSHeaderPropertyPanel headerPropertyPanel;
 	private UserHeaderPropertyPanel userHeaderPropertyPanel;
 	private EditedMessageHandler onOK;
-	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	private JideTabbedPane tabbedPane = new JideTabbedPane(JTabbedPane.TOP);
 
 	private MessageWriter messageWriter;
 	private String destinationName;
@@ -50,30 +52,32 @@ public class MessageEditorDialog extends JDialog {
 	}
 
 	public static boolean canEdit(Message message) {
-		return message == null || message instanceof Message || message instanceof TextMessage || message instanceof MapMessage ;
+		return message == null || message instanceof Message || message instanceof TextMessage || message instanceof MapMessage;
 	}
-	
+
 	/**
 	 * Create the dialog.
 	 */
 
 	public MessageEditorDialog(final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK) throws JMSException {
 		this("Send message to " + destinationName, message, destinationName, domain, onOK);
+		setModal(false);
 	}
 
 	public MessageEditorDialog(final Message message, final EditedMessageHandler onOK) throws JMSException {
 		this("Edit Message", message, null, null, onOK);
+		setModal(true);
 	}
 
-	public MessageEditorDialog(final String title, final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK) throws JMSException {
+	public MessageEditorDialog(final String title, final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK)
+			throws JMSException {
 		super(HermesBrowser.getBrowser());
 		if (!canEdit(message)) {
-			throw new JMSException("Unsupported message type") ;
+			throw new JMSException("Unsupported message type");
 		}
 		this.onOK = onOK;
 		this.destinationName = destinationName;
 		this.domain = domain;
-		setModal(true);
 		setTitle(title);
 		setBounds(100, 100, 721, 525);
 		getContentPane().setLayout(new BorderLayout());
@@ -101,7 +105,9 @@ public class MessageEditorDialog extends JDialog {
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						MessageEditorDialog.this.dispose();
+						if (isModal()) {
+							MessageEditorDialog.this.dispose();
+						}
 						if (onOK != null) {
 							onOK();
 						}
@@ -152,10 +158,12 @@ public class MessageEditorDialog extends JDialog {
 				}
 				try {
 					messageWriter = createWriterForType(type);
-					tabbedPane.addTab("Payload", messageWriter);
+					if (messageWriter != null) {
+						tabbedPane.addTab("Payload", messageWriter);
+					}
 				} catch (JMSException ex) {
 					HermesBrowser.getBrowser().showErrorDialog(ex);
-				}				
+				}
 			}
 		});
 	}

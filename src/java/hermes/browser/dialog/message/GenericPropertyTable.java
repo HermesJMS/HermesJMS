@@ -12,7 +12,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
-public class GenericPropertyTable extends JTable {
+import com.jidesoft.grid.JideTable;
+
+public class GenericPropertyTable extends JideTable {
 
 	public GenericPropertyTable(final PropertyTableModel model) {
 		setModel(model) ;

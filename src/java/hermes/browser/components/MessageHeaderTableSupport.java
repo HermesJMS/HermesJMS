@@ -44,77 +44,55 @@ import org.apache.log4j.Logger;
  * @version $Id: MessageHeaderTableSupport.java,v 1.1 2004/07/26 19:03:37
  *          colincrist Exp $
  */
-class MessageHeaderTableSupport
-{
-   private static final Logger log = Logger.getLogger(MessageHeaderTableSupport.class);
+class MessageHeaderTableSupport {
+	private static final Logger log = Logger.getLogger(MessageHeaderTableSupport.class);
 
-   static void init(final BrowserAction action, final MessageHeaderTable table, DataFlavor[] myFlavours)
-   {
-      table.setDragEnabled(true);
-      table.setTransferHandler(new MessageHeaderTransferHandler(action));
+	static void init(final BrowserAction action, final MessageHeaderTable table, DataFlavor[] myFlavours) {
+		table.setDragEnabled(true);
+		table.setTransferHandler(new MessageHeaderTransferHandler(action));
 
-      final MouseListener ml = new MouseAdapter()
-      {
-         public void mousePressed(MouseEvent e)
-         {
-            if (SwingUtilities.isMiddleMouseButton(e))
-            {
-               table.clearSelection();
-            }
-            else if (SwingUtilities.isLeftMouseButton(e))
-            {
-              
-                  if (e.getClickCount() == 2)
-                  {
-                     table.onDoubleClick();
-                  }
-                  else
-                  {
-              
-               final JComponent c = (JComponent) e.getSource();
-               final TransferHandler th = c.getTransferHandler();
+		final MouseListener ml = new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (SwingUtilities.isMiddleMouseButton(e)) {
+					table.clearSelection();
+				} else if (SwingUtilities.isLeftMouseButton(e)) {
 
-               th.exportAsDrag(c, e, TransferHandler.COPY);
-                  }
-            }
-            else if (SwingUtilities.isRightMouseButton(e))
-            {
-               action.doPopup(e);
-            }
-         }
-      };
+					if (e.getClickCount() == 2) {
+						table.onDoubleClick();
+					} else {
 
-      table.addMouseListener(ml);
+						final JComponent c = (JComponent) e.getSource();
+						final TransferHandler th = c.getTransferHandler();
 
-      final DefaultTableCellRenderer dateRenderer = new DefaultTableCellRenderer()
-      {
-         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1967620759224151946L;
+						th.exportAsDrag(c, e, TransferHandler.COPY);
+					}
+				} else if (SwingUtilities.isRightMouseButton(e)) {
+					action.doPopup(e);
+				}
+			}
+		};
 
-		protected void setValue(Object value)
-         {
-            super.setText((value == null) ? "" : value.toString());
-         }
-      };
+		table.addMouseListener(ml);
 
-      table.setDefaultRenderer(Date.class, dateRenderer);
-   }
+		final DefaultTableCellRenderer dateRenderer = new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1967620759224151946L;
 
-   static Component prepareRenderer(Component c, JTable table, TableCellRenderer renderer, int row, int column)
-   {
-      if (!table.isCellSelected(row, column))
-      {
-         if (row % 2 == 1)
-         {            
-            c.setBackground(Color.LIGHT_GRAY);
-         }
-         else
-         {
-            c.setBackground(table.getBackground());
-         }
-      }
-      return c;
-   }
+			protected void setValue(Object value) {
+				super.setText((value == null) ? "" : value.toString());
+			}
+		};
+
+		table.setDefaultRenderer(Date.class, dateRenderer);
+	}
+
+	static Component prepareRenderer(Component c, JTable table, TableCellRenderer renderer, int row, int column) {
+		if (!table.isCellSelected(row, column)) {
+			if (row % 2 == 1) {
+				c.setBackground(Color.LIGHT_GRAY);
+			} else {
+				c.setBackground(table.getBackground());
+			}
+		}
+		return c;
+	}
 }

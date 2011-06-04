@@ -24,6 +24,7 @@ import hermes.browser.HermesBrowser;
 import hermes.impl.DefaultXMLHelper;
 import hermes.impl.XMLHelper;
 import hermes.store.MessageStore;
+import hermes.store.MessageStoreFolder;
 import hermes.store.MessageStoreQueue;
 import hermes.store.MessageStoreTopic;
 import hermes.store.jdbc.MessageResultSetHandler;
@@ -38,6 +39,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import javax.jms.Destination;
 import javax.jms.JMSException;
@@ -63,7 +65,6 @@ public class DefaultJDBCAdapter implements JDBCAdapter
    private int maxMessageSize = 1024 * 1024;
    private int maxDestinationSize = 5000 ;
 
-   private long messageIdSequence = System.currentTimeMillis();
    private Statements statements;
 
    public DefaultJDBCAdapter() throws IOException
@@ -119,7 +120,7 @@ public class DefaultJDBCAdapter implements JDBCAdapter
 
    private synchronized String getNextMessageId(String storeId)
    {
-      return "ID:" + storeId + "-" + messageIdSequence++;
+      return "ID:" + storeId + "-" + UUID.randomUUID() ;
    }
 
 
@@ -195,40 +196,29 @@ public class DefaultJDBCAdapter implements JDBCAdapter
 
       Hermes.ui.getDefaultMessageSink().add("Getting message store destinations....");
 
-      runner.query(connection, "select destination from stores where storeId=? and domain=?", new Object[] { storeId, Domain.QUEUE.getId() },
+      runner.query(connection, "select distinct destination, domain from stores where storeId=? ", new Object[] { storeId },
             new ResultSetHandler()
             {
                public Object handle(ResultSet rs) throws SQLException
                {
                   while (rs.next())
                   {
-                     final Destination d = new MessageStoreQueue(rs.getString(1));
-
-                     destinations.add(d);
+                	  final Domain domain = Domain.getDomain(rs.getInt(2)) ;
+                	  if (domain.equals(Domain.QUEUE)) {
+                          destinations.add( new MessageStoreQueue(rs.getString(1)));
+                	  } else if (domain.equals(Domain.TOPIC)) {
+                		  destinations.add(new MessageStoreTopic(rs.getString(1))) ;
+                	  } else if (domain.equals(Domain.FOLDER)) {
+                		  destinations.add(new MessageStoreFolder(rs.getString(1))) ;
+                	  }
+                     
                   }
 
                   return destinations;
                }
             });
 
-      runner.query(connection, "select destination from stores where storeId=? and domain=?", new Object[] { storeId, Domain.TOPIC.getId() },
-            new ResultSetHandler()
-            {
-               public Object handle(ResultSet rs) throws SQLException
-               {
-
-                  while (rs.next())
-                  {
-                     final Destination d = new MessageStoreTopic(rs.getString(1));
-
-                     destinations.add(d);
-                  }
-
-                  return destinations;
-               }
-            });
-
-      Hermes.ui.getDefaultMessageSink().add("Getting message store destinations.... done.");
+      Hermes.ui.getDefaultMessageSink().add("Getting message store folders.... done.");
 
       return destinations;
    }

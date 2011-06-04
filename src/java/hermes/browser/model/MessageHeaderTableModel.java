@@ -43,374 +43,312 @@ import com.codestreet.selector.parser.IValueProvider;
  *          colincrist Exp $
  */
 
-public class MessageHeaderTableModel extends DefaultTableModel implements RowValueProvider
-{
-   /**
+public class MessageHeaderTableModel extends DefaultTableModel implements RowValueProvider {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5348456596625232189L;
-private static final Logger log = Logger.getLogger(MessageHeaderTableModel.class);
-   private final Vector<Vector> rows = new Vector<Vector>();
-   private final Vector<Message> messages = new Vector<Message>();
-   private final Hermes hermes;
-   private String destinationName;
-   private Vector<HideableTableColumn> userProperties = new Vector<HideableTableColumn>();
+	private static final Logger log = Logger.getLogger(MessageHeaderTableModel.class);
+	private final Vector<Vector> rows = new Vector<Vector>();
+	private final Vector<Message> messages = new Vector<Message>();
+	private final Hermes hermes;
+	private String destinationName;
+	private Vector<HideableTableColumn> userProperties = new Vector<HideableTableColumn>();
 
-   public MessageHeaderTableModel(Hermes hermes, String destinationName)
-   {
-      this.hermes = hermes;
-      this.destinationName = destinationName;
+	public MessageHeaderTableModel(Hermes hermes, String destinationName) {
+		this.hermes = hermes;
+		this.destinationName = destinationName;
 
-      addColumn("#");
-      addColumn("JMSMessageId");
-      addColumn("JMSDestination");
-      addColumn("JMSTimestamp");
-      addColumn("JMSType");
-      addColumn("JMSReplyTo");
-      addColumn("JMSCorrelationID");
-      addColumn("JMSExpiration");
-      addColumn("JMSPriority");
-   }
+		addColumn("#");
+		addColumn("JMSMessageId");
+		addColumn("JMSDestination");
+		addColumn("JMSTimestamp");
+		addColumn("JMSType");
+		addColumn("JMSReplyTo");
+		addColumn("JMSCorrelationID");
+		addColumn("JMSExpiration");
+		addColumn("JMSPriority");
+	}
 
-   public IValueProvider getValueProviderForRow(int row)
-   {
-     return ValueProvider.valueOf(messages.get(row)) ;
-   }
+	public IValueProvider getValueProviderForRow(int row) {
+		return ValueProvider.valueOf(messages.get(row));
+	}
 
-   public Message getMessageAt(int row)
-   {
-      return (Message) messages.elementAt(row);
-   }
+	public Message getMessageAt(int row) {
+		return (Message) messages.elementAt(row);
+	}
 
-   public void setDestinationName(String destinationName)
-   {
-      this.destinationName = destinationName;
-   }
+	public void setDestinationName(String destinationName) {
+		this.destinationName = destinationName;
+	}
 
-   public boolean isCellEditable(int row, int column)
-   {
-      return false;
-   }
+	public boolean isCellEditable(int row, int column) {
+		return false;
+	}
 
-   public void clear()
-   {
-      rows.clear();
-      messages.clear() ;
+	public void clear() {
+		rows.clear();
+		messages.clear();
 
-      fireTableDataChanged();
-   }
+		fireTableDataChanged();
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.swing.table.TableModel#getColumnCount()
-    */
-   public int getColumnCount()
-   {
-      return 9 + userProperties.size();
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.table.TableModel#getColumnCount()
+	 */
+	public int getColumnCount() {
+		return 9 + userProperties.size();
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.swing.table.TableModel#getRowCount()
-    */
-   public int getRowCount()
-   {
-      if (rows == null)
-      {
-         return 0;
-      }
-
-      return rows.size();
-   }
-
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.swing.table.TableModel#getValueAt(int, int)
-    */
-   public Object getValueAt(int y, int x)
-   {
-      if (rows.size() > y)
-      {
-         Vector row = (Vector) rows.elementAt(y);
-
-         return row.elementAt(x);
-      }
-      else
-      {
-         return null;
-      }
-   }
-
-   public void removeFirstRow()
-   {
-      rows.remove(0);
-      messages.remove(0);
-
-      fireTableRowsDeleted(0, 1);
-   }
-
-   private Vector createRow(int messageIndex, Message message) throws JMSException
-   {
-      final Vector<Object> newRow = new Vector<Object>();
-
-      newRow.add(new Long(messageIndex));
-      newRow.add(message.getJMSMessageID());
-
-      //
-      // Some providers, e.g. WebSphereMQ, when dealing with messages put from
-      // a non-JMS sender don't include the destination
-      // on the message so if its not there we'll use the configured name.
-
-      try
-      {
-      if (message.getJMSDestination() != null)
-      {
-         newRow.add(JMSUtils.getDestinationName(message.getJMSDestination()));
-      }
-      else
-      {
-         newRow.add(destinationName);
-      }
-      }
-      catch (Exception ex)
-      {
-         log.error("cannot get JMSDestination: "+ ex.getMessage()) ;
-         newRow.add("Unknown") ;
-      }
-
-      try
-      {
-         newRow.add(new Date(message.getJMSTimestamp())); 
-      }
-      catch (Exception ex)
-      {
-         newRow.add(new Date());
-
-         log.error("no JMSTimestamp in message: " + ex.getMessage());
-      }
-
-      try
-      {
-         newRow.add(message.getJMSType());
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSType in message: " + ex.getMessage());
-
-         newRow.add("");
-      }
-
-      try
-      {
-         if (message.getJMSReplyTo() != null)
-         {
-            newRow.add(JMSUtils.getDestinationName(message.getJMSReplyTo()));
-         }
-         else
-         {
-            newRow.add("");
-         }
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSReplyTo in message: " + ex.getMessage());
-
-         newRow.add("");
-      }
-
-      try
-      {
-         newRow.add(message.getJMSCorrelationID());
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSCorrelationID in message: " + ex.getMessage());
-
-         newRow.add("");
-      }
-
-      try
-      {
-         newRow.add(new Long(message.getJMSExpiration()));
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSExpiration in message: " + ex.getMessage());
-
-         newRow.add("");
-      }
-      
-      try
-      {
-         newRow.add(message.getJMSPriority());
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSPriority in message: " + ex.getMessage());
-
-         newRow.add("");
-      }
-
-      return newRow;
-   }
-
-   public void setFinalMessageIndex(int messageIndex)
-   {
-      try
-      {
-      // log.debug("setFinalMessageIndex, messageIndex=" + messageIndex);
-
-      if (messageIndex == -1)
-      {
-         if (rows.size() > 0)
-         {
-            rows.clear();
-            messages.clear();
-            fireTableDataChanged();
-         }
-      }
-      else if (messageIndex != rows.size() - 1 && (HermesBrowser.getBrowser().getMaxMessagesInBrowserPane() == -1 || messageIndex < HermesBrowser.getBrowser().getMaxMessagesInBrowserPane() ))
-      {
-         int lastRow = rows.size() - 1;
-
-         while (rows.size() != messageIndex + 1)
-         {
-            if (rows.size() > 0)
-            {
-               rows.remove(rows.size() - 1);
-               messages.remove(messages.size() - 1);
-            }
-            else
-            {
-               break ;
-            }
-         }
-
-         fireTableDataChanged();
-      }
-      }
-      catch (HermesException ex)
-      {
-         throw new HermesRuntimeException(ex) ;      
-      }
-   }
-
-   public void addMessage(int messageIndex, Message message) throws JMSException
-   {
-      if (messageIndex < rows.size())
-      {
-         Message existingMessage = messages.elementAt(messageIndex);
-
-         // log.debug("comparing " + existingMessage.getJMSMessageID() + " and "
-         // + message.getJMSMessageID());
-
-         if (existingMessage.getJMSMessageID().equals(message.getJMSMessageID()))
-         {
-            // log.debug("add message (exists) index=" + messageIndex + " id=" +
-            // message.getJMSMessageID());
-
-            // The same message in the same index position, ignore it...
-
-            return;
-         }
-         else
-         {
-            // log.debug("add message (change) index=" + messageIndex + "
-            // size()= " + rows.size() + " id=" + message.getJMSMessageID());
-
-            rows.setElementAt(createRow(messageIndex, message), messageIndex);
-            messages.setElementAt(message, messageIndex);
-            fireTableRowsUpdated(messageIndex, messageIndex);
-
-            return;
-         }
-      }
-      else
-      {
-         // log.debug("add message (append) index=" + messageIndex + " id=" +
-         // message.getJMSMessageID());
-      }
-
-      rows.add(createRow(messageIndex, message));
-      messages.add(message);
-
-      fireTableRowsInserted(messageIndex, messageIndex);
-   }
-
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.swing.table.TableModel#getColumnName(int)
-    */
-   public String getColumnName(int arg0)
-   {
-      switch (arg0)
-      {
-         case 0:
-            return "#";
-         case 1:
-            return "JMSMessageID";
-         case 2:
-            return "JMSDestination";
-         case 3:
-            return "JMSTimestamp";
-         case 4:
-            return "JMSType";
-         case 5:
-            return "JMSReplyTo";
-         case 6:
-            return "JMSCorrelationID";
-         case 7:
-            return "JMSExpiration";
-         case 8:
-            return "JMSPriority" ;
-      }
-
-      return super.getColumnName(arg0);
-   }
-
-   public Class getColumnClass(int column)
-   {
-      switch (column)
-      {
-         case 0:
-            return Long.class;
-         case 1:
-            return String.class;
-         case 2:
-            return String.class;
-         case 3:
-            return String.class;
-         case 4:
-            return String.class;
-         case 5:
-            return String.class;
-         case 6:
-            return String.class;
-         case 7:
-            return Long.class;
-         case 8:
-            return Integer.class ;
-      }
-
-      return super.getColumnClass(column);
-   }
-
-   public Object getChildValueAt(int row)
-   {
-      return getMessageAt(row);
-   }
-
-public void updateMessage(Message message) throws JMSException {
-	for (int i = 0 ; i < messages.size() ; i++) {
-		if (messages.get(i).getJMSMessageID().equals(message.getJMSMessageID())) {
-			messages.set(i, message) ;
-			fireTableRowsUpdated(i, i) ;
-			break ;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.table.TableModel#getRowCount()
+	 */
+	public int getRowCount() {
+		if (rows == null) {
+			return 0;
 		}
-	}	
-}
+
+		return rows.size();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.table.TableModel#getValueAt(int, int)
+	 */
+	public Object getValueAt(int y, int x) {
+		if (rows.size() > y) {
+			Vector row = (Vector) rows.elementAt(y);
+
+			return row.elementAt(x);
+		} else {
+			return null;
+		}
+	}
+
+	public void removeFirstRow() {
+		rows.remove(0);
+		messages.remove(0);
+
+		fireTableRowsDeleted(0, 1);
+	}
+
+	private Vector createRow(int messageIndex, Message message) throws JMSException {
+		final Vector<Object> newRow = new Vector<Object>();
+
+		newRow.add(new Long(messageIndex));
+		newRow.add(message.getJMSMessageID());
+
+		//
+		// Some providers, e.g. WebSphereMQ, when dealing with messages put from
+		// a non-JMS sender don't include the destination
+		// on the message so if its not there we'll use the configured name.
+
+		try {
+			if (message.getJMSDestination() != null) {
+				newRow.add(JMSUtils.getDestinationName(message.getJMSDestination()));
+			} else {
+				newRow.add(destinationName);
+			}
+		} catch (Exception ex) {
+			log.error("cannot get JMSDestination: " + ex.getMessage());
+			newRow.add("Unknown");
+		}
+
+		try {
+			newRow.add(new Date(message.getJMSTimestamp()));
+		} catch (Exception ex) {
+			newRow.add(new Date());
+
+			log.error("no JMSTimestamp in message: " + ex.getMessage());
+		}
+
+		try {
+			newRow.add(message.getJMSType());
+		} catch (Exception ex) {
+			log.error("no JMSType in message: " + ex.getMessage());
+
+			newRow.add("");
+		}
+
+		try {
+			if (message.getJMSReplyTo() != null) {
+				newRow.add(JMSUtils.getDestinationName(message.getJMSReplyTo()));
+			} else {
+				newRow.add("");
+			}
+		} catch (Exception ex) {
+			log.error("no JMSReplyTo in message: " + ex.getMessage());
+
+			newRow.add("");
+		}
+
+		try {
+			newRow.add(message.getJMSCorrelationID());
+		} catch (Exception ex) {
+			log.error("no JMSCorrelationID in message: " + ex.getMessage());
+
+			newRow.add("");
+		}
+
+		try {
+			newRow.add(new Long(message.getJMSExpiration()));
+		} catch (Exception ex) {
+			log.error("no JMSExpiration in message: " + ex.getMessage());
+
+			newRow.add("");
+		}
+
+		try {
+			newRow.add(message.getJMSPriority());
+		} catch (Exception ex) {
+			log.error("no JMSPriority in message: " + ex.getMessage());
+
+			newRow.add("");
+		}
+
+		return newRow;
+	}
+
+	public void setFinalMessageIndex(int messageIndex) {
+		try {
+			// log.debug("setFinalMessageIndex, messageIndex=" + messageIndex);
+
+			if (messageIndex == -1) {
+				if (rows.size() > 0) {
+					rows.clear();
+					messages.clear();
+					fireTableDataChanged();
+				}
+			} else if (messageIndex != rows.size() - 1
+					&& (HermesBrowser.getBrowser().getMaxMessagesInBrowserPane() == -1 || messageIndex < HermesBrowser.getBrowser()
+							.getMaxMessagesInBrowserPane())) {
+				int lastRow = rows.size() - 1;
+
+				while (rows.size() != messageIndex + 1) {
+					if (rows.size() > 0) {
+						rows.remove(rows.size() - 1);
+						messages.remove(messages.size() - 1);
+					} else {
+						break;
+					}
+				}
+
+				fireTableDataChanged();
+			}
+		} catch (HermesException ex) {
+			throw new HermesRuntimeException(ex);
+		}
+	}
+
+	public void addMessage(int messageIndex, Message message) throws JMSException {
+		if (messageIndex < rows.size()) {
+			Message existingMessage = messages.elementAt(messageIndex);
+
+			// log.debug("comparing " + existingMessage.getJMSMessageID() +
+			// " and "
+			// + message.getJMSMessageID());
+
+			if (existingMessage.getJMSMessageID().equals(message.getJMSMessageID())) {
+				// log.debug("add message (exists) index=" + messageIndex +
+				// " id=" +
+				// message.getJMSMessageID());
+
+				// The same message in the same index position, ignore it...
+
+				return;
+			} else {
+				// log.debug("add message (change) index=" + messageIndex + "
+				// size()= " + rows.size() + " id=" +
+				// message.getJMSMessageID());
+
+				rows.setElementAt(createRow(messageIndex, message), messageIndex);
+				messages.setElementAt(message, messageIndex);
+				fireTableRowsUpdated(messageIndex, messageIndex);
+
+				return;
+			}
+		} else {
+			// log.debug("add message (append) index=" + messageIndex + " id=" +
+			// message.getJMSMessageID());
+		}
+
+		rows.add(createRow(messageIndex, message));
+		messages.add(message);
+
+		fireTableRowsInserted(messageIndex, messageIndex);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.table.TableModel#getColumnName(int)
+	 */
+	public String getColumnName(int arg0) {
+		switch (arg0) {
+		case 0:
+			return "#";
+		case 1:
+			return "JMSMessageID";
+		case 2:
+			return "JMSDestination";
+		case 3:
+			return "JMSTimestamp";
+		case 4:
+			return "JMSType";
+		case 5:
+			return "JMSReplyTo";
+		case 6:
+			return "JMSCorrelationID";
+		case 7:
+			return "JMSExpiration";
+		case 8:
+			return "JMSPriority";
+		}
+
+		return super.getColumnName(arg0);
+	}
+
+	public Class getColumnClass(int column) {
+		switch (column) {
+		case 0:
+			return Long.class;
+		case 1:
+			return String.class;
+		case 2:
+			return String.class;
+		case 3:
+			return String.class;
+		case 4:
+			return String.class;
+		case 5:
+			return String.class;
+		case 6:
+			return String.class;
+		case 7:
+			return Long.class;
+		case 8:
+			return Integer.class;
+		}
+
+		return super.getColumnClass(column);
+	}
+
+	public Object getChildValueAt(int row) {
+		return getMessageAt(row);
+	}
+
+	public void updateMessage(Message message) throws JMSException {
+		for (int i = 0; i < messages.size(); i++) {
+			if (messages.get(i).getJMSMessageID().equals(message.getJMSMessageID())) {
+				messages.set(i, message);
+				fireTableRowsUpdated(i, i);
+				break;
+			}
+		}
+	}
 }

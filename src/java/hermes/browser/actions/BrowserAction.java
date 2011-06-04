@@ -43,6 +43,7 @@ import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -206,14 +207,6 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
 
 	public boolean isRunning() {
 		return !taskStopped;
-	}
-
-	protected void addMessage(Message message) throws javax.jms.JMSException {
-		synchronized (cachedRows) {
-			cachedRows.add(message);
-
-			totalMessagesRead++;
-		}
 	}
 
 	protected abstract Task createTask() throws Exception;

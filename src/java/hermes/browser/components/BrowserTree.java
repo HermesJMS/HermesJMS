@@ -303,7 +303,7 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 
 			if (hermesNode != null && destinationNode != null) {
 				HermesBrowser.getBrowser().getActionFactory()
-						.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), messages);
+						.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), messages, true);
 			}
 		}
 
@@ -321,7 +321,7 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 
 			if (hermesNode != null && destinationNode != null) {
 				HermesBrowser.getBrowser().getActionFactory()
-						.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), messages);
+						.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), messages, true);
 			}
 		}
 
@@ -351,7 +351,7 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 										.getBrowser()
 										.getActionFactory()
 										.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(),
-												new ArrayList(Arrays.asList(message)));
+												new ArrayList(Arrays.asList(message)), false);
 							}
 						});
 						dialog.setLocationRelativeTo(HermesBrowser.getBrowser()) ;
@@ -364,7 +364,7 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 
 					if (action == TransferHandler.COPY) {
 						HermesBrowser.getBrowser().getActionFactory()
-								.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), selected);
+								.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), selected, true);
 					} else {
 						HermesBrowser.getBrowser().getActionFactory()
 								.createMessageMoveAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), selected);

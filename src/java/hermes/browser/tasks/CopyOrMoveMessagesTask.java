@@ -56,7 +56,9 @@ public class CopyOrMoveMessagesTask extends TaskSupport {
 	private int action;
 	private Domain target;
 
-	public CopyOrMoveMessagesTask(Hermes hermes, String destination, Domain target, Collection messages, int action) {
+	private boolean showConfirm;
+
+	public CopyOrMoveMessagesTask(Hermes hermes, String destination, Domain target, Collection messages, int action, boolean showConfirm) {
 		super(action == TransferHandler.COPY ? IconCache.getIcon("copy") : IconCache.getIcon("cut"));
 
 		this.hermes = hermes;
@@ -64,6 +66,7 @@ public class CopyOrMoveMessagesTask extends TaskSupport {
 		this.destination = destination;
 		this.action = action;
 		this.target = target;
+		this.showConfirm = showConfirm;
 	}
 
 	public String getTitle() {
@@ -95,39 +98,41 @@ public class CopyOrMoveMessagesTask extends TaskSupport {
 	public void invoke() throws Exception {
 		action = HermesBrowser.getBrowser().getBrowserTree().getLastDndAction();
 
-		synchronized (this) {
-			//
-			// See if the user still wants to continue...
+		if (showConfirm) {
 
-			SwingRunner.invokeLater(new Runnable() {
-				public void run() {
-					String copyOrMove = "send";
-					switch (action) {
-					case TransferHandler.COPY:
-						copyOrMove = "copy";
-						break;
-					case TransferHandler.MOVE:
-						copyOrMove = "move";
-					}
+			synchronized (this) {
+				//
+				// See if the user still wants to continue...
 
-					if (messages.size() > 1) {
-						optionRval = JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you wish to " + copyOrMove + " these " + messages.size()
-								+ " messages to " + destination + "?", "Confirm.", JOptionPane.YES_NO_OPTION);
-					} else {
-						optionRval = JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you wish to " + copyOrMove + " this message to "
-								+ destination + "?", "Confirm.", JOptionPane.YES_NO_OPTION);
-					}
+				SwingRunner.invokeLater(new Runnable() {
+					public void run() {
+						String copyOrMove = "send";
+						switch (action) {
+						case TransferHandler.COPY:
+							copyOrMove = "copy";
+							break;
+						case TransferHandler.MOVE:
+							copyOrMove = "move";
+						}
+						if (messages.size() > 1) {
+							optionRval = JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you wish to " + copyOrMove + " these " + messages.size()
+									+ " messages to " + destination + "?", "Confirm.", JOptionPane.YES_NO_OPTION);
+						} else {
+							optionRval = JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you wish to " + copyOrMove + " this message to "
+									+ destination + "?", "Confirm.", JOptionPane.YES_NO_OPTION);
+						}
 
-					synchronized (CopyOrMoveMessagesTask.this) {
-						CopyOrMoveMessagesTask.this.notifyAll();
+						synchronized (CopyOrMoveMessagesTask.this) {
+							CopyOrMoveMessagesTask.this.notifyAll();
+						}
 					}
+				});
+
+				try {
+					this.wait();
+				} catch (InterruptedException ex) {
+					// NOP
 				}
-			});
-
-			try {
-				this.wait();
-			} catch (InterruptedException ex) {
-				// NOP
 			}
 		}
 

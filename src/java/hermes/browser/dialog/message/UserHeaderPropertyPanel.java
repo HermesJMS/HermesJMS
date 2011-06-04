@@ -9,7 +9,10 @@ import java.util.Enumeration;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
+import org.apache.log4j.Logger;
+
 public class UserHeaderPropertyPanel extends GenericPropertyPanel {
+	private static final Logger log = Logger.getLogger(UserHeaderPropertyPanel.class);
 
 	public UserHeaderPropertyPanel(Message message) throws JMSException {
 		super(true);
