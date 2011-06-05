@@ -32,8 +32,7 @@ import org.apache.log4j.Logger;
  * getter.
  * 
  * @author colincrist@hermesjms.com
- * @version $Id: GetCachingMethodInterceptor.java,v 1.2 2006/07/13 07:35:34
- *          colincrist Exp $
+ * @version $Id$
  */
 
 public final class GetCachingMethodInterceptor implements MethodInterceptor {
@@ -54,7 +53,6 @@ public final class GetCachingMethodInterceptor implements MethodInterceptor {
 		if (ReflectUtils.isGetter(method)) {
 			return properties.get(ReflectUtils.getPropertyName(method));
 		}
-		log.debug("superName: " + proxy.getSuperName());
 		
 		Object rval = null ;
 		if (altObject != null) {
@@ -76,7 +74,7 @@ public final class GetCachingMethodInterceptor implements MethodInterceptor {
 
 			properties.put(propertyName, args[0]);
 
-			log.debug("GetCachingMethodInterceptor setter for " + ReflectUtils.getPropertyName(method) + " with " + args[0]);
+//			log.debug("GetCachingMethodInterceptor setter for " + ReflectUtils.getPropertyName(method) + " with " + args[0]);
 		}
 
 		return rval;

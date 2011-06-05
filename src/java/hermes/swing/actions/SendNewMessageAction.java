@@ -20,13 +20,9 @@ package hermes.swing.actions;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
 import hermes.browser.actions.AbstractEditedMessageHandler;
-import hermes.browser.actions.ActionFactory;
 import hermes.browser.dialog.message.MessageEditorDialog;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
 import hermes.browser.model.tree.HermesTreeNode;
-import hermes.browser.model.tree.MessageStoreQueueTreeNode;
-import hermes.browser.model.tree.MessageStoreTopicTreeNode;
-import hermes.browser.model.tree.MessageStoreTreeNode;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;

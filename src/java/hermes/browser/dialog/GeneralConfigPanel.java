@@ -82,6 +82,8 @@ private static final Logger log = Logger.getLogger(GeneralConfigPanel.class);
    private static final String SCROLL_MESSAGES_IN_BROWSE = "ScrollMessagesDuringBrowse";
    private static final String BASE64_ENCODE_MESSAGES = "Base64EncodeTextMessages";
    private static final String MESSAGE_STORE_MESSAGE_FACTORY = "MessageStoreMessageFactory";
+   private static final String DISPLAY_DESTINATION_IN_MESSAGE_STORE = "DisplayDestinationInMessageStore";
+
 
    private static final String AUDIT_DIRECTORY_INFO = "The directory where audit files are written whenever you interact with a queue/topic.";
    private static final String MESSAGES_DIRECTORY_INFO = "The directory to hold your message repository files.";
@@ -109,6 +111,7 @@ private static final Logger log = Logger.getLogger(GeneralConfigPanel.class);
    private static final String SCROLL_MESSAGES_IN_BROWSE_INFO = "Scroll to the newest message during a browse";
    private static final String BASE64_ENCODE_MESSAGES_INFO = "Base64 encode text messages when stored in XML or in message stores";
    private static final String MESSAGE_STORE_MESSAGE_FACTORY_INFO = "The JMS session to use when working with message stores";
+   private static final String DISPLAY_DESTINATION_IN_MESSAGE_STORE_INFO = "Under the message store node in the browser tree, display the original queue or topic the message came from." ;
 
    private PreferencesDialog dialog;
    private HermesConfig config;
@@ -136,6 +139,7 @@ private static final Logger log = Logger.getLogger(GeneralConfigPanel.class);
    private Property scrollMessagesInBrowseProperty;
    private Property base64EncodeMessagesProperty;
    private Property messageStoreMessageFactory;
+   private Property displayDestinationInMessageStoreProperty ;
 
    private List<Runnable> watchSetters = new ArrayList<Runnable>();
 
@@ -257,6 +261,10 @@ private static final Logger log = Logger.getLogger(GeneralConfigPanel.class);
       {
          config.setMaxMessagesInBrowserPane(((Integer) maxCachedMessagesProperty.getValue()).intValue());
       }
+      
+      if (displayDestinationInMessageStoreProperty.getValue() != null) {
+    	  config.setShowDestinationsInMessageStore((Boolean) displayDestinationInMessageStoreProperty.getValue() ) ;
+      }
 
       HermesBrowser.getBrowser().getMessageRepository().setDirectory(config.getMessageFilesDir());
 
@@ -306,6 +314,8 @@ public void setHermesConfig(HermesConfig config)
             SCROLL_MESSAGES_IN_BROWSE_INFO, Boolean.class);
       base64EncodeMessagesProperty = new PropertyImpl(BASE64_ENCODE_MESSAGES, new Boolean(config.isBase64EncodeMessages()), BASE64_ENCODE_MESSAGES_INFO,
             Boolean.class);
+      displayDestinationInMessageStoreProperty = new  PropertyImpl(DISPLAY_DESTINATION_IN_MESSAGE_STORE, new Boolean(config.isShowDestinationsInMessageStore()), DISPLAY_DESTINATION_IN_MESSAGE_STORE_INFO,
+              Boolean.class);
       messageStoreMessageFactory = new PropertyImpl(MESSAGE_STORE_MESSAGE_FACTORY, config.getMessageStoreMessageFactory(), MESSAGE_STORE_MESSAGE_FACTORY_INFO,
             Hermes.class);
 
@@ -400,6 +410,7 @@ public void setHermesConfig(HermesConfig config)
       list.add(scrollMessagesInBrowseProperty);
       list.add(base64EncodeMessagesProperty);
       list.add(messageStoreMessageFactory);
+      list.add(displayDestinationInMessageStoreProperty) ;
 
       list.add(watchProperty);
 
