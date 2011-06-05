@@ -72,6 +72,7 @@ import hermes.swing.actions.SaveMessagesAsTextAction;
 import hermes.swing.actions.SaveMessagesAsXMLAction;
 import hermes.swing.actions.SaveMessagesIndividuallyAsXMLAction;
 import hermes.swing.actions.SearchDestinationOrContextAction;
+import hermes.swing.actions.SendNewMessageAction;
 import hermes.swing.actions.TruncateAction;
 
 import java.awt.event.ActionEvent;
@@ -277,6 +278,7 @@ public class PopupMenuFactory
       watchMenu.setIcon(IconCache.getIcon("hermes.watch"));
       watchMenu.setEnabled(false);
 
+      newMenu.add(new JMenuItem(ActionRegistry.getAction(SendNewMessageAction.class))) ;
       newMenu.add(addSession);
       newMenu.add(addContext);
       newMenu.add(addQueue);

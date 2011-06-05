@@ -51,7 +51,7 @@ public class SendNewMessageAction extends ActionSupport {
 	private static final long serialVersionUID = -5332422858213360837L;
 
 	public SendNewMessageAction() {
-		putValue(Action.NAME, "Send New Message");
+		putValue(Action.NAME, "New Message");
 		putValue(Action.SHORT_DESCRIPTION, "Create a new message...");
 		putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.message.new"));
 		// putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_S,
