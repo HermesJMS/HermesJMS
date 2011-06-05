@@ -230,7 +230,7 @@ public class BytesMessageImpl extends MessageImpl implements BytesMessage
 
    public void writeBytes(byte[] arg0) throws JMSException
    {
-      // TODO Auto-generated method stub
+      bytes = ByteBuffer.wrap(arg0) ;
 
    }
 

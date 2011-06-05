@@ -67,10 +67,9 @@ public class MessageStoreTreeNode extends AbstractTreeNode implements MessageSto
 
 		setIcon(IconCache.getIcon("hermes.store"));
 
-		messageStore.addMessageListener(this);
-
 		try {
 			if (HermesBrowser.getBrowser().getConfig().isShowDestinationsInMessageStore()) {
+				messageStore.addMessageListener(this);
 				timerTask = new TimerTask() {
 					@Override
 					public void run() {

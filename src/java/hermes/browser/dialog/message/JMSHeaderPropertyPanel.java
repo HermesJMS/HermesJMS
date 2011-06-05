@@ -3,6 +3,7 @@ package hermes.browser.dialog.message;
 import hermes.Domain;
 import hermes.Hermes;
 import hermes.browser.components.EditedMessageHandler;
+import hermes.providers.messages.BytesMessageImpl;
 import hermes.util.JMSUtils;
 import hermes.util.TextUtils;
 
@@ -103,6 +104,9 @@ public class JMSHeaderPropertyPanel extends JPanel {
 		case Message:
 			message = handler.createMessage();
 			break;
+		case BytesMessage:
+			message = new BytesMessageImpl() ;
+			break ;
 		default:
 			throw new JMSException("Unsupported message type " + messageType);
 		}

@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
@@ -52,7 +53,7 @@ public class MessageEditorDialog extends JDialog {
 	}
 
 	public static boolean canEdit(Message message) {
-		return message == null || message instanceof Message || message instanceof TextMessage || message instanceof MapMessage;
+		return message == null || message instanceof Message || message instanceof TextMessage || message instanceof MapMessage || message instanceof BytesMessage ;
 	}
 
 	/**
@@ -174,6 +175,8 @@ public class MessageEditorDialog extends JDialog {
 			return new TextMessagePayloadPanel();
 		case MapMessage:
 			return new MapMessagePayloadPanel();
+		case BytesMessage:
+			return new BytesMessagePayloadPanel() ;
 		}
 		return null;
 	}
