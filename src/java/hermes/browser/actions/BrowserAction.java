@@ -756,7 +756,7 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
 	}
 	
 	private void updatePayloadPanel() {
-		selectedRow = filterModel.getActualRowAt(messageHeaderTable.getSelectedRow());
+		selectedRow = filterModel.getActualRowAt(messageHeaderTable.getActualRowAt(messageHeaderTable.getSelectedRow()));
 
 		if (messageHeaderTableModel.getRowCount() > selectedRow && selectedRow >= 0) {
 			final int row = selectedRow;

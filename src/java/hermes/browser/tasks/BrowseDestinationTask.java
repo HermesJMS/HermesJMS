@@ -1,4 +1,4 @@
- /* 
+/* 
  * Copyright 2003,2004 Colin Crist
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,165 +39,134 @@ import org.apache.log4j.Logger;
 /**
  * @author colincrist@hermesjms.com
  */
-public class BrowseDestinationTask extends TaskSupport implements Task
-{
-   private static final Logger log = Logger.getLogger(BrowseDestinationTask.class);
-   private Hermes hermes;
-   private Iterator iter;
-   private QueueBrowser browser;
-   private String title = "Browse";
-   private boolean useMessageConsumer = false ;
+public class BrowseDestinationTask extends TaskSupport implements Task {
+	private static final Logger log = Logger.getLogger(BrowseDestinationTask.class);
+	private Hermes hermes;
+	private Iterator iter;
+	private QueueBrowser browser;
+	private String title = "Browse";
+	private boolean useMessageConsumer = false;
+	private boolean queuesOnly = false;
 
-   public BrowseDestinationTask(Hermes hermes, final DestinationConfig dConfig)
-   {
-      super(Domain.getDomain(dConfig.getDomain()).getIcon());
+	public BrowseDestinationTask(Hermes hermes, final DestinationConfig dConfig) {
+		super(Domain.getDomain(dConfig.getDomain()).getIcon());
 
-      this.hermes = hermes;
-      this.title = "Browsing " + dConfig.getName() + " on " + hermes.getId();
+		this.hermes = hermes;
+		this.title = "Browsing " + dConfig.getName() + " on " + hermes.getId();
 
-      if (dConfig.isDurable())
-      {
-         title = title + " (durableName=" + dConfig.getClientID() + ")";
-      }
+		if (dConfig.isDurable()) {
+			title = title + " (durableName=" + dConfig.getClientID() + ")";
+		}
 
-      this.iter = new Iterator()
-      {
-         private boolean first = true;
+		this.iter = new Iterator() {
+			private boolean first = true;
 
-         public void remove()
-         {
-            // TODO Auto-generated method stub
-         }
+			public void remove() {
+				// TODO Auto-generated method stub
+			}
 
-         public boolean hasNext()
-         {
-            return first;
-         }
+			public boolean hasNext() {
+				return first;
+			}
 
-         public Object next()
-         {
-            first = false;
-            return dConfig;
-         }
-      };
-   }
+			public Object next() {
+				first = false;
+				return dConfig;
+			}
+		};
+	}
 
-   public BrowseDestinationTask(Hermes hermes, Iterator iter)
-   {
-      super(IconCache.getIcon("jms.unknown"));
+	public BrowseDestinationTask(Hermes hermes, Iterator iter) {
+		super(IconCache.getIcon("jms.unknown"));
 
-      this.hermes = hermes;
-      this.iter = iter;
-   }
+		this.hermes = hermes;
+		this.iter = iter;
+		this.queuesOnly = true; // Can only browse queues when browsing all destinations on a session. 
+	}
 
-   public String getTitle()
-   {
-      return title;
-   }
+	public String getTitle() {
+		return title;
+	}
 
-   protected QueueBrowser createBrowser(Destination destination, DestinationConfig dConfig) throws JMSException
-   {
-      if (dConfig.getDomain() == Domain.QUEUE.getId() && hermes.getSessionConfig().isUseConsumerForQueueBrowse())
-      {
-         log.debug("using a MessageConsumer for the QueueBrowse") ;
-         
-         
-         return new QueueBrowserWithConsumer(hermes, (Queue) destination,  dConfig.getSelector(), HermesBrowser.getBrowser().getQueueBrowseConsumerTimeout()) ;
-      }
-      else
-      {
-         return hermes.createBrowser(dConfig) ;
-      }
-   }
+	protected QueueBrowser createBrowser(Destination destination, DestinationConfig dConfig) throws JMSException {
+		if (dConfig.getDomain() == Domain.QUEUE.getId() && hermes.getSessionConfig().isUseConsumerForQueueBrowse()) {
+			log.debug("using a MessageConsumer for the QueueBrowse");
 
-   public void stop()
-   {
-      super.stop();
+			return new QueueBrowserWithConsumer(hermes, (Queue) destination, dConfig.getSelector(), HermesBrowser.getBrowser().getQueueBrowseConsumerTimeout());
+		} else {
+			return hermes.createBrowser(dConfig);
+		}
+	}
 
-      try
-      {
-         if (browser != null)
-         {
-            browser.close();
-            browser = null;
-         }
-      }
-      catch (JMSException e)
-      {
-         log.error(e.getMessage(), e);
-      }
-   }
+	public void stop() {
+		super.stop();
 
-   public void invoke() throws Exception
-   {
-      while (iter.hasNext())
-      {
-         final DestinationConfig dConfig = (DestinationConfig) iter.next();
-         int nmessages = 0;
+		try {
+			if (browser != null) {
+				browser.close();
+				browser = null;
+			}
+		} catch (JMSException e) {
+			log.error(e.getMessage(), e);
+		}
+	}
 
-                  
-         try
-         {
-            final Destination destination = hermes.getDestination(dConfig.getName(), Domain.getDomain(dConfig.getDomain()));
-            browser = createBrowser(destination, dConfig);
+	public void invoke() throws Exception {
+		while (iter.hasNext()) {
+			final DestinationConfig dConfig = (DestinationConfig) iter.next();
+			final boolean shouldBrowse = queuesOnly ? Domain.getDomain(dConfig.getDomain()).equals(Domain.QUEUE) : true ;
+			int nmessages = 0;
 
-            notifyStatus("Running...");
+			try {
+				if (shouldBrowse) {
+					final Destination destination = hermes.getDestination(dConfig.getName(), Domain.getDomain(dConfig.getDomain()));
+					browser = createBrowser(destination, dConfig);
 
-            for (final Enumeration messageIter = browser.getEnumeration() ; messageIter.hasMoreElements() && isRunning();)
-            {
-               final Message message = (Message) messageIter.nextElement();
+					notifyStatus("Running...");
 
-               if (message != null)
-               {
-                  notifyMessage(message);
-                  nmessages++;
-               }
-               else
-               {
-                  // @TODO May be a bug here, keep an eye out for this message recurring!
-                  
-                  log.error("Got a null message!") ;
-                  Thread.sleep(500) ;
-               }
-            }
+					for (final Enumeration messageIter = browser.getEnumeration(); messageIter.hasMoreElements() && isRunning();) {
+						final Message message = (Message) messageIter.nextElement();
 
-            if (!isRunning())
-            {
-               log.debug("user requested stop browse of " + dConfig.getName());
-            }
-         }
-         catch (BrowseInterruptedException ex)
-         {
-            log.info("browse of " + getTitle() + " interrupted after " + nmessages);
-         }
-         catch (InterruptedException ex)
-         {
-            log.info(ex.getMessage(), ex) ;
-         }
-         finally
-         {
-            log.debug("browse complete nmessages=" + nmessages);
-            
-            notifyStatus("Done.");
+						if (message != null) {
+							notifyMessage(message);
+							nmessages++;
+						} else {
+							// @TODO May be a bug here, keep an eye out for this
+							// message recurring!
 
-            if (browser != null)
-            {
-               browser.close();
-               browser = null;
-            }
+							log.error("Got a null message!");
+							Thread.sleep(500);
+						}
+					}
 
-            hermes.close();
-         }
-      }
-   }
+					if (!isRunning()) {
+						log.debug("user requested stop browse of " + dConfig.getName());
+					}
+				}
+			} catch (BrowseInterruptedException ex) {
+				log.info("browse of " + getTitle() + " interrupted after " + nmessages);
+			} catch (InterruptedException ex) {
+				log.info(ex.getMessage(), ex);
+			} finally {
+				log.debug("browse complete nmessages=" + nmessages);
 
-   public boolean isUseMessageConsumer()
-   {
-      return useMessageConsumer;
-   }
+				notifyStatus("Done.");
 
-   public void setUseMessageConsumer(boolean useMessageConsumer)
-   {
-      this.useMessageConsumer = useMessageConsumer;
-   }
+				if (browser != null) {
+					browser.close();
+					browser = null;
+				}
+
+				hermes.close();
+			}
+		}
+	}
+
+	public boolean isUseMessageConsumer() {
+		return useMessageConsumer;
+	}
+
+	public void setUseMessageConsumer(boolean useMessageConsumer) {
+		this.useMessageConsumer = useMessageConsumer;
+	}
 }

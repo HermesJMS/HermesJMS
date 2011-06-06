@@ -2,98 +2,98 @@
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="src/test"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/naming-java.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/namespace.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jta-spec1_0_1.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/naming-factory.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/relaxngDatatype.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/naming-common.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-logging.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/naming-resources.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jsp-api.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/activation.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jasper-runtime.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/servlet-api.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jlfgr-1_0.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-beanutils.jar" sourcepath="/LOCAL/commons-beanutils-1.7.0-src/src/java"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-collections.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jaas.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-digester.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jasper-compiler.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/xsdlib.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-codec-1.1.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/displaytag-1.0-b2.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/javax.jms.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jmx.jar"/>
-	<classpathentry kind="var" path="JIDE_ROOT/lib/jide-action.jar"/>
-	<classpathentry kind="var" path="JIDE_ROOT/lib/jide-common.jar"/>
-	<classpathentry kind="var" path="JIDE_ROOT/lib/jide-components.jar"/>
-	<classpathentry kind="var" path="JIDE_ROOT/lib/jide-dialogs.jar"/>
-	<classpathentry kind="var" path="JIDE_ROOT/lib/jide-dock.jar"/>
-	<classpathentry kind="var" path="JIDE_ROOT/lib/jide-grids.jar"/>
-	<classpathentry kind="var" path="ARJUNA_ROOT/lib/ams-client.jar"/>
-	<classpathentry kind="var" path="ARJUNA_ROOT/lib/ams-client-core.jar"/>
-	<classpathentry kind="var" path="ARJUNA_ROOT/lib/ams-adminapi.jar"/>
-	<classpathentry kind="var" path="ARJUNA_ROOT/lib/ams-common.jar"/>
-	<classpathentry kind="var" path="ARJUNA_ROOT/lib/ext/mw-common.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/naming-java.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/namespace.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jta-spec1_0_1.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/naming-factory.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/relaxngDatatype.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/naming-common.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/commons-logging.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/naming-resources.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jsp-api.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/activation.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jasper-runtime.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/servlet-api.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jlfgr-1_0.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/commons-beanutils.jar" sourcepath="/LOCAL/commons-beanutils-1.7.0-src/src/java"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/commons-collections.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jaas.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/commons-digester.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jasper-compiler.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/xsdlib.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/commons-codec-1.1.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/displaytag-1.0-b2.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/javax.jms.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jmx.jar"/>
+	<classpathentry exported="true" kind="var" path="JIDE_ROOT/lib/jide-action.jar"/>
+	<classpathentry exported="true" kind="var" path="JIDE_ROOT/lib/jide-common.jar"/>
+	<classpathentry exported="true" kind="var" path="JIDE_ROOT/lib/jide-components.jar"/>
+	<classpathentry exported="true" kind="var" path="JIDE_ROOT/lib/jide-dialogs.jar"/>
+	<classpathentry exported="true" kind="var" path="JIDE_ROOT/lib/jide-dock.jar"/>
+	<classpathentry exported="true" kind="var" path="JIDE_ROOT/lib/jide-grids.jar"/>
+	<classpathentry exported="true" kind="var" path="ARJUNA_ROOT/lib/ams-client.jar"/>
+	<classpathentry exported="true" kind="var" path="ARJUNA_ROOT/lib/ams-client-core.jar"/>
+	<classpathentry exported="true" kind="var" path="ARJUNA_ROOT/lib/ams-adminapi.jar"/>
+	<classpathentry exported="true" kind="var" path="ARJUNA_ROOT/lib/ams-common.jar"/>
+	<classpathentry exported="true" kind="var" path="ARJUNA_ROOT/lib/ext/mw-common.jar"/>
 	<classpathentry kind="var" path="EMS_ROOT/lib/tibjms.jar"/>
 	<classpathentry kind="var" path="EMS_ROOT/lib/tibjmsadmin.jar"/>
-	<classpathentry kind="var" path="FIORANO_ROOT/lib/fmq-client.jar"/>
-	<classpathentry kind="var" path="FIORANO_ROOT/lib/fmq-admin-impl.jar"/>
-	<classpathentry kind="var" path="FIORANO_ROOT/lib/fmq-common-all.jar"/>
-	<classpathentry kind="var" path="JBOSS_ROOT/client/jbossall-client.jar"/>
-	<classpathentry kind="var" path="OPENJMS_ROOT/lib/openjms-client-0.7.6.1.jar"/>
-	<classpathentry kind="var" path="WME_ROOT/lib/BrokerJMS61.jar"/>
-	<classpathentry kind="var" path="WME_ROOT/lib/client61.jar"/>
-	<classpathentry kind="var" path="WEBLOGIC_ROOT/weblogic.jar"/>
-	<classpathentry kind="var" path="SONICMQ_ROOT/lib/mgmt_agent.jar"/>
-	<classpathentry kind="var" path="SONICMQ_ROOT/lib/mgmt_client.jar"/>
-	<classpathentry kind="var" path="SONICMQ_ROOT/lib/mgmt_config.jar"/>
-	<classpathentry kind="var" path="SONICMQ_ROOT/lib/jmxri.jar"/>
-	<classpathentry kind="var" path="SONICMQ_ROOT/lib/mfcontext.jar"/>
-	<classpathentry kind="var" path="SONICMQ_ROOT/lib/sonic_Client.jar"/>
-	<classpathentry kind="var" path="SONICMQ_ROOT/lib/sonic_mgmt_client.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/xercesImpl.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-dbutils-1.0.jar"/>
-	<classpathentry kind="var" path="WEBSPHERE_ROOT/java/com.ibm.mq.jar"/>
-	<classpathentry kind="var" path="WEBSPHERE_ROOT/java/com.ibm.mqjms.jar"/>
-	<classpathentry kind="var" path="WEBSPHERE_ROOT/java/commonservices.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/selector-1.1.jar" sourcepath="/LOCAL/jamsel/selector-1.1.jar"/>
+	<classpathentry exported="true" kind="var" path="FIORANO_ROOT/lib/fmq-client.jar"/>
+	<classpathentry exported="true" kind="var" path="FIORANO_ROOT/lib/fmq-admin-impl.jar"/>
+	<classpathentry exported="true" kind="var" path="FIORANO_ROOT/lib/fmq-common-all.jar"/>
+	<classpathentry exported="true" kind="var" path="JBOSS_ROOT/client/jbossall-client.jar"/>
+	<classpathentry exported="true" kind="var" path="OPENJMS_ROOT/lib/openjms-client-0.7.6.1.jar"/>
+	<classpathentry exported="true" kind="var" path="WME_ROOT/lib/BrokerJMS61.jar"/>
+	<classpathentry exported="true" kind="var" path="WME_ROOT/lib/client61.jar"/>
+	<classpathentry exported="true" kind="var" path="WEBLOGIC_ROOT/weblogic.jar"/>
+	<classpathentry exported="true" kind="var" path="SONICMQ_ROOT/lib/mgmt_agent.jar"/>
+	<classpathentry exported="true" kind="var" path="SONICMQ_ROOT/lib/mgmt_client.jar"/>
+	<classpathentry exported="true" kind="var" path="SONICMQ_ROOT/lib/mgmt_config.jar"/>
+	<classpathentry exported="true" kind="var" path="SONICMQ_ROOT/lib/jmxri.jar"/>
+	<classpathentry exported="true" kind="var" path="SONICMQ_ROOT/lib/mfcontext.jar"/>
+	<classpathentry exported="true" kind="var" path="SONICMQ_ROOT/lib/sonic_Client.jar"/>
+	<classpathentry exported="true" kind="var" path="SONICMQ_ROOT/lib/sonic_mgmt_client.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/xercesImpl.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/commons-dbutils-1.0.jar"/>
+	<classpathentry exported="true" kind="var" path="WEBSPHERE_ROOT/java/com.ibm.mq.jar"/>
+	<classpathentry exported="true" kind="var" path="WEBSPHERE_ROOT/java/com.ibm.mqjms.jar"/>
+	<classpathentry exported="true" kind="var" path="WEBSPHERE_ROOT/java/commonservices.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/selector-1.1.jar" sourcepath="/LOCAL/jamsel/selector-1.1.jar"/>
 	<classpathentry kind="src" path="src/resources"/>
-	<classpathentry kind="var" path="WEBLOGIC_ROOT/com.bea.core.utils.full_1.0.0.0.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/log4j-1.2.15.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jsyntaxpane-0.9.1.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/hermes-sapjms.jar"/>
-	<classpathentry kind="var" path="ORACLEAQ_ROOT/aqapi.jar"/>
-	<classpathentry kind="var" path="ORACLEAQ_ROOT/castor-1.0.5-xml.jar"/>
-	<classpathentry kind="var" path="ORACLEAQ_ROOT/ojdbc6.jar"/>
-	<classpathentry kind="var" path="ACTIVEMQ_ROOT"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="ACTIVEMQ_ROOT/lib/activemq-core-5.3.1.jar"/>
-	<classpathentry kind="var" path="JORAM_ROOT/lib/joram-client.jar"/>
-	<classpathentry kind="var" path="JORAM_ROOT/lib/joram-shared.jar"/>
-	<classpathentry kind="var" path="JORAM_ROOT/lib/ow_monolog.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/derby.jar"/>
-	<classpathentry kind="var" path="WEBSPHERE_ROOT/java/com.ibm.mq.pcf.jar"/>
-	<classpathentry kind="var" path="MX4J_ROOT/lib/mx4j.jar"/>
-	<classpathentry kind="var" path="MX4J_ROOT/lib/mx4j-tools.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/ant.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/ArtTk.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/commons-lang-2.1.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/datatips.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/providers/imq/lib/imq.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/JyConsole.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jython.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/mina-core-1.1.0-SNAPSHOT.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/quickfixj.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/tools.jar"/>
-	<classpathentry kind="var" path="HORNETQ_ROOT/client/hornetq-jms-client.jar"/>
-	<classpathentry kind="var" path="HORNETQ_ROOT/client/jnp-client.jar"/>
-	<classpathentry kind="var" path="HORNETQ_ROOT/client/hornetq-core-client.jar"/>
-	<classpathentry kind="var" path="HORNETQ_ROOT/lib/netty.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/cglib-nodep-2.2.2.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/asm-all-4.0_RC1.jar"/>
-	<classpathentry kind="var" path="HERMES_ROOT/src/lib/forms-1.3.0.jar"/>
+	<classpathentry exported="true" kind="var" path="WEBLOGIC_ROOT/com.bea.core.utils.full_1.0.0.0.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/log4j-1.2.15.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jsyntaxpane-0.9.1.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/hermes-sapjms.jar"/>
+	<classpathentry exported="true" kind="var" path="ORACLEAQ_ROOT/aqapi.jar"/>
+	<classpathentry exported="true" kind="var" path="ORACLEAQ_ROOT/castor-1.0.5-xml.jar"/>
+	<classpathentry exported="true" kind="var" path="ORACLEAQ_ROOT/ojdbc6.jar"/>
+	<classpathentry exported="true" kind="var" path="ACTIVEMQ_ROOT"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="var" path="ACTIVEMQ_ROOT/lib/activemq-core-5.3.1.jar"/>
+	<classpathentry exported="true" kind="var" path="JORAM_ROOT/lib/joram-client.jar"/>
+	<classpathentry exported="true" kind="var" path="JORAM_ROOT/lib/joram-shared.jar"/>
+	<classpathentry exported="true" kind="var" path="JORAM_ROOT/lib/ow_monolog.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/derby.jar"/>
+	<classpathentry exported="true" kind="var" path="WEBSPHERE_ROOT/java/com.ibm.mq.pcf.jar"/>
+	<classpathentry exported="true" kind="var" path="MX4J_ROOT/lib/mx4j.jar"/>
+	<classpathentry exported="true" kind="var" path="MX4J_ROOT/lib/mx4j-tools.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/ant.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/ArtTk.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/commons-lang-2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/datatips.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/providers/imq/lib/imq.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/JyConsole.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jython.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/mina-core-1.1.0-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/quickfixj.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/tools.jar"/>
+	<classpathentry exported="true" kind="var" path="HORNETQ_ROOT/client/hornetq-jms-client.jar"/>
+	<classpathentry exported="true" kind="var" path="HORNETQ_ROOT/client/jnp-client.jar"/>
+	<classpathentry exported="true" kind="var" path="HORNETQ_ROOT/client/hornetq-core-client.jar"/>
+	<classpathentry exported="true" kind="var" path="HORNETQ_ROOT/lib/netty.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/cglib-nodep-2.2.2.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/asm-all-4.0_RC1.jar"/>
+	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/forms-1.3.0.jar"/>
 	<classpathentry kind="output" path="ebuild/classes"/>
 </classpath>

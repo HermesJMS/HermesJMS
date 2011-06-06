@@ -34,91 +34,78 @@ import com.jidesoft.grid.Filter;
 import com.jidesoft.grid.FilterableTableModel;
 
 /**
- * A JIDE FilterableTableModel that uses <link href="http://jamsel.sourceforge.net/">JAMSEL</link>
- * to give SQL92 filters on the table content. An implementation of RowValueProvider must be given
- * that can pull out values from the table row for property names in the SQL.
+ * A JIDE FilterableTableModel that uses <link
+ * href="http://jamsel.sourceforge.net/">JAMSEL</link> to give SQL92 filters on
+ * the table content. An implementation of RowValueProvider must be given that
+ * can pull out values from the table row for property names in the SQL.
  * 
  * @author colincrist@hermesjms.com
- * @version $Id: SQL92FilterableTableModel.java,v 1.3 2006/05/26 10:08:21 colincrist Exp $
+ * @version $Id: SQL92FilterableTableModel.java,v 1.3 2006/05/26 10:08:21
+ *          colincrist Exp $
  */
 
-public class SQL92FilterableTableModel extends FilterableTableModel
-{
-   /**
+public class SQL92FilterableTableModel extends FilterableTableModel {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6078216473511901668L;
-private static final Logger log = Logger.getLogger(SQL92FilterableTableModel.class) ;
-   private RowValueProvider rowValueProvider;
-   private ISelector selector;
-   private IIdentifierExtension extension ;
+	private static final Logger log = Logger.getLogger(SQL92FilterableTableModel.class);
+	private RowValueProvider rowValueProvider;
+	private ISelector selector;
+	private IIdentifierExtension extension;
 
-   public SQL92FilterableTableModel(TableModel model, RowValueProvider rowValueProvider, IIdentifierExtension extension)
-   {
-      this(model, extension);
-      this.rowValueProvider = rowValueProvider ;
-   }
-   
-   public SQL92FilterableTableModel(TableModel model, IIdentifierExtension extension)
-   {
-      super(model);
-      this.extension = extension ;
-   }
-   
-   public SQL92FilterableTableModel(TableModel model)
-   {
-      super(model);
-   }
+	public SQL92FilterableTableModel(TableModel model, RowValueProvider rowValueProvider, IIdentifierExtension extension) {
+		this(model, extension);
+		this.rowValueProvider = rowValueProvider;
+	}
 
-   public void setSelector(String selectorString) throws InvalidSelectorException
-   {
-      clearFilters();
+	public SQL92FilterableTableModel(TableModel model, IIdentifierExtension extension) {
+		super(model);
+		this.extension = extension;
+	}
 
-      if (rowValueProvider == null)
-      {
-         throw new InvalidSelectorException("No RowValueProvider defined") ;
-      }
-      
-      if (!TextUtils.isEmpty(selectorString))
-      {
-         if (extension != null)
-         {
-            selector = Selector.getInstance(selectorString, extension);
-         }
-         else
-         {
-            selector = Selector.getInstance(selectorString);
-         }
-                 
-         Filter filter = new AbstractTableFilter()
-         {
-            /**
+	public SQL92FilterableTableModel(TableModel model) {
+		super(model);
+	}
+
+	public void setSelector(String selectorString) throws InvalidSelectorException {
+		clearFilters();
+
+		if (rowValueProvider == null) {
+			throw new InvalidSelectorException("No RowValueProvider defined");
+		}
+
+		if (!TextUtils.isEmpty(selectorString)) {
+			if (extension != null) {
+				selector = Selector.getInstance(selectorString, extension);
+			} else {
+				selector = Selector.getInstance(selectorString);
+			}
+
+			Filter filter = new AbstractTableFilter() {
+				/**
 			 * 
 			 */
-			private static final long serialVersionUID = 7094288732603611045L;
+				private static final long serialVersionUID = 7094288732603611045L;
 
-			public boolean isValueFiltered(Object arg0)
-            {              
-               final IValueProvider values = rowValueProvider.getValueProviderForRow(getRowIndex()) ;
-             
-               return !(selector.eval(values, null) == Result.RESULT_TRUE) ;
-            }
-         };
+				public boolean isValueFiltered(Object arg0) {
+					final IValueProvider values = rowValueProvider.getValueProviderForRow(getRowIndex());
 
-         addFilter(filter) ;
-      }
-     
-      setFiltersApplied(true);
-   }
+					return !(selector.eval(values, null) == Result.RESULT_TRUE);
+				}
+			};
 
+			addFilter(filter);
+		}
 
-   public RowValueProvider getRowValueProvider()
-   {
-      return rowValueProvider;
-   }
+		setFiltersApplied(true);
+	}
 
-   public void setRowValueProvider(RowValueProvider rowValueProvider)
-   {
-      this.rowValueProvider = rowValueProvider;
-   }
+	public RowValueProvider getRowValueProvider() {
+		return rowValueProvider;
+	}
+
+	public void setRowValueProvider(RowValueProvider rowValueProvider) {
+		this.rowValueProvider = rowValueProvider;
+	}
 }

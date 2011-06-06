@@ -17,7 +17,7 @@
     -->
     <info>
         <appname>HermesJMS</appname>
-        <appversion>1.14 SoapUI</appversion>
+        <appversion>1.14</appversion>
         <authors>
             <author name="Colin Crist" email="colincrist@hermesjms.com"/>
         </authors>
