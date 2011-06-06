@@ -33,6 +33,7 @@ import javax.jms.JMSException;
 
 public class StringSearchQueueBrowseAction extends QueueBrowseAction
 {
+	private static final DestinationConfig SEARCH_ALL = HermesBrowser.getConfigDAO().createDestinationConfig("*", Domain.QUEUE) ;
     private String string ;
     private boolean searchUserHeader ;
 
@@ -53,7 +54,7 @@ public class StringSearchQueueBrowseAction extends QueueBrowseAction
     
     public StringSearchQueueBrowseAction(Hermes hermes, String string, boolean searchUserHeader, int maxMessages) throws JMSException
     {
-        super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig("*", Domain.QUEUE),  maxMessages, string);
+        super(hermes, SEARCH_ALL,  maxMessages, string);
         
         this.string = string ;
         this.searchUserHeader = searchUserHeader ;
@@ -65,7 +66,7 @@ public class StringSearchQueueBrowseAction extends QueueBrowseAction
      */
     protected Task createTask() throws Exception
     {
-        if (getDestination() == null)
+        if (getDestinationConfig() == SEARCH_ALL)
         {
             return new StringSearchBrowseDestinationTask(getHermes(), string, searchUserHeader, getTitle()) ;
         }
