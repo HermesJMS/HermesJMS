@@ -39,47 +39,41 @@ import com.jidesoft.swing.JideSwingUtilities;
  *          colincrist Exp $
  */
 
-public class SearchDestinationOrContextAction extends ActionSupport
-{
-   /**
+public class SearchDestinationOrContextAction extends ActionSupport {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3691177566297585905L;
-private boolean searchUserHeader = true ;
-   
-   public SearchDestinationOrContextAction()
-   {
-      putValue(Action.NAME, "Search...");
-      putValue(Action.SHORT_DESCRIPTION, "Search the queues/topics.");
-      putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.browse.filter"));
+	private boolean searchUserHeader = true;
 
-      setEnabled(false);
+	public SearchDestinationOrContextAction() {
+		putValue(Action.NAME, "Search...");
+		putValue(Action.SHORT_DESCRIPTION, "Search the queues/topics.");
+		putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.browse.filter"));
 
-      enableOnBrowserTreeSelection(new Class[] { DestinationConfigTreeNode.class, HermesTreeNode.class } , this, true) ;    
-   }
+		setEnabled(false);
 
-   public void actionPerformed(ActionEvent arg0)
-   {
-      final BrowserTree browserTree = HermesBrowser.getBrowser().getBrowserTree();
+		enableOnBrowserTreeSelection(new Class[] { DestinationConfigTreeNode.class, HermesTreeNode.class }, this, true);
+	}
 
-      if (browserTree.getSelectionPath().getLastPathComponent() instanceof DestinationConfigTreeNode)
-      {
-         final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) browserTree.getSelectionPath().getLastPathComponent();
-         final HermesTreeNode hermesNode = (HermesTreeNode) destinationNode.getHermesTreeNode();
-         final QueueSearchDialog dialog = new QueueSearchDialog(HermesBrowser.getBrowser(), hermesNode.getHermes(), (DestinationConfig)  destinationNode.getBean(), searchUserHeader);
+	public void actionPerformed(ActionEvent arg0) {
+		final BrowserTree browserTree = HermesBrowser.getBrowser().getBrowserTree();
 
-         dialog.setLocationRelativeTo(null) ;
-         dialog.show();
-      }
-      else if (browserTree.getSelectionPath().getLastPathComponent() instanceof HermesTreeNode)
-      {
-         final HermesTreeNode hermesNode = (HermesTreeNode) browserTree.getSelectionPath().getLastPathComponent();
+		if (browserTree.getSelectionPath().getLastPathComponent() instanceof DestinationConfigTreeNode) {
+			final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) browserTree.getSelectionPath().getLastPathComponent();
+			final HermesTreeNode hermesNode = (HermesTreeNode) destinationNode.getHermesTreeNode();
+			final QueueSearchDialog dialog = new QueueSearchDialog(HermesBrowser.getBrowser(), hermesNode.getHermes(), (DestinationConfig) destinationNode.getBean(), searchUserHeader);
 
-         final QueueSearchDialog dialog = new QueueSearchDialog(HermesBrowser.getBrowser(), hermesNode.getHermes());
+			dialog.setLocationRelativeTo(null);
+			dialog.show();
+		} else if (browserTree.getSelectionPath().getLastPathComponent() instanceof HermesTreeNode) {
+			final HermesTreeNode hermesNode = (HermesTreeNode) browserTree.getSelectionPath().getLastPathComponent();
 
-         JideSwingUtilities.centerWindow(dialog) ;
-         dialog.show();
-      }
+			final QueueSearchDialog dialog = new QueueSearchDialog(HermesBrowser.getBrowser(), hermesNode.getHermes());
 
-   }
+			JideSwingUtilities.centerWindow(dialog);
+			dialog.show();
+		}
+
+	}
 }

@@ -36,69 +36,55 @@ import javax.swing.event.TreeSelectionListener;
  * Truncate a queue or file repository.
  * 
  * @author colincrist@hermesjms.com
- * @version $Id: TruncateAction.java,v 1.7 2005/12/14 08:11:24 colincrist Exp $
+ * @version $Id $
  */
 
-public class TruncateAction extends ActionSupport
-{
-   /**
+public class TruncateAction extends ActionSupport {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 139535445442209172L;
 
-public TruncateAction()
-   {
-      putValue(Action.NAME, "Truncate");
-      putValue(Action.SHORT_DESCRIPTION, "Truncate a queue, durable subscription or file.");
-      putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.queue.truncate"));
+	public TruncateAction() {
+		putValue(Action.NAME, "Truncate");
+		putValue(Action.SHORT_DESCRIPTION, "Truncate a queue, durable subscription or file.");
+		putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.queue.truncate"));
 
-      setEnabled(false);
+		setEnabled(false);
 
-      if (!HermesBrowser.getBrowser().isRestricted())
-      {
-         enableOnBrowserTreeSelection(new Class[] { DestinationConfigTreeNode.class, RepositoryTreeNode.class }, this, new TreeSelectionListener()
-         {
-            public void valueChanged(TreeSelectionEvent e)
-            {
-               if (getBrowserTree().hasSelection() && getBrowserTree().getLastSelectedPathComponent() instanceof DestinationConfigTreeNode)
-               {
-                  final DestinationConfigTreeNode treeNode = (DestinationConfigTreeNode) getBrowserTree().getSelectionPath().getLastPathComponent();
+		if (!HermesBrowser.getBrowser().isRestricted()) {
+			enableOnBrowserTreeSelection(new Class[] { DestinationConfigTreeNode.class, RepositoryTreeNode.class }, this, new TreeSelectionListener() {
+				public void valueChanged(TreeSelectionEvent e) {
+					if (getBrowserTree().hasSelection() && getBrowserTree().getLastSelectedPathComponent() instanceof DestinationConfigTreeNode) {
+						final DestinationConfigTreeNode treeNode = (DestinationConfigTreeNode) getBrowserTree().getSelectionPath().getLastPathComponent();
 
-                  setEnabled(treeNode.isQueue() || (treeNode.getConfig().isDurable()));
-               }
-            }
-         }, true);
-      }
-   }
+						setEnabled(treeNode.isQueue() || (treeNode.getConfig().isDurable()));
+					}
+				}
+			}, true);
+		}
+	}
 
-   public void actionPerformed(ActionEvent event)
-   {
-      if (getBrowserTree().getSelectionPath().getLastPathComponent() instanceof DestinationConfigTreeNode)
-      {
-         final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) getBrowserTree().getSelectionPath().getLastPathComponent();
+	public void actionPerformed(ActionEvent event) {
+		if (getBrowserTree().getSelectionPath().getLastPathComponent() instanceof DestinationConfigTreeNode) {
+			final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) getBrowserTree().getSelectionPath().getLastPathComponent();
 
-         if (destinationNode != null)
-         {
-            HermesTreeNode hermesNode = (HermesTreeNode) destinationNode.getHermesTreeNode();
+			if (destinationNode != null) {
+				HermesTreeNode hermesNode = (HermesTreeNode) destinationNode.getHermesTreeNode();
 
-            try
-            {
-               BrowserAction browserAction = (BrowserAction) HermesBrowser.getBrowser().getDocumentPane().getActiveDocument();
-               HermesBrowser.getBrowser().getActionFactory().createTruncateAction(hermesNode.getHermes(), destinationNode.getConfig(), browserAction);
-            }
-            catch (JMSException ex)
-            {
-               HermesBrowser.getBrowser().showErrorDialog("Cannot truncate: ", ex);
-            }
-         }
-      }
-      else if (HermesBrowser.getBrowser().getBrowserTree().getSelectionPath().getLastPathComponent() instanceof RepositoryTreeNode)
-      {
-         final RepositoryTreeNode repositoryNode = (RepositoryTreeNode) getBrowserTree().getSelectionPath().getLastPathComponent();
+				try {
+					BrowserAction browserAction = (BrowserAction) HermesBrowser.getBrowser().getDocumentPane().getActiveDocument();
+					HermesBrowser.getBrowser().getActionFactory().createTruncateAction(hermesNode.getHermes(), destinationNode.getConfig(), browserAction);
+				} catch (JMSException ex) {
+					HermesBrowser.getBrowser().showErrorDialog("Cannot truncate: ", ex);
+				}
+			}
+		} else if (HermesBrowser.getBrowser().getBrowserTree().getSelectionPath().getLastPathComponent() instanceof RepositoryTreeNode) {
+			final RepositoryTreeNode repositoryNode = (RepositoryTreeNode) getBrowserTree().getSelectionPath().getLastPathComponent();
 
-         repositoryNode.getRepository().delete();
+			repositoryNode.getRepository().delete();
 
-         Hermes.ui.getDefaultMessageSink().add("Repository " + repositoryNode.getRepository().getId() + " truncated");
-      }
-   }
+			Hermes.ui.getDefaultMessageSink().add("Repository " + repositoryNode.getRepository().getId() + " truncated");
+		}
+	}
 }

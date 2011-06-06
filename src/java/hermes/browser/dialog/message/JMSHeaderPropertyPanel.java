@@ -124,6 +124,7 @@ public class JMSHeaderPropertyPanel extends JPanel {
 			// message.setJMSTimestamp(this.message.getJMSTimestamp());
 			message.setJMSDestination(this.message.getJMSDestination());
 		}
+		
 		if (!TextUtils.isEmpty(correlationIDField.getText())) {
 			message.setJMSCorrelationID(correlationIDField.getText());
 		}

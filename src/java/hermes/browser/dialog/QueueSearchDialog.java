@@ -49,205 +49,177 @@ import com.jidesoft.dialog.StandardDialog;
 
 /**
  * @author colincrist@hermesjms.com last changed by: $Author: colincrist $
- * @version $Id: QueueSearchDialog.java,v 1.6 2005/06/20 15:28:35 colincrist Exp $
+ * @version $Id: QueueSearchDialog.java,v 1.6 2005/06/20 15:28:35 colincrist Exp
+ *          $
  */
-public class QueueSearchDialog extends StandardDialog
-{
-    /**
+public class QueueSearchDialog extends StandardDialog {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1241201218711233617L;
 	private static final Logger log = Logger.getLogger(QueueSearchDialog.class);
-    private static Vector selectionHistory = new Vector();
+	private static Vector selectionHistory = new Vector();
 
-    private JPanel topPanel = new JPanel();
-    private Hermes hermes;   
-    private JLabel info = new JLabel("Enter the string or regular expression to search messages for.");;
-    private JComboBox stringCombo;
-    private JCheckBox stringCheckBox = new JCheckBox("Simple string search");
-    private JCheckBox regexCheckBox = new JCheckBox("Regular expression search");
-    private JCheckBox userHeaderCheckBox = new JCheckBox("Search user header properties", true);
-    private JCheckBox jmsHeaderCheckBox = new JCheckBox("Search JMS header poperties");
-    private DestinationConfig destinationConfig ;
+	private JPanel topPanel = new JPanel();
+	private Hermes hermes;
+	private JLabel info = new JLabel("Enter the string or regular expression to search messages for.");;
+	private JComboBox stringCombo;
+	private JCheckBox stringCheckBox = new JCheckBox("Simple string search");
+	private JCheckBox regexCheckBox = new JCheckBox("Regular expression search");
+	private JCheckBox userHeaderCheckBox = new JCheckBox("Search user header properties", true);
+	private JCheckBox jmsHeaderCheckBox = new JCheckBox("Search JMS header poperties");
+	private DestinationConfig destinationConfig;
 
-    /**
-     * @param parent
-     * @param name
-     * @param modal
-     */
-    public QueueSearchDialog(Frame parent, Hermes hermes, DestinationConfig destinationConfig, boolean searchUserHeader)
-    {
-        super(parent, "Search queue/topic", true);
+	/**
+	 * @param parent
+	 * @param name
+	 * @param modal
+	 */
+	public QueueSearchDialog(Frame parent, Hermes hermes, DestinationConfig destinationConfig, boolean searchUserHeader) {
+		super(parent, "Search queue/topic", true);
 
-        this.hermes = hermes;
-        this.destinationConfig = destinationConfig;
-        
+		this.hermes = hermes;
+		this.destinationConfig = destinationConfig;
 
-        setDefaultAction(new AbstractAction()
-        {
-            /**
+		setDefaultAction(new AbstractAction() {
+			/**
 			 * 
 			 */
 			private static final long serialVersionUID = -6422887636600458052L;
 
-			public void actionPerformed(ActionEvent e)
-            {
-                onOK();
-            }
-        });
-    }
+			public void actionPerformed(ActionEvent e) {
+				onOK();
+			}
+		});
+	}
 
-    public QueueSearchDialog(Frame parent, Hermes hermes)
-    {
-        super(parent, "Search all queues on " + hermes.getId(), true);
+	public QueueSearchDialog(Frame parent, Hermes hermes) {
+		super(parent, "Search all queues on " + hermes.getId(), true);
 
-        this.hermes = hermes;
+		this.hermes = hermes;
 
-        setDefaultAction(new AbstractAction()
-        {
-            /**
+		setDefaultAction(new AbstractAction() {
+			/**
 			 * 
 			 */
 			private static final long serialVersionUID = -3434398395757886417L;
 
-			public void actionPerformed(ActionEvent e)
-            {
-                onOK();
-            }
-        });
-    }
+			public void actionPerformed(ActionEvent e) {
+				onOK();
+			}
+		});
+	}
 
-    protected void onOK()
-    {
-        String selection = stringCombo.getSelectedItem() != null ? stringCombo.getSelectedItem().toString() : null ;
+	protected void onOK() {
+		String selection = stringCombo.getSelectedItem() != null ? stringCombo.getSelectedItem().toString() : null;
 
-        if (selection != null && !selection.equals(""))
-        {
-            try
-            {
-                BrowserAction action;
+		if (selection != null && !selection.equals("")) {
+			try {
+				BrowserAction action;
 
-                
-                if (regexCheckBox.isSelected())
-                {
-                    action = HermesBrowser.getBrowser().getActionFactory().createRegexQueueBrowseAction(hermes, destinationConfig, selection);
-                }
-                else
-                {
-                    action = HermesBrowser.getBrowser().getActionFactory().createStringSeachQueueBrowseAction(hermes, destinationConfig, selection,
-                            userHeaderCheckBox.isSelected());
-                }
+				if (regexCheckBox.isSelected()) {
+					action = HermesBrowser.getBrowser().getActionFactory().createRegexQueueBrowseAction(hermes, destinationConfig, selection);
+				} else {
+					action = HermesBrowser.getBrowser().getActionFactory().createStringSeachQueueBrowseAction(hermes, destinationConfig, selection, userHeaderCheckBox.isSelected());
+				}
 
-                selectionHistory.add(selection) ;
-            }
-            catch (JMSException e)
-            {
-                log.error(e.getMessage(), e);
+				selectionHistory.add(selection);
+			} catch (JMSException e) {
+				log.error(e.getMessage(), e);
 
-                HermesBrowser.getBrowser().showErrorDialog(e);
-            }
-        }
-    }
+				HermesBrowser.getBrowser().showErrorDialog(e);
+			}
+		}
+	}
 
-    public JComponent createBannerPanel()
-    {
-        return new JLabel();
-    }
+	public JComponent createBannerPanel() {
+		return new JLabel();
+	}
 
-    public ButtonPanel createButtonPanel()
-    {
-        final ButtonPanel buttonPanel = new ButtonPanel();
-        final JButton okButton = new JButton("OK");
-        final JButton cancelButton = new JButton("Cancel");
+	public ButtonPanel createButtonPanel() {
+		final ButtonPanel buttonPanel = new ButtonPanel();
+		final JButton okButton = new JButton("OK");
+		final JButton cancelButton = new JButton("Cancel");
 
-        buttonPanel.addButton(okButton);
-        buttonPanel.addButton(cancelButton);
+		buttonPanel.addButton(okButton);
+		buttonPanel.addButton(cancelButton);
 
-        okButton.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                onOK();
-                dispose();
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				onOK();
+				dispose();
 
-            }
-        });
+			}
+		});
 
-        cancelButton.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                dispose();
-            }
-        });
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        return buttonPanel;
-    }
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		return buttonPanel;
+	}
 
-    public JComponent createContentPanel()
-    {
-        Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+	public JComponent createContentPanel() {
+		Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED);
 
-        topPanel.setLayout(new BorderLayout());
+		topPanel.setLayout(new BorderLayout());
 
-        //
-        // The combo box panel...
+		//
+		// The combo box panel...
 
-        JPanel comboPanel = new JPanel();
+		JPanel comboPanel = new JPanel();
 
-        comboPanel.setLayout(new GridLayout(1, 1));
-        comboPanel.setBorder(BorderFactory.createTitledBorder(border, "Search for"));
-        stringCombo = new JComboBox(selectionHistory);
-        stringCombo.setEditable(true);
+		comboPanel.setLayout(new GridLayout(1, 1));
+		comboPanel.setBorder(BorderFactory.createTitledBorder(border, "Search for"));
+		stringCombo = new JComboBox(selectionHistory);
+		stringCombo.setEditable(true);
 
-        comboPanel.add(stringCombo);
+		comboPanel.add(stringCombo);
 
-        //
-        // The check box panel...
+		//
+		// The check box panel...
 
-        JPanel checkBoxPanel = new JPanel();
+		JPanel checkBoxPanel = new JPanel();
 
-        checkBoxPanel.setBorder(BorderFactory.createTitledBorder(border, "Options"));
+		checkBoxPanel.setBorder(BorderFactory.createTitledBorder(border, "Options"));
 
-        checkBoxPanel.setLayout(new GridLayout(4, 1));
-        checkBoxPanel.add(stringCheckBox);
-        checkBoxPanel.add(regexCheckBox);
-        checkBoxPanel.add(userHeaderCheckBox);
-        checkBoxPanel.add(jmsHeaderCheckBox);
+		checkBoxPanel.setLayout(new GridLayout(4, 1));
+		checkBoxPanel.add(stringCheckBox);
+		checkBoxPanel.add(regexCheckBox);
+		checkBoxPanel.add(userHeaderCheckBox);
+		checkBoxPanel.add(jmsHeaderCheckBox);
 
-        topPanel.add(comboPanel, BorderLayout.NORTH);
-        topPanel.add(checkBoxPanel, BorderLayout.SOUTH);
+		topPanel.add(comboPanel, BorderLayout.NORTH);
+		topPanel.add(checkBoxPanel, BorderLayout.SOUTH);
 
-        // 
-        // Actions...
+		//
+		// Actions...
 
-        stringCheckBox.setSelected(true);
-        regexCheckBox.setSelected(false);
+		stringCheckBox.setSelected(true);
+		regexCheckBox.setSelected(false);
 
-        stringCheckBox.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                regexCheckBox.setSelected(!stringCheckBox.isSelected());
-            }
-        });
+		stringCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				regexCheckBox.setSelected(!stringCheckBox.isSelected());
+			}
+		});
 
-        regexCheckBox.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                stringCheckBox.setSelected(!regexCheckBox.isSelected());
-            }
-        });
+		regexCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				stringCheckBox.setSelected(!regexCheckBox.isSelected());
+			}
+		});
 
-        userHeaderCheckBox.setSelected(true);
-        jmsHeaderCheckBox.setSelected(false);
-        jmsHeaderCheckBox.setEnabled(false);
+		userHeaderCheckBox.setSelected(true);
+		jmsHeaderCheckBox.setSelected(false);
+		jmsHeaderCheckBox.setEnabled(false);
 
-        setSize(new Dimension(430, 250));
-        setResizable(false);
+		setSize(new Dimension(430, 250));
+		setResizable(false);
 
-        return topPanel;
-    }
+		return topPanel;
+	}
 }

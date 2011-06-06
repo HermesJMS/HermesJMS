@@ -354,6 +354,7 @@ public abstract class BrowserAction extends AbstractDocumentComponent implements
 	/**
 	 * Get the set of JMS messages in the selection (if any)
 	 */
+
 	public Collection<Message> getSelectedMessages() {
 		final ArrayList<Message> ids = new ArrayList<Message>();
 		final int[] rows = messageHeaderTable.getSelectedRows();

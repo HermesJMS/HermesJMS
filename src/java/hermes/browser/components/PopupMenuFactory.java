@@ -50,6 +50,7 @@ import hermes.swing.actions.ChainByClOrdIDAction;
 import hermes.swing.actions.CollapseBrowserTreeAction;
 import hermes.swing.actions.CopyBrowserNodeAction;
 import hermes.swing.actions.CopyMessagesToClipboardAction;
+import hermes.swing.actions.CorrelateMessagesAction;
 import hermes.swing.actions.CreateNewContextAction;
 import hermes.swing.actions.CreateNewJNDIContextAction;
 import hermes.swing.actions.CreateNewMessageStoreAction;
@@ -154,6 +155,7 @@ public class PopupMenuFactory
       saveMenu.add(new JMenuItem(ActionRegistry.getAction(SaveMessagesAsXMLAction.class)));
       saveMenu.add(new JMenuItem(ActionRegistry.getAction(SaveMessagesIndividuallyAsXMLAction.class)));
 
+      popup.add(new JMenuItem(ActionRegistry.getAction(CorrelateMessagesAction.class))) ;
       popup.add(editMenu);
       popup.add(saveMenu);
       popup.add(new JPopupMenu.Separator());
