@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+@SuppressWarnings("serial")
 public class BytesMessagePayloadPanel extends MessageWriter {
 private JTextArea textArea = new JTextArea() ;
 private JScrollPane scrollPane = new JScrollPane();
