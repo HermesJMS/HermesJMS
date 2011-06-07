@@ -40,6 +40,7 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.time.FastDateFormat;
+import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -47,6 +48,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
 public class JMSHeaderPropertyPanel extends JPanel {
+	private static final Logger log = Logger.getLogger(JMSHeaderPropertyPanel.class);
+
 	private JTextField messageIdField;
 	private JTextField replyToField;
 	private JTextField correlationIDField;
@@ -93,52 +96,47 @@ public class JMSHeaderPropertyPanel extends JPanel {
 
 	public Message createMessage(EditedMessageHandler handler) throws JMSException, NamingException {
 		MessageType messageType = (MessageType) messageTypeCombo.getSelectedItem();
-		Message message = null;
+		Message newMessage = null;
 		switch (messageType) {
 		case TextMessage:
-			message = handler.createTextMessage();
+			newMessage = handler.createTextMessage();
 			break;
 		case MapMessage:
-			message = handler.createMapMessage();
+			newMessage = handler.createMapMessage();
 			break;
 		case Message:
-			message = handler.createMessage();
+			newMessage = handler.createMessage();
 			break;
 		case BytesMessage:
-			message = new BytesMessageImpl() ;
+			newMessage = new BytesMessageImpl() ;
 			break ;
 		default:
 			throw new JMSException("Unsupported message type " + messageType);
 		}
 
 		if (!TextUtils.isEmpty(replyToField.getText())) {
-			message.setJMSReplyTo(queueCheckBox.isSelected() ? handler.createQueue(replyToField.getText()) : handler.createTopic(replyToField.getText()));
+			newMessage.setJMSReplyTo(queueCheckBox.isSelected() ? handler.createQueue(replyToField.getText()) : handler.createTopic(replyToField.getText()));
 		}
 
 		if (!TextUtils.isEmpty(typeField.getText())) {
-			message.setJMSType(typeField.getText());
+			newMessage.setJMSType(typeField.getText());
 		}
 
 		if (this.message != null) {
-			 message.setJMSMessageID(this.message.getJMSMessageID());
-			// message.setJMSTimestamp(this.message.getJMSTimestamp());
-			message.setJMSDestination(this.message.getJMSDestination());
+			 newMessage.setJMSMessageID(this.message.getJMSMessageID());
+			newMessage.setJMSDestination(this.message.getJMSDestination());
 		}
 		
 		if (!TextUtils.isEmpty(correlationIDField.getText())) {
-			message.setJMSCorrelationID(correlationIDField.getText());
+			newMessage.setJMSCorrelationID(correlationIDField.getText());
 		}
 
-		message.setJMSPriority(((SpinnerNumberModel) priroritySpinner.getModel()).getNumber().intValue());
-		message.setJMSExpiration(((SpinnerNumberModel) expirationSpinner.getModel()).getNumber().longValue());
+		newMessage.setJMSPriority(((SpinnerNumberModel) priroritySpinner.getModel()).getNumber().intValue());
+		newMessage.setJMSExpiration(((SpinnerNumberModel) expirationSpinner.getModel()).getNumber().longValue());
 
-		return message;
+		return newMessage;
 	}
-
-	private void handleException(JMSException ex) {
-
-	}
-
+	
 	/**
 	 * Create the panel.
 	 */
