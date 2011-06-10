@@ -17,9 +17,6 @@
 
 package hermes.browser.actions;
 
-import java.util.Collection;
-import java.util.Set;
-
 import hermes.Domain;
 import hermes.Hermes;
 import hermes.HermesRepository;
@@ -28,6 +25,8 @@ import hermes.browser.IconCache;
 import hermes.browser.components.EditedMessageHandler;
 import hermes.browser.tasks.BrowseRepositoryFileTask;
 import hermes.browser.tasks.Task;
+
+import java.util.Set;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
