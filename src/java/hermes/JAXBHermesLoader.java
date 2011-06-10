@@ -63,7 +63,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.TopicConnectionFactory;
