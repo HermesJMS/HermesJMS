@@ -18,9 +18,7 @@
 package hermes.swing.actions;
 
 import hermes.browser.HermesBrowser;
-import hermes.browser.IconCache;
 import hermes.browser.actions.BrowserAction;
-import hermes.browser.actions.QueueBrowseAction;
 import hermes.browser.components.BrowserTree;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
 import hermes.browser.model.tree.HermesTreeNode;
@@ -71,10 +69,10 @@ public class CorrelateMessagesAction extends ActionSupport {
 						for (Iterator<Message> iter = messages.iterator(); iter.hasNext();) {
 							Message message = iter.next();
 							selector.append("JMSMessageID = '" + message.getJMSMessageID() + "' ");
-							selector.append("OR JMSCorrelationID = '" + message.getJMSMessageID() + "'");
+							selector.append("OR JMSCorrelationID = '" + message.getJMSMessageID() + "' ");
 							if (message.getJMSCorrelationID() != null) {
-								selector.append("OR JMSMessageID = '" + message.getJMSMessageID() + "'");
-								selector.append("OR JMSCorrelationID = '" + message.getJMSCorrelationID() + "'");
+								selector.append("OR JMSMessageID = '" + message.getJMSCorrelationID() + "' ");
+								selector.append("OR JMSCorrelationID = '" + message.getJMSCorrelationID() + "' ");
 
 							}
 
