@@ -19,6 +19,7 @@ package hermes.fix.quickfix;
 
 import hermes.fix.FIXMessage;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,194 +38,151 @@ import quickfix.mina.message.FIXMessageDecoder;
  *          Exp $
  */
 
-public class QuickFIXMessageCache
-{
-   private LRUMap messages;
-   private Set<FIXMessage> toReset = new HashSet<FIXMessage>();
-   private Lock lock = new ReentrantLock();
+public class QuickFIXMessageCache {
+	private LRUMap messages;
+	private Set<FIXMessage> toReset = new HashSet<FIXMessage>();
+	private Lock lock = new ReentrantLock();
 
-   private Map<Thread, FIXMessageDecoder> decoders = new HashMap<Thread, FIXMessageDecoder>();
+	private Map<Thread, FIXMessageDecoder> decoders = new HashMap<Thread, FIXMessageDecoder>();
 
-   public QuickFIXMessageCache()
-   {
-      this(1024);
-   }
+	public QuickFIXMessageCache() {
+		this(1024);
+	}
 
-   public FIXMessageDecoder getDecoder()
-   {
-      synchronized (decoders)
-      {
-         FIXMessageDecoder decoder = decoders.get(Thread.currentThread());
+	public FIXMessageDecoder getDecoder() throws UnsupportedEncodingException {
+		synchronized (decoders) {
+			FIXMessageDecoder decoder = decoders.get(Thread.currentThread());
 
-         if (decoder == null)
-         {
-            decoder = new FIXMessageDecoder();
-            decoders.put(Thread.currentThread(), decoder);
-         }
+			if (decoder == null) {
+				decoder = new FIXMessageDecoder();
+				decoders.put(Thread.currentThread(), decoder);
+			}
 
-         return decoder;
-      }
-   }
+			return decoder;
+		}
+	}
 
-   public QuickFIXMessageCache(int size)
-   {
-      messages = createLRUMap(size);
-   }
+	public QuickFIXMessageCache(int size) {
+		messages = createLRUMap(size);
+	}
 
-   private LRUMap createLRUMap(int size)
-   {
-      return new LRUMap(size)
-      {
-         /**
+	private LRUMap createLRUMap(int size) {
+		return new LRUMap(size) {
+			/**
 		 * 
 		 */
-		private static final long serialVersionUID = -3353399913762901038L;
+			private static final long serialVersionUID = -3353399913762901038L;
 
-		@Override
-         protected boolean removeLRU(LinkEntry entry)
-         {
-            //
-            // When the message is removed from the cache clear its fields.
+			@Override
+			protected boolean removeLRU(LinkEntry entry) {
+				//
+				// When the message is removed from the cache clear its fields.
 
-            final FIXMessage message = (FIXMessage) entry.getKey();
+				final FIXMessage message = (FIXMessage) entry.getKey();
 
-            // We cannot call reset here, the next time a put occurs, we'll
-            // reset it.
+				// We cannot call reset here, the next time a put occurs, we'll
+				// reset it.
 
-            synchronized (toReset)
-            {
-               toReset.add(message);
-            }
+				synchronized (toReset) {
+					toReset.add(message);
+				}
 
-            return super.removeLRU(entry);
-         }
-      };
-   }
+				return super.removeLRU(entry);
+			}
+		};
+	}
 
-   public void setSize(int size)
-   {
-      lock.lock();
+	public void setSize(int size) {
+		lock.lock();
 
-      try
-      {
-         final LRUMap newMessages = createLRUMap(size);
+		try {
+			final LRUMap newMessages = createLRUMap(size);
 
-         messages.putAll(newMessages);
-         messages = newMessages;
-      }
-      finally
-      {
-         lock.unlock();
-      }
-   }
+			messages.putAll(newMessages);
+			messages = newMessages;
+		} finally {
+			lock.unlock();
+		}
+	}
 
-   public int getSize()
-   {
-      lock.lock();
+	public int getSize() {
+		lock.lock();
 
-      try
-      {
-         if (messages == null)
-         {
-            return 0;
-         }
-         else
-         {
-            return messages.maxSize();
-         }
-      }
-      finally
-      {
-         lock.unlock();
-      }
-   }
+		try {
+			if (messages == null) {
+				return 0;
+			} else {
+				return messages.maxSize();
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
 
-   public void close()
-   {
-      lock.lock();
+	public void close() {
+		lock.lock();
 
-      try
-      {
-         messages.clear();
-         decoders.clear();
-         
-      }
-      finally
-      {
-         lock.unlock();
-      }
-      
-      synchronized (toReset)
-      {
-         toReset.clear();
-      }
-   }
+		try {
+			messages.clear();
+			decoders.clear();
 
-   public void lock()
-   {
-      lock.lock() ;
-   }
-   
-   public void unlock()
-   {
-      lock.unlock() ;
-   }
-   
-   public boolean contains(FIXMessage key)
-   {
-      lock.lock();
+		} finally {
+			lock.unlock();
+		}
 
-      try
-      {
-         return messages.containsKey(key);
-      }
-      finally
-      {
-         lock.unlock();
-      }
-   }
+		synchronized (toReset) {
+			toReset.clear();
+		}
+	}
 
-   public void put(FIXMessage key, Message value)
-   {
-      lock.lock();
+	public void lock() {
+		lock.lock();
+	}
 
-      try
-      {
-         messages.put(key, value);         
-      }
-      finally
-      {
-         lock.unlock();
-      }
-      
-      synchronized (toReset)
-      {
-         if (toReset.contains(key))
-         {
-            toReset.remove(key) ;
-         }
-         
-         for (FIXMessage m : toReset)
-         {
-            m.reset();
-         }
+	public void unlock() {
+		lock.unlock();
+	}
 
-         toReset.clear();
-      }
+	public boolean contains(FIXMessage key) {
+		lock.lock();
 
-   }
+		try {
+			return messages.containsKey(key);
+		} finally {
+			lock.unlock();
+		}
+	}
 
-   public Message get(FIXMessage key)
-   {
-      lock.lock();
+	public void put(FIXMessage key, Message value) {
+		lock.lock();
 
-      try
-      {
-         return (Message) messages.get(key);
-      }
-      finally
-      {
-         lock.unlock();
-      }
-   }
+		try {
+			messages.put(key, value);
+		} finally {
+			lock.unlock();
+		}
+
+		synchronized (toReset) {
+			if (toReset.contains(key)) {
+				toReset.remove(key);
+			}
+
+			for (FIXMessage m : toReset) {
+				m.reset();
+			}
+
+			toReset.clear();
+		}
+
+	}
+
+	public Message get(FIXMessage key) {
+		lock.lock();
+
+		try {
+			return (Message) messages.get(key);
+		} finally {
+			lock.unlock();
+		}
+	}
 }

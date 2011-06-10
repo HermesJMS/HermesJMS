@@ -21,6 +21,7 @@ import hermes.HermesRuntimeException;
 import hermes.fix.FIXMessage;
 import hermes.fix.NoSuchFieldException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -54,288 +55,226 @@ import quickfix.mina.message.FIXMessageDecoder;
  * additional cleanup.
  * 
  * @author colincrist@hermesjms.com
- * @version $Id: AbstractQuickFIXMessage.java,v 1.5 2007/02/28 10:47:27 colincrist Exp $
+ * @version $Id: AbstractQuickFIXMessage.java,v 1.5 2007/02/28 10:47:27
+ *          colincrist Exp $
  */
 
-public abstract class AbstractQuickFIXMessage implements FIXMessage
-{
+public abstract class AbstractQuickFIXMessage implements FIXMessage {
 
-   private static Set<Integer> retainedFields;
-   private Lock lock = new ReentrantLock();
+	private static Set<Integer> retainedFields;
+	private Lock lock = new ReentrantLock();
 
-   static
-   {
-      retainedFields = new HashSet<Integer>();
+	static {
+		retainedFields = new HashSet<Integer>();
 
-      retainedFields.add(SenderCompID.FIELD);
-      retainedFields.add(TargetCompID.FIELD);
-      retainedFields.add(SendingTime.FIELD);
-      retainedFields.add(MsgSeqNum.FIELD);
-      retainedFields.add(MsgType.FIELD);
-      retainedFields.add(OnBehalfOfCompID.FIELD);
-      retainedFields.add(OnBehalfOfSubID.FIELD);
-   }
+		retainedFields.add(SenderCompID.FIELD);
+		retainedFields.add(TargetCompID.FIELD);
+		retainedFields.add(SendingTime.FIELD);
+		retainedFields.add(MsgSeqNum.FIELD);
+		retainedFields.add(MsgType.FIELD);
+		retainedFields.add(OnBehalfOfCompID.FIELD);
+		retainedFields.add(OnBehalfOfSubID.FIELD);
+	}
 
-   private static final Logger log = Logger.getLogger(AbstractQuickFIXMessage.class);
+	private static final Logger log = Logger.getLogger(AbstractQuickFIXMessage.class);
 
-  
-   class MyDecoderOutput implements ProtocolDecoderOutput
-   {
-      public void write(Object object)
-      {
-         try
-         {
-            getCache().put(AbstractQuickFIXMessage.this, new Message((String) object));
-         }
-         catch (Exception ex)
-         {
-            log.error(ex.getMessage(), ex);
+	class MyDecoderOutput implements ProtocolDecoderOutput {
+		public void write(Object object) {
+			try {
+				getCache().put(AbstractQuickFIXMessage.this, new Message((String) object));
+			} catch (Exception ex) {
+				log.error(ex.getMessage(), ex);
 
-            throw new HermesRuntimeException(ex);
-         }
-      }
+				throw new HermesRuntimeException(ex);
+			}
+		}
 
-      public void flush()
-      {
-         // TODO Auto-generated method stub
-         
-      }
-   }
+		public void flush() {
+			// TODO Auto-generated method stub
 
-   public AbstractQuickFIXMessage(QuickFIXMessageCache cache)
-   {
-      this.cache = cache;
-   }
+		}
+	}
 
-   public QuickFIXMessageCache getCache()
-   {
-      return cache;
-   }
+	public AbstractQuickFIXMessage(QuickFIXMessageCache cache) {
+		this.cache = cache;
+	}
 
-   private Map<Integer, Field> allFields;
-   private Map<Integer, Field> cachedFields = new HashMap<Integer, Field>();
-   private DataDictionary dictionary;
-   private QuickFIXMessageCache cache;
+	public QuickFIXMessageCache getCache() {
+		return cache;
+	}
 
-   private FIXMessageDecoder getDecoder()
-   {
-      return cache.getDecoder();
-   }
+	private Map<Integer, Field> allFields;
+	private Map<Integer, Field> cachedFields = new HashMap<Integer, Field>();
+	private DataDictionary dictionary;
+	private QuickFIXMessageCache cache;
 
-   public String getMsgType()
-   {
-      return getString(MsgType.FIELD);
-   }
+	private FIXMessageDecoder getDecoder() throws UnsupportedEncodingException {
+		return cache.getDecoder();
+	}
 
-   public synchronized Set<Integer> getFieldOrder()
-   {
-      return getAllFields().keySet();
-   }
+	public String getMsgType() {
+		return getString(MsgType.FIELD);
+	}
 
-   public boolean fieldExists(int tag)
-   {
-      if (cachedFields.containsKey(tag))
-      {
-         return true;
-      }
+	public synchronized Set<Integer> getFieldOrder() {
+		return getAllFields().keySet();
+	}
 
-      return getAllFields().containsKey(tag);
-   }
+	public boolean fieldExists(int tag) {
+		if (cachedFields.containsKey(tag)) {
+			return true;
+		}
 
-   public Map<Integer, Field> getAllFields()
-   {     
+		return getAllFields().containsKey(tag);
+	}
 
-      try
-      {
-         lock.lock();
-         
-         if (allFields == null)
-         {
-            allFields = new LinkedHashMap<Integer, Field>();
+	public Map<Integer, Field> getAllFields() {
 
-            final Message message = getMessage();
+		try {
+			lock.lock();
 
-            if (message == null)
-            {
-               return new HashMap<Integer, Field> () ;
-            }
-            
-            for (final Iterator iterator = message.getHeader().iterator(); iterator.hasNext();)
-            {
-               Field field = (Field) iterator.next();
-               allFields.put(field.getTag(), field);
+			if (allFields == null) {
+				allFields = new LinkedHashMap<Integer, Field>();
 
-               if (retainedFields.contains(field.getTag()))
-               {
-                  cachedFields.put(field.getTag(), field);
-               }
-            }
+				final Message message = getMessage();
 
-            for (final Iterator iterator = message.iterator(); iterator.hasNext();)
-            {
-               Field field = (Field) iterator.next();
-               int tag = field.getTag();
+				if (message == null) {
+					return new HashMap<Integer, Field>();
+				}
 
-               if (!allFields.containsKey(tag))
-               {
-                  allFields.put(tag, field);
+				for (final Iterator iterator = message.getHeader().iterator(); iterator.hasNext();) {
+					Field field = (Field) iterator.next();
+					allFields.put(field.getTag(), field);
 
-                  if (retainedFields.contains(field.getTag()))
-                  {
-                     cachedFields.put(field.getTag(), field);
-                  }
-               }
-            }
+					if (retainedFields.contains(field.getTag())) {
+						cachedFields.put(field.getTag(), field);
+					}
+				}
 
-            for (final Iterator iterator = message.getTrailer().iterator(); iterator.hasNext();)
-            {
-               Field field = (Field) iterator.next();
-               allFields.put(field.getTag(), field);
+				for (final Iterator iterator = message.iterator(); iterator.hasNext();) {
+					Field field = (Field) iterator.next();
+					int tag = field.getTag();
 
-               if (retainedFields.contains(field.getTag()))
-               {
-                  cachedFields.put(field.getTag(), field);
-               }
-            }
-         }
-         return allFields;
-      }
-      finally
-      {
-         lock.unlock();
-      }
-   }
+					if (!allFields.containsKey(tag)) {
+						allFields.put(tag, field);
 
-   public void reset()
-   {
-      lock.lock();
+						if (retainedFields.contains(field.getTag())) {
+							cachedFields.put(field.getTag(), field);
+						}
+					}
+				}
 
-      try
-      {
-         allFields.clear();
-         allFields = null;
-      }
-      finally
-      {
-         lock.unlock();
-      }
-   }
+				for (Iterator groupsKeys = message.groupKeyIterator(); groupsKeys.hasNext();) {
+					int groupCountTag = ((Integer) groupsKeys.next()).intValue();
+				}
 
-   public Object getObject(Field field)
-   {
-      if (cachedFields.containsKey(field))
-      {
-         return cachedFields.get(field).getObject();
-      }
+				for (final Iterator iterator = message.getTrailer().iterator(); iterator.hasNext();) {
+					Field field = (Field) iterator.next();
+					allFields.put(field.getTag(), field);
 
-      Field cached = getAllFields().get(field.getTag());
+					if (retainedFields.contains(field.getTag())) {
+						cachedFields.put(field.getTag(), field);
+					}
+				}
+			}
+			return allFields;
+		} finally {
+			lock.unlock();
+		}
+	}
 
-      if (cached != null)
-      {
-         return cached.getObject();
-      }
-      else
-      {
-         return null;
-      }
-   }
+	public void reset() {
+		lock.lock();
 
-   public Object getObject(int tag) throws NoSuchFieldException
-   {
-      if (cachedFields.containsKey(tag))
-      {
-         return getObject(cachedFields.get(tag));
-      }
+		try {
+			allFields.clear();
+			allFields = null;
+		} finally {
+			lock.unlock();
+		}
+	}
 
-      if (getAllFields().containsKey(tag))
-      {
-         return getObject(getAllFields().get(tag));
-      }
-      else
-      {
-         throw new NoSuchFieldException(tag);
-      }
+	public Object getObject(Field field) {
+		if (cachedFields.containsKey(field)) {
+			return cachedFields.get(field).getObject();
+		}
 
-   }
+		Field cached = getAllFields().get(field.getTag());
 
-   public String getString(int field)
-   {
-      try
-      {
-         if (cachedFields.containsKey(field))
-         {
-            return cachedFields.get(field).getObject().toString();
-         }
+		if (cached != null) {
+			return cached.getObject();
+		} else {
+			return null;
+		}
+	}
 
-         if (getAllFields().containsKey(field))
-         {
-            return getAllFields().get(field).getObject().toString();
-         }
-         else
-         {
-            throw new FieldNotFound("No such field " + field);
-         }
-      }
-      catch (FieldNotFound e)
-      {
-         throw new HermesRuntimeException(e);
-      }
-   }
+	public Object getObject(int tag) throws NoSuchFieldException {
+		if (cachedFields.containsKey(tag)) {
+			return getObject(cachedFields.get(tag));
+		}
 
-   public DataDictionary getDictionary()
-   {
-      return dictionary;
-   }
+		if (getAllFields().containsKey(tag)) {
+			return getObject(getAllFields().get(tag));
+		} else {
+			throw new NoSuchFieldException(tag);
+		}
 
-   protected void setDictionary(DataDictionary dictionary)
-   {
-      this.dictionary = dictionary;
-   }
+	}
 
-   public String toString()
-   {
-      return new String(getBytes());
-   }
+	public String getString(int field) {
+		try {
+			if (cachedFields.containsKey(field)) {
+				return cachedFields.get(field).getObject().toString();
+			}
 
-   public Message getMessage()
-   {
-      getCache().lock();
+			if (getAllFields().containsKey(field)) {
+				return getAllFields().get(field).getObject().toString();
+			} else {
+				throw new FieldNotFound("No such field " + field);
+			}
+		} catch (FieldNotFound e) {
+			throw new HermesRuntimeException(e);
+		}
+	}
 
-      try
-      {
-         if (!getCache().contains(AbstractQuickFIXMessage.this))
-         {
-            try
-            {
-               Message message = new Message(new String(getBytes()), dictionary, false);
+	public DataDictionary getDictionary() {
+		return dictionary;
+	}
 
-               getCache().put(this, message);
+	protected void setDictionary(DataDictionary dictionary) {
+		this.dictionary = dictionary;
+	}
 
-               if (getDictionary() == null)
-               {
-                  setDictionary(QuickFIXUtils.getDictionary(message));
-               }
+	public String toString() {
+		return new String(getBytes());
+	}
 
-               return message;
-            }
-            catch (InvalidMessage e)
-            {
-               log.error("Ignoring invalid message: " + e.getMessage(), e) ;
-               return null ;
-            }
-            catch (Exception e)
-            {
-               throw new HermesRuntimeException(e);
-            }
-         }
-         else
-         {
-            return getCache().get(this);
-         }
-      }
-      finally
-      {
-         getCache().unlock();
-      }
-   }
+	public Message getMessage() {
+		getCache().lock();
+
+		try {
+			if (!getCache().contains(AbstractQuickFIXMessage.this)) {
+				try {
+					Message message = new Message(new String(getBytes()), dictionary, false);
+
+					getCache().put(this, message);
+
+					if (getDictionary() == null) {
+						setDictionary(QuickFIXUtils.getDictionary(message));
+					}
+
+					return message;
+				} catch (InvalidMessage e) {
+					log.error("Ignoring invalid message: " + e.getMessage(), e);
+					return null;
+				} catch (Exception e) {
+					throw new HermesRuntimeException(e);
+				}
+			} else {
+				return getCache().get(this);
+			}
+		} finally {
+			getCache().unlock();
+		}
+	}
 }

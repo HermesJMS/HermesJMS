@@ -36,69 +36,63 @@ import com.jidesoft.grid.SortableTable;
  *          Exp $
  */
 
-public class FIXMessageViewTable extends SortableTable
-{
-   /**
+public class FIXMessageViewTable extends SortableTable {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7557105531629435884L;
-private FIXMessageViewTableModel model;
+	private FIXMessageViewTableModel model;
 
-   public FIXMessageViewTable(FIXMessageViewTableModel model)
-   {
-      super(model);
+	public FIXMessageViewTable(FIXMessageViewTableModel model) {
+		super(model);
 
-      this.model = model;
+		this.model = model;
 
-      setSortable(true);
+		setSortable(true);
 
-      int block = 25;
+		int block = 25;
 
-      getColumn(FIXMessageViewTableModel.FIELD).setPreferredWidth(block);
-      getColumn(FIXMessageViewTableModel.NAME).setPreferredWidth(block * 4);
-      getColumn(FIXMessageViewTableModel.VALUE).setPreferredWidth(block * 4);
-      getColumn(FIXMessageViewTableModel.DESCRIPTION).setPreferredWidth(block * 8);
+		getColumn(FIXMessageViewTableModel.FIELD).setPreferredWidth(block);
+		getColumn(FIXMessageViewTableModel.NAME).setPreferredWidth(block * 4);
+		getColumn(FIXMessageViewTableModel.VALUE).setPreferredWidth(block * 4);
+		getColumn(FIXMessageViewTableModel.DESCRIPTION).setPreferredWidth(block * 8);
 
-      getColumn(FIXMessageViewTableModel.FIELD).setCellRenderer(new URLRenderer());
-      getColumn(FIXMessageViewTableModel.NAME).setCellRenderer(new URLRenderer());
+		getColumn(FIXMessageViewTableModel.FIELD).setCellRenderer(new URLRenderer());
+		getColumn(FIXMessageViewTableModel.NAME).setCellRenderer(new URLRenderer());
 
-      addMouseListener(new URLRendererMouseListener(this));
-      
-      setSelectionMode(ListSelectionModel.SINGLE_SELECTION) ;
-   }
+		addMouseListener(new URLRendererMouseListener(this));
 
-   public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
-   {
-      final Component c = super.prepareRenderer(renderer, row, column);
-      final FIXMessageViewTableModel.RowType rowType = model.getRowType(getActualRowAt(row));
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
 
-      if (!isCellSelected(row, column))
-      {
-         switch (rowType)
-         {
-            case HEADER:
-               c.setBackground(Colours.WHITESMOKE);
-               break;
+	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+		final Component c = super.prepareRenderer(renderer, row, column);
+		final FIXMessageViewTableModel.RowType rowType = model.getRowType(getActualRowAt(row));
 
-            case TRAILER:
-               c.setBackground(Colours.WHITESMOKE);
-               break;
+		if (!isCellSelected(row, column)) {
+			switch (rowType) {
+			case HEADER:
+				c.setBackground(Colours.WHITESMOKE);
+				break;
 
-            case APPLICATION:
-               c.setBackground(Colours.POWDER_BLUE); 
-               break;
-         }
-      }
+			case TRAILER:
+				c.setBackground(Colours.WHITESMOKE);
+				break;
 
-      switch (column)
-      {
-         case 0:
-            ((JLabel) c).setHorizontalAlignment(JLabel.LEFT);
-            break;
-      }
+			case APPLICATION:
+				c.setBackground(Colours.POWDER_BLUE);
+				break;
+			}
+		}
 
-      c.setForeground(Color.BLACK);
+		switch (column) {
+		case 0:
+			((JLabel) c).setHorizontalAlignment(JLabel.LEFT);
+			break;
+		}
 
-      return c;
-   }
+		c.setForeground(Color.BLACK);
+
+		return c;
+	}
 }

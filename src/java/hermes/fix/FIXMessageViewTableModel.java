@@ -17,142 +17,176 @@
 
 package hermes.fix;
 
+import hermes.fix.quickfix.QuickFIXUtils;
+
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.apache.log4j.Logger;
+
+import quickfix.DataDictionary;
+import quickfix.Field;
+import quickfix.FieldMap;
+import quickfix.FieldNotFound;
+import quickfix.FieldType;
+import quickfix.Group;
+
 /**
  * @author colincrist@hermesjms.com
- * @version $Id: FIXMessageViewTableModel.java,v 1.5 2006/08/01 07:29:35 colincrist Exp $
+ * @version $Id: FIXMessageViewTableModel.java,v 1.5 2006/08/01 07:29:35
+ *          colincrist Exp $
  */
 
-public class FIXMessageViewTableModel extends AbstractTableModel
-{
-   /**
+public class FIXMessageViewTableModel extends AbstractTableModel {
+	/**
 	 * 
 	 */
+	private static final Logger log = Logger.getLogger(FIXMessageViewTableModel.class);
+
 	private static final long serialVersionUID = 7400479603426161337L;
-public static final String FIELD = "Field" ;
-   public static final String NAME = "Name" ;
-   public static final String VALUE = "Value" ;
-   public static final String DESCRIPTION = "Description" ;
-   
-   private String[] columns = { FIELD, NAME, VALUE, DESCRIPTION };
+	public static final String FIELD = "Field";
+	public static final String NAME = "Name";
+	public static final String VALUE = "Value";
+	public static final String DESCRIPTION = "Description";
 
-   private FIXMessage message;
-   private Vector<RowDef> rows = new Vector<RowDef>();
+	private String[] columns = { FIELD, NAME, VALUE, DESCRIPTION };
 
-   public enum RowType
-   {
-      HEADER, APPLICATION, TRAILER
-   }
+	private FIXMessage message;
+	private Vector<RowDef> rows = new Vector<RowDef>();
 
-   private class RowDef
-   {
-      RowType type;
-      int tag ;
-   }
+	public enum RowType {
+		HEADER, APPLICATION, TRAILER
+	}
 
-   public FIXMessageViewTableModel(FIXMessage message)
-   {
-      super();
-      this.message = message;
+	private class RowDef {
+		RowType type;
+		int tag;
+		public String fieldName;
+		public String fieldValue;
+		public Object fieldValueName = "";
+	}
 
-      for (int i : message.getFieldOrder())
-      {
-         RowDef rowDef = new RowDef();
+	public FIXMessageViewTableModel(FIXMessage message) throws FIXException, FieldNotFound {
+		super();
+		this.message = message;
 
-         rowDef.tag = i;
+		String msgType = message.getMsgType();
 
-         if (message.getDictionary().isHeaderField(i))
-         {
-            rowDef.type = RowType.HEADER;
-         }
-         else if (message.getDictionary().isTrailerField(i))
-         {
-            rowDef.type = RowType.TRAILER;
-         }
-         else
-         {
-            rowDef.type = RowType.APPLICATION;
-         }
+		processFieldMap("", message.getDictionary(), msgType, message.getMessage().getHeader());
+		processFieldMap("", message.getDictionary(), msgType, message.getMessage());
+		processFieldMap("", message.getDictionary(), msgType, message.getMessage().getTrailer());
+	}
 
-         rows.add(rowDef);
-      }
+	private boolean isGroupCountField(DataDictionary dd, Field field) {
+		return dd.getFieldTypeEnum(field.getTag()) == FieldType.NumInGroup;
+	}
 
-   }
+	private void processFieldMap(String prefix, DataDictionary dd, String msgType, FieldMap fieldMap) {
 
-   public int getRowCount()
-   {
-      if (rows != null)
-      {
-         return rows.size();
-      }
-      else
-      {
-         return 0;
-      }
-   }
+		Iterator fieldIterator = fieldMap.iterator();
+		while (fieldIterator.hasNext()) {
+			Field field = (Field) fieldIterator.next();
+			try {
+				if (!isGroupCountField(dd, field)) {
+					String value = fieldMap.getString(field.getTag());
+					if (dd.hasFieldValue(field.getTag())) {
+						value = dd.getValueName(field.getTag(), fieldMap.getString(field.getTag())) + " (" + value + ")";
+					}
+					RowDef rowDef = new RowDef();
+					if (dd.isHeaderField(field.getField())) {
+						rowDef.type = RowType.HEADER;
+					} else if (dd.isTrailerField(field.getField())) {
+						rowDef.type = RowType.TRAILER;
+					} else {
+						rowDef.type = RowType.APPLICATION;
+					}
+					String fieldName = dd.getFieldName(field.getTag());
+					rowDef.tag = field.getTag();
+					rowDef.fieldName = prefix + (fieldName == null ? "" : fieldName);
+					rowDef.fieldValue = value == null ? "" : value;
+					try {
+						rowDef.fieldValueName = message.getDictionary().getValueName(field.getTag(), message.getString(field.getTag()));
+					} catch (Throwable ex) {
 
-   public int getColumnCount()
-   {
-      return columns.length;
-   }
+					}
 
-   @Override
-   public Class<?> getColumnClass(int columnIndex)
-   {
-     if (columnIndex == 0)
-     {
-        return Integer.class ;
-     }
-     else
-     {
-        return String.class ;
-     }
-   }
+					rows.add(rowDef);
+				}
+			} catch (FieldNotFound f) {
+				log.error(f);
+			}
+		}
 
-   public RowType getRowType(int row)
-   {
-      RowDef rowDef = rows.get(row) ;
-      
-      return rowDef.type ;
-   }
-   
-   @Override
-   public String getColumnName(int column)
-   {
-      return columns[column] ; 
-   }
+		Iterator groupsKeys = fieldMap.groupKeyIterator();
+		while (groupsKeys.hasNext()) {
+			int groupCountTag = ((Integer) groupsKeys.next()).intValue();
+			// System.out.println(prefix + dd.getFieldName(groupCountTag) +
+			// ": count = " + fieldMap.getInt(groupCountTag));
+			Group g = new Group(groupCountTag, 0);
+			int i = 1;
+			while (fieldMap.hasGroup(i, groupCountTag)) {
+				try {
+					fieldMap.getGroup(i, g);
+					processFieldMap(prefix + "  ", dd, msgType, g);
+				} catch (FieldNotFound ex) {
+					log.error(ex);
+				}
+				i++;
 
-   public Object getValueAt(int rowIndex, int columnIndex)
-   {
-      RowDef row = rows.get(rowIndex);
+			}
+		}
+	}
 
-      switch (columnIndex)
-      {
-         case 0:
-            return row.tag ;
+	public int getRowCount() {
+		if (rows != null) {
+			return rows.size();
+		} else {
+			return 0;
+		}
+	}
 
-         case 1:
-            return message.getDictionary().getFieldName(row.tag) ;
+	public int getColumnCount() {
+		return columns.length;
+	}
 
-         case 2:
-            try
-            {
-            return message.getObject(row.tag);
-            }
-            catch (NoSuchFieldException ex)
-            {
-               return ex.getMessage() ;
-            }
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		if (columnIndex == 0) {
+			return Integer.class;
+		} else {
+			return String.class;
+		}
+	}
 
-         case 3:
-            return message.getDictionary().getValueName(row.tag, message.getString(row.tag)) ;
+	public RowType getRowType(int row) {
+		RowDef rowDef = rows.get(row);
 
-         default:
-            return "";
-      }
-   }
+		return rowDef.type;
+	}
+
+	@Override
+	public String getColumnName(int column) {
+		return columns[column];
+	}
+
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		RowDef row = rows.get(rowIndex);
+
+		switch (columnIndex) {
+		case 0:
+			return row.tag;
+		case 1:
+			return row.fieldName;
+		case 2:
+			return row.fieldValue;
+		case 3:
+			return row.fieldValueName;
+
+		default:
+			return "";
+		}
+	}
 
 }

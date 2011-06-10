@@ -328,7 +328,7 @@ public class FIXInputStreamReader implements Runnable, FIXReader
 
       messageBufferIndex = 0;
 
-      return new QuickFIXMessage(cache, rval, QuickFIXUtils.getDictionary(protocol));
+      return new QuickFIXMessage(cache, rval, null);
    }
 
 }

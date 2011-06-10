@@ -22,6 +22,7 @@ import hermes.browser.components.PopupMenuFactory;
 import hermes.browser.transferable.MessagesTransferHandler;
 import hermes.swing.Colours;
 import hermes.swing.SQL92FilterableTableModel;
+import hermes.swing.SwingUtils;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -51,203 +52,168 @@ import com.jidesoft.swing.JidePopupMenu;
 
 /**
  * @author colincrist@hermesjms.com
- * @version $Id: FIXMessageTable.java,v 1.15 2007/02/18 16:13:42 colincrist Exp $
+ * @version $Id: FIXMessageTable.java,v 1.15 2007/02/18 16:13:42 colincrist Exp
+ *          $
  */
 
-public class FIXMessageTable extends SortableTable
-{
-   /**
+public class FIXMessageTable extends SortableTable {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2044612567082104913L;
-private static final Logger log = Logger.getLogger(FIXMessageTable.class);
-   private SQL92FilterableTableModel selectorModel;
-   private FIXMessageTableModel model;
-   private JidePopupMenu popup;
-   private SessionKey sessionKey;
-   private boolean autoScroll = false;
+	private static final Logger log = Logger.getLogger(FIXMessageTable.class);
+	private SQL92FilterableTableModel selectorModel;
+	private FIXMessageTableModel model;
+	private JidePopupMenu popup;
+	private SessionKey sessionKey;
+	private boolean autoScroll = false;
 
-   public boolean isAutoScroll()
-   {
-      return autoScroll;
-   }
+	public boolean isAutoScroll() {
+		return autoScroll;
+	}
 
-   public void setAutoScroll(boolean autoScroll)
-   {
-      this.autoScroll = autoScroll;
-   }
+	public void setAutoScroll(boolean autoScroll) {
+		this.autoScroll = autoScroll;
+	}
 
-   public FIXMessageTable(final SessionKey sessionKey, final FIXMessageTableModel model)
-   {
-      super();
+	public FIXMessageTable(final SessionKey sessionKey, final FIXMessageTableModel model) {
+		super();
 
-      this.model = model;
-      this.selectorModel = new SQL92FilterableTableModel(model, new FIXIdentifierExtension());
-      this.selectorModel.setRowValueProvider(model);
-      this.sessionKey = sessionKey;
+		this.model = model;
+		this.selectorModel = new SQL92FilterableTableModel(model, new FIXIdentifierExtension());
+		this.selectorModel.setRowValueProvider(model);
+		this.sessionKey = sessionKey;
 
-      setSortable(true);
+		setSortable(true);
 
-      setModel(selectorModel);
-      setDragEnabled(true);
-      setTransferHandler(new MessagesTransferHandler(this));
-      getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		setModel(selectorModel);
+		setDragEnabled(true);
+		setTransferHandler(new MessagesTransferHandler(this));
+		getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-      getColumn(FIXMessageTableModel.DIRECTION).setMaxWidth(IconCache.getIcon("hermes.back").getIconWidth() + 4);
+		getColumn(FIXMessageTableModel.DIRECTION).setMaxWidth(IconCache.getIcon("hermes.back").getIconWidth() + 4);
 
-      getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer()
-      {
-         /**
+		getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
+			/**
 		 * 
 		 */
-		private static final long serialVersionUID = -2075897579194001018L;
+			private static final long serialVersionUID = -2075897579194001018L;
 
-		@Override
-         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-         {
-            FIXMessage message = model.getMessageAt(selectorModel.getActualRowAt(row));
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				FIXMessage message = model.getMessageAt(selectorModel.getActualRowAt(row));
 
-            if (model.getRole(message) == SessionRole.ACCEPTOR)
-            {
-               setIcon(IconCache.getIcon("hermes.back"));
-            }
-            else
-            {
-               setIcon(IconCache.getIcon("hermes.forward"));
-            }
+				if (model.getRole(message) == SessionRole.ACCEPTOR) {
+					setIcon(IconCache.getIcon("hermes.back"));
+				} else {
+					setIcon(IconCache.getIcon("hermes.forward"));
+				}
 
-            return this;
-         }
-      });
+				return this;
+			}
+		});
 
-      addMouseListener(new MouseAdapter()
-      {
-         public void mousePressed(MouseEvent e)
-         {
-            if (SwingUtilities.isLeftMouseButton(e))
-            {
-               // final JComponent c = (JComponent) e.getSource();
-               // final TransferHandler th = c.getTransferHandler();
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (SwingUtilities.isLeftMouseButton(e)) {
+					// final JComponent c = (JComponent) e.getSource();
+					// final TransferHandler th = c.getTransferHandler();
 
-               getTransferHandler().exportAsDrag(FIXMessageTable.this, e, TransferHandler.COPY);
-            }
-            else if (SwingUtilities.isRightMouseButton(e))
-            {
-               doPopup(e);
-            }
-         }
-      });
+					getTransferHandler().exportAsDrag(FIXMessageTable.this, e, TransferHandler.COPY);
+				} else if (SwingUtilities.isRightMouseButton(e)) {
+					doPopup(e);
+				}
+			}
+		});
 
-      model.addTableModelListener(new TableModelListener()
-      {
-         public void tableChanged(TableModelEvent e)
-         {
-            if (isAutoScroll())
-            {
-               if (e.getType() == TableModelEvent.INSERT)
-               {
-                  getSelectionModel().setSelectionInterval(model.getRowCount() - 1, model.getRowCount() - 1);
-                  scrollRectToVisible(getCellRect(model.getRowCount() - 1, 0, true));
-               }
-            }
-         }
-      });
-   }
+		model.addTableModelListener(new TableModelListener() {
+			public void tableChanged(TableModelEvent e) {
+				if (isAutoScroll()) {
+					if (e.getType() == TableModelEvent.INSERT) {
+						getSelectionModel().setSelectionInterval(model.getRowCount() - 1, model.getRowCount() - 1);
+						scrollRectToVisible(getCellRect(model.getRowCount() - 1, 0, true));
+					}
+				}
+			}
+		});
+	}
 
-   public SessionKey getSessionKey()
-   {
-      return sessionKey;
-   }
+	public SessionKey getSessionKey() {
+		return sessionKey;
+	}
 
-   private void doPopup(MouseEvent e)
-   {
-      if (popup == null)
-      {
-         popup = PopupMenuFactory.createFIXMessageTablePopup(this);
-      }
+	private void doPopup(MouseEvent e) {
+		if (popup == null) {
+			popup = PopupMenuFactory.createFIXMessageTablePopup(this);
+		}
 
-      popup.show(this, e.getX(), e.getY());
-   }
+		popup.show(this, e.getX(), e.getY());
+	}
 
-   public Collection<Object> getSelectedMessages()
-   {
-      Collection<Object> rval = new ArrayList<Object>();
-      int[] selected = getSelectedRows();
+	public Collection<Object> getSelectedMessages() {
+		Collection<Object> rval = new ArrayList<Object>();
+		int[] selected = getSelectedRows();
 
-      for (int i = 0; i < selected.length; i++)
-      {
-         rval.add(getMessageAt(selected[i]));
-      }
+		for (int i = 0; i < selected.length; i++) {
+			rval.add(getMessageAt(selected[i]));
+		}
 
-      return rval;
-   }
+		return rval;
+	}
 
-   public FIXMessage getMessageAt(int row)
-   {
-      return model.getMessageAt(selectorModel.getActualRowAt(getActualRowAt(row)));
-   }
+	public FIXMessage getMessageAt(int row) {
+		return model.getMessageAt(selectorModel.getActualRowAt(getActualRowAt(row)));
+	}
 
-   public void addMessages(Collection<FIXMessage> messages)
-   {
-      model.addMessages(messages);
+	public void addMessages(Collection<FIXMessage> messages) {
+		model.addMessages(messages);
 
-   }
+		SwingUtils.scrollVertically((JComponent) this.getParent(), SwingUtils.getRowBounds(this, model.getRowCount(), model.getRowCount()));
+	}
 
-   public void setSelector(String selector) throws InvalidSelectorException
-   {
-      selectorModel.setSelector(selector);
-   }
+	public void setSelector(String selector) throws InvalidSelectorException {
+		selectorModel.setSelector(selector);
+	}
 
-   public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
-   {
-      Component c = super.prepareRenderer(renderer, row, column);
+	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+		Component c = super.prepareRenderer(renderer, row, column);
 
-      if (row < getRowCount())
-      {
-         FIXMessage message = getMessageAt(row);
+		if (row < getRowCount()) {
+			FIXMessage message = getMessageAt(row);
 
-         if (message != null)
-         {
-            if (!isCellSelected(row, column))
-            {
-               if (model.getRole(message) == SessionRole.ACCEPTOR)
-               {
-                  c.setBackground(Colours.LIGHT_SEA_GREEN);
-               }
-               else
-               {
-                  c.setBackground(Colours.LIGHT_SKY_BLUE);
-               }
-            }
-         }
-      }
-      return c;
-   }
+			if (message != null) {
+				if (!isCellSelected(row, column)) {
+					if (model.getRole(message) == SessionRole.ACCEPTOR) {
+						c.setBackground(Colours.LIGHT_SEA_GREEN);
+					} else {
+						c.setBackground(Colours.LIGHT_SKY_BLUE);
+					}
+				}
+			}
+		}
+		return c;
+	}
 
-   @Override
-   public void scrollRectToVisible(Rectangle aRect)
-   {
-      Container parent;
-      int dx = getX(), dy = getY();
+	@Override
+	public void scrollRectToVisible(Rectangle aRect) {
+		Container parent;
+		int dx = getX(), dy = getY();
 
-      for (parent = getParent(); !(parent == null)
-            && (!(parent instanceof JViewport) || (((JViewport) parent).getClientProperty("HierarchicalTable.mainViewport") == null)); parent = parent
-            .getParent())
-      {
-         Rectangle bounds = parent.getBounds();
+		for (parent = getParent(); !(parent == null) && (!(parent instanceof JViewport) || (((JViewport) parent).getClientProperty("HierarchicalTable.mainViewport") == null)); parent = parent
+				.getParent()) {
+			Rectangle bounds = parent.getBounds();
 
-         dx += bounds.x;
-         dy += bounds.y;
-      }
+			dx += bounds.x;
+			dy += bounds.y;
+		}
 
-      if (!(parent == null) && !(parent instanceof CellRendererPane))
-      {
-         aRect.x += dx;
-         aRect.y += dy;
+		if (!(parent == null) && !(parent instanceof CellRendererPane)) {
+			aRect.x += dx;
+			aRect.y += dy;
 
-         ((JComponent) parent).scrollRectToVisible(aRect);
-         aRect.x -= dx;
-         aRect.y -= dy;
-      }
-   }
+			((JComponent) parent).scrollRectToVisible(aRect);
+			aRect.x -= dx;
+			aRect.y -= dy;
+		}
+	}
 }

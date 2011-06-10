@@ -22,7 +22,9 @@ import hermes.fix.FIXException;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import quickfix.BooleanField;
 import quickfix.CharField;
@@ -38,162 +40,136 @@ import quickfix.StringField;
 import quickfix.UtcDateOnlyField;
 import quickfix.UtcTimeOnlyField;
 import quickfix.UtcTimeStampField;
+import quickfix.field.MsgType;
 
 /**
  * @author colincrist@hermesjms.com
  * @version $Id: QuickFIXUtils.java,v 1.4 2006/07/17 21:20:53 colincrist Exp $
  */
 
-public class QuickFIXUtils
-{
-   private static Map<String, DataDictionary> dictionaryCache = new HashMap<String, DataDictionary>();
+public class QuickFIXUtils {
+	private static Map<String, DataDictionary> dictionaryCache = new HashMap<String, DataDictionary>();
 
-   public static DataDictionary getDictionary(Message message) throws FieldNotFound, FIXException
-   {
-      String beginString = message.getHeader().getString(8);
+	public static String FIX50_DICTIONARY = "FIX.5.0";
+	private static Set<String> BEGIN_STRINGS = new HashSet<String>();
 
-      return QuickFIXUtils.getDictionary(beginString);
-   }
+	static {
+		BEGIN_STRINGS.add(FixVersions.BEGINSTRING_FIX40);
+		BEGIN_STRINGS.add(FixVersions.BEGINSTRING_FIX41);
+		BEGIN_STRINGS.add(FixVersions.BEGINSTRING_FIX42);
+		BEGIN_STRINGS.add(FixVersions.BEGINSTRING_FIX43);
+		BEGIN_STRINGS.add(FixVersions.BEGINSTRING_FIX44);
+		BEGIN_STRINGS.add(FixVersions.FIX50);
+		BEGIN_STRINGS.add(FixVersions.BEGINSTRING_FIXT11);
+	}
 
-   public static DataDictionary getDictionary(String beginString) throws FIXException
-   {
-      DataDictionary dictionary = dictionaryCache.get(beginString);
-      if (dictionary == null)
-      {
-         if (!(FixVersions.BEGINSTRING_FIX40.equals(beginString) || FixVersions.BEGINSTRING_FIX41.equals(beginString)
-               || FixVersions.BEGINSTRING_FIX42.equals(beginString) || FixVersions.BEGINSTRING_FIX43.equals(beginString) || FixVersions.BEGINSTRING_FIX44
-               .equals(beginString)))
-         {
-            throw new HermesRuntimeException("Invalid FIX BeginString: '" + beginString + "'.");
-         }
+	public static DataDictionary getDictionary(Message message) throws FieldNotFound, FIXException {
+		String beginString = message.getHeader().getString(8);
 
-         String dictionaryFileName = "quickfix/" + beginString.replaceAll("\\.", "") + ".xml";
-         // the dictionary is loaded from the quickfix.jar file.
-         InputStream ddis = Thread.currentThread().getContextClassLoader().getResourceAsStream(dictionaryFileName);
-         if (ddis == null)
-         {
-            throw new NullPointerException("Data Dictionary file '" + dictionaryFileName + "' not found at root of CLASSPATH.");
-         }
+		return QuickFIXUtils.getDictionary(beginString);
+	}
 
-         try
-         {
-            dictionary = new DataDictionary(ddis);
-            dictionaryCache.put(beginString, dictionary);
-         }
-         catch (ConfigError configError)
-         {
-            throw new HermesRuntimeException("Error loading data dictionary file.", configError);
-         }
+	public static DataDictionary getDictionary(String beginString) throws FIXException {
+		DataDictionary dictionary = dictionaryCache.get(beginString);
+		if (dictionary == null) {
+			if (!BEGIN_STRINGS.contains(beginString)) {
+				throw new HermesRuntimeException("Invalid FIX BeginString: '" + beginString + "'.");
+			}
+			String dictionaryFileName = null ;
+			
+			if (beginString.equals(FixVersions.BEGINSTRING_FIXT11)) {
+				dictionaryFileName = "quickfix/" + FixVersions.FIX50.replaceAll("\\.", "") + ".xml";
+			} else {
+				dictionaryFileName = "quickfix/" + beginString.replaceAll("\\.", "") + ".xml";
+			}
 
-      }
-      return dictionary;
-   }
+			 
+			// the dictionary is loaded from the quickfix.jar file.
+			InputStream ddis = Thread.currentThread().getContextClassLoader().getResourceAsStream(dictionaryFileName);
+			if (ddis == null) {
+				throw new NullPointerException("Data Dictionary file '" + dictionaryFileName + "' not found at root of CLASSPATH.");
+			}
 
-   public static Field getField(Message message, Field field)
-   {
-      try
-      {
-         if (field instanceof BooleanField)
-         {
-            try
-            {
-               return message.getField((BooleanField) field);
-            }
-            catch (FieldNotFound ex)
-            {
-               return message.getHeader().getField((BooleanField) field);
-            }
-         }
+			try {
+				dictionary = new DataDictionary(ddis);
+				dictionaryCache.put(beginString, dictionary);
+			} catch (ConfigError configError) {
+				throw new HermesRuntimeException("Error loading data dictionary file.", configError);
+			}
 
-         if (field instanceof CharField)
-         {
-            try
-            {
-               return message.getField((CharField) field);
-            }
-            catch (FieldNotFound ex)
-            {
-               return message.getHeader().getField((CharField) field);
-            }
-         }
+		}
+		return dictionary;
+	}
 
-         if (field instanceof DoubleField)
-         {
-            try
-            {
-               return message.getField((DoubleField) field);
-            }
-            catch (FieldNotFound ex)
-            {
-               return message.getHeader().getField((DoubleField) field);
-            }
-         }
+	public static Field getField(Message message, Field field) {
+		try {
+			if (field instanceof BooleanField) {
+				try {
+					return message.getField((BooleanField) field);
+				} catch (FieldNotFound ex) {
+					return message.getHeader().getField((BooleanField) field);
+				}
+			}
 
-         if (field instanceof IntField)
-         {
-            try
-            {
-               return message.getField((IntField) field);
-            }
-            catch (FieldNotFound ex)
-            {
-               return message.getHeader().getField((IntField) field);
-            }
-         }
+			if (field instanceof CharField) {
+				try {
+					return message.getField((CharField) field);
+				} catch (FieldNotFound ex) {
+					return message.getHeader().getField((CharField) field);
+				}
+			}
 
-         if (field instanceof StringField)
-         {
-            try
-            {
-               return message.getField((StringField) field);
-            }
-            catch (FieldNotFound ex)
-            {
-               return message.getHeader().getField((StringField) field);
-            }
-         }
+			if (field instanceof DoubleField) {
+				try {
+					return message.getField((DoubleField) field);
+				} catch (FieldNotFound ex) {
+					return message.getHeader().getField((DoubleField) field);
+				}
+			}
 
-         if (field instanceof UtcDateOnlyField)
-         {
-            try
-            {
-               return message.getField((UtcDateOnlyField) field);
-            }
-            catch (FieldNotFound ex)
-            {
-               return message.getHeader().getField((UtcDateOnlyField) field);
-            }
-         }
+			if (field instanceof IntField) {
+				try {
+					return message.getField((IntField) field);
+				} catch (FieldNotFound ex) {
+					return message.getHeader().getField((IntField) field);
+				}
+			}
 
-         if (field instanceof UtcTimeOnlyField)
-         {
-            try
-            {
-               return message.getField((UtcTimeOnlyField) field);
-            }
-            catch (FieldNotFound ex)
-            {
-               return message.getHeader().getField((UtcTimeOnlyField) field);
-            }
-         }
+			if (field instanceof StringField) {
+				try {
+					return message.getField((StringField) field);
+				} catch (FieldNotFound ex) {
+					return message.getHeader().getField((StringField) field);
+				}
+			}
 
-         if (field instanceof UtcTimeStampField)
-         {
-            try
-            {
-               return message.getField((UtcTimeStampField) field);
-            }
-            catch (FieldNotFound ex)
-            {
-               return message.getHeader().getField((UtcTimeStampField) field);
-            }
-         }
+			if (field instanceof UtcDateOnlyField) {
+				try {
+					return message.getField((UtcDateOnlyField) field);
+				} catch (FieldNotFound ex) {
+					return message.getHeader().getField((UtcDateOnlyField) field);
+				}
+			}
 
-         throw new FieldNotFound(field.getClass().getName());
-      }
-      catch (FieldNotFound ex)
-      {
-         throw new HermesRuntimeException(ex);
-      }
-   }
+			if (field instanceof UtcTimeOnlyField) {
+				try {
+					return message.getField((UtcTimeOnlyField) field);
+				} catch (FieldNotFound ex) {
+					return message.getHeader().getField((UtcTimeOnlyField) field);
+				}
+			}
+
+			if (field instanceof UtcTimeStampField) {
+				try {
+					return message.getField((UtcTimeStampField) field);
+				} catch (FieldNotFound ex) {
+					return message.getHeader().getField((UtcTimeStampField) field);
+				}
+			}
+
+			throw new FieldNotFound(field.getClass().getName());
+		} catch (FieldNotFound ex) {
+			throw new HermesRuntimeException(ex);
+		}
+	}
 }

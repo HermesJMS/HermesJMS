@@ -25,6 +25,8 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.swing.JComponent;
 
+import quickfix.FieldNotFound;
+
 /**
  * @author colincrist@hermesjms.com
  * @version $Id: FIXUtils.java,v 1.7 2006/08/01 07:29:35 colincrist Exp $
@@ -40,7 +42,7 @@ public class FIXUtils
       super();
    }
 
-   public static JComponent createView(FIXMessage message, boolean displayHeaderAndTrailer, boolean displayValueWithEnum) throws FIXException
+   public static JComponent createView(FIXMessage message, boolean displayHeaderAndTrailer, boolean displayValueWithEnum) throws FIXException, FieldNotFound
    {
       return new FIXMessageViewTable(new FIXMessageViewTableModel(message));
    }

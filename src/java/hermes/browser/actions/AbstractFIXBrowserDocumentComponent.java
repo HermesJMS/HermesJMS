@@ -200,7 +200,7 @@ public abstract class AbstractFIXBrowserDocumentComponent extends AbstractDocume
 
             getMessagePayloadPanel().setViewportView(renderedLRUMap.get(m));
          }
-         catch (FIXException e1)
+         catch (Exception e1)
          {
             log.error(e1.getMessage(), e1);
 

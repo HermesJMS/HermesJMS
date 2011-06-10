@@ -234,6 +234,11 @@ public class NIOFIXFileReader implements FIXReader, Runnable
       final int messageLength = parseBuffer.position() - startOfMessageOffset;
       position = parseBuffer.position();
 
+      
+     
+
+      protocolAsBytes[protocolAsBytesIndex++] = '\0';
+      
       return new NIOQuickFIXMessage(messageCache, this, mappedStart + startOfMessageOffset, messageLength, QuickFIXUtils.getDictionary(protocol));
 
    }

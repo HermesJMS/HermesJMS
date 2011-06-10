@@ -210,10 +210,10 @@
 				minOccurs='0' maxOccurs='unbounded' />
 		</xs:sequence>
 		<xs:attribute type="xs:string" name="id" />
-		<xs:attribute type="xs:int" name="defaultDepthAlertThreshold" />
-		<xs:attribute type="xs:long" name="defaultAgeAlertThreshold" />
+		<xs:attribute type="xs:int" name="defaultDepthAlertThreshold" default="0"/>
+		<xs:attribute type="xs:long" name="defaultAgeAlertThreshold" default="0"/>
 		<xs:attribute type="xs:boolean" name="showAge" default="true" />
-		<xs:attribute type="xs:long" name="updateFrequency" />
+		<xs:attribute type="xs:long" name="updateFrequency" default="30000"/>
 
 	</xs:complexType>
 

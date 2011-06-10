@@ -58,20 +58,7 @@ public class MessageStoreBrowserAction extends QueueBrowseAction {
 	private Destination destination;
 	private String selector;
 
-	/**
-	 * @param hermes
-	 * @param repository
-	 * @param listener
-	 * @param maxMessages
-	 * @throws javax.jms.JMSException
-	 */
-	public MessageStoreBrowserAction(Hermes hermes, MessageStore messageStore, Destination destination) throws JMSException {
-		super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(messageStore.getId() + destination, Domain.QUEUE), -1, null);
-
-		this.messageStore = messageStore;
-		this.destination = destination;
-	}
-
+	
 	public MessageStoreBrowserAction(Hermes hermes, MessageStore messageStore, Destination destination, String selector) throws JMSException {
 		super(hermes, HermesBrowser.getConfigDAO().createDestinationConfig(messageStore.getId() + destination, Domain.QUEUE), -1, null);
 
