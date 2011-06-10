@@ -59,253 +59,209 @@ import org.apache.log4j.Logger;
  *          colincrist Exp $
  */
 
-public class ConnectionFactoryManagerImpl extends JMSManagerImpl implements ConnectionFactoryManager
-{
-   private static final Category cat = Category.getInstance(ConnectionFactoryManagerImpl.class);
-   private static final Logger traceLogger = Logger.getLogger("javax.jms.trace");
-   private static Class[] interfaces = { ConnectionFactory.class, QueueConnectionFactory.class, TopicConnectionFactory.class };
+public class ConnectionFactoryManagerImpl extends JMSManagerImpl implements ConnectionFactoryManager {
+	private static final Logger log = Logger.getLogger(ConnectionFactoryManagerImpl.class);
+	private static final Logger traceLogger = Logger.getLogger("javax.jms.trace");
+	private static Class[] interfaces = { ConnectionFactory.class, QueueConnectionFactory.class, TopicConnectionFactory.class };
 
-   private ExtensionFinder extensionFinder;
-   private ConnectionFactory connectionFactory;
-   private ConnectionFactory proxyConnectionFactory;
-   private String id;
-   private String shortString;
-   private HermesAdminFactory extension = null;
-   private Map<DestinationConfigKeyWrapper, DestinationConfig> destinationConfigs = new HashMap<DestinationConfigKeyWrapper, DestinationConfig>();
-   // private Map<String, DestinationConfig> topics = new HashMap<String,
-   // DestinationConfig>();
-   private List<DestinationConfig> destinationConfigsAsList = new ArrayList<DestinationConfig>();
-   private boolean trace = false;
-   private FactoryConfig factoryConfig;
-   private ClassLoaderManager classLoaderManager;
+	private ExtensionFinder extensionFinder;
+	private ConnectionFactory connectionFactory;
+	private ConnectionFactory proxyConnectionFactory;
+	private String id;
+	private String shortString;
+	private HermesAdminFactory extension = null;
+	private Map<DestinationConfigKeyWrapper, DestinationConfig> destinationConfigs = new HashMap<DestinationConfigKeyWrapper, DestinationConfig>();
+	// private Map<String, DestinationConfig> topics = new HashMap<String,
+	// DestinationConfig>();
+	private List<DestinationConfig> destinationConfigsAsList = new ArrayList<DestinationConfig>();
+	private boolean trace = false;
+	private FactoryConfig factoryConfig;
+	private ClassLoaderManager classLoaderManager;
 
-   /**
-    * CFNode constructor comment.
-    * 
-    * @throws InstantiationException
-    * @throws ClassNotFoundException
-    * @throws IllegalAccessException
-    * @throws InvocationTargetException
-    * @throws NoSuchMethodException
-    * @throws IOException 
-    */
-   public ConnectionFactoryManagerImpl(ClassLoaderManager classLoaderManager, FactoryConfig factoryConfig) throws InstantiationException,
-         ClassNotFoundException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException
-   {
-      super();
+	/**
+	 * CFNode constructor comment.
+	 * 
+	 * @throws InstantiationException
+	 * @throws ClassNotFoundException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws IOException
+	 */
+	public ConnectionFactoryManagerImpl(ClassLoaderManager classLoaderManager, FactoryConfig factoryConfig) throws InstantiationException,
+			ClassNotFoundException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
+		super();
 
-      this.factoryConfig = factoryConfig;
-      this.classLoaderManager = classLoaderManager;
-      this.extensionFinder = new ExtensionFinderImpl(classLoaderManager);
+		this.factoryConfig = factoryConfig;
+		this.classLoaderManager = classLoaderManager;
+		this.extensionFinder = new ExtensionFinderImpl(classLoaderManager);
 
-      setProvider(factoryConfig.getProvider());
-   }
+		setProvider(factoryConfig.getProvider());
+	}
 
-   public void close() throws JMSException
-   {
+	public void close() throws JMSException {
 
-   }
+	}
 
-   /**
-    * Add a statically configured destination reachable via this
-    * ConnectionFactory
-    */
-   public void addDestinationConfig(DestinationConfig destConfig)
-   {
-      DestinationConfigKeyWrapper key = new DestinationConfigKeyWrapper(destConfig);
+	/**
+	 * Add a statically configured destination reachable via this
+	 * ConnectionFactory
+	 */
+	public void addDestinationConfig(DestinationConfig destConfig) {
+		DestinationConfigKeyWrapper key = new DestinationConfigKeyWrapper(destConfig);
 
-      // cat.debug("new destination, domain=" +
-      // Domain.getDomain(destConfig.getDomain()).toString() + ", name=" +
-      // destConfig.getName());
+		// cat.debug("new destination, domain=" +
+		// Domain.getDomain(destConfig.getDomain()).toString() + ", name=" +
+		// destConfig.getName());
 
-      if (destinationConfigs.containsKey(key))
-      {
-         DestinationConfig old = destinationConfigs.remove(key);
-         destinationConfigsAsList.remove(old);
+		if (destinationConfigs.containsKey(key)) {
+			DestinationConfig old = destinationConfigs.remove(key);
+			destinationConfigsAsList.remove(old);
 
-         cat.debug("removed duplicate reference, reference domain=" + Domain.getDomain(destConfig.getDomain()).toString());
-      }
+			log.debug("removed duplicate reference, reference domain=" + Domain.getDomain(destConfig.getDomain()).toString());
+		}
 
-      destinationConfigs.put(key, destConfig);
-      destinationConfigsAsList.add(destConfig);
-   }
+		destinationConfigs.put(key, destConfig);
+		destinationConfigsAsList.add(destConfig);
+	}
 
-   public Context createContext() throws NamingException, JMSException
-   {
-     if (connectionFactory instanceof JNDIConnectionFactory)
-     {
-        JNDIConnectionFactory jndiCF = (JNDIConnectionFactory) connectionFactory ;
-        return jndiCF.createContext() ;
-     }
-     else
-     {
-        return null ;
-     }
-   }
+	public Context createContext() throws NamingException, JMSException {
+		if (connectionFactory instanceof JNDIConnectionFactory) {
+			JNDIConnectionFactory jndiCF = (JNDIConnectionFactory) connectionFactory;
+			return jndiCF.createContext();
+		} else {
+			return null;
+		}
+	}
 
-   public void removeDestinationConfig(DestinationConfig destConfig)
-   {
+	public void removeDestinationConfig(DestinationConfig destConfig) {
 
-      DestinationConfigKeyWrapper key = new DestinationConfigKeyWrapper(destConfig);
-      destinationConfigs.remove(key);
-      destinationConfigsAsList.remove(destConfig);
-   }
+		DestinationConfigKeyWrapper key = new DestinationConfigKeyWrapper(destConfig);
+		destinationConfigs.remove(key);
+		destinationConfigsAsList.remove(destConfig);
+	}
 
-   /**
-    * Connect. No implementation for a connection factory.
-    */
-   public void connect() throws javax.jms.JMSException
-   {
+	/**
+	 * Connect. No implementation for a connection factory.
+	 */
+	public void connect() throws javax.jms.JMSException {
 
-   }
+	}
 
-   /**
-    * Get some short description of this connection factory
-    */
+	/**
+	 * Get some short description of this connection factory
+	 */
 
-   public String getConnectionFactoryType()
-   {
-      return null;
-   }
+	public String getConnectionFactoryType() {
+		return null;
+	}
 
-   public ConnectionFactory getConnectionFactory() throws JMSException
-   {
-      if (trace)
-      {
-         return proxyConnectionFactory;
-      }
-      else
-      {
-         return connectionFactory;
-      }
-   }
+	public ConnectionFactory getConnectionFactory() throws JMSException {
+		if (trace) {
+			return proxyConnectionFactory;
+		} else {
+			return connectionFactory;
+		}
+	}
 
-   public DestinationConfig getDestinationConfig(String id, Domain domain)
-   {
-      DestinationConfigKeyWrapper key = new DestinationConfigKeyWrapper(id, domain);
-      DestinationConfig rval = destinationConfigs.get(key);
+	public DestinationConfig getDestinationConfig(String id, Domain domain) {
+		DestinationConfigKeyWrapper key = new DestinationConfigKeyWrapper(id, domain);
+		DestinationConfig rval = destinationConfigs.get(key);
 
-      if (rval == null)
-      {
-         rval = HermesBrowser.getConfigDAO().createDestinationConfig();
-         rval.setName(id);
-         rval.setDomain(domain.getId());
+		if (rval == null) {
+			rval = HermesBrowser.getConfigDAO().createDestinationConfig();
+			rval.setName(id);
+			rval.setDomain(domain.getId());
+		}
 
-         cat.info("cannot find name=" + id + ", domain=" + domain + " dynamically creating a destination...");
-      }
+		return rval;
+	}
 
-      return rval;
-   }
+	public DestinationConfig getDestinationConfig(Destination d) throws JMSException {
+		return getDestinationConfig(JMSUtils.getDestinationName(d), Domain.getDomain(d));
+	}
 
-   public DestinationConfig getDestinationConfig(Destination d) throws JMSException
-   {
-      return getDestinationConfig(JMSUtils.getDestinationName(d), Domain.getDomain(d));
-   }
+	public Collection getDestinationConfigs() {
+		return destinationConfigsAsList;
+	}
 
-   public Collection getDestinationConfigs()
-   {
-      return destinationConfigsAsList;
-   }
+	public Object getObject() throws JMSException {
+		return getConnectionFactory();
+	}
 
-   public Object getObject() throws JMSException
-   {
-      return getConnectionFactory();
-   }
+	public String toString() {
+		try {
+			return "connectionFactory class=" + connectionFactory.getClass().getName() + ", properties=" + BeanUtils.describe(connectionFactory);
+		} catch (Throwable e) {
+			return e.getMessage();
+		}
+	}
 
-   
+	public void setProvider(ProviderConfig pConfig) throws InstantiationException, ClassNotFoundException, IllegalAccessException, InvocationTargetException,
+			NoSuchMethodException, IOException {
+		ClassLoader classLoader = classLoaderManager.getClassLoader(factoryConfig.getClasspathId());
+		connectionFactory = ReflectUtils.createConnectionFactory(classLoader.loadClass(pConfig.getClassName()));
 
-   public String toString()
-   {
-      try
-      {
-         return "connectionFactory class=" + connectionFactory.getClass().getName() + ", properties=" + BeanUtils.describe(connectionFactory) ;
-      }
-      catch (Throwable e)
-      {
-         return e.getMessage() ;
-      }
-   }
-   
-   public void setProvider(ProviderConfig pConfig) throws InstantiationException, ClassNotFoundException, IllegalAccessException, InvocationTargetException,
-         NoSuchMethodException, IOException
-   {
-      ClassLoader classLoader = classLoaderManager.getClassLoader(factoryConfig.getClasspathId());
-      connectionFactory = ReflectUtils.createConnectionFactory(classLoader.loadClass(pConfig.getClassName()));
+		LoaderSupport.populateBean(connectionFactory, pConfig.getProperties());
+		setConnectionFactory(connectionFactory);
+	}
 
-      LoaderSupport.populateBean(connectionFactory, pConfig.getProperties());
-      setConnectionFactory(connectionFactory);
-   }
+	private void setConnectionFactory(ConnectionFactory connectionFactory) {
+		this.connectionFactory = connectionFactory;
+	}
 
-   private void setConnectionFactory(ConnectionFactory connectionFactory)
-   {
-      this.connectionFactory = connectionFactory;
-   }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-   public void setId(String id)
-   {
-      this.id = id;
-   }
+	public String getId() {
+		return id;
+	}
 
-   public String getId()
-   {
-      return id;
-   }
+	/**
+	 * @return Returns the trace.
+	 */
+	public boolean isTrace() {
+		return trace;
+	}
 
-   /**
-    * @return Returns the trace.
-    */
-   public boolean isTrace()
-   {
-      return trace;
-   }
+	/**
+	 * @param trace
+	 *            The trace to set.
+	 */
+	public void setTrace(boolean trace) {
+		this.trace = trace;
+	}
 
-   /**
-    * @param trace
-    *           The trace to set.
-    */
-   public void setTrace(boolean trace)
-   {
-      this.trace = trace;
-   }
+	/**
+	 * @return Returns the extension.
+	 */
+	public HermesAdminFactory getExtension(ProviderExtConfig extConfig) throws HermesException {
+		if (extension == null) {
+			try {
+				extension = extensionFinder.createExtension(factoryConfig.getClasspathId(), extConfig, connectionFactory);
 
-   /**
-    * @return Returns the extension.
-    */
-   public HermesAdminFactory getExtension(ProviderExtConfig extConfig) throws HermesException
-   {
-      if (extension == null)
-      {
-         try
-         {
-            extension = extensionFinder.createExtension(factoryConfig.getClasspathId(), extConfig, connectionFactory);
+				return extension;
+			} catch (Exception e) {
+				throw new HermesException(e);
+			}
+		} else {
+			return extension;
+		}
+	}
 
-            return extension;
-         }
-         catch (Exception e)
-         {
-            throw new HermesException(e);
-         }
-      }
-      else
-      {
-         return extension;
-      }
-   }
+	/**
+	 * @return Returns the extensionFinder.
+	 */
+	public ExtensionFinder getExtensionFinder() {
+		return extensionFinder;
+	}
 
-   /**
-    * @return Returns the extensionFinder.
-    */
-   public ExtensionFinder getExtensionFinder()
-   {
-      return extensionFinder;
-   }
-
-   /**
-    * @param extensionFinder
-    *           The extensionFinder to set.
-    */
-   public void setExtensionFinder(ExtensionFinder extensionFinder)
-   {
-      this.extensionFinder = extensionFinder;
-   }
+	/**
+	 * @param extensionFinder
+	 *            The extensionFinder to set.
+	 */
+	public void setExtensionFinder(ExtensionFinder extensionFinder) {
+		this.extensionFinder = extensionFinder;
+	}
 }

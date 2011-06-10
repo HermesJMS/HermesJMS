@@ -29,7 +29,6 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -44,10 +43,8 @@ import javax.jms.TextMessage;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-import javax.swing.JTree;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.map.LRUMap;

@@ -1,8 +1,10 @@
 package hermes.swing;
 
-import java.lang.reflect.*;
-import java.util.*;
-import javax.swing.table.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.table.AbstractTableModel;
 
 /**
  *  A TableModel that better supports the processing of rows of data. That

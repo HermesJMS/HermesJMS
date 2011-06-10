@@ -1041,4 +1041,12 @@ public class ConfigDAOImpl implements ConfigDAO
 
       config.getFactory().add(newFactory);
    }
+
+@Override
+public PropertyConfig createPropertyConfig(String name, String value) {
+	PropertyConfig p = factory.createPropertyConfig() ;
+	p.setName(name) ;
+	p.setValue(value) ;
+	return p ;
+}
 }

@@ -28,6 +28,7 @@ import hermes.config.FactoryConfig;
 import hermes.config.HermesConfig;
 import hermes.config.JDBCStore;
 import hermes.config.ObjectFactory;
+import hermes.config.PropertyConfig;
 import hermes.config.PropertySetConfig;
 import hermes.config.ProviderExtConfig;
 import hermes.config.RendererConfig;
@@ -128,5 +129,7 @@ public interface ConfigDAO
    public abstract FactoryConfig duplicate(FactoryConfig sourceFactory, String newSessionId) throws JAXBException;
 
    public abstract void duplicateSession(HermesConfig config, String hermesId, String newHermesId) throws JAXBException, HermesException;
+
+public abstract PropertyConfig createPropertyConfig(String string, String serverURL);
 
 }

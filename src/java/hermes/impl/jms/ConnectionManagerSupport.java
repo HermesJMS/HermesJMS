@@ -17,8 +17,6 @@
 
 package hermes.impl.jms;
 
-import java.lang.reflect.InvocationTargetException;
-
 import hermes.Hermes;
 import hermes.JNDIQueueConnectionFactory;
 import hermes.ProviderFailureException;
@@ -33,7 +31,6 @@ import javax.jms.JMSException;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.TopicConnectionFactory;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
 /**
