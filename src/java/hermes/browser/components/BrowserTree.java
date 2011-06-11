@@ -48,6 +48,7 @@ import hermes.impl.HTMLBeanHelper;
 import hermes.store.MessageStore;
 import hermes.swing.actions.ActionRegistry;
 import hermes.swing.actions.BrowseDestinationOrContextAction;
+import hermes.util.TextUtils;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -62,7 +63,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -231,6 +231,26 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 		return null;
 	}
 
+	public Hermes getHermesAsMessageFactory() throws HermesException {
+		if (!TextUtils.isEmpty(HermesBrowser.getBrowser().getConfig().getMessageStoreMessageFactory())) {
+			try {
+				Hermes hermes = (Hermes) HermesBrowser.getBrowser().getContext().lookup(HermesBrowser.getBrowser().getConfig().getMessageStoreMessageFactory());
+
+				if (hermes != null) {
+					return hermes;
+				}
+			} catch (NamingException ex) {
+				log.info("cannot find configured message store message factory, using one from the tree instead: " + ex.getMessage(), ex);
+			}
+		}
+
+		if (getLastSelectedHermesTreeNode() == null) {
+			return getBrowserModel().getFirstHermesTreeNode().getHermes();
+		} else {
+			return getLastSelectedHermesTreeNode().getHermes();
+		}
+	}
+	
 	/**
 	 * Returns the last Hermes session node that was in a selection path.
 	 */
@@ -706,7 +726,7 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 	}
 
 	public void maybeDoBrowse(MouseEvent e) {
-		if (e.getClickCount() == 2) {
+		if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
 			TreePath path = getPathForLocation(e.getX(), e.getY());
 
 			if (path != null) {

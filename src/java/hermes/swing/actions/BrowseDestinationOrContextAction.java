@@ -54,152 +54,89 @@ import org.apache.log4j.Logger;
  *          colincrist Exp $
  */
 
-public class BrowseDestinationOrContextAction extends ActionSupport
-{
-   /**
+public class BrowseDestinationOrContextAction extends ActionSupport {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2261691717762103310L;
-private static final Logger log = Logger.getLogger(BrowseDestinationOrContextAction.class);
+	private static final Logger log = Logger.getLogger(BrowseDestinationOrContextAction.class);
 
-   public BrowseDestinationOrContextAction()
-   {
-      putValue(Action.NAME, "Browse...");
-      putValue(Action.SHORT_DESCRIPTION, "Browse the queue, topic or context");
-      putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.browse"));
-      putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
+	public BrowseDestinationOrContextAction() {
+		putValue(Action.NAME, "Browse...");
+		putValue(Action.SHORT_DESCRIPTION, "Browse the queue, topic or context");
+		putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.browse"));
+		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 
-      setEnabled(false);
+		setEnabled(false);
 
-      enableOnBrowserTreeSelection(new Class[] { MessageStoreQueueTreeNode.class, MessageStoreTopicTreeNode.class, MessageStoreTreeNode.class,
-            DestinationConfigTreeNode.class, NamingConfigTreeNode.class }, this, true);
-      enableOnBrowserTreeSelection(new Class[] { NamingConfigTreeNode.class }, this, new TreeSelectionListener()
-      {
-         public void valueChanged(TreeSelectionEvent e)
-         {
-            setEnabled(getBrowserTree().getLastSelectedHermesTreeNode() != null);
-         }
-      }, true);
-   }
+		enableOnBrowserTreeSelection(new Class[] { MessageStoreQueueTreeNode.class, MessageStoreTopicTreeNode.class, MessageStoreTreeNode.class,
+				DestinationConfigTreeNode.class, NamingConfigTreeNode.class }, this, true);
+		enableOnBrowserTreeSelection(new Class[] { NamingConfigTreeNode.class }, this, new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e) {
+				setEnabled(getBrowserTree().getLastSelectedHermesTreeNode() != null);
+			}
+		}, true);
+	}
 
-   public void actionPerformed(ActionEvent e)
-   {
-      actionPerformed(getBrowserTree().getSelectionModel().getSelectionPath());
-   }
+	public void actionPerformed(ActionEvent e) {
+		actionPerformed(getBrowserTree().getSelectionModel().getSelectionPath());
+	}
 
-   public void actionPerformed(TreePath selectionPath)
-   {
+	public void actionPerformed(TreePath selectionPath) {
 
-      if (selectionPath != null)
-      {
-         try
-         {
-            if (selectionPath.getLastPathComponent() instanceof NamingConfigTreeNode)
-            {
-               final NamingConfigTreeNode node = (NamingConfigTreeNode) selectionPath.getLastPathComponent();
+		if (selectionPath != null) {
+			try {
+				if (selectionPath.getLastPathComponent() instanceof NamingConfigTreeNode) {
+					final NamingConfigTreeNode node = (NamingConfigTreeNode) selectionPath.getLastPathComponent();
 
-               HermesBrowser.getBrowser().getActionFactory().createBrowseContextAction(node.getConfig());
-            }
-            else if (selectionPath.getLastPathComponent() instanceof DestinationConfigTreeNode)
-            {
-               final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) selectionPath.getLastPathComponent();
-               final Hermes hermes = ((HermesTreeNode) destinationNode.getHermesTreeNode()).getHermes();
+					HermesBrowser.getBrowser().getActionFactory().createBrowseContextAction(node.getConfig());
 
-               log.info("browsing " + hermes.getId() + ": " + destinationNode.getDestinationName());
+				} else if (selectionPath.getLastPathComponent() instanceof DestinationConfigTreeNode) {
+					final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) selectionPath.getLastPathComponent();
+					final Hermes hermes = ((HermesTreeNode) destinationNode.getHermesTreeNode()).getHermes();
 
-               HermesBrowser.getBrowser().getActionFactory().createQueueBrowseAction(hermes, destinationNode.getConfig());
+					HermesBrowser.getBrowser().getActionFactory().createQueueBrowseAction(hermes, destinationNode.getConfig());
 
-            }
-            else if (selectionPath.getLastPathComponent() instanceof RepositoryTreeNode)
-            {
-               final RepositoryTreeNode repNode = (RepositoryTreeNode) selectionPath.getLastPathComponent();
+				} else if (selectionPath.getLastPathComponent() instanceof RepositoryTreeNode) {
+					final RepositoryTreeNode repNode = (RepositoryTreeNode) selectionPath.getLastPathComponent();
+					final Hermes hermes = HermesBrowser.getBrowser().getBrowserTree().getHermesAsMessageFactory();
 
-               if (getBrowserTree().getLastSelectedHermesTreeNode() == null)
-               {
-                  HermesBrowser.getBrowser().showErrorDialog(
-                        "You must select a session first to use as the factory to\ncreate messages read from a repository file.");
-               }
-               else
-               {
-                  final Hermes hermes = HermesBrowser.getBrowser().getBrowserTree().getLastSelectedHermesTreeNode().getHermes();
+					HermesBrowser.getBrowser().getActionFactory().createRepositoryBrowseAction(repNode.getRepository(), hermes);
 
-                  log.info("reading " + repNode.getRepository().getId());
+				} else if (selectionPath.getLastPathComponent() instanceof MessageStoreTreeNode) {
+					final MessageStoreTreeNode node = (MessageStoreTreeNode) selectionPath.getLastPathComponent();
+					final Hermes hermes = HermesBrowser.getBrowser().getBrowserTree().getHermesAsMessageFactory();
 
-                  HermesBrowser.getBrowser().getActionFactory().createRepositoryBrowseAction(repNode.getRepository(), hermes);
-               }
-            }
-            else if (selectionPath.getLastPathComponent() instanceof MessageStoreTreeNode)
-            {
-               final MessageStoreTreeNode node = (MessageStoreTreeNode) selectionPath.getLastPathComponent();
-               final Hermes hermes = checkHermesForMessageStore();
+					HermesBrowser.getBrowser().getActionFactory().createMessageStoreBrowseAction(node.getMessageStore(), hermes, null);
 
-               HermesBrowser.getBrowser().getActionFactory().createMessageStoreBrowseAction(node.getMessageStore(), hermes, null);
+				} else if (selectionPath.getLastPathComponent() instanceof MessageStoreQueueTreeNode) {
+					final MessageStoreQueueTreeNode queueNode = (MessageStoreQueueTreeNode) selectionPath.getLastPathComponent();
 
-            }
-            else if (selectionPath.getLastPathComponent() instanceof MessageStoreQueueTreeNode)
-            {
-               final MessageStoreQueueTreeNode queueNode = (MessageStoreQueueTreeNode) selectionPath.getLastPathComponent();
+					if (queueNode.getParent() instanceof MessageStoreTreeNode) {
+						final MessageStoreTreeNode storeNode = (MessageStoreTreeNode) queueNode.getParent();
+						final Hermes hermes = HermesBrowser.getBrowser().getBrowserTree().getHermesAsMessageFactory();
 
-               if (queueNode.getParent() instanceof MessageStoreTreeNode)
-               {
-                  final MessageStoreTreeNode storeNode = (MessageStoreTreeNode) queueNode.getParent();
-                  final Hermes hermes = checkHermesForMessageStore();
+						HermesBrowser.getBrowser().getActionFactory()
+								.createMessageStoreBrowseAction(storeNode.getMessageStore(), hermes, (Queue) queueNode.getBean(), null);
 
-                  HermesBrowser.getBrowser().getActionFactory().createMessageStoreBrowseAction(storeNode.getMessageStore(), hermes,
-                        (Queue) queueNode.getBean(), null);
+					}
+				} else if (selectionPath.getLastPathComponent() instanceof MessageStoreTopicTreeNode) {
+					final MessageStoreTopicTreeNode topicNode = (MessageStoreTopicTreeNode) selectionPath.getLastPathComponent();
 
-               }
-            }
-            else if (selectionPath.getLastPathComponent() instanceof MessageStoreTopicTreeNode)
-            {
-               final MessageStoreTopicTreeNode topicNode = (MessageStoreTopicTreeNode) selectionPath.getLastPathComponent();
+					if (topicNode.getParent() instanceof MessageStoreTreeNode) {
+						final MessageStoreTreeNode storeNode = (MessageStoreTreeNode) topicNode.getParent();
+						final Hermes hermes = HermesBrowser.getBrowser().getBrowserTree().getHermesAsMessageFactory();
 
-               if (topicNode.getParent() instanceof MessageStoreTreeNode)
-               {
-                  final MessageStoreTreeNode storeNode = (MessageStoreTreeNode) topicNode.getParent();
-                  final Hermes hermes = checkHermesForMessageStore();
+						HermesBrowser.getBrowser().getActionFactory()
+								.createMessageStoreBrowseAction(storeNode.getMessageStore(), hermes, (Topic) topicNode.getBean(), null);
 
-                  HermesBrowser.getBrowser().getActionFactory().createMessageStoreBrowseAction(storeNode.getMessageStore(), hermes,
-                        (Topic) topicNode.getBean(), null);
+					}
+				}
+			} catch (Exception ex) {
+				log.error(ex.getMessage(), ex);
 
-               }
-            }
-         }
-         catch (Exception ex)
-         {
-            log.error(ex.getMessage(), ex);
-
-            JOptionPane.showMessageDialog(HermesBrowser.getBrowser(), "During browse/read: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-         }
-      }
-   }
-
-   private Hermes checkHermesForMessageStore() throws HermesException
-   {
-      if (!TextUtils.isEmpty(HermesBrowser.getBrowser().getConfig().getMessageStoreMessageFactory()))
-      {
-         try
-         {
-            Hermes hermes = (Hermes) HermesBrowser.getBrowser().getContext().lookup(HermesBrowser.getBrowser().getConfig().getMessageStoreMessageFactory()) ;
-            
-            if (hermes != null)
-            {
-               return hermes ;
-            }
-         }
-         catch (NamingException ex)
-         {
-            log.info("cannot find configured message store message factory, using one from the tree instead: " + ex.getMessage(), ex) ;
-         }         
-      }
-      
-      if (getBrowserTree().getLastSelectedHermesTreeNode() == null)
-      {
-         return getBrowserTree().getBrowserModel().getFirstHermesTreeNode().getHermes();
-      }
-      else
-      {
-         return getBrowserTree().getLastSelectedHermesTreeNode().getHermes();
-      }
-   }
+				JOptionPane.showMessageDialog(HermesBrowser.getBrowser(), "During browse/read: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
 }

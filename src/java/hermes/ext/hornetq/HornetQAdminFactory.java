@@ -39,6 +39,8 @@ public class HornetQAdminFactory implements HermesAdminFactory {
 
 	public HornetQAdminFactory() {
 		super();
+		log.info("ctor " + Thread.currentThread().getContextClassLoader()) ;
+		log.info(getClass().getClassLoader()) ;
 	}
 
 	/**

@@ -179,4 +179,4 @@ fi
 #
 # Run main(). 
 
-"$JAVACMD" -XX:NewSize=256m -Xmx1024m $HERMES_OPTS -Dlog4j.configuration=file:$HERMES_HOME/bin/log4j.props -Dhermes.home=$HERMES_HOME -Dhermes=$HERMES_CFG -Dhermes.libs=$HERMES_LIB -classpath $LOCALCLASSPATH  hermes.browser.HermesBrowser
+"$JAVACMD" -XX:NewSize=256m -Xmx1024m $HERMES_OPTS -Dlog4j.configuration=file:$HERMES_HOME/bin/log4j.props -Dhermes.home=$HERMES_HOME -Dhermes=$HERMES_CFG -Dhermes.libs=$HERMES_LIB/ext -classpath $LOCALCLASSPATH  hermes.browser.HermesBrowser

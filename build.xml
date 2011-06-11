@@ -42,6 +42,8 @@
 
 
 	<property name="lib" value="${build}/lib" />
+	<property name="lib.ext" value="${build}/lib/ext" />
+
 	<property name="providers" value="${build}/providers" />
 
 	<property name="cfg" value="${build}/cfg" />
@@ -117,6 +119,7 @@
 		<mkdir dir="${classes.ext.imq}" />
 		<mkdir dir="${webstart}" />
 		<mkdir dir="${lib}" />
+		<mkdir dir="${lib.ext}" />
 		<mkdir dir="${bin}" />
 		<mkdir dir="${cfg}" />
 		<mkdir dir="${providers}" />
@@ -515,67 +518,67 @@
 
 	<target name="jar-ext" depends="compile-ext">
 
-		<jar jarfile="${lib}/hermes-imq.jar">
+		<jar jarfile="${lib.ext}/hermes-imq.jar">
 					<fileset dir="${classes.ext.imq}" />
 				</jar>
 		
-		<jar jarfile="${lib}/hermes-seebeyond.jar">
+		<jar jarfile="${lib.ext}/hermes-seebeyond.jar">
 				<fileset dir="${classes.ext.seebeyond}" />
 			</jar>
 		
-		<jar jarfile="${lib}/hermes-activemq.jar">
+		<jar jarfile="${lib.ext}/hermes-activemq.jar">
 			<fileset dir="${classes.ext.activemq}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-sonicmq.jar">
+		<jar jarfile="${lib.ext}/hermes-sonicmq.jar">
 			<fileset dir="${classes.ext.sonic}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-sqs.jar">
+		<jar jarfile="${lib.ext}/hermes-sqs.jar">
 			<fileset dir="${classes.ext.sqs}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-ems.jar">
+		<jar jarfile="${lib.ext}/hermes-ems.jar">
 			<fileset dir="${classes.ext.ems}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-fiorano.jar">
+		<jar jarfile="${lib.ext}/hermes-fiorano.jar">
 			<fileset dir="${classes.ext.fiorano}" />
 		</jar>
 		
-		<jar jarfile="${lib}/hermes-hornetq.jar">
+		<jar jarfile="${lib.ext}/hermes-hornetq.jar">
 				<fileset dir="${classes.ext.hornetq}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-jbossmq.jar">
+		<jar jarfile="${lib.ext}/hermes-jbossmq.jar">
 			<fileset dir="${classes.ext.jbossmq}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-webspheremq.jar">
+		<jar jarfile="${lib.ext}/hermes-webspheremq.jar">
 			<fileset dir="${classes.ext.mq}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-joram.jar">
+		<jar jarfile="${lib.ext}/hermes-joram.jar">
 			<fileset dir="${classes.ext.joram}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-weblogic.jar">
+		<jar jarfile="${lib.ext}/hermes-weblogic.jar">
 			<fileset dir="${classes.ext.weblogic}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-openjms.jar">
+		<jar jarfile="${lib.ext}/hermes-openjms.jar">
 			<fileset dir="${classes.ext.openjms}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-arjuna.jar">
+		<jar jarfile="${lib.ext}/hermes-arjuna.jar">
 			<fileset dir="${classes.ext.arjuna}" />
 		</jar>
 
-		<jar jarfile="${lib}/hermes-wme.jar">
+		<jar jarfile="${lib.ext}/hermes-wme.jar">
 			<fileset dir="${classes.ext.wme}" />
 		</jar>		
 		
-		<jar jarfile="${lib}/hermes-aq.jar">
+		<jar jarfile="${lib.ext}/hermes-aq.jar">
 					<fileset dir="${classes.ext.oracleaq}" />
 		</jar>
 

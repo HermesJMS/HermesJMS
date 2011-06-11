@@ -91,7 +91,7 @@ public class LoaderSupport
        */
       protected synchronized Class loadClass(String arg0, boolean arg1) throws ClassNotFoundException
       {
-         if (arg0.equals("fr.dyade.aaa.jndi2.client.NamingContextFactory"))
+         if (arg0.startsWith("hermes.ext"))
          {
             log.debug("loadClass(" + arg0 + ", " + arg1 + ") from " + toString());
          }

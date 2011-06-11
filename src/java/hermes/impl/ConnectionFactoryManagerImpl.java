@@ -239,6 +239,8 @@ public class ConnectionFactoryManagerImpl extends JMSManagerImpl implements Conn
 	public HermesAdminFactory getExtension(ProviderExtConfig extConfig) throws HermesException {
 		if (extension == null) {
 			try {
+				log.debug("loading adminfactory from " + factoryConfig.getClasspathId()) ;
+				
 				extension = extensionFinder.createExtension(factoryConfig.getClasspathId(), extConfig, connectionFactory);
 
 				return extension;

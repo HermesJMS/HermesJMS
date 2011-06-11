@@ -39,49 +39,43 @@ import org.apache.log4j.Logger;
  * @version $Id: ExtensionFinderImpl.java,v 1.6 2004/07/30 17:25:15 colincrist
  *          Exp $
  */
-public class ExtensionFinderImpl implements ExtensionFinder
-{
-   private static final Logger log = Logger.getLogger(ExtensionFinderImpl.class);
+public class ExtensionFinderImpl implements ExtensionFinder {
+	private static final Logger log = Logger.getLogger(ExtensionFinderImpl.class);
 
-   private ClassLoaderManager classLoaderManager;
+	private ClassLoaderManager classLoaderManager;
 
-   public ExtensionFinderImpl(ClassLoaderManager classLoaderManager)
-   {
-      this.classLoaderManager = classLoaderManager;
-   }
+	public ExtensionFinderImpl(ClassLoaderManager classLoaderManager) {
+		this.classLoaderManager = classLoaderManager;
+	}
 
-   public synchronized HermesAdminFactory createExtension(String classPathId, ProviderExtConfig extConfig, ConnectionFactory cf) throws InstantiationException,
-         ClassNotFoundException, NamingException, JMSException
-   {
-      if (extConfig != null && extConfig.getClassName() != null && !extConfig.getClassName().equals(""))
-      {
-         log.debug("creating extension " + extConfig.getClassName() + " for " + cf.getClass().getName());
+	public synchronized HermesAdminFactory createExtension(String classPathId, ProviderExtConfig extConfig, ConnectionFactory cf)
+			throws InstantiationException, ClassNotFoundException, NamingException, JMSException {
+		if (extConfig != null && extConfig.getClassName() != null && !extConfig.getClassName().equals("")) {
+			log.debug("creating extension " + extConfig.getClassName() + " for " + cf.getClass().getName());
 
-         HermesAdminFactory providerExtension = null;
+			HermesAdminFactory providerExtension = null;
 
-         try
-         {
-            ClassLoader classLoader = classLoaderManager.getClassLoader(classPathId);
+			try {
 
-            log.debug("loading from " + classLoader);
+				ClassLoader classLoader = classLoaderManager.getClassLoader(classPathId);
 
-            Thread.currentThread().setContextClassLoader(classLoader);
+				log.debug("loading from " + classLoader);
 
-            providerExtension = (HermesAdminFactory) classLoader.loadClass(extConfig.getClassName()).newInstance();
+				Thread.currentThread().setContextClassLoader(classLoader);
 
-            LoaderSupport.populateBean(providerExtension, extConfig.getProperties());
+				providerExtension = (HermesAdminFactory) classLoader.loadClass(extConfig.getClassName()).newInstance();
 
-         }
-         catch (Exception e)
-         {
-            log.debug(e.getMessage(), e);
+				LoaderSupport.populateBean(providerExtension, extConfig.getProperties());
 
-            throw new HermesException(e);
-         }
+			} catch (Exception e) {
+				log.debug(e.getMessage(), e);
 
-         return providerExtension;
-      }
+				throw new HermesException(e);
+			}
 
-      return new DefaultHermesAdminFactory();
-   }
+			return providerExtension;
+		}
+
+		return new DefaultHermesAdminFactory();
+	}
 }

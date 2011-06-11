@@ -137,6 +137,8 @@ public class MessageEditorDialog extends JDialog {
 			tabbedPane.addTab("Payload", messageWriter);
 		} else if (message instanceof MapMessage) {
 			messageWriter = new MapMessagePayloadPanel((MapMessage) message, true);
+		} else if (message instanceof BytesMessage) {
+			messageWriter = new BytesMessagePayloadPanel((BytesMessage) message);
 		}
 
 		tabbedPane.addTab("Payload", messageWriter);
