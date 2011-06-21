@@ -1,5 +1,7 @@
 <project name="hermes" default="jar-ext" basedir=".">
 
+
+
 	<!-- Dependent 3rd party libraries are defined in the build.properties file -->
 
 	<property file="build.properties" />
@@ -136,7 +138,7 @@
 				<include name="*.jar" />
 			</fileset>
 
-<!--
+			<!--
 			<fileset dir="${ant.lib}">
 				<include name="ant.jar" />
 			</fileset>
@@ -163,34 +165,34 @@
 				<include name="jamsel.jar" />
 			</fileset>
 		</path>
-		
+
 		<!-- Classpath for HornetQ -->
 
-			<path id="hornetq.classpath">
-				<path refid="plugin.classpath" />
+		<path id="hornetq.classpath">
+			<path refid="plugin.classpath" />
 
-				<fileset dir="${hornetq.lib}">
-					<include name="*.jar" />
-				</fileset>
-			</path>
-			
-		
+			<fileset dir="${hornetq.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+
 		<!-- Classpath for OracleAQ -->
 
-			<path id="oracleaq.classpath">
-				<path refid="plugin.classpath" />
+		<path id="oracleaq.classpath">
+			<path refid="plugin.classpath" />
 
-				<fileset dir="${oracleaq.lib}">
-					<include name="*.jar"/>
-				</fileset>
-			</path>
-		
+			<fileset dir="${oracleaq.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
 
 		<path id="imq.classpath">
 			<path refid="plugin.classpath" />
 
 			<fileset dir="${imq.lib}">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 		</path>
 
@@ -337,9 +339,9 @@
 		</path>
 
 		<path id="xjc.classpath">
-		        <path refid="project.classpath"/>
+			<path refid="project.classpath" />
 			<fileset dir="${jaxb.lib}">
-			<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 		</path>
 
@@ -362,9 +364,9 @@
 
 		<javac target="1.5" destdir="${classes}" deprecation="on" debug="true">
 			<src path="${src.java}" />
-			<exclude name="hermes/ext/imq/*.java"/>	
-			<exclude name="hermes/ext/oracle/aq/*.java"/>
-			<exclude name="hermes/ext/sqs/*.java"/>
+			<exclude name="hermes/ext/imq/*.java" />
+			<exclude name="hermes/ext/oracle/aq/*.java" />
+			<exclude name="hermes/ext/sqs/*.java" />
 			<exclude name="hermes/ext/sonicmq/*.java" />
 			<exclude name="hermes/ext/sqs/*.java" />
 			<exclude name="hermes/ext/mq/*.java" />
@@ -388,21 +390,21 @@
 
 	<target name="compile-ext" depends="jar,compile-imq,compile-oracleaq,compile-activemq,compile-mq,compile-jbossmq,compile-hornetq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond,compile-sqs" />
 
-	
+
 	<target name="compile-oracleaq" depends="jar" if="oracleaq.present">
-			<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.oracleaq}" deprecation="on" debug="true">
-				<include name="**/ext/oracle/aq/*.java" />
-				<classpath refid="oracleaq.classpath" />
-			</javac>
-		</target>
-	
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.oracleaq}" deprecation="on" debug="true">
+			<include name="**/ext/oracle/aq/*.java" />
+			<classpath refid="oracleaq.classpath" />
+		</javac>
+	</target>
+
 	<target name="compile-imq" depends="jar" if="imq.present">
-				<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.imq}" deprecation="on" debug="true">
-					<include name="**/ext/imq/*.java" />
-					<classpath refid="imq.classpath" />
-				</javac>
-			</target>
-	
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.imq}" deprecation="on" debug="true">
+			<include name="**/ext/imq/*.java" />
+			<classpath refid="imq.classpath" />
+		</javac>
+	</target>
+
 
 	<target name="compile-hornetq" depends="compile-main" if="hornetq.present">
 		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.hornetq}" deprecation="on" debug="true">
@@ -410,7 +412,7 @@
 			<classpath refid="hornetq.classpath" />
 		</javac>
 	</target>
-			
+
 	<target name="compile-seebeyond" depends="jar" if="mx4j.present">
 		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.seebeyond}" deprecation="on" debug="true">
 			<include name="**/ext/seebeyond/*.java" />
@@ -428,7 +430,7 @@
 		</javac>
 	</target>
 
-	
+
 	<target name="compile-sqs" depends="jar" if="sqs.present">
 		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.sqs}" deprecation="on" debug="true">
 			<include name="**/ext/sqs/*.java" />
@@ -509,7 +511,7 @@
 
 	<target name="jar" depends="compile">
 		<jar jarfile="${lib}/hermes.jar">
-			<fileset dir="${classes}" />		
+			<fileset dir="${classes}" />
 			<fileset dir="${src.java}" excludes="**/*.java" />
 			<fileset dir="${resources}" />
 
@@ -519,13 +521,13 @@
 	<target name="jar-ext" depends="compile-ext">
 
 		<jar jarfile="${lib.ext}/hermes-imq.jar">
-					<fileset dir="${classes.ext.imq}" />
-				</jar>
-		
+			<fileset dir="${classes.ext.imq}" />
+		</jar>
+
 		<jar jarfile="${lib.ext}/hermes-seebeyond.jar">
-				<fileset dir="${classes.ext.seebeyond}" />
-			</jar>
-		
+			<fileset dir="${classes.ext.seebeyond}" />
+		</jar>
+
 		<jar jarfile="${lib.ext}/hermes-activemq.jar">
 			<fileset dir="${classes.ext.activemq}" />
 		</jar>
@@ -545,9 +547,9 @@
 		<jar jarfile="${lib.ext}/hermes-fiorano.jar">
 			<fileset dir="${classes.ext.fiorano}" />
 		</jar>
-		
+
 		<jar jarfile="${lib.ext}/hermes-hornetq.jar">
-				<fileset dir="${classes.ext.hornetq}" />
+			<fileset dir="${classes.ext.hornetq}" />
 		</jar>
 
 		<jar jarfile="${lib.ext}/hermes-jbossmq.jar">
@@ -576,19 +578,19 @@
 
 		<jar jarfile="${lib.ext}/hermes-wme.jar">
 			<fileset dir="${classes.ext.wme}" />
-		</jar>		
-		
+		</jar>
+
 		<jar jarfile="${lib.ext}/hermes-aq.jar">
-					<fileset dir="${classes.ext.oracleaq}" />
+			<fileset dir="${classes.ext.oracleaq}" />
 		</jar>
 
 		<copy todir="${lib}">
 			<fileset dir="${src.lib}">
 				<include name="**/*.jar" />
-<!--				<exclude name="ant.jar" /> -->
+				<!--				<exclude name="ant.jar" /> -->
 			</fileset>
 			<fileset dir="${jide.lib}">
-							<include name="*.jar" />
+				<include name="*.jar" />
 			</fileset>
 		</copy>
 
@@ -652,5 +654,36 @@
 			</fileset>
 		</ftp>
 	</target>
+	
+	<target name="osx.dmg" depends="osx.app" description="Create OS X .dmg">
+	  <delete file="build/HermesJMS.dmg"/>
+	  <exec executable="hdiutil" failonerror="true">
+	    <arg value="create"/>
+	    <arg value="-fs"/>
+	    <arg value="HFS+"/>
+	    <arg value="-volname"/>
+	    <arg value="HermesJMS"/>
+	    <arg value="-srcfolder"/>
+	    <arg file="build/HermesJMS.app"/>
+	    <arg file="build/HermesJMS.dmg"/>
+	  </exec>
+	</target>
+	
+
+	<target name="osx.app" depends="jar-ext">
+		<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
+
+		<jarbundler dir="build" name="HermesJMS" mainclass="hermes.browser.HermesBrowser" jvmversion="1.6+" icon="icons/hermes-logo.icns" version="1.14" infostring="HermesJMS (c) Colin Crist" bundleid="hermes.HermesBrowser" vmoptions="-Dhermes.libs=HermesJMS.app/Contents/Resources">
+			<javaproperty name="apple.laf.useScreenMenuBar" value="true" />
+			<javaproperty name="apple.awt.brushMetal" value="true" />
+			<javaproperty name="apple.awt.showGrowBox" value="false" />
+			<jarfileset dir="build/lib">
+				<include name="*.jar" />
+			</jarfileset>
+			<resourcefileset dir="build/lib/ext" includes="*.jar" />
+
+		</jarbundler>
+	</target>
+
 </project>
 
