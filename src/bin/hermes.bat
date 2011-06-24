@@ -1,4 +1,4 @@
-@echo off
+echo off
 
 REM  Licensed under the Apache License, Version 2.0 (the "License");
 REM  you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ set HERMES_BIN=%HERMES_HOME%\bin
 set JAXB=%HERMES_LIBS%\jaxb-api.jar
 set JIDE=%HERMES_LIBS%\jide-action.jar;%HERMES_LIBS%\jide-common.jar;%HERMES_LIBS%\jide-components.jar;%HERMES_LIBS%\jide-dialogs.jar;%HERMES_LIBS%\jide-dock.jar;%HERMES_LIBS%\jide-grids.jar
 
-set CLASSPATH=%JAXB%;%HERMES_LIBS%/jta-spec1_0_1.jar;%HERMES_LIBS%\xml-apis.jar;%HERMES_LIBS%\jms.jar;%HERMES_LIBS%\relaxngDatatype.jar;%HERMES_LIBS%\jaas.jar;%HERMES_LIBS%\activation.jar;%HERMES_LIBS%\commons-digester.jar;%HERMES_LIBS%\commons-codec-1.1.jar;%HERMES_LIBS%\log4j-1.2.15.jar;%HERMES_LIBS%\j2ee.jar;%HERMES_LIBS%\commons-logging.jar;%HERMES_LIBS%\jlfgr-1_0.jar;%HERMES_LIBS%\commons-lang-2.1.jar;%HERMES_LIBS%\xercesImpl.jar;%HERMES_LIBS%\namespace.jar;%HERMES_LIBS%\xsdlib.jar;%HERMES_LIBS%\datatips.jar;%HERMES_LIBS%\derby.jar;%HERMES_LIBS%\commons-dbutils-1.0.jar;%HERMES_LIBS%\ant.jar;%HERMES_LIBS%\db2cc.jar;%HERMES_LIBS%\hermes-selector.jar;%HERMES_LIBS%\jms-jmx.jar;%HERMES_LIBS%\selector-1.1.jar;%HERMES_LIBS%\asm-all-4.0_RC1.jar;%HERMES_LIBS%\quickfixj.jar;%HERMES_LIBS%\jython.jar;%HERMES_LIBS%\ArtTk.jar;%HERMES_LIBS%\JyConsole.jar;%HERMES_LIBS%\mina-core-1.1.0-SNAPSHOT.jar;%HERMES_LIBS%\slf4j-jdk14-1.0.1.jar;%HERMES_LIBS%\commons-collections.jar;%HERMES_LIBS%\jsyntaxpane-0.9.1.jar
+set CLASSPATH=%JAXB%;%HERMES_LIBS%/jta-spec1_0_1.jar;%HERMES_LIBS%\xml-apis.jar;%HERMES_LIBS%\jms.jar;%HERMES_LIBS%\relaxngDatatype.jar;%HERMES_LIBS%\jaas.jar;%HERMES_LIBS%\activation.jar;%HERMES_LIBS%\commons-digester.jar;%HERMES_LIBS%\commons-codec-1.1.jar;%HERMES_LIBS%\log4j-1.2.15.jar;%HERMES_LIBS%\j2ee.jar;%HERMES_LIBS%\commons-logging.jar;%HERMES_LIBS%\jlfgr-1_0.jar;%HERMES_LIBS%\commons-lang-2.1.jar;%HERMES_LIBS%\xercesImpl.jar;%HERMES_LIBS%\namespace.jar;%HERMES_LIBS%\xsdlib.jar;%HERMES_LIBS%\datatips.jar;%HERMES_LIBS%\derby.jar;%HERMES_LIBS%\commons-dbutils-1.0.jar;%HERMES_LIBS%\ant.jar;%HERMES_LIBS%\db2cc.jar;%HERMES_LIBS%\hermes-selector.jar;%HERMES_LIBS%\jms-jmx.jar;%HERMES_LIBS%\selector-1.1.jar;%HERMES_LIBS%\asm-all-4.0_RC1.jar;%HERMES_LIBS%\quickfixj.jar;%HERMES_LIBS%\jython.jar;%HERMES_LIBS%\ArtTk.jar;%HERMES_LIBS%\JyConsole.jar;%HERMES_LIBS%\mina-core-1.1.0-SNAPSHOT.jar;%HERMES_LIBS%\slf4j-api-1.6.1.jar;%HERMES_LIBS%\slf4j-jdk14-1.6.1.jar;%HERMES_LIBS%\commons-collections.jar;%HERMES_LIBS%\jsyntaxpane-0.9.1.jar
 set CLASSPATH=%CLASSPATH%;%HERMES_LIBS%\hermes.jar;%HERMES_LIBS%\cglib-nodep-2.2.2.jar;%HERMES_LIBS%\commons-beanutils.jar;%JIDE%;%HERMES_LIBS%\forms-1.3.0.jar
 set CLASSPATH=%HERMES_LIBS%;%CLASSPATH%
 

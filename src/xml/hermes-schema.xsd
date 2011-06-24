@@ -117,7 +117,7 @@
 
 	<xs:complexType name="QuickFIXConfig">
 		<xs:attribute name="cacheSize" type="xs:int" />
-		<xs:attribute name="filterSessionMsgTypes" type="xs:boolean" />
+		<xs:attribute name="filterSessionMsgTypes" type="xs:boolean" default="false"/>
 	</xs:complexType>
 
 	<xs:complexType name="HermesConfig">
@@ -186,7 +186,9 @@
 			default="true" />
 		<xs:attribute name="messageStoreMessageFactory" type="xs:string" />
 
-		<xs:attribute name="showDestinationsInMessageStore" type="xs:boolean" default="false"/>
+		<xs:attribute name="showDestinationsInMessageStore" type="xs:boolean" default="false"/>		
+		<xs:attribute name="HTMLRendererXSL" type="xs:string"/>
+		
 	</xs:complexType>
 
 	<xs:complexType name="FactoryConfig">

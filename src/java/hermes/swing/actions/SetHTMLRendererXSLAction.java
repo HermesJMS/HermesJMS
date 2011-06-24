@@ -17,12 +17,17 @@
 
 package hermes.swing.actions;
 
+import java.awt.event.ActionEvent;
+
 import hermes.Hermes;
+import hermes.HermesException;
 import hermes.browser.HermesBrowser;
+import hermes.browser.IconCache;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
 import hermes.browser.model.tree.HermesTreeNode;
 import hermes.browser.tasks.SendMessageTask;
 
+import javax.swing.Action;
 import javax.swing.JFileChooser;
 
 /**
@@ -33,25 +38,21 @@ import javax.swing.JFileChooser;
  *          colincrist Exp $
  */
 
-public abstract class AbstractSendFileAction extends ActionSupport {
+public class SetHTMLRendererXSLAction extends ActionSupport {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7964360849799569657L;
 
-	public AbstractSendFileAction() {
-		setEnabled(false);
-
-		if (!HermesBrowser.getBrowser().isRestricted()) {
-			enableOnBrowserTreeSelection(new Class[] { DestinationConfigTreeNode.class }, this, true);
-		}
+	public SetHTMLRendererXSLAction() {
+		putValue(Action.NAME, "Set XSL");
+		putValue(Action.SHORT_DESCRIPTION, "Set the XSL to use for HTML rendering of XML");
+		putValue(Action.SMALL_ICON, IconCache.getIcon("xsl"));
+		setEnabled(true);
 	}
 
-	public void doSendAFile(int isXML, boolean preserveDestination) {
-		final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) HermesBrowser.getBrowser().getBrowserTree().getLastSelectedPathComponent();
-		final HermesTreeNode hermesNode = (HermesTreeNode) destinationNode.getHermesTreeNode();
-		final String text = ((isXML == SendMessageTask.IS_XML) ? "Send XML to " : "Send file to ") + destinationNode.getDestinationName();
-
+	@Override
+	public void actionPerformed(ActionEvent e) {
 		JFileChooser chooser = null;
 
 		if (DirectoryCache.lastUploadDirectory == null) {
@@ -60,12 +61,14 @@ public abstract class AbstractSendFileAction extends ActionSupport {
 			chooser = new JFileChooser(DirectoryCache.lastUploadDirectory);
 		}
 
-		if (chooser.showDialog(HermesBrowser.getBrowser(), text) == JFileChooser.APPROVE_OPTION) {
+		if (chooser.showDialog(HermesBrowser.getBrowser(), "Select XSL...") == JFileChooser.APPROVE_OPTION) {
 			DirectoryCache.lastUploadDirectory = chooser.getSelectedFile().getParentFile();
-			HermesBrowser.getBrowser().getActionFactory()
-					.createSimpleSendMessageAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), chooser.getSelectedFile(), isXML, preserveDestination);
-		} else {
-			Hermes.ui.getDefaultMessageSink().add("File upload cancelled");
+			try {
+				HermesBrowser.getBrowser().getConfig().setHTMLRendererXSL(chooser.getSelectedFile().getAbsolutePath());
+			} catch (HermesException e1) {
+				HermesBrowser.getBrowser().showErrorDialog(e1);
+			}
 		}
 	}
+
 }

@@ -130,6 +130,6 @@ public abstract class XmlUtils {
 	}
 
 	public static boolean isXML(final String s) {
-		return s != null && s.startsWith("<?xml");
+		return s != null && (s.startsWith("<?xml") || s.startsWith("<")) ;
 	}
 }

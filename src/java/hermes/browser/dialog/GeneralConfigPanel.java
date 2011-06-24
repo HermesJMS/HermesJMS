@@ -307,8 +307,7 @@ public void setHermesConfig(HermesConfig config)
             .getQueueBrowseConsumerTimeout()), CONSUMER_TIMEOUT_INFO, Long.class);
       watchProperty = new PropertyImpl(WATCH, WATCH_INFO);
       quickFIXCacheProperty = new PropertyImpl(QF_CACHE, new Integer(config.getQuickFIX().getCacheSize()), QF_CACHE_INFO, Integer.class);
-      quickFIXCacheFilterSessionProperty = new PropertyImpl(QF_FILTER_SESSION, new Boolean(config.getQuickFIX().isFilterSessionMsgTypes() == null ? false
-            : config.getQuickFIX().isFilterSessionMsgTypes()), QF_FILTER_SESSION_INFO, Boolean.class);
+      quickFIXCacheFilterSessionProperty = new PropertyImpl(QF_FILTER_SESSION, new Boolean(config.getQuickFIX().isFilterSessionMsgTypes()), QF_FILTER_SESSION_INFO, Boolean.class);
       enableJythonProperty = new PropertyImpl(ENABLE_JYTHON, new Boolean(config.isEnableJython()), ENABLE_JYTHON_INFO, Boolean.class);
       scrollMessagesInBrowseProperty = new PropertyImpl(SCROLL_MESSAGES_IN_BROWSE, new Boolean(config.isScrollMessagesDuringBrowse()),
             SCROLL_MESSAGES_IN_BROWSE_INFO, Boolean.class);

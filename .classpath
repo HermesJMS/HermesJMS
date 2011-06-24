@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="src/test"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/naming-java.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/namespace.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jta-spec1_0_1.jar"/>
@@ -60,7 +61,7 @@
 	<classpathentry exported="true" kind="var" path="WEBSPHERE_ROOT/java/commonservices.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/selector-1.1.jar" sourcepath="/LOCAL/jamsel/selector-1.1.jar"/>
 	<classpathentry kind="src" path="src/resources"/>
-	<classpathentry exported="true" kind="var" path="WEBLOGIC_ROOT/com.bea.core.utils.full_1.0.0.0.jar"/>
+	<classpathentry kind="var" path="WEBLOGIC_ROOT/com.bea.core.utils.full_1.0.0.0.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/log4j-1.2.15.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jsyntaxpane-0.9.1.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/hermes-sapjms.jar"/>
@@ -68,7 +69,6 @@
 	<classpathentry exported="true" kind="var" path="ORACLEAQ_ROOT/castor-1.0.5-xml.jar"/>
 	<classpathentry exported="true" kind="var" path="ORACLEAQ_ROOT/ojdbc6.jar"/>
 	<classpathentry exported="true" kind="var" path="ACTIVEMQ_ROOT"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="var" path="ACTIVEMQ_ROOT/lib/activemq-core-5.3.1.jar"/>
 	<classpathentry exported="true" kind="var" path="JORAM_ROOT/lib/joram-client.jar"/>
 	<classpathentry exported="true" kind="var" path="JORAM_ROOT/lib/joram-shared.jar"/>
