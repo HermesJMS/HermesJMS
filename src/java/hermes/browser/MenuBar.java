@@ -121,7 +121,7 @@ public class MenuBar extends CommandMenuBar {
 		messageMenu.add(new JMenuItem(ActionRegistry.getAction(SaveMessagesAsTextAction.class)));
 		messageMenu.add(new JMenuItem(ActionRegistry.getAction(SaveMessagesAsXMLAction.class)));
 		messageMenu.add(new JMenuItem(ActionRegistry.getAction(SaveMessagesIndividuallyAsXMLAction.class)));
-		messageMenu.add(new JMenuItem(ActionRegistry.getAction(SetHTMLRendererXSLAction.class)));
+//		messageMenu.add(new JMenuItem(ActionRegistry.getAction(SetHTMLRendererXSLAction.class)));
 		
 		final Component[] components = PopupMenuFactory.createBrowserTreePopup(hermesBrowser.getBrowserTree()).getComponents();
 
