@@ -6,6 +6,7 @@ import hermes.browser.components.EditedMessageHandler;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -89,7 +90,9 @@ public class MessageEditorDialog extends JDialog {
 			contentPanel.add(tabbedPane);
 			{
 				headerPropertyPanel = new JMSHeaderPropertyPanel();
-				tabbedPane.addTab("JMS Header", null, headerPropertyPanel, null);
+				JPanel panel = new JPanel(new GridBagLayout()) ;
+				panel.add(headerPropertyPanel) ;
+				tabbedPane.addTab("JMS Header", null, panel, null);
 			}
 			{
 				userHeaderPropertyPanel = new UserHeaderPropertyPanel(message);

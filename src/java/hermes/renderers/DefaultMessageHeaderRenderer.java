@@ -17,6 +17,7 @@
 
 package hermes.renderers;
 
+import hermes.Domain;
 import hermes.browser.ConfigDialogProxy;
 import hermes.swing.SwingUtils;
 import hermes.util.JMSUtils;
@@ -41,166 +42,125 @@ import com.jidesoft.grid.SortableTable;
  *          colincrist Exp $
  */
 
-public class DefaultMessageHeaderRenderer extends AbstractMessageRenderer
-{
-   private static final Logger log = Logger.getLogger(DefaultMessageHeaderRenderer.class);
+public class DefaultMessageHeaderRenderer extends AbstractMessageRenderer {
+	private static final Logger log = Logger.getLogger(DefaultMessageHeaderRenderer.class);
 
-   public DefaultMessageHeaderRenderer()
-   {
-      super();
-      // TODO Auto-generated constructor stub
-   }
+	public DefaultMessageHeaderRenderer() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-   public JComponent render(Message m)
-   {
-      final SortableTable table = new SortableTable();
-      final DefaultTableModel tableModel = new DefaultTableModel()
-      {
-      
-         /**
+	public JComponent render(Message m) {
+		final SortableTable table = new SortableTable();
+		final DefaultTableModel tableModel = new DefaultTableModel() {
+
+			/**
 		 * 
 		 */
-		private static final long serialVersionUID = 5702541447000695825L;
+			private static final long serialVersionUID = 5702541447000695825L;
 
-		@Override
-         public boolean isCellEditable(int row, int column)
-         {
-            return false ;
-         }      
-      };
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
-      tableModel.addColumn("Property");
-      tableModel.addColumn("Value");
+		tableModel.addColumn("Property");
+		tableModel.addColumn("Value");
 
-      //
-      // Header properties...
+		//
+		// Header properties...
 
-      try
-      {
-         tableModel.addRow(new Object[] { "JMSMessageID", m.getJMSMessageID() });
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSMessageID in message: " + ex.getMessage());
-      }
+		try {
+			tableModel.addRow(new Object[] { "JMSMessageID", m.getJMSMessageID() });
+		} catch (Exception ex) {
+			log.error("no JMSMessageID in message: " + ex.getMessage());
+		}
 
-      try
-      {
-         tableModel.addRow(new Object[] { "JMSDestination", JMSUtils.getDestinationName(m.getJMSDestination()) });
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSDestination in message: " + ex.getMessage());
-      }
+		try {
+			tableModel.addRow(new Object[] { "JMSDestination", JMSUtils.getDestinationName(m.getJMSDestination()) });
+		} catch (Exception ex) {
+			log.error("no JMSDestination in message: " + ex.getMessage());
+		}
 
-      try
-      {
-         tableModel.addRow(new Object[] { "JMSTimestamp", new Date(m.getJMSTimestamp()) });
-      }
-      catch (Exception ex)
-      {
-         tableModel.addRow(new Object[] { "JMSTimestamp", new Date() });
-         log.error("no JMSTimestamp in message: " + ex.getMessage());
-      }
+		try {
+			tableModel.addRow(new Object[] { "JMSTimestamp", new Date(m.getJMSTimestamp()) });
+		} catch (Exception ex) {
+			tableModel.addRow(new Object[] { "JMSTimestamp", new Date() });
+			log.error("no JMSTimestamp in message: " + ex.getMessage());
+		}
 
-      try
-      {
-         tableModel.addRow(new Object[] { "JMSType", m.getJMSType() });
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSType in message: " + ex.getMessage());
-      }
+		try {
+			tableModel.addRow(new Object[] { "JMSType", m.getJMSType() });
+		} catch (Exception ex) {
+			log.error("no JMSType in message: " + ex.getMessage());
+		}
 
-      try
-      {
-         tableModel.addRow(new Object[] { "JMSReplyTo", JMSUtils.getDestinationName(m.getJMSReplyTo()) });
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSReplyTo in message: " + ex.getMessage());
-      }
+		try {
+			tableModel.addRow(new Object[] { "JMSReplyTo", JMSUtils.getDestinationName(m.getJMSReplyTo()) + " (" + Domain.getDomain(m.getJMSReplyTo()) + ")" });
+		} catch (Exception ex) {
+			log.error("no JMSReplyTo in message: " + ex.getMessage());
+		}
 
-      try
-      {
-         tableModel.addRow(new Object[] { "JMSCorrelationID", m.getJMSCorrelationID() });
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSCorrelationID in message: " + ex.getMessage());
-      }
+		try {
+			tableModel.addRow(new Object[] { "JMSCorrelationID", m.getJMSCorrelationID() });
+		} catch (Exception ex) {
+			log.error("no JMSCorrelationID in message: " + ex.getMessage());
+		}
 
-      try
-      {
-         tableModel.addRow(new Object[] { "JMSExpiration", new Long(m.getJMSExpiration()) });
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSExpiration in message: " + ex.getMessage());
-      }
-      
-      try
-      {
-         tableModel.addRow(new Object[] { "JMSPriority", new Long(m.getJMSPriority()) });
-      }
-      catch (Exception ex)
-      {
-         log.error("no JMSPriority in message: " + ex.getMessage());
-      }
+		try {
+			tableModel.addRow(new Object[] { "JMSExpiration", new Long(m.getJMSExpiration()) });
+		} catch (Exception ex) {
+			log.error("no JMSExpiration in message: " + ex.getMessage());
+		}
 
-      try
-      {
-         if (m.getPropertyNames() != null)
-         {
-            for (final Enumeration iter = m.getPropertyNames(); iter.hasMoreElements();)
-            {
-               try
-               {
-                  final String propertyName = (String) iter.nextElement();
-                  final Object propertyValue = m.getObjectProperty(propertyName) ;                 
-                  final Object[] row = { propertyName,  propertyValue};
-                  
-                  tableModel.addRow(row);
-               }
-               catch (RuntimeException ex)
-               {
-                  ex.printStackTrace();
-               }
-            }
-         }
-      }
-      catch (Throwable e)
-      {
-         final Object[] row = { "Error", e.getClass().getName() + ": " + e.getMessage() };
-         tableModel.addRow(row);
+		try {
+			tableModel.addRow(new Object[] { "JMSPriority", new Long(m.getJMSPriority()) });
+		} catch (Exception ex) {
+			log.error("no JMSPriority in message: " + ex.getMessage());
+		}
 
-         log.error(e.getMessage(), e);
-      }
+		try {
+			if (m.getPropertyNames() != null) {
+				for (final Enumeration iter = m.getPropertyNames(); iter.hasMoreElements();) {
+					try {
+						final String propertyName = (String) iter.nextElement();
+						final Object propertyValue = m.getObjectProperty(propertyName);
+						final Object[] row = { propertyName, propertyValue };
 
-      table.setModel(tableModel);
-      
-      return SwingUtils.createJScrollPane(table);
-   }
+						tableModel.addRow(row);
+					} catch (RuntimeException ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+		} catch (Throwable e) {
+			final Object[] row = { "Error", e.getClass().getName() + ": " + e.getMessage() };
+			tableModel.addRow(row);
 
-   
-   /**
-    * There are no configurable options on this renderer
-    */
-   public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception
-   {
-      return null;
-   }
+			log.error(e.getMessage(), e);
+		}
 
-   /**
-    * Any JMS message is rederable.
-    */
-   public boolean canRender(Message message)
-   {
-      return true;
-   }
+		table.setModel(tableModel);
 
-   public String getDisplayName()
-   {
-      return "Header";
-   }
+		return SwingUtils.createJScrollPane(table);
+	}
+
+	/**
+	 * There are no configurable options on this renderer
+	 */
+	public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception {
+		return null;
+	}
+
+	/**
+	 * Any JMS message is rederable.
+	 */
+	public boolean canRender(Message message) {
+		return true;
+	}
+
+	public String getDisplayName() {
+		return "Header";
+	}
 }
