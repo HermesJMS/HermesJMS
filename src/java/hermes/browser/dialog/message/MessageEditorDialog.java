@@ -81,7 +81,7 @@ public class MessageEditorDialog extends JDialog {
 		this.destinationName = destinationName;
 		this.domain = domain;
 		setTitle(title);
-		setBounds(100, 100, 721, 525);
+		setBounds(100, 100, 700, 400);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

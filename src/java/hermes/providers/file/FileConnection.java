@@ -36,7 +36,6 @@ import javax.jms.Session;
 import javax.jms.Topic;
 
 import org.apache.log4j.Logger;
-import org.objectweb.joram.shared.admin.GetConfigRequest;
 
 /**
  * An XML file provider.
