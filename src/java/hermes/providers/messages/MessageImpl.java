@@ -19,9 +19,11 @@ package hermes.providers.messages;
 
 import hermes.HermesException;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.jms.Destination;
 import javax.jms.JMSException;
@@ -42,9 +44,9 @@ public class MessageImpl implements Message
     private int priority;
     private boolean redilivered;
     private Destination replyTo;
-    private long timestamp;
+    private long timestamp = new Date().getTime() ;
     private String type;
-    private String messageId;
+    private String messageId = UUID.randomUUID().toString() ;
     private MessageSessionReference session;
     private Map header = new HashMap();
 

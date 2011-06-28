@@ -23,30 +23,41 @@ import hermes.providers.file.FileMessageFactory;
 
 import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.Queue;
+import javax.jms.Topic;
 import javax.naming.NamingException;
 
 /**
  * @author colincrist@hermesjms.com
- * @version $Id: StoreMessageFactory.java,v 1.2 2005/08/15 20:37:27 colincrist Exp $
+ * @version $Id: StoreMessageFactory.java,v 1.2 2005/08/15 20:37:27 colincrist
+ *          Exp $
  */
 
-public class StoreMessageFactory extends FileMessageFactory
-{
-   @Override
-   public Destination getDestination(String name, Domain domain) throws JMSException, NamingException
-   {
-      if (domain == Domain.QUEUE)
-      {
-         return new MessageStoreQueue(name) ;
-      }
-      else if (domain == Domain.TOPIC)
-      {
-         return new MessageStoreTopic(name) ;
-      }
-      else
-      {
-         throw new HermesException("Invalid domain.") ;
-      }
-   }
+public class StoreMessageFactory extends FileMessageFactory {
+	public StoreMessageFactory() {
+		super(null);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public Queue createQueue(String name) throws JMSException {
+		return new MessageStoreQueue(name);
+	}
+
+	@Override
+	public Topic createTopic(String name) throws JMSException {
+		return new MessageStoreTopic(name);
+	}
+
+	@Override
+	public Destination getDestination(String name, Domain domain) throws JMSException, NamingException {
+		if (domain == Domain.QUEUE) {
+			return new MessageStoreQueue(name);
+		} else if (domain == Domain.TOPIC) {
+			return new MessageStoreTopic(name);
+		} else {
+			throw new HermesException("Invalid domain.");
+		}
+	}
 
 }

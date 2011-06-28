@@ -20,6 +20,7 @@ package hermes.providers.file;
 import hermes.Domain;
 import hermes.HermesException;
 import hermes.MessageFactory;
+import hermes.browser.HermesBrowser;
 import hermes.providers.messages.MapMessageImpl;
 import hermes.providers.messages.MessageImpl;
 import hermes.providers.messages.ObjectMessageImpl;
@@ -47,140 +48,130 @@ import javax.naming.NamingException;
  *          Exp $
  */
 
-public class FileMessageFactory implements MessageFactory
-{
+public class FileMessageFactory implements MessageFactory {
 
-   /**
-    *  
-    */
-   public FileMessageFactory()
-   {
-      super();
-   }
+	private static final String SEPARATOR = System.getProperty("file.separator");
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#createBytesMessage()
-    */
-   public BytesMessage createBytesMessage() throws JMSException
-   {
-      throw new HermesException("BytesMessage not supported");
-   }
+	private String baseDirectory;
+	
+   
+	
+	public String getFilename(String file) throws HermesException {
+		if (baseDirectory != null) {
+			return baseDirectory + SEPARATOR + file;
+		} else {
+			return HermesBrowser.getBrowser().getConfig().getMessageFilesDir() + SEPARATOR + file;
+		}
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#createMapMessage()
-    */
-   public MapMessage createMapMessage() throws JMSException
-   {
-      return new MapMessageImpl();
-   }
+	public FileMessageFactory(String baseDirectory) {
+		this.baseDirectory = baseDirectory;
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#createObjectMessage()
-    */
-   public ObjectMessage createObjectMessage() throws JMSException
-   {
-      return new ObjectMessageImpl();
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#createBytesMessage()
+	 */
+	public BytesMessage createBytesMessage() throws JMSException {
+		throw new HermesException("BytesMessage not supported");
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#createStreamMessage()
-    */
-   public StreamMessage createStreamMessage() throws JMSException
-   {
-      throw new HermesException("StreamMessage not supported");
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#createMapMessage()
+	 */
+	public MapMessage createMapMessage() throws JMSException {
+		return new MapMessageImpl();
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#createTextMessage()
-    */
-   public TextMessage createTextMessage() throws JMSException
-   {
-      return new TextMessageImpl();
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#createObjectMessage()
+	 */
+	public ObjectMessage createObjectMessage() throws JMSException {
+		return new ObjectMessageImpl();
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#createTextMessage(java.lang.String)
-    */
-   public TextMessage createTextMessage(String text) throws JMSException
-   {
-      return new TextMessageImpl(text);
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#createStreamMessage()
+	 */
+	public StreamMessage createStreamMessage() throws JMSException {
+		throw new HermesException("StreamMessage not supported");
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#createMessage()
-    */
-   public Message createMessage() throws JMSException
-   {
-      return new MessageImpl();
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#createTextMessage()
+	 */
+	public TextMessage createTextMessage() throws JMSException {
+		return new TextMessageImpl();
+	}
 
-   public Queue createQueue(String name) throws JMSException
-   {
-      return new DummyQueue(name);
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#createTextMessage(java.lang.String)
+	 */
+	public TextMessage createTextMessage(String text) throws JMSException {
+		return new TextMessageImpl(text);
+	}
 
-   public Topic createTopic(String topic) throws JMSException
-   {
-      return new DummyTopic(topic);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#createMessage()
+	 */
+	public Message createMessage() throws JMSException {
+		return new MessageImpl();
+	}
 
-   }
+	public Queue createQueue(String name) throws JMSException {
+		return new FileQueue(getFilename(name));
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#getDestination(java.lang.String)
-    */
-   public Destination getDestination(String name, Domain domain) throws JMSException, NamingException
-   {
-      if (domain == Domain.QUEUE)
-      {
-         return createQueue(name);
-      }
-      else
-      {
-         return createTopic(name);
-      }
-   }
+	public Topic createTopic(String topic) throws JMSException {
+		return new DummyTopic(topic);
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#getDestinationName(javax.jms.Destination)
-    */
-   public String getDestinationName(Destination to) throws JMSException
-   {
-      if (to instanceof Queue)
-      {
-         return ((Queue) to).getQueueName();
-      }
-      else
-      {
-         return ((Topic) to).getTopicName();
-      }
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#getDestination(java.lang.String)
+	 */
+	public Destination getDestination(String name, Domain domain) throws JMSException, NamingException {
+		if (domain == Domain.QUEUE) {
+			return createQueue(name);
+		} else {
+			return createTopic(name);
+		}
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.MessageFactory#createObjectMessage(java.io.Serializable)
-    */
-   public ObjectMessage createObjectMessage(Serializable object) throws JMSException
-   {
-      return new ObjectMessageImpl(object);
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#getDestinationName(javax.jms.Destination)
+	 */
+	public String getDestinationName(Destination to) throws JMSException {
+		if (to instanceof Queue) {
+			return ((Queue) to).getQueueName();
+		} else {
+			return ((Topic) to).getTopicName();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.MessageFactory#createObjectMessage(java.io.Serializable)
+	 */
+	public ObjectMessage createObjectMessage(Serializable object) throws JMSException {
+		return new ObjectMessageImpl(object);
+	}
 
 }

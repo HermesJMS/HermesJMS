@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -48,109 +49,113 @@ import com.codestreet.selector.parser.Result;
  * @version $Id: FileQueue.java,v 1.5 2007/02/28 10:47:29 colincrist Exp $
  */
 
-public class FileQueue implements Queue, TemporaryQueue
-{
-   private static XMLHelper xmlHelper = new DefaultXMLHelper();
-   private File file;
+public class FileQueue implements Queue, TemporaryQueue {
+	private static XMLHelper xmlHelper = new DefaultXMLHelper();
+	private File file;
+	private String property;
+	private String EMPTY_FILE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<content/>\n";
 
-   public FileQueue(File file)
-   {
-      this.file = file;
-   }
 
-   public FileQueue() throws IOException
-   {
-      this.file = File.createTempFile("hermes-queue", ".xml");
-   }
+	public String getProperty() {
+		return property;
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.jms.Queue#getQueueName()
-    */
-   public String getQueueName() throws JMSException
-   {
-      return file.getName();
-   }
+	public void setProperty(String property) {
+		this.property = property;
+	}
 
-   public Collection getMessages(MessageFactory messageFactory) throws JMSException, IOException
-   {
-      return xmlHelper.fromXML(messageFactory, new FileInputStream(file));
-   }
+	public FileQueue(String fileName) throws HermesException {
+		file = new File(fileName) ;
+		if (!file.exists()) {
+			try {
+				file.createNewFile() ;
+				FileWriter fs = new FileWriter(file) ;
+				fs.append(EMPTY_FILE) ;
+				fs.close() ;
+			} catch (IOException e) {
+				throw new HermesException(e) ;
+			}
+		}
+	}
+	public FileQueue(File file) {
+		this.file = file;
+	}
 
-   public Collection getMessages(MessageFactory messageFactory, String selector) throws JMSException, IOException
-   {      
-      final Collection messages = xmlHelper.fromXML(messageFactory, new FileInputStream(file));
+	public FileQueue() throws IOException {
+		this.file = File.createTempFile("hermes-queue", ".xml");
+	}
 
-      if (selector != null)
-      {
-         try
-         {
-            final ISelector selectorImpl  = Selector.getInstance(selector) ;
-            for (final Iterator iter = messages.iterator(); iter.hasNext();)
-            {
-               final Message message = (Message) iter.next();
-               if (selectorImpl.eval(ValueProvider.valueOf(message), null) == Result.RESULT_FALSE)
-               {
-                  iter.remove();
-               }
-            }
-         }
-         catch (InvalidSelectorException e)
-         {
-            throw new HermesException(e) ;
-         }         
-      }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.Queue#getQueueName()
+	 */
+	public String getQueueName() throws JMSException {
+		return file.getName();
+	}
 
-      return messages;
-   }
+	public Collection getMessages(MessageFactory messageFactory) throws JMSException, IOException {
+		return xmlHelper.fromXML(messageFactory, new FileInputStream(file));
+	}
 
-   public void addMessages(MessageFactory messageFactory, Collection messages) throws JMSException, IOException
-   {
-      Collection c = getMessages(messageFactory, null);
-      c.addAll(messages);
+	public Collection getMessages(MessageFactory messageFactory, String selector) throws JMSException, IOException {
+		final Collection messages = xmlHelper.fromXML(messageFactory, new FileInputStream(file));
 
-      xmlHelper.toXML(c, new FileOutputStream(file));
-   }
+		if (selector != null) {
+			try {
+				final ISelector selectorImpl = Selector.getInstance(selector);
+				for (final Iterator iter = messages.iterator(); iter.hasNext();) {
+					final Message message = (Message) iter.next();
+					if (selectorImpl.eval(ValueProvider.valueOf(message), null) == Result.RESULT_FALSE) {
+						iter.remove();
+					}
+				}
+			} catch (InvalidSelectorException e) {
+				throw new HermesException(e);
+			}
+		}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.jms.TemporaryQueue#delete()
-    */
-   public void delete() throws JMSException
-   {
-      file.delete();
-   }
-   
-   public void delete(MessageFactory messageFactory, Collection<String> todelete) throws FileNotFoundException, JMSException
-   {
-      final Collection<Message> messages = xmlHelper.fromXML(messageFactory, new FileInputStream(file));
-      for (Iterator<Message> iter = messages.iterator() ; iter.hasNext() ; )
-      {
-         Message m = iter.next() ;
-         if (todelete.contains(m.getJMSMessageID()))
-         {
-            iter.remove() ;
-         }     
-      }
-   }
+		return messages;
+	}
 
-   public int hashCode()
-   {
-      return file.hashCode();
-   }
+	public void addMessages(MessageFactory messageFactory, Collection messages) throws JMSException, IOException {
+		Collection c = getMessages(messageFactory, null);
+		c.addAll(messages);
 
-   public boolean equals(Object other)
-   {
-      if (other instanceof FileQueue)
-      {
-         FileQueue otherQueue = (FileQueue) other;
+		xmlHelper.toXML(c, new FileOutputStream(file));
+	}
 
-         return otherQueue.hashCode() == hashCode();
-      }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.TemporaryQueue#delete()
+	 */
+	public void delete() throws JMSException {
+		file.delete();
+	}
 
-      return false;
-   }
+	public void delete(MessageFactory messageFactory, Collection<String> todelete) throws FileNotFoundException, JMSException {
+		final Collection<Message> messages = xmlHelper.fromXML(messageFactory, new FileInputStream(file));
+		for (Iterator<Message> iter = messages.iterator(); iter.hasNext();) {
+			Message m = iter.next();
+			if (todelete.contains(m.getJMSMessageID())) {
+				iter.remove();
+			}
+		}
+	}
+
+	public int hashCode() {
+		return file.hashCode();
+	}
+
+	public boolean equals(Object other) {
+		if (other instanceof FileQueue) {
+			FileQueue otherQueue = (FileQueue) other;
+
+			return otherQueue.hashCode() == hashCode();
+		}
+
+		return false;
+	}
 
 }

@@ -36,6 +36,7 @@ import javax.jms.Session;
 import javax.jms.Topic;
 
 import org.apache.log4j.Logger;
+import org.objectweb.joram.shared.admin.GetConfigRequest;
 
 /**
  * An XML file provider.
@@ -174,7 +175,7 @@ public class FileConnection implements QueueConnection
      */
     public QueueSession createQueueSession(boolean arg0, int arg1) throws JMSException
     {
-        return new FileSession(this, arg0, arg1);
+        return new FileSession(this, arg0, arg1, factory.getBaseDirectory());
     }
 
     /**
@@ -235,6 +236,6 @@ public class FileConnection implements QueueConnection
      */
     public Session createSession(boolean arg0, int arg1) throws JMSException
     {
-        return new FileSession(this, arg0, arg1);
+        return new FileSession(this, arg0, arg1, factory.getBaseDirectory());
     }
 }

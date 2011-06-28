@@ -31,7 +31,6 @@ import hermes.swing.actions.SaveMessagesAsXMLAction;
 import hermes.swing.actions.SaveMessagesIndividuallyAsXMLAction;
 import hermes.swing.actions.SendTextFileAction;
 import hermes.swing.actions.SendXMLFileAction;
-import hermes.swing.actions.SetHTMLRendererXSLAction;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -48,7 +47,7 @@ import com.jidesoft.swing.JideMenu;
 
 /**
  * @author colincrist@hermesjms.com last changed by: $Author: colincrist $
- * @version $Id: MenuBar.java,v 1.22 2007/01/14 15:32:24 colincrist Exp $
+ * @version $Id$
  */
 public class MenuBar extends CommandMenuBar {
 	/**
