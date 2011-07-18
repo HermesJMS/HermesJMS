@@ -40,6 +40,7 @@
 	<property name="classes.webstart" value="${build.classes}/webstart" />
 	<property name="classes.ext.oracleaq" value="${build.classes}/classes-ext/oracle-aq" />
 	<property name="classes.ext.imq" value="${build.classes}/classes-ext/imq" />
+	<property name="classes.ext.qpid" value="${build.classes}/classes-ext/qpid" />
 
 
 
@@ -97,6 +98,8 @@
 		<available file="${sqs/lib}/jms4sqs.jar" property="sqs.present" />
 		<available file="${mx4j.lib}/mx4j.jar" property="mx4j.present" />
 		<available file="${oracleaq.lib}/aqapi.jar" property="oracleaq.present" />
+		<available file="${qpid.lib}/qpid-client-0.13.jar" property="qpid.present" />
+
 		<available file="${imq.lib}" property="imq.present" />
 
 		<mkdir dir="${build}" />
@@ -119,6 +122,8 @@
 		<mkdir dir="${classes.webstart}" />
 		<mkdir dir="${classes.ext.oracleaq}" />
 		<mkdir dir="${classes.ext.imq}" />
+		<mkdir dir="${classes.ext.qpid}" />
+
 		<mkdir dir="${webstart}" />
 		<mkdir dir="${lib}" />
 		<mkdir dir="${lib.ext}" />
@@ -165,6 +170,17 @@
 				<include name="jamsel.jar" />
 			</fileset>
 		</path>
+
+		<!-- Classpath for QPID -->
+
+		<path id="qpid.classpath">
+			<path refid="plugin.classpath" />
+
+			<fileset dir="${qpid.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
 
 		<!-- Classpath for HornetQ -->
 
@@ -384,12 +400,23 @@
 			<exclude name="hermes/ext/seebeyond/model/*.java" />
 			<exclude name="hermes/ext/seebeyond/ican/*.java" />
 			<exclude name="hermes/ext/seebeyond/jcaps/*.java" />
+			<exclude name="hermes/ext/qpid/*.java" />
+			<exclude name="hermes/ext/qpid/qmf/*.java" />
+
 			<classpath refid="project.classpath" />
 		</javac>
 	</target>
 
-	<target name="compile-ext" depends="jar,compile-imq,compile-oracleaq,compile-activemq,compile-mq,compile-jbossmq,compile-hornetq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond,compile-sqs" />
+	<target name="compile-ext" depends="jar,compile-imq,compile-qpid,compile-oracleaq,compile-activemq,compile-mq,compile-jbossmq,compile-hornetq,compile-weblogic,compile-arjuna,compile-joram,compile-wme,compile-openjms,compile-fiorano,compile-ems,compile-sonic,compile-seebeyond,compile-sqs" />
 
+
+	<target name="compile-qpid" depends="jar" if="qpid.present">
+		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.qpid}" deprecation="on" debug="true">
+			<include name="**/ext/qpid/*.java" />
+			<include name="**/ext/qpid/qmf/*.java" />
+			<classpath refid="qpid.classpath" />
+		</javac>
+	</target>
 
 	<target name="compile-oracleaq" depends="jar" if="oracleaq.present">
 		<javac target="1.5" sourcepath="" srcdir="${src.java}" destdir="${classes.ext.oracleaq}" deprecation="on" debug="true">
@@ -524,6 +551,10 @@
 			<fileset dir="${classes.ext.imq}" />
 		</jar>
 
+		<jar jarfile="${lib.ext}/hermes-qpid.jar">
+			<fileset dir="${classes.ext.qpid}" />
+		</jar>
+
 		<jar jarfile="${lib.ext}/hermes-seebeyond.jar">
 			<fileset dir="${classes.ext.seebeyond}" />
 		</jar>
@@ -654,21 +685,21 @@
 			</fileset>
 		</ftp>
 	</target>
-	
+
 	<target name="osx.dmg" depends="osx.app" description="Create OS X .dmg">
-	  <delete file="build/HermesJMS.dmg"/>
-	  <exec executable="hdiutil" failonerror="true">
-	    <arg value="create"/>
-	    <arg value="-fs"/>
-	    <arg value="HFS+"/>
-	    <arg value="-volname"/>
-	    <arg value="HermesJMS"/>
-	    <arg value="-srcfolder"/>
-	    <arg file="build/HermesJMS.app"/>
-	    <arg file="build/HermesJMS.dmg"/>
-	  </exec>
+		<delete file="build/HermesJMS.dmg" />
+		<exec executable="hdiutil" failonerror="true">
+			<arg value="create" />
+			<arg value="-fs" />
+			<arg value="HFS+" />
+			<arg value="-volname" />
+			<arg value="HermesJMS" />
+			<arg value="-srcfolder" />
+			<arg file="build/HermesJMS.app" />
+			<arg file="build/HermesJMS.dmg" />
+		</exec>
 	</target>
-	
+
 
 	<target name="osx.app" depends="jar-ext">
 		<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />

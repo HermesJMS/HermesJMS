@@ -44,222 +44,181 @@ import com.jidesoft.grid.PropertyTableModel;
  * An editable panel of properties.
  * 
  * @author colincrist@hermesjms.com
- * @version $Id: MapPropertyPanel.java,v 1.6 2005/08/21 20:48:06 colincrist Exp $
+ * @version $Id: MapPropertyPanel.java,v 1.6 2005/08/21 20:48:06 colincrist Exp
+ *          $
  */
-public class MapPropertyPanel extends JPanel
-{
-   private static final long serialVersionUID = 2789449525269251165L;
-   private static final Logger log = Logger.getLogger(MapPropertyPanel.class);
+public class MapPropertyPanel extends JPanel {
+	private static final long serialVersionUID = 2789449525269251165L;
+	private static final Logger log = Logger.getLogger(MapPropertyPanel.class);
 
-   private List onOK = new ArrayList();
-   private Map map;
-   private Map changes = new HashMap();
-   private boolean editable = false;
-   private String title;
+	private List<Runnable> onOK = new ArrayList<Runnable>();
+	private Map<String, Object> map;
+	private Map<String, Object> changes = new HashMap<String, Object>();
+	private boolean editable = false;
+	private String title;
 
-   public MapPropertyPanel(String title, Map map, boolean editable)
-   {
-      this(map, editable);
-      this.title = title;
-   }
+	public MapPropertyPanel(String title, Map map, boolean editable) {
+		this(map, editable);
+		this.title = title;
+	}
 
-   public MapPropertyPanel(Map map, boolean editable)
-   {
-      this.map = map;
-      this.editable = editable;
-   }
+	public MapPropertyPanel(Map<String, Object> map, boolean editable) {
+		this.map = map;
+		this.editable = editable;
+	}
 
-   public MapPropertyPanel(Map map)
-   {
-      this(map, false);
-   }
+	public MapPropertyPanel(Map map) {
+		this(map, false);
+	}
 
-   protected void doOnOK(Runnable r)
-   {
-      onOK.add(r);
-   }
+	protected void doOnOK(Runnable r) {
+		onOK.add(r);
+	}
 
-   protected void onSetProperty(String propertyName, Object propertyValue)
-   {
-      log.debug("setting " + propertyName + " = " + propertyValue);
+	protected void onSetProperty(String propertyName, Object propertyValue) {
+		log.debug("setting " + propertyName + " = " + propertyValue);
 
-      map.put(propertyName, propertyValue);
-      changes.put(propertyName, propertyValue);
-   }
+		map.put(propertyName, propertyValue);
+		changes.put(propertyName, propertyValue);
+	}
 
-   protected JComponent createNorthComponent()
-   {
-      if (title == null)
-      {
-         return new JLabel();
-      }
-      else
-      {
-         JLabel classNameLabel = new JLabel(title);
-         classNameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-         return classNameLabel;
-      }
-   }
+	protected JComponent createNorthComponent() {
+		if (title == null) {
+			return new JLabel();
+		} else {
+			JLabel classNameLabel = new JLabel(title);
+			classNameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+			return classNameLabel;
+		}
+	}
 
-   @SuppressWarnings("unchecked")
-protected JComponent createCenterComponent()
-   {
-      List model = new ArrayList();
+	@SuppressWarnings("unchecked")
+	protected JComponent createCenterComponent() {
+		List<JidePropertyImpl> model = new ArrayList<JidePropertyImpl>();
 
-      try
-      {
+		try {
 
-         for (Iterator iter = map.keySet().iterator(); iter.hasNext();)
-         {
-            final String propertyName = (String) iter.next();
+			for (Iterator<String> iter = map.keySet().iterator(); iter.hasNext();) {
+				final String propertyName = iter.next();
 
-            if (propertyName.equals("class"))
-            {
-               // NOP
-            }
-            else
-            {
-               Object propertyValue = map.get(propertyName);
+				if (propertyName.equals("class")) {
+					// NOP
+				} else {
+					Object propertyValue = map.get(propertyName);
 
-               if (propertyValue == null)
-               {
-                  propertyValue = "";
-               }
+					if (propertyValue == null) {
+						propertyValue = "";
+					}
 
-               final JidePropertyImpl pConfig = new JidePropertyImpl(propertyName, propertyName + " [" + getPropertyType(propertyName).getName() + "]",
-                     getPropertyType(propertyName), propertyValue)
-               {
-                  /**
+					final JidePropertyImpl pConfig = new JidePropertyImpl(propertyName, propertyName + " [" + getPropertyType(propertyName).getName() + "]",
+							getPropertyType(propertyName), propertyValue) {
+						/**
 				 * 
 				 */
-				private static final long serialVersionUID = -1529987569514922256L;
+						private static final long serialVersionUID = -1529987569514922256L;
 
-				public void setValue(final Object newValue)
-                  {
-                     super.setValue(newValue);
+						public void setValue(final Object newValue) {
+							super.setValue(newValue);
 
-                     log.debug("setValue propertyName=" + propertyName + ", newValue=" + newValue);
+							log.debug("setValue propertyName=" + propertyName + ", newValue=" + newValue);
 
-                     doOnOK(new Runnable()
-                     {
-                        public void run()
-                        {
-                           onSetProperty(propertyName, newValue);
-                        }
-                     });
-                  }
-               };
+							doOnOK(new Runnable() {
+								public void run() {
+									onSetProperty(propertyName, newValue);
+								}
+							});
+						}
+					};
 
-               pConfig.setEditable(editable);
+					pConfig.setEditable(editable);
 
-               if (editable)
-               {
-                  onOK.add(new Runnable()
-                  {
-                     public void run()
-                     {
-                        map.put(propertyName, pConfig.getValue());
-                     }
-                  });
-               }
+					if (editable) {
+						onOK.add(new Runnable() {
+							public void run() {
+								map.put(propertyName, pConfig.getValue());
+							}
+						});
+					}
 
-               model.add(pConfig);
-            }
-         }
-      }
-      catch (IllegalAccessException e)
-      {
-         log.error(e.getMessage(), e);
-      }
-      catch (InvocationTargetException e)
-      {
-         log.error(e.getMessage(), e);
-      }
-      catch (NoSuchMethodException e)
-      {
-         log.error(e.getMessage(), e);
-      }
+					model.add(pConfig);
+				}
+			}
+		} catch (IllegalAccessException e) {
+			log.error(e.getMessage(), e);
+		} catch (InvocationTargetException e) {
+			log.error(e.getMessage(), e);
+		} catch (NoSuchMethodException e) {
+			log.error(e.getMessage(), e);
+		}
 
-      //
-      // Build the model and create the table...
+		//
+		// Build the model and create the table...
 
-      PropertyTableModel propertyTableModel = new PropertyTableModel(model);
-      PropertyTable propertyTable = new PropertyTable(propertyTableModel);
-      propertyTable.addFocusListener(new FocusListener()
-      {      
-         public void focusLost(FocusEvent e)
-         {
-            if (!e.isTemporary()) {
-               JTable t = (JTable) e.getSource() ;
-               CellEditor ce = t.getCellEditor() ;
-               if (ce != null) {
-                  ce.stopCellEditing() ;
-               }
-            }      
-         }
-      
-         public void focusGained(FocusEvent e)
-         {
-            
-         }      
-      } ) ;
-      
-      propertyTable.expandAll();
-      PropertyPane propertyPane = new PropertyPane(propertyTable);
+		PropertyTableModel<JidePropertyImpl> propertyTableModel = new PropertyTableModel<JidePropertyImpl>(model);
 
-      return propertyPane;
-   }
+		PropertyTable propertyTable = new PropertyTable(propertyTableModel);
+		propertyTable.addFocusListener(new FocusListener() {
+			public void focusLost(FocusEvent e) {
+				if (!e.isTemporary()) {
+					JTable t = (JTable) e.getSource();
+					CellEditor ce = t.getCellEditor();
+					if (ce != null) {
+						ce.stopCellEditing();
+					}
+				}
+			}
 
-   public void init()
-   {
-      setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-      setLayout(new BorderLayout());
+			public void focusGained(FocusEvent e) {
 
-      add(createNorthComponent(), BorderLayout.NORTH);
-      add(createCenterComponent(), BorderLayout.CENTER);
-   }
+			}
+		});
 
-   public Map getChanges()
-   {
-      return changes;
-   }
+		propertyTable.expandAll();
+		PropertyPane propertyPane = new PropertyPane(propertyTable);
 
-   public Map getMap()
-   {
-      return map;
-   }
+		return propertyPane;
+	}
 
-   public void doOK()
-   {
-      for (Iterator iter = onOK.iterator(); iter.hasNext();)
-      {
-         Runnable r = (Runnable) iter.next();
-         r.run();
-      }
-   }
+	public void init() {
+		setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+		setLayout(new BorderLayout());
 
-   public void doCancel()
-   {
-      // NOP
-   }
+		add(createNorthComponent(), BorderLayout.NORTH);
+		add(createCenterComponent(), BorderLayout.CENTER);
+	}
 
-   private Class getPropertyType(String propertyName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
-   {
-      if (map.get(propertyName) == null)
-      {
-         return String.class;
-      }
+	public Map<String, Object> getChanges() {
+		return changes;
+	}
 
-      return map.get(propertyName).getClass();
-   }
+	public Map<String, Object> getMap() {
+		return map;
+	}
 
-   public void addOKAction(Runnable r)
-   {
-      onOK.add(r);
-   }
+	public void doOK() {
+		for (Iterator<Runnable> iter = onOK.iterator(); iter.hasNext();) {
+			Runnable r = iter.next();
+			r.run();
+		}
+	}
 
-   public boolean isEditable()
-   {
-      return editable;
-   }
+	public void doCancel() {
+		// NOP
+	}
+
+	private Class getPropertyType(String propertyName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		if (map.get(propertyName) == null) {
+			return String.class;
+		}
+
+		return map.get(propertyName).getClass();
+	}
+
+	public void addOKAction(Runnable r) {
+		onOK.add(r);
+	}
+
+	public boolean isEditable() {
+		return editable;
+	}
 }

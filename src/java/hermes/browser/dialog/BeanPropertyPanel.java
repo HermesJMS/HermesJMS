@@ -33,51 +33,44 @@ import org.apache.log4j.Logger;
  * A panel showing a beans simple properties.
  * 
  * @author colincrist@hermesjms.com
- * @version $Id: BeanPropertyPanel.java,v 1.4 2005/07/19 07:15:01 colincrist Exp $
+ * @version $Id: BeanPropertyPanel.java,v 1.4 2005/07/19 07:15:01 colincrist Exp
+ *          $
  */
-public class BeanPropertyPanel extends MapPropertyPanel
-{
-   private static final long serialVersionUID = 4415416943574076763L;
-   private static final Logger log = Logger.getLogger(BeanPropertyPanel.class);
-   private List onOK = new ArrayList();
-   private Object bean;
-   private boolean editable = false;
-   private boolean setProperty = true;
+public class BeanPropertyPanel extends MapPropertyPanel {
+	private static final long serialVersionUID = 4415416943574076763L;
+	private static final Logger log = Logger.getLogger(BeanPropertyPanel.class);
+	private List onOK = new ArrayList();
+	private Object bean;
+	private boolean setProperty = true;
 
-   public BeanPropertyPanel(Object bean, boolean editable, boolean setProperty) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException
-   {
-      super(PropertyUtils.describe(bean), editable);
+	public BeanPropertyPanel(Object bean, boolean editable, boolean setProperty) throws IllegalAccessException, NoSuchMethodException,
+			InvocationTargetException {
+		super(PropertyUtils.describe(bean), editable);
 
-      this.bean = bean;
-      this.setProperty = setProperty;
-   }
+		
+		this.bean = bean;
+		this.setProperty = setProperty;
+	}
 
-   public BeanPropertyPanel(Object bean) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
-   {
-      this(bean, false, true);
-   }
+	public BeanPropertyPanel(Object bean) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		this(bean, false, true);
+	}
 
-   protected JComponent createNorthComponent()
-   {
-      JLabel classNameLabel = new JLabel("Class: " + bean.getClass().getName());
-      classNameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-      return classNameLabel;
-   }
+	protected JComponent createNorthComponent() {
+		JLabel classNameLabel = new JLabel("Class: " + bean.getClass().getName());
+		classNameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		return classNameLabel;
+	}
 
-   protected void onSetProperty(String propertyName, Object propertyValue)
-   {
-      try
-      {
-         if (setProperty)
-         {
-            PropertyUtils.setProperty(bean, propertyName, propertyValue);
-         }
+	protected void onSetProperty(String propertyName, Object propertyValue) {
+		try {
+			if (setProperty) {
+				PropertyUtils.setProperty(bean, propertyName, propertyValue);
+			}
 
-         super.onSetProperty(propertyName, propertyValue);
-      }
-      catch (Throwable e)
-      {
-         HermesBrowser.getBrowser().showErrorDialog("Cannot set property " + propertyName, e);
-      }
-   }
+			super.onSetProperty(propertyName, propertyValue);
+		} catch (Throwable e) {
+			HermesBrowser.getBrowser().showErrorDialog("Cannot set property " + propertyName, e);
+		}
+	}
 }
