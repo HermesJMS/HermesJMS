@@ -103,8 +103,8 @@ public abstract class AbstractQuickFIXMessage implements FIXMessage {
 		return cache;
 	}
 
-	private Map<Integer, Field> allFields;
-	private Map<Integer, Field> cachedFields = new HashMap<Integer, Field>();
+	private volatile Map<Integer, Field> allFields;
+	private volatile Map<Integer, Field> cachedFields = new HashMap<Integer, Field>();
 	private DataDictionary dictionary;
 	private QuickFIXMessageCache cache;
 
@@ -129,14 +129,14 @@ public abstract class AbstractQuickFIXMessage implements FIXMessage {
 	}
 
 	public Map<Integer, Field> getAllFields() {
-
-		try {
-			lock.lock();
-
-			if (allFields == null) {
-				allFields = new LinkedHashMap<Integer, Field>();
+		if (allFields == null) {
+			try {
+				
 
 				final Message message = getMessage();
+
+				lock.lock();
+				allFields = new LinkedHashMap<Integer, Field>();
 
 				if (message == null) {
 					return new HashMap<Integer, Field>();
@@ -176,18 +176,21 @@ public abstract class AbstractQuickFIXMessage implements FIXMessage {
 						cachedFields.put(field.getTag(), field);
 					}
 				}
+			} finally {
+				lock.unlock();
 			}
-			return allFields;
-		} finally {
-			lock.unlock();
 		}
+		return allFields;
+
 	}
 
 	public void reset() {
 		lock.lock();
 
 		try {
-			allFields.clear();
+			if (allFields != null) {
+				allFields.clear();
+			}
 			allFields = null;
 		} finally {
 			lock.unlock();

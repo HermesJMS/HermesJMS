@@ -46,166 +46,131 @@ import org.apache.log4j.Logger;
 import com.jidesoft.document.DocumentComponentEvent;
 import com.jidesoft.document.DocumentComponentListener;
 
-public abstract class BrowseActionListenerAdapter extends AbstractAction implements DocumentComponentListener, ListSelectionListener, TableModelListener
-{
-   /**
+public abstract class BrowseActionListenerAdapter extends AbstractAction implements DocumentComponentListener, ListSelectionListener, TableModelListener {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2062440164714409247L;
-private static final Logger log = Logger.getLogger(BrowseActionListenerAdapter.class);
-   private boolean tableListener = false;
-   private boolean checkSelection = true;
-   private boolean checkRunning = false;
-   private Set<Class> documentTypes = new HashSet<Class> ()  ;
+	private static final Logger log = Logger.getLogger(BrowseActionListenerAdapter.class);
+	private boolean tableListener = false;
+	private boolean checkSelection = true;
+	private boolean checkRunning = false;
+	private Set<Class> documentTypes = new HashSet<Class>();
 
-   public BrowseActionListenerAdapter()
-   {
-      HermesBrowser.getBrowser().addDocumentComponentListener(this);
-      HermesBrowser.getBrowser().addMessageSelectionListener(this);
-      
-   }
+	public BrowseActionListenerAdapter() {
+		HermesBrowser.getBrowser().addDocumentComponentListener(this);
+		HermesBrowser.getBrowser().addMessageSelectionListener(this);
 
-   protected void addDocumentType(Class clazz)
-   {
-      documentTypes.add(clazz) ;      
-   }
-   public BrowseActionListenerAdapter(boolean tableListener, boolean checkSelection, boolean checkRunning)
-   {
-      this();
-      this.tableListener = tableListener;
-      this.checkSelection = checkSelection;
-   }
+	}
 
-   public void documentComponentDocked(DocumentComponentEvent arg0)
-   {
-      // TODO Auto-generated method stub
-      
-   }
+	protected void addDocumentType(Class clazz) {
+		documentTypes.add(clazz);
+	}
 
-   public void documentComponentFloated(DocumentComponentEvent arg0)
-   {
-      // TODO Auto-generated method stub
-      
-   }
+	public BrowseActionListenerAdapter(boolean tableListener, boolean checkSelection, boolean checkRunning) {
+		this();
+		this.tableListener = tableListener;
+		this.checkSelection = checkSelection;
+	}
 
-   public void actionPerformed(ActionEvent e)
-   {
-      // TODO Auto-generated method stub
-      
-   }
+	public void documentComponentDocked(DocumentComponentEvent arg0) {
+		// TODO Auto-generated method stub
 
-   protected void checkEnabled(Object object)
-   {
-      if (object instanceof BrowserAction)
-      {
-         final BrowserAction browseAction = (BrowserAction) object;
+	}
 
-         if (checkSelection)
-         {
-            setEnabled(browseAction.hasSelection());
-         }
-         else
-         {
-            setEnabled(true);
-         }
+	public void documentComponentFloated(DocumentComponentEvent arg0) {
+		// TODO Auto-generated method stub
 
-         if (checkRunning)
-         {
-            setEnabled(!browseAction.isRunning());
-         }
-      }
-      else if (object instanceof BrowseContextAction)
-      {
-         setEnabled(true) ;
-      }
-      else 
-      {
-         for (Class clazz : documentTypes)
-         {
-            if (clazz.isAssignableFrom(object.getClass()))
-            {
-               setEnabled(true);
-            }
-         }
-      }
-      
-   }
+	}
 
-   public final void tableChanged(TableModelEvent e)
-   {
-      if (HermesBrowser.getBrowser().getDocumentPane().getActiveDocument() != null)
-      {
-         checkEnabled(HermesBrowser.getBrowser().getDocumentPane().getActiveDocument());
-      }
-   }
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
 
-   protected void attachListener(Object source)
-   {
-      if (source instanceof BrowserAction)
-      {
-         BrowserAction action = (BrowserAction) source;
-         action.getMessageHeaderTable().getModel().addTableModelListener(this);
-      }
-   }
+	}
 
-   protected void detachListener(Object source)
-   {
-      if (source instanceof BrowserAction)
-      {
-         BrowserAction action = (BrowserAction) source;
-         action.getMessageHeaderTable().getModel().removeTableModelListener(this);
-      }
-   }
+	protected void checkEnabled(Object object) {
+		if (object instanceof BrowserAction) {
+			final BrowserAction browseAction = (BrowserAction) object;
 
-   public void documentComponentMoved(DocumentComponentEvent arg0)
-   {
-      // NOP
-   }
+			if (checkSelection) {
+				setEnabled(browseAction.hasSelection());
+			} else {
+				setEnabled(true);
+			}
 
-   public void documentComponentMoving(DocumentComponentEvent arg0)
-   {
-      // NOP
-   }
+			if (checkRunning) {
+				setEnabled(!browseAction.isRunning());
+			}
+		} else if (object instanceof BrowseContextAction) {
+			setEnabled(true);
+		} else {
+			for (Class clazz : documentTypes) {
+				if (clazz.isAssignableFrom(object.getClass())) {
+					setEnabled(true);
+				}
+			}
+		}
 
-   public void documentComponentOpened(DocumentComponentEvent event)
-   {
-      checkEnabled(event.getSource());
-      attachListener(event.getSource());
-   }
+	}
 
-   public void documentComponentClosing(DocumentComponentEvent event)
-   {
-      setEnabled(false);
-      detachListener(event.getSource());
-   }
+	public final void tableChanged(TableModelEvent e) {
+		if (HermesBrowser.getBrowser().getDocumentPane().getActiveDocument() != null) {
+			checkEnabled(HermesBrowser.getBrowser().getDocumentPane().getActiveDocument());
+		}
+	}
 
-   public void documentComponentClosed(DocumentComponentEvent event)
-   {
-      setEnabled(false);
-      detachListener(event.getSource());
-   }
+	protected void attachListener(Object source) {
+		if (source instanceof BrowserAction) {
+			BrowserAction action = (BrowserAction) source;
+			action.getMessageHeaderTable().getModel().addTableModelListener(this);
+		}
+	}
 
-   public void documentComponentActivated(DocumentComponentEvent event)
-   {
-      checkEnabled(event.getSource());
-      attachListener(event.getSource());
-   }
+	protected void detachListener(Object source) {
+		if (source instanceof BrowserAction) {
+			BrowserAction action = (BrowserAction) source;
+			action.getMessageHeaderTable().getModel().removeTableModelListener(this);
+		}
+	}
 
-   public void documentComponentDeactivated(DocumentComponentEvent event)
-   {
-      checkEnabled(event.getSource());
-      detachListener(event.getSource());
-   }
+	public void documentComponentMoved(DocumentComponentEvent arg0) {
+		// NOP
+	}
 
-   public void valueChanged(final ListSelectionEvent event)
-   {
-      if (HermesBrowser.getBrowser().getDocumentPane().getActiveDocument() != null)
-      {
-         checkEnabled(HermesBrowser.getBrowser().getDocumentPane().getActiveDocument());
-      }
-      else
-      {
-         setEnabled(false);
-      }
-   }
+	public void documentComponentMoving(DocumentComponentEvent arg0) {
+		// NOP
+	}
+
+	public void documentComponentOpened(DocumentComponentEvent event) {
+		checkEnabled(event.getSource());
+		attachListener(event.getSource());
+	}
+
+	public void documentComponentClosing(DocumentComponentEvent event) {
+		setEnabled(false);
+		detachListener(event.getSource());
+	}
+
+	public void documentComponentClosed(DocumentComponentEvent event) {
+		setEnabled(false);
+		detachListener(event.getSource());
+	}
+
+	public void documentComponentActivated(DocumentComponentEvent event) {
+		checkEnabled(event.getSource());
+		attachListener(event.getSource());
+	}
+
+	public void documentComponentDeactivated(DocumentComponentEvent event) {
+		checkEnabled(event.getSource());
+		detachListener(event.getSource());
+	}
+
+	public void valueChanged(final ListSelectionEvent event) {
+		if (HermesBrowser.getBrowser().getDocumentPane().getActiveDocument() != null) {
+			checkEnabled(HermesBrowser.getBrowser().getDocumentPane().getActiveDocument());
+		} else {
+			setEnabled(false);
+		}
+	}
 }

@@ -44,152 +44,127 @@ import com.codestreet.selector.parser.IValueProvider;
  *          Exp $
  */
 
-public class FIXMessageTableModel extends AbstractTableModel implements RowValueProvider
-{
-   /**
+public class FIXMessageTableModel extends AbstractTableModel implements RowValueProvider {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3958105974757909932L;
-private static final Logger log = Logger.getLogger(FIXMessageTableModel.class);
-   public static final String DIRECTION = " ";
+	private static final Logger log = Logger.getLogger(FIXMessageTableModel.class);
+	public static final String DIRECTION = " ";
 
-   // public static final String RAW_MESSAGE = "Raw Message" ;
+	// public static final String RAW_MESSAGE = "Raw Message" ;
 
-   private final List<FIXMessage> messages = new TreeList();
-   private final Vector<Field> fields = new Vector<Field>();
-   private final Vector<Class> classes = new Vector<Class>();
-   private SessionKey initiatorSessionKey;
+	private final List<FIXMessage> messages = new TreeList();
+	private final Vector<Field> fields = new Vector<Field>();
+	private final Vector<Class> classes = new Vector<Class>();
+	private SessionKey initiatorSessionKey;
 
-   public FIXMessageTableModel(SessionKey initiatorSessionKey)
-   {
-      super();
+	public FIXMessageTableModel(SessionKey initiatorSessionKey) {
+		super();
 
-      this.initiatorSessionKey = initiatorSessionKey;
+		this.initiatorSessionKey = initiatorSessionKey;
 
-      fields.add(null);
-      fields.add(new MsgSeqNum());
-      fields.add(new SendingTime());
-      fields.add(new MsgType());
-      fields.add(new SenderSubID());
-      fields.add(new TargetSubID());
+		fields.add(null);
+		fields.add(new MsgSeqNum());
+		fields.add(new SendingTime());
+		fields.add(new MsgType());
+		fields.add(new SenderSubID());
+		fields.add(new TargetSubID());
 
-      classes.add(Integer.class);
-      classes.add(String.class);
-      classes.add(String.class);
-      classes.add(String.class);
-      classes.add(String.class);
-      classes.add(String.class);
-   }
+		classes.add(Integer.class);
+		classes.add(String.class);
+		classes.add(String.class);
+		classes.add(String.class);
+		classes.add(String.class);
+		classes.add(String.class);
+	}
 
-   public IValueProvider getValueProviderForRow(int row)
-   {
-      return new FIXMessageValueProvider(getMessageAt(row));
-   }
+	public IValueProvider getValueProviderForRow(int row) {
+		return new FIXMessageValueProvider(getMessageAt(row));
+	}
 
-   @Override
-   public Class<?> getColumnClass(int columnIndex)
-   {
-      return classes.get(columnIndex);
-   }
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		return classes.get(columnIndex);
+	}
 
-   @Override
-   public String getColumnName(int column)
-   {
-      if (column == 0)
-      {
-         return " ";
-      }
-      else
-      {
-         return fields.get(column).getClass().getSimpleName();
-      }
-   }
+	@Override
+	public String getColumnName(int column) {
+		if (column == 0) {
+			return " ";
+		} else {
+			return fields.get(column).getClass().getSimpleName();
+		}
+	}
 
-   public int getColumnCount()
-   {
-      return fields.size();
-   }
+	public int getColumnCount() {
+		return fields.size();
+	}
 
-   public int getRowCount()
-   {
-      return messages.size();
-   }
+	public int getRowCount() {
+		return messages.size();
+	}
 
-   public FIXMessage getMessageAt(int row)
-   {
-      return messages.get(row);
-   }
+	public FIXMessage getMessageAt(int row) {
+		if (row >= 0) {
+			return messages.get(row);
+		} else {
+			return null;
+		}
+	}
 
-   public void addMessages(Collection<FIXMessage> newMessages)
-   {
-      messages.addAll(newMessages);
-      fireTableRowsInserted(messages.size() - newMessages.size(), messages.size());
-   }
+	public void addMessages(Collection<FIXMessage> newMessages) {
+		if (newMessages.size() > 0) {
+			messages.addAll(newMessages);
+			fireTableRowsInserted(messages.size() - newMessages.size(), messages.size());
+		}
+	}
 
-   public SessionRole getRole(FIXMessage message)
-   {
-      final String senderCompID = message.getString(SenderCompID.FIELD);
+	public SessionRole getRole(FIXMessage message) {
+		final String senderCompID = message.getString(SenderCompID.FIELD);
 
-      if (initiatorSessionKey.getSenderCompID().equals(senderCompID))
-      {
-         return SessionRole.INITIATOR;
-      }
-      else
-      {
-         return SessionRole.ACCEPTOR;
-      }
-   }
+		if (initiatorSessionKey.getSenderCompID().equals(senderCompID)) {
+			return SessionRole.INITIATOR;
+		} else {
+			return SessionRole.ACCEPTOR;
+		}
+	}
 
-   public Object getValueAt(int rowIndex, int columnIndex)
-   {
-      if (rowIndex > messages.size())
-      {
-         return null;
-      }
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		if (rowIndex > messages.size()) {
+			return null;
+		}
 
-      final FIXMessage message = messages.get(rowIndex);
+		final FIXMessage message = messages.get(rowIndex);
 
-      if (columnIndex == 0)
-      {
-         if (getRole(message) == SessionRole.INITIATOR)
-         {
-            return "-->";
-         }
-         else
-         {
-            return "<--";
-         }
-      }
-      else
-      {
+		if (columnIndex == 0) {
+			if (getRole(message) == SessionRole.INITIATOR) {
+				return "-->";
+			} else {
+				return "<--";
+			}
+		} else {
 
-         final Field field = fields.get(columnIndex);
-         final Object fieldValue = message.getObject(field);
+			final Field field = fields.get(columnIndex);
+			final Object fieldValue = message.getObject(field);
 
-         if (fieldValue != null && fieldValue instanceof String)
-         {
-            String valueName = message.getDictionary().getValueName(field.getTag(), (String) fieldValue) ;
-            
-            if (valueName == null)
-            {
-               return fieldValue;
-            }
-            else
-            {
-               return valueName ;
-            }
-         }
-         else
-         {
-            return fieldValue;
-         }
-      }
-   }
+			if (fieldValue != null && fieldValue instanceof String) {
+				String valueName = message.getDictionary().getValueName(field.getTag(), (String) fieldValue);
 
-   @Override
-   public boolean isCellEditable(int rowIndex, int columnIndex)
-   {
-      return false;
-   }
+				if (valueName == null) {
+					return fieldValue;
+				} else {
+					return valueName;
+				}
+			} else {
+				return fieldValue;
+			}
+		}
+	}
+
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		return false;
+	}
 
 }

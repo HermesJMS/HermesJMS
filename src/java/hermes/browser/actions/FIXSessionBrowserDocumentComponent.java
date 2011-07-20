@@ -17,12 +17,8 @@
 
 package hermes.browser.actions;
 
-import hermes.HermesRuntimeException;
-import hermes.browser.components.FitScrollPane;
 import hermes.fix.FIXMessageTable;
 import hermes.fix.FIXMessageTableModel;
-import hermes.fix.FIXSessionTable;
-import hermes.fix.FIXSessionTableModel;
 import hermes.fix.SessionKey;
 import hermes.fix.quickfix.QuickFIXMessageCache;
 import hermes.swing.ProxyListSelectionModel;
@@ -30,9 +26,6 @@ import hermes.swing.ProxyListSelectionModel;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TimerTask;
 
 import javax.swing.JPopupMenu;
@@ -40,17 +33,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import org.apache.log4j.Logger;
 
 import com.codestreet.selector.parser.InvalidSelectorException;
 import com.jidesoft.document.DocumentComponentListener;
-import com.jidesoft.grid.HierarchicalTable;
-import com.jidesoft.grid.HierarchicalTableComponentFactory;
 import com.jidesoft.grid.ListSelectionModelGroup;
-import com.jidesoft.grid.TreeLikeHierarchicalPanel;
 
 /**
  * HermesAction to perform the browse of a queue or topic.
@@ -60,344 +49,176 @@ import com.jidesoft.grid.TreeLikeHierarchicalPanel;
  *          colincrist Exp $
  */
 
-public class FIXSessionBrowserDocumentComponent extends AbstractFIXBrowserDocumentComponent implements HierarchicalTableComponentFactory, FilterableAction
-{
-   private static final Logger log = Logger.getLogger(FIXSessionBrowserDocumentComponent.class);
-   private boolean firstMessage = true;
-   private ListSelectionEvent lastSelected;
-   private final ListSelectionModelGroup listSelectionGroup = new ListSelectionModelGroup();
-   private final Map<SessionKey, FIXMessageTable> tables = new HashMap<SessionKey, FIXMessageTable>();
+public class FIXSessionBrowserDocumentComponent extends AbstractFIXBrowserDocumentComponent implements FilterableAction {
+	private static final Logger log = Logger.getLogger(FIXSessionBrowserDocumentComponent.class);
+	private boolean firstMessage = true;
+	private ListSelectionEvent lastSelected;
+	private final ListSelectionModelGroup listSelectionGroup = new ListSelectionModelGroup();
 
-   private FIXSessionTable sessionTable;
-   private FIXSessionTableModel sessionTableModel = new FIXSessionTableModel();
- private ListSelectionListener sessionTableListSelectionListener ;
- private TableModelListener sessionTableModelListener ;
-   private JPopupMenu popup;
-   private Map<FIXMessageTable, ListSelectionListener> childTableListSelectionListeners = new HashMap<FIXMessageTable, ListSelectionListener> () ;
-   
+	private FIXMessageTable messageTable;
+	private FIXMessageTableModel messageTableModel;
+	private ListSelectionListener messageTableListSelectionListener;
+	private TableModelListener messageTableModelListener;
+	private JPopupMenu popup;
+	private SessionKey selectedSessionKey;
+	private ProxyListSelectionModel proxySelectionModel = new ProxyListSelectionModel();
+	private QuickFIXMessageCache messageCache;
 
-   private SessionKey selectedSessionKey;
-   private ProxyListSelectionModel proxySelectionModel = new ProxyListSelectionModel();
-   private QuickFIXMessageCache messageCache = new QuickFIXMessageCache();
+	public FIXSessionBrowserDocumentComponent(QuickFIXMessageCache messageCache, SessionKey sessionKey) {
+		super(sessionKey.toString());
+		this.messageCache = messageCache;
+		messageTableModel = new FIXMessageTableModel(sessionKey);
+		messageTable = new FIXMessageTable(sessionKey, messageTableModel);
 
-   public FIXSessionBrowserDocumentComponent(String title)
-   {
-      super(title);
+		messageTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				doSelectionChanged(messageTable, e) ;				
+			}
+		}) ;
+		init();
+	}
 
-      sessionTable = new FIXSessionTable(sessionTableModel);
-      sessionTable.setComponentFactory(this);
+	public ListSelectionModel getListSelectionModel() {
+		return proxySelectionModel;
+	}
 
-      init();
-   }
+	public boolean isNavigableForward() {
+		return messageTable.getSelectedRow() < messageTable.getRowCount() - 1;
+	}
 
-   public ListSelectionModel getListSelectionModel()
-   {
-      return proxySelectionModel;
-   }
+	public boolean isNavigableBackward() {
+		return messageTable.getSelectedRow() > 0 && messageTable.getRowCount() > 1;
+	}
 
-   public boolean isNavigableForward()
-   {
-      if (selectedSessionKey != null)
-      {
-         FIXMessageTable table = tables.get(selectedSessionKey);
-         return table.getSelectedRow() < table.getRowCount() - 1;
-      }
-      else
-      {
-         return false;
-      }
-   }
+	public void navigateBackward() {
+		int currentRow = messageTable.getSelectedRow();
+		messageTable.getSelectionModel().setSelectionInterval(currentRow - 1, currentRow - 1);
+	}
 
-   public boolean isNavigableBackward()
-   {
-      if (selectedSessionKey != null)
-      {
-         FIXMessageTable table = tables.get(selectedSessionKey);
-         return table.getSelectedRow() > 0 && table.getRowCount() > 1;
-      }
-      else
-      {
-         return false;
-      }
-   }
+	public void navigateForward() {
+		final int currentRow = messageTable.getSelectedRow();
+		messageTable.getSelectionModel().setSelectionInterval(currentRow + 1, currentRow + 1);
+	}
 
-   public void navigateBackward()
-   {
-      if (selectedSessionKey != null)
-      {
-         FIXMessageTable table = tables.get(selectedSessionKey);
-         int currentRow = table.getSelectedRow();
+	public Collection<Object> getSelectedMessages() {
+		return messageTable.getSelectedMessages();
+	}
 
-         table.getSelectionModel().setSelectionInterval(currentRow - 1, currentRow - 1);
-      }
-   }
+	@Override
+	protected void doClose() {
+		super.doClose();
 
-   public void navigateForward()
-   {
-      if (selectedSessionKey != null)
-      {
-         FIXMessageTable table = tables.get(selectedSessionKey);
-         final int currentRow = table.getSelectedRow();
+		messageCache.close();
 
-         table.getSelectionModel().setSelectionInterval(currentRow + 1, currentRow + 1);
-      }
-   }
+		for (DocumentComponentListener l : getDocumentComponentListeners()) {
+			removeDocumentComponentListener(l);
+		}
+	}
 
-   public Collection<Object> getSelectedMessages()
-   {
-      if (selectedSessionKey != null)
-      {
-         FIXMessageTable table = tables.get(selectedSessionKey);
-         return table.getSelectedMessages();
-      }
-      else
-      {
-         return Collections.EMPTY_LIST;
-      }
-   }
+	public void decrementSelection() {
+		int currentRow = messageTable.getSelectedRow();
 
-   @Override
-   protected void doClose()
-   {
-      super.doClose();  
-      
-      sessionTable.getModel().removeTableModelListener(sessionTableModelListener) ;
-      sessionTable.getSelectionModel().removeListSelectionListener(sessionTableListSelectionListener) ;
-      
-      for (Map.Entry<FIXMessageTable, ListSelectionListener> entry : childTableListSelectionListeners.entrySet())        
-      {
-         listSelectionGroup.remove(entry.getKey().getSelectionModel()) ;
-         
-         entry.getKey().getSelectionModel().removeListSelectionListener(entry.getValue()) ;
-      }
-      
-      sessionTable.close();
-      
-      sessionTable = null;
+		messageTable.getSelectionModel().setSelectionInterval(currentRow - 1, currentRow - 1);
+	}
 
-      messageCache.close();
+	public void incrementSelection() {
+		final int currentRow = messageTable.getSelectedRow();
 
-      for (DocumentComponentListener l : getDocumentComponentListeners())
-      {
-         removeDocumentComponentListener(l);
-      }
-   }
+		messageTable.getSelectionModel().setSelectionInterval(currentRow + 1, currentRow + 1);
+	}
 
-   public void decrementSelection()
-   {
-      int currentRow = sessionTable.getSelectedRow();
+	public boolean hasSelection() {
+		return messageTable.getSelectedRowCount() > 0;
+	}
 
-      sessionTable.getSelectionModel().setSelectionInterval(currentRow - 1, currentRow - 1);
-   }
+	public void setSelector(String selector) throws InvalidSelectorException {
+		messageTable.setSelector(selector);
+	}
 
-   public void incrementSelection()
-   {
-      final int currentRow = sessionTable.getSelectedRow();
+	public void doSelectionChanged(FIXMessageTable table, ListSelectionEvent e) {
+		super.doSelectionChanged(table, e);
 
-      sessionTable.getSelectionModel().setSelectionInterval(currentRow + 1, currentRow + 1);
-   }
+		//
+		// Hmm.
+	}
 
-   public boolean hasSelection()
-   {
-      return sessionTable.getSelectedRowCount() > 0;
-   }
+	protected void init() {
+		super.init();
 
-   public void setSelector(String selector) throws InvalidSelectorException
-   {
-      for (FIXMessageTable table : tables.values())
-      {
-         table.setSelector(selector);
-      }
-   }
+	}
 
-   public synchronized Component createChildComponent(HierarchicalTable table, Object value, int row)
-   {
-      final FIXMessageTableModel model = (FIXMessageTableModel) value;
+	/**
+	 * Called by the timer, it will update the UI with the new rows of consumes
+	 * messages, updating the status panels accordingly. Returns true if the
+	 * action is still running, otherwise false, allowing the timer to switch
+	 * itself off.
+	 */
 
-      if (model == null)
-      {
-         throw new HermesRuntimeException("No table");
-      }
+	protected void updateTableRows(final boolean reschedule) {
 
-      FIXMessageTable childTable = null;
-      SessionKey sessionKey = sessionTableModel.getSessionKey(row);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				synchronized (getCachedRows()) {
+					if (messageTable != null) {
+						messageTable.addMessages(getCachedRows());
 
-      if (tables.containsKey(sessionKey))
-      {
-         childTable = tables.get(sessionKey);
-      }
-      else
-      {
-         childTable = new FIXMessageTable(sessionKey, model);
-         tables.put(sessionTableModel.getSessionKey(row), childTable);
+						if (firstMessage) {
+							messageTable.getSelectionModel().setSelectionInterval(0, 0);
+							firstMessage = false;
+						}
 
-         final FIXMessageTable fChildTable = childTable;
+						setCachedRows(new ArrayList());
+					}
+				}
 
-         proxySelectionModel.add(childTable.getSelectionModel());
+				StringBuffer buffer = new StringBuffer();
 
-         ListSelectionListener childTableListSelectionListener = new ListSelectionListener()
-         {
-            public void valueChanged(ListSelectionEvent e)
-            {
-               doSelectionChanged(fChildTable, e);
-            }
-         } ;
-         
-         
-         childTable.getSelectionModel().addListSelectionListener(childTableListSelectionListener);
-         childTableListSelectionListeners.put(childTable, childTableListSelectionListener) ;         
-      }
+				if (!reschedule || isTaskStopped()) {
+					buffer.append("Finished. ");
+				} else {
 
-      final FitScrollPane fitPane = new FitScrollPane(childTable);
-      final TreeLikeHierarchicalPanel hPanel = new TreeLikeHierarchicalPanel(fitPane);
+					switch (messageTableModel.getRowCount()) {
+					case 0:
+						buffer.append("No messages read.");
+						break;
+					case 1:
+						buffer.append("1 message found.");
+						break;
 
-      listSelectionGroup.add(childTable.getSelectionModel());
+					default:
+						buffer.append(messageTableModel.getRowCount()).append(" messages read.");
+					}
+				}
 
-      return hPanel;
-   }
+				if (reschedule) {
+					setStatusText(buffer.toString());
+				} else {
+					setStatusText("Finished. " + buffer.toString());
+				}
 
-   public void doSelectionChanged(FIXMessageTable table, ListSelectionEvent e)
-   {
-      super.doSelectionChanged(table, e);
+				if (reschedule) {
+					TimerTask timerTask = new TimerTask() {
+						@Override
+						public void run() {
+							updateTableRows(true);
+						}
+					};
 
-      //
-      // Hmm.
-   }
+					timer.schedule(timerTask, getScreenUpdateTimeout());
+				}
+			}
+		});
 
-   public synchronized void destroyChildComponent(HierarchicalTable table, Component component, int row)
-   {
-      final FIXMessageTable childTable = (FIXMessageTable) tables.get(sessionTableModel.getSessionKey(row));
+	}
 
-      listSelectionGroup.remove(childTable.getSelectionModel());
-      proxySelectionModel.remove(childTable.getSelectionModel());
-   }
+	public QuickFIXMessageCache getMessageCache() {
+		return messageCache;
+	}
 
-   @Override
-   protected Component getHeaderComponent()
-   {
-      return sessionTable;
-   }
-
-   protected void init()
-   {
-      super.init();
-
-      sessionTableModelListener = new TableModelListener()
-      {
-         public void tableChanged(TableModelEvent e)
-         {
-            if (e.getType() == TableModelEvent.INSERT)
-            {
-               log.debug("faking createChildComponent for row " + e.getFirstRow());
-               createChildComponent(sessionTable, sessionTable.getChildValueAt(e.getFirstRow()), e.getFirstRow());
-            }
-         }
-      } ;
-      
-      sessionTable.getModel().addTableModelListener(sessionTableModelListener);
-
-      sessionTableListSelectionListener = new ListSelectionListener()
-      {
-         public void valueChanged(ListSelectionEvent e)
-         {
-            if (sessionTable.getSelectedRow() >= 0 && sessionTable.getSelectedRow() < sessionTable.getRowCount())
-            {
-               selectedSessionKey = sessionTable.getSessionKey(sessionTable.getSelectedRow());
-               proxySelectionModel.forward(e);
-            }
-         }
-      } ;
-      
-      sessionTable.getSelectionModel().addListSelectionListener(sessionTableListSelectionListener);
-   }
-
-   /**
-    * Called by the timer, it will update the UI with the new rows of consumes
-    * messages, updating the status panels accordingly. Returns true if the
-    * action is still running, otherwise false, allowing the timer to switch
-    * itself off.
-    */
-
-   protected void updateTableRows(final boolean reschedule)
-   {
-      if (sessionTable == null)
-      {
-         return;
-      }
-
-      SwingUtilities.invokeLater(new Runnable()
-      {
-         public void run()
-         {
-            synchronized (getCachedRows())
-            {
-               if (sessionTable != null)
-               {
-                  sessionTable.addMessages(getCachedRows());
-
-                  if (firstMessage)
-                  {
-                     sessionTable.getSelectionModel().setSelectionInterval(0, 0);
-                     firstMessage = false;
-                  }
-
-                  setCachedRows(new ArrayList());
-               }
-            }
-
-            StringBuffer buffer = new StringBuffer();
-
-            if (!reschedule || isTaskStopped())
-            {
-               buffer.append("Finished. ");
-            }
-            else
-            {
-
-               switch (sessionTableModel.getRowCount())
-               {
-                  case 0:
-                     buffer.append("No sessions found.");
-                     break;
-                  case 1:
-                     buffer.append("1 session found.");
-                     break;
-
-                  default:
-                     buffer.append(sessionTableModel.getRowCount()).append(" sessions found.");
-               }
-            }
-
-            if (reschedule)
-            {
-               setStatusText(buffer.toString());
-            }
-            else
-            {
-               setStatusText("Finished. " + buffer.toString());
-            }
-
-            if (reschedule)
-            {
-               TimerTask timerTask = new TimerTask()
-               {
-                  @Override
-                  public void run()
-                  {
-                     updateTableRows(true);
-                  }
-               };
-
-               timer.schedule(timerTask, getScreenUpdateTimeout());
-            }
-         }
-      });
-
-   }
-
-   public QuickFIXMessageCache getMessageCache()
-   {
-      return messageCache;
-   }
+	@Override
+	protected Component getHeaderComponent() {
+		return messageTable ;
+	}
 
 }

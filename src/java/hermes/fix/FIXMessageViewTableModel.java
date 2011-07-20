@@ -107,7 +107,7 @@ public class FIXMessageViewTableModel extends AbstractTableModel {
 					rowDef.fieldName = prefix + (fieldName == null ? "" : fieldName);
 					rowDef.fieldValue = value == null ? "" : value;
 					try {
-						rowDef.fieldValueName = message.getDictionary().getValueName(field.getTag(), message.getString(field.getTag()));
+						rowDef.fieldValueName = dd.getValueName(field.getTag(), fieldMap.getString(field.getTag()));
 					} catch (Throwable ex) {
 
 					}
@@ -122,8 +122,14 @@ public class FIXMessageViewTableModel extends AbstractTableModel {
 		Iterator groupsKeys = fieldMap.groupKeyIterator();
 		while (groupsKeys.hasNext()) {
 			int groupCountTag = ((Integer) groupsKeys.next()).intValue();
-			// System.out.println(prefix + dd.getFieldName(groupCountTag) +
-			// ": count = " + fieldMap.getInt(groupCountTag));
+
+			RowDef rowDef = new RowDef();
+			rowDef.type = RowType.APPLICATION;
+			rowDef.tag = groupCountTag;
+			rowDef.fieldName = prefix + ((dd.getFieldName(groupCountTag) == null) ? "" : dd.getFieldName(groupCountTag));
+			rowDef.fieldValue = Integer.toString(fieldMap.getGroupCount(groupCountTag));
+			rows.add(rowDef);
+
 			Group g = new Group(groupCountTag, 0);
 			int i = 1;
 			while (fieldMap.hasGroup(i, groupCountTag)) {

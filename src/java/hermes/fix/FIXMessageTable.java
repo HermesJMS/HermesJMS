@@ -90,9 +90,7 @@ public class FIXMessageTable extends SortableTable {
 		setDragEnabled(true);
 		setTransferHandler(new MessagesTransferHandler(this));
 		getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
 		getColumn(FIXMessageTableModel.DIRECTION).setMaxWidth(IconCache.getIcon("hermes.back").getIconWidth() + 4);
-
 		getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
 			/**
 		 * 
@@ -129,10 +127,12 @@ public class FIXMessageTable extends SortableTable {
 		model.addTableModelListener(new TableModelListener() {
 			public void tableChanged(TableModelEvent e) {
 				if (isAutoScroll()) {
-					if (e.getType() == TableModelEvent.INSERT) {
-						getSelectionModel().setSelectionInterval(model.getRowCount() - 1, model.getRowCount() - 1);
-						scrollRectToVisible(getCellRect(model.getRowCount() - 1, 0, true));
-					}
+					// if (e.getType() == TableModelEvent.INSERT) {
+					// getSelectionModel().setSelectionInterval(model.getRowCount()
+					// - 1, model.getRowCount() - 1);
+					// scrollRectToVisible(getCellRect(model.getRowCount() - 1,
+					// 0, true));
+					// }
 				}
 			}
 		});
@@ -166,9 +166,10 @@ public class FIXMessageTable extends SortableTable {
 	}
 
 	public void addMessages(Collection<FIXMessage> messages) {
-		model.addMessages(messages);
-
-		SwingUtils.scrollVertically((JComponent) this.getParent(), SwingUtils.getRowBounds(this, model.getRowCount(), model.getRowCount()));
+		if (messages.size() > 0) {
+			model.addMessages(messages);
+			SwingUtils.scrollVertically((JComponent) this.getParent(), SwingUtils.getRowBounds(this, model.getRowCount(), model.getRowCount()));
+		}
 	}
 
 	public void setSelector(String selector) throws InvalidSelectorException {
@@ -194,26 +195,29 @@ public class FIXMessageTable extends SortableTable {
 		return c;
 	}
 
-	@Override
-	public void scrollRectToVisible(Rectangle aRect) {
-		Container parent;
-		int dx = getX(), dy = getY();
-
-		for (parent = getParent(); !(parent == null) && (!(parent instanceof JViewport) || (((JViewport) parent).getClientProperty("HierarchicalTable.mainViewport") == null)); parent = parent
-				.getParent()) {
-			Rectangle bounds = parent.getBounds();
-
-			dx += bounds.x;
-			dy += bounds.y;
-		}
-
-		if (!(parent == null) && !(parent instanceof CellRendererPane)) {
-			aRect.x += dx;
-			aRect.y += dy;
-
-			((JComponent) parent).scrollRectToVisible(aRect);
-			aRect.x -= dx;
-			aRect.y -= dy;
-		}
-	}
+	// @Override
+	// public void scrollRectToVisible(Rectangle aRect) {
+	// Container parent;
+	// int dx = getX(), dy = getY();
+	//
+	// for (parent = getParent(); !(parent == null) && (!(parent instanceof
+	// JViewport) || (((JViewport)
+	// parent).getClientProperty("HierarchicalTable.mainViewport") == null));
+	// parent = parent
+	// .getParent()) {
+	// Rectangle bounds = parent.getBounds();
+	//
+	// dx += bounds.x;
+	// dy += bounds.y;
+	// }
+	//
+	// if (!(parent == null) && !(parent instanceof CellRendererPane)) {
+	// aRect.x += dx;
+	// aRect.y += dy;
+	//
+	// ((JComponent) parent).scrollRectToVisible(aRect);
+	// aRect.x -= dx;
+	// aRect.y -= dy;
+	// }
+	// }
 }

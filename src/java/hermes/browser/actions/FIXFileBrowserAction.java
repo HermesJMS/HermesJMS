@@ -20,6 +20,7 @@ package hermes.browser.actions;
 import hermes.browser.IconCache;
 import hermes.browser.tasks.BrowseFIXFileTask;
 import hermes.browser.tasks.Task;
+import hermes.fix.quickfix.QuickFIXMessageCache;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +45,7 @@ public class FIXFileBrowserAction
 
    private InputStream istream;
    private String title;
-
+   private QuickFIXMessageCache messageCache = new QuickFIXMessageCache();
    public FIXFileBrowserAction(File file, int maxMessages) throws FileNotFoundException
    {
       super();
@@ -64,10 +65,8 @@ public class FIXFileBrowserAction
 
    public void start()
    {
-      final FIXSessionBrowserDocumentComponent frame = new FIXSessionBrowserDocumentComponent(title);
-      final Task task = new BrowseFIXFileTask(frame, istream, title);
+      final Task task = new BrowseFIXFileTask(messageCache, istream, title);
       
-      frame.setTask(task);
 
       task.start();
    }
