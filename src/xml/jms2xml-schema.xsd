@@ -14,7 +14,7 @@
 		</xs:sequence>
 
 		<xs:attribute name="JMSCorrelationID" type="xs:string" />
-	    <xs:attribute name="JMSDeliveryMode" type="xs:int"/>
+	    <xs:attribute name="JMSDeliveryMode" type="xs:int" default="2"/>
 		<xs:attribute name="JMSDestination" type="xs:string"/>
 		<xs:attribute name="JMSExpiration" type="xs:long"/>
 		<xs:attribute name="JMSMessageID" type="xs:string"/>
