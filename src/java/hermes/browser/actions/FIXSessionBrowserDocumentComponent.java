@@ -49,7 +49,7 @@ import com.jidesoft.grid.ListSelectionModelGroup;
  *          colincrist Exp $
  */
 
-public class FIXSessionBrowserDocumentComponent extends AbstractFIXBrowserDocumentComponent implements FilterableAction {
+public class FIXSessionBrowserDocumentComponent extends AbstractFIXBrowserDocumentComponent implements FilterableAction, ListSelectionListener {
 	private static final Logger log = Logger.getLogger(FIXSessionBrowserDocumentComponent.class);
 	private boolean firstMessage = true;
 	private ListSelectionEvent lastSelected;
@@ -70,12 +70,8 @@ public class FIXSessionBrowserDocumentComponent extends AbstractFIXBrowserDocume
 		messageTableModel = new FIXMessageTableModel(sessionKey);
 		messageTable = new FIXMessageTable(sessionKey, messageTableModel);
 
-		messageTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {			
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				doSelectionChanged(messageTable, e) ;				
-			}
-		}) ;
+		messageTable.getSelectionModel().addListSelectionListener(this);
+
 		init();
 	}
 
@@ -114,6 +110,8 @@ public class FIXSessionBrowserDocumentComponent extends AbstractFIXBrowserDocume
 		for (DocumentComponentListener l : getDocumentComponentListeners()) {
 			removeDocumentComponentListener(l);
 		}
+		messageTable.getSelectionModel().removeListSelectionListener(this);
+		messageTableModel.clear();
 	}
 
 	public void decrementSelection() {
@@ -136,13 +134,6 @@ public class FIXSessionBrowserDocumentComponent extends AbstractFIXBrowserDocume
 		messageTable.setSelector(selector);
 	}
 
-	public void doSelectionChanged(FIXMessageTable table, ListSelectionEvent e) {
-		super.doSelectionChanged(table, e);
-
-		//
-		// Hmm.
-	}
-
 	protected void init() {
 		super.init();
 
@@ -156,7 +147,6 @@ public class FIXSessionBrowserDocumentComponent extends AbstractFIXBrowserDocume
 	 */
 
 	protected void updateTableRows(final boolean reschedule) {
-
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				synchronized (getCachedRows()) {
@@ -218,7 +208,11 @@ public class FIXSessionBrowserDocumentComponent extends AbstractFIXBrowserDocume
 
 	@Override
 	protected Component getHeaderComponent() {
-		return messageTable ;
+		return messageTable;
 	}
 
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		super.doSelectionChanged(messageTable, e);
+	}
 }

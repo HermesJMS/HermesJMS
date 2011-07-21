@@ -99,17 +99,17 @@ public class BrowseFIXFileTask extends TaskSupport {
 				if (document == null) {
 					document = new FIXSessionBrowserDocumentComponent(messageCache, key1);
 					documents.put(key1, document);
-					documents.put(key2, document);					
+					documents.put(key2, document);	
+					addTaskListener(document) ;
+					document.addDocumentComponentListener(new DocumentComponetListenerSupport(){
+						@Override
+						public void documentComponentClosed(DocumentComponentEvent arg0) {
+							stop() ;
+						}					
+					}) ;
 				}			
 				
-				document.addDocumentComponentListener(new DocumentComponetListenerSupport(){
-
-					@Override
-					public void documentComponentClosed(DocumentComponentEvent arg0) {
-						stop() ;
-					}
-					
-				}) ;
+				
 				
 				document.addMessage(message);
 			}

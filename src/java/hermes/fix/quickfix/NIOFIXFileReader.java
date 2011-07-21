@@ -92,7 +92,7 @@ public class NIOFIXFileReader implements FIXReader, Runnable
          }
 
          return rval;
-      }
+      }     
       catch (Exception ex)
       {
          log.error(ex.getMessage(), ex);

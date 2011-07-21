@@ -167,4 +167,11 @@ public class FIXMessageTableModel extends AbstractTableModel implements RowValue
 		return false;
 	}
 
+	public void clear() {
+		messages.clear();
+		fields.clear();
+		classes.clear();
+		
+	}
+
 }
