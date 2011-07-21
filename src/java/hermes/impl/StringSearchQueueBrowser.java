@@ -32,8 +32,6 @@ import javax.jms.TextMessage;
 
 import org.apache.log4j.Logger;
 
-
-
 /**
  * QueueBrowser that facades another QueueBrowser and does an additional level
  * of filtering based on a string search. The seach is performed on either
@@ -43,226 +41,178 @@ import org.apache.log4j.Logger;
  * @version $Id: StringSearchQueueBrowser.java,v 1.3 2004/11/30 20:21:36
  *          colincrist Exp $
  */
-public class StringSearchQueueBrowser implements QueueBrowser
-{
-   private static final Logger log = Logger.getLogger(StringSearchQueueBrowser.class);
-   private boolean searchJMSHeader;
-   private boolean searchUserHeader;
-   private QueueBrowser browser;
-   private String string;
+public class StringSearchQueueBrowser implements QueueBrowser {
+	private static final Logger log = Logger.getLogger(StringSearchQueueBrowser.class);
+	private boolean searchJMSHeader;
+	private boolean searchUserHeader;
+	private QueueBrowser browser;
+	private String string;
 
-   class StringSearchEnumeration implements Enumeration
-   {
-      private Enumeration iter;
+	class StringSearchEnumeration implements Enumeration {
+		private Enumeration iter;
 
-      StringSearchEnumeration(Enumeration iter)
-      {
-         this.iter = iter;
-      }
+		StringSearchEnumeration(Enumeration iter) {
+			this.iter = iter;
+		}
 
-      public boolean hasMoreElements()
-      {
-         return iter.hasMoreElements();
-      }
+		public boolean hasMoreElements() {
+			return iter.hasMoreElements();
+		}
 
-      public Object nextElement()
-      {
-         while (iter.hasMoreElements())
-         {
-            Message m = (Message) iter.nextElement();
+		public Object nextElement() {
+			while (iter.hasMoreElements()) {
+				Message m = (Message) iter.nextElement();
 
-            if (m != null)
-            {
-               if (matches(m))
-               {
-                  return m;
-               }
-            }
-            else
-            {
-               return null;
-            }
-         }
+				if (m != null) {
+					if (matches(m)) {
+						return m;
+					}
+				} else {
+					return null;
+				}
+			}
 
-         return null;
-      }
-   }
+			return null;
+		}
+	}
 
-   /**
-    * Create a new StringSearchQueueBrowser to filter messages from the
-    * underlying QueueBrowser.
-    * 
-    * @param browser
-    *           the underlying queue browser
-    * @param regex
-    *           the regular expression
-    * @param searchJMSHeader
-    *           whether to search the JMS header properties
-    * @param searchUserHeader
-    *           whether to search the user properties
-    */
-   public StringSearchQueueBrowser(QueueBrowser browser, String string, boolean searchJMSHeader, boolean searchUserHeader)
-   {
-      this.browser = browser;
-      this.searchJMSHeader = searchJMSHeader;
-      this.searchUserHeader = searchUserHeader;
-      this.string = string;
+	/**
+	 * Create a new StringSearchQueueBrowser to filter messages from the
+	 * underlying QueueBrowser.
+	 * 
+	 * @param browser
+	 *            the underlying queue browser
+	 * @param regex
+	 *            the regular expression
+	 * @param searchJMSHeader
+	 *            whether to search the JMS header properties
+	 * @param searchUserHeader
+	 *            whether to search the user properties
+	 */
+	public StringSearchQueueBrowser(QueueBrowser browser, String string, boolean searchJMSHeader, boolean searchUserHeader) {
+		this.browser = browser;
+		this.searchJMSHeader = searchJMSHeader;
+		this.searchUserHeader = searchUserHeader;
+		this.string = string;
 
-   }
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.jms.QueueBrowser#getQueue()
-    */
-   public Queue getQueue() throws JMSException
-   {
-      return browser.getQueue();
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.QueueBrowser#getQueue()
+	 */
+	public Queue getQueue() throws JMSException {
+		return browser.getQueue();
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.jms.QueueBrowser#getMessageSelector()
-    */
-   public String getMessageSelector() throws JMSException
-   {
-      return browser.getMessageSelector();
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.QueueBrowser#getMessageSelector()
+	 */
+	public String getMessageSelector() throws JMSException {
+		return browser.getMessageSelector();
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.jms.QueueBrowser#getEnumeration()
-    */
-   public Enumeration getEnumeration() throws JMSException
-   {
-      return new StringSearchEnumeration(browser.getEnumeration());
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.QueueBrowser#getEnumeration()
+	 */
+	public Enumeration getEnumeration() throws JMSException {
+		return new StringSearchEnumeration(browser.getEnumeration());
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see javax.jms.QueueBrowser#close()
-    */
-   public void close() throws JMSException
-   {
-      browser.close();
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.QueueBrowser#close()
+	 */
+	public void close() throws JMSException {
+		browser.close();
+	}
 
-   public boolean matches(Message message)
-   {
-      try
-      {
-         if (searchJMSHeader)
-         {
+	public boolean matches(Message message) {
+		try {
+			if (searchJMSHeader) {
 
-         }
+			}
 
-         if (searchUserHeader)
-         {
-            for (Enumeration headerNames = message.getPropertyNames(); headerNames.hasMoreElements();)
-            {
-               try
-               {
-                  String key = (String) headerNames.nextElement();
-                  Object value = message.getObjectProperty(key);
+			if (searchUserHeader) {
+				for (Enumeration headerNames = message.getPropertyNames(); headerNames.hasMoreElements();) {
+					try {
+						String key = (String) headerNames.nextElement();
+						Object value = message.getObjectProperty(key);
 
-                  if (key != null)
-                  {
-                     if (key.indexOf(string) != -1)
-                     {
-                        return true;
-                     }
-                  }
-                  
-                  if (value != null)
-                  {
-                     if (value.toString().indexOf(string) != -1)
-                     {
-                        return true;
-                     }
-                  }
-               }
-               catch (JMSException ex)
-               {
-                  log.error(ex.getMessage(), ex);
-               }
-            }
-         }
+						if (key != null) {
+							if (key.indexOf(string) != -1) {
+								return true;
+							}
+						}
 
-         if (message instanceof TextMessage)
-         {
-            try
-            {
-               return (((TextMessage) message).getText().indexOf(string) != -1);
-            }
-            catch (JMSException ex)
-            {
-               log.error(ex.getMessage(), ex);
-            }
-         }
-         else if (message instanceof MapMessage)
-         {
-            try
-            {
-               MapMessage map = (MapMessage) message;
+						if (value != null) {
+							if (value.toString().indexOf(string) != -1) {
+								return true;
+							}
+						}
+					} catch (JMSException ex) {
+						log.error(ex.getMessage(), ex);
+					}
+				}
+			}
 
-               for (Enumeration mapNames = map.getMapNames(); mapNames.hasMoreElements();)
-               {
-                  String key = (String) mapNames.nextElement();
-                  Object value = map.getObject(key);
+			if (message instanceof TextMessage) {
+				try {
+					String text = ((TextMessage) message).getText();
 
-                  if (key.indexOf(string) != -1)
-                  {
-                     return true;
-                  }
-                  if (value != null)
-                  {
-                     if (value.toString().indexOf(string) != -1)
-                     {
-                        return true;
-                     }
-                  }
-               }
-            }
-            catch (JMSException ex)
-            {
-               log.error(ex.getMessage(), ex);
-            }
-         }
-         else if (message instanceof ObjectMessage)
-         {
-            try
-            {
-               final ObjectMessage om = (ObjectMessage) message;
-               final String toString = om.getObject().toString();
+					return text != null && text.indexOf(string) != -1;
+				} catch (JMSException ex) {
+					log.error(ex.getMessage(), ex);
+				}
+			} else if (message instanceof MapMessage) {
+				try {
+					MapMessage map = (MapMessage) message;
 
-               if (toString.indexOf(string) != -1)
-               {
-                  return true;
-               }
-            }
-            catch (Throwable t)
-            {
-               log.error(t.getMessage(), t);
-            }
-         }
-         else if (message instanceof BytesMessage)
-         {
-            final BytesMessage bm = (BytesMessage) message ;            
-            final String toString = new String(MessageUtils.asBytes(bm)) ;
+					for (Enumeration mapNames = map.getMapNames(); mapNames.hasMoreElements();) {
+						String key = (String) mapNames.nextElement();
+						Object value = map.getObject(key);
 
-            return toString.indexOf(string) != -1 ;                     
-         }
-         
-         return false;
-      }
-      catch (JMSException e)
-      {
-         log.error(e.getMessage(), e);
-      }
+						if (key.indexOf(string) != -1) {
+							return true;
+						}
+						if (value != null) {
+							if (value.toString().indexOf(string) != -1) {
+								return true;
+							}
+						}
+					}
+				} catch (JMSException ex) {
+					log.error(ex.getMessage(), ex);
+				}
+			} else if (message instanceof ObjectMessage) {
+				try {
+					final ObjectMessage om = (ObjectMessage) message;
+					final String toString = om.getObject().toString();
 
-      return false;
-   }
+					if (toString.indexOf(string) != -1) {
+						return true;
+					}
+				} catch (Throwable t) {
+					log.error(t.getMessage(), t);
+				}
+			} else if (message instanceof BytesMessage) {
+				final BytesMessage bm = (BytesMessage) message;
+				final String toString = new String(MessageUtils.asBytes(bm));
+
+				return toString.indexOf(string) != -1;
+			}
+
+			return false;
+		} catch (JMSException e) {
+			log.error(e.getMessage(), e);
+		}
+
+		return false;
+	}
 }
