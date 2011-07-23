@@ -124,7 +124,7 @@ public class JMSHeaderPropertyPanel extends JPanel {
 		}
 
 		if (!TextUtils.isEmpty(replyToField.getText())) {
-			newMessage.setJMSReplyTo(tglbtnQueue.equals(Domain.QUEUE) ? handler.createQueue(replyToField.getText()) : handler.createTopic(replyToField.getText()));
+			newMessage.setJMSReplyTo(tglbtnQueue.getText().equals(Domain.QUEUE.toString()) ? handler.createQueue(replyToField.getText()) : handler.createTopic(replyToField.getText()));
 		}
 
 		if (!TextUtils.isEmpty(typeField.getText())) {

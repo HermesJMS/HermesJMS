@@ -352,9 +352,7 @@ public class DefaultXMLHelper implements XMLHelper {
 			// JMS Header properties
 
 			try {
-				if (message.getJMSDeliveryMode() != null) {
-					rval.setJMSDeliveryMode(message.getJMSDeliveryMode());
-				}
+				rval.setJMSDeliveryMode(message.getJMSDeliveryMode());
 			} catch (JMSException ex) {
 				log.error("unable to set JMSDeliveryMode to " + message.getJMSDeliveryMode() + ": " + ex.getMessage());
 			}

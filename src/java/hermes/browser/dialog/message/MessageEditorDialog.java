@@ -196,7 +196,7 @@ public class MessageEditorDialog extends JDialog {
 			onOK.onMessage(newMessage);
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
-			HermesBrowser.getBrowser().showErrorDialog(ex);
+			HermesBrowser.getBrowser().showErrorDialog(ex.getMessage(), ex);
 		}
 	}
 
