@@ -97,7 +97,7 @@ public class DefaultMessageHeaderRenderer extends AbstractMessageRenderer {
 		}
 
 		try {
-			tableModel.addRow(new Object[] { "JMSReplyTo", JMSUtils.getDestinationName(m.getJMSReplyTo()) + " (" + Domain.getDomain(m.getJMSReplyTo()) + ")" });
+			tableModel.addRow(new Object[] { "JMSReplyTo", JMSUtils.getDestinationName(m.getJMSReplyTo()) + (m.getJMSReplyTo() != null ? " (" + Domain.getDomain(m.getJMSReplyTo()) + ")" : "") });
 		} catch (Exception ex) {
 			log.error("no JMSReplyTo in message: " + ex.getMessage());
 		}
