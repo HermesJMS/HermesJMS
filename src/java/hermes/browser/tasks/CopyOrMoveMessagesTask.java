@@ -55,10 +55,10 @@ public class CopyOrMoveMessagesTask extends TaskSupport {
 	private ProgressMonitor monitor;
 	private int action;
 	private Domain target;
-
 	private boolean showConfirm;
+	private boolean duplicate = true;
 
-	public CopyOrMoveMessagesTask(Hermes hermes, String destination, Domain target, Collection messages, int action, boolean showConfirm) {
+	public CopyOrMoveMessagesTask(Hermes hermes, String destination, Domain target, Collection messages, int action, boolean showConfirm, boolean duplicate) {
 		super(action == TransferHandler.COPY ? IconCache.getIcon("copy") : IconCache.getIcon("cut"));
 
 		this.hermes = hermes;
@@ -67,6 +67,7 @@ public class CopyOrMoveMessagesTask extends TaskSupport {
 		this.action = action;
 		this.target = target;
 		this.showConfirm = showConfirm;
+		this.duplicate = duplicate;
 	}
 
 	public String getTitle() {
@@ -82,8 +83,12 @@ public class CopyOrMoveMessagesTask extends TaskSupport {
 	private Message createMessage(Destination to, Object o, Collection ids) throws JMSException {
 		if (o instanceof Message) {
 			Message oldMessage = (Message) o;
-			Message newMessage = hermes.duplicate(to, oldMessage);
-
+			Message newMessage = null;
+			if (duplicate) {
+				newMessage = hermes.duplicate(to, oldMessage);
+			} else {
+				newMessage = oldMessage;
+			}
 			ids.add(oldMessage.getJMSMessageID());
 			return newMessage;
 		} else if (o instanceof byte[]) {

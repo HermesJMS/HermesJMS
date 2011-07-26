@@ -70,7 +70,7 @@ public class SendNewMessageAction extends ActionSupport {
 							.getBrowser()
 							.getActionFactory()
 							.createMessageCopyAction(hNode.getHermes(), dNode.getDestinationName(), dNode.getDomain(),
-									new ArrayList<Message>(Arrays.asList(message)), false);
+									new ArrayList<Message>(Arrays.asList(message)), false, false);
 				}
 			});
 			dialog.setLocationRelativeTo(HermesBrowser.getBrowser());

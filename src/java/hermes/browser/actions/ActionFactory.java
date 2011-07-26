@@ -172,9 +172,9 @@ public class ActionFactory
    /**
     * Create an action to copy a set of messages to a queue/topic
     */
-   public CopyOrMoveMessagesTask createMessageCopyAction(Hermes hermes, String d, Domain domain, Collection set, boolean showConfirm)
+   public CopyOrMoveMessagesTask createMessageCopyAction(Hermes hermes, String d, Domain domain, Collection set, boolean showConfirm, boolean duplicate)
    {
-      CopyOrMoveMessagesTask rval = new CopyOrMoveMessagesTask(hermes, d, domain, set, TransferHandler.COPY, showConfirm);
+      CopyOrMoveMessagesTask rval = new CopyOrMoveMessagesTask(hermes, d, domain, set, TransferHandler.COPY, showConfirm, duplicate);
 
       rval.start();
 
@@ -183,7 +183,7 @@ public class ActionFactory
 
    public CopyOrMoveMessagesTask createMessageMoveAction(Hermes hermes, String d, Domain domain, Collection set)
    {
-      CopyOrMoveMessagesTask rval = new CopyOrMoveMessagesTask(hermes, d, domain, set, TransferHandler.MOVE, true);
+      CopyOrMoveMessagesTask rval = new CopyOrMoveMessagesTask(hermes, d, domain, set, TransferHandler.MOVE, true, true);
 
       rval.start();
 
