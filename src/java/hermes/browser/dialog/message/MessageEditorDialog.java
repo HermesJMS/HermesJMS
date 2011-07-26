@@ -39,6 +39,8 @@ public class MessageEditorDialog extends JDialog {
 	private MessageWriter messageWriter;
 	private String destinationName;
 	private Domain domain;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -62,16 +64,17 @@ public class MessageEditorDialog extends JDialog {
 	 */
 
 	public MessageEditorDialog(final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK) throws JMSException {
-		this("Send message to " + destinationName, message, destinationName, domain, onOK);
+		this("Send message to " + destinationName, message, destinationName, domain, onOK, "Send", "Done");
+		
 		setModal(false);
 	}
 
 	public MessageEditorDialog(final Message message, final EditedMessageHandler onOK) throws JMSException {
-		this("Edit Message", message, null, null, onOK);
+		this("Edit Message", message, null, null, onOK, "OK", "Cancel");
 		setModal(true);
 	}
 
-	public MessageEditorDialog(final String title, final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK)
+	public MessageEditorDialog(final String title, final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK, String okText, String cancelText)
 			throws JMSException {
 		super(HermesBrowser.getBrowser());
 		if (!canEdit(message)) {
@@ -106,7 +109,7 @@ public class MessageEditorDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Send");
+				JButton okButton = new JButton(okText);
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						if (isModal()) {
@@ -122,7 +125,7 @@ public class MessageEditorDialog extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Done");
+				JButton cancelButton = new JButton(cancelText);
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						MessageEditorDialog.this.dispose();
