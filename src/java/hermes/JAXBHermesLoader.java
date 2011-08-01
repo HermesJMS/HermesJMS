@@ -501,7 +501,9 @@ public class JAXBHermesLoader implements HermesLoader {
 		//
 		// You can now get the factory from the manager.
 
-		if (factoryConfig.getProvider().getClassName().equals(JNDIConnectionFactory.class.getName())) {
+		if (factoryConfig.getProvider().getClassName().equals(JNDIConnectionFactory.class.getName())
+				|| factoryConfig.getProvider().getClassName().equals(JNDIQueueConnectionFactory.class.getName())
+				|| factoryConfig.getProvider().getClassName().equals(JNDITopicConnectionFactory.class.getName())) {
 
 			jndiFactory = (JNDIConnectionFactory) connectionFactoryManager.getConnectionFactory();
 			jndiFactory._setDelegateClassLoader(classLoader);
