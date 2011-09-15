@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. * 
+ * limitations under the License. *
  */
 package hermes.ext.qpid;
 
@@ -70,6 +70,8 @@ public class QpidManager {
     private Destination responses;
     private MessageConsumer receiver;
 
+    private String respQueueName;
+
     /**
      * Init connection with brocker.
      *
@@ -93,10 +95,11 @@ public class QpidManager {
         // In the 0.8 Qpid release, the broker incorrectly required
         // the client's response queue to be bound to
         // qmf.default.direct, requiring the following address:
-        String tempQueueName = "BURL:management-direct://qmf.default.direct//"
-            + UUID.randomUUID() + "?autodelete='true'";
+        respQueueName = UUID.randomUUID().toString();
+        String respQueueAddress = "BURL:management-direct://qmf.default.direct//"
+            + respQueueName + "?autodelete='true'";
 
-        responses = session.createQueue(tempQueueName);
+        responses = session.createQueue(respQueueAddress);
         // responses = session.createQueue("topic:/qmf.default.direct/" +
         // UUID.randomUUID());
         // However since the 0.10 release, the simpler approach
@@ -174,4 +177,9 @@ public class QpidManager {
             log.debug("closed QPID connection");
         }
     }
+
+    public String getRespQueueName() {
+        return respQueueName;
+    }
+
 }

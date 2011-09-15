@@ -162,7 +162,7 @@ private static final Logger log = Logger.getLogger(GeneralRendererConfigPanel.cl
          {
             final String className = renderer.getClass().getName();
             final Map properties = BeanUtils.describe(renderer);
-            final MessageRenderer.Config rendererConfig = renderer.createConfig();
+            final MessageRenderer.Config rendererConfig = renderer.getConfig() != null ? renderer.getConfig() : renderer.createConfig();
 
             if (rendererConfig != null)
             {

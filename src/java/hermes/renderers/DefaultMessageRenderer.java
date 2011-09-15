@@ -349,7 +349,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 			try {
 				final StringBuffer sb = new StringBuffer();
 
-				sb.append(MessageUtils.asBytes(bytesMessage));
+				sb.append(new String(MessageUtils.asBytes(bytesMessage))); 
 				textPane.setWrapStyleWord(true);
 				textPane.setText(sb.toString());
 

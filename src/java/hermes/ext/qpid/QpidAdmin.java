@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. * 
+ * limitations under the License. *
  */
 package hermes.ext.qpid;
 
@@ -26,9 +26,6 @@ import hermes.ext.HermesAdminSupport;
 import hermes.ext.qpid.qmf.QMFObject;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,7 +49,6 @@ import org.apache.log4j.Logger;
 public class QpidAdmin
     extends HermesAdminSupport
     implements hermes.HermesAdmin {
-
 
     private final Logger log = Logger.getLogger(QpidAdmin.class);
     private QpidManager qpidManager;
@@ -105,7 +101,6 @@ public class QpidAdmin
         qpidManager.close();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<DestinationConfig> discoverDestinationConfigs()
             throws JMSException {
@@ -119,19 +114,22 @@ public class QpidAdmin
 
                 QMFObject qmfObject = new QMFObject(i);
                 String queueName = qmfObject.getName();
-                DestinationConfig destinationConfig = buildDestinationConfig(queueName);
-                PropertySetConfig propertySetConfig = new PropertySetConfig();
 
-                for (String key : qmfObject.keySet()) {
+                if(acceptDestination(queueName)) {
+                    DestinationConfig destinationConfig = buildDestinationConfig(queueName);
+                    PropertySetConfig propertySetConfig = new PropertySetConfig();
 
-                    PropertyConfig propertyConfig = new PropertyConfig();
-                    propertyConfig.setName(key);
-                    propertyConfig.setValue(qmfObject.getStringValue(key));
-                    propertySetConfig.getProperty().add(propertyConfig);
+                    for (String key : qmfObject.keySet()) {
+
+                        PropertyConfig propertyConfig = new PropertyConfig();
+                        propertyConfig.setName(key);
+                        propertyConfig.setValue(qmfObject.getStringValue(key));
+                        propertySetConfig.getProperty().add(propertyConfig);
+                    }
+
+                    destinationConfig.setProperties(propertySetConfig);
+                    rval.add(destinationConfig);
                 }
-
-                destinationConfig.setProperties(propertySetConfig);
-                rval.add(destinationConfig);
             }
         } catch (UnsupportedEncodingException e) {
             throw new HermesException(e);
@@ -151,6 +149,10 @@ public class QpidAdmin
         return destinationConfig;
     }
 
+    protected boolean acceptDestination(String destName) {
+        return !qpidManager.getRespQueueName().equals(destName);
+    }
+
     @Override
     public Map<String, Object> getStatistics(DestinationConfig destination)
         throws JMSException {
@@ -160,8 +162,6 @@ public class QpidAdmin
 
             List<Map<String, ?>> objects = qpidManager.getObjects(QmfTypes.QUEUE);
             for (Map<String, ?> i : objects) {
-
-                @SuppressWarnings("unchecked")
                 QMFObject qmfObject = new QMFObject(i);
                 String name = qmfObject.getName();
                 if (destination.getName().equals(name)) {

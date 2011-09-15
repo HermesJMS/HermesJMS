@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2003,2004 Colin Crist
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package hermes.browser.dialog;
@@ -65,7 +65,7 @@ import com.jidesoft.grid.SortableTable;
 public class DestinationConfigPanel extends JPanel
 {
    /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -9161130471970874426L;
 private static final String IMPORT = "Import...";
@@ -90,6 +90,13 @@ private static final String IMPORT = "Import...";
       this.dialog = dialog;
 
       init();
+   }
+
+   public void reset() {
+       while(destinationTableModel.getRowCount() > 0) {
+           destinationTableModel.removeRow(0);
+       }
+       updateModel();
    }
 
    public void init()
@@ -171,7 +178,7 @@ private static final String IMPORT = "Import...";
                DestinationConfig dConfig = new DestinationConfig() ;
                dConfig.setDomain(Domain.QUEUE.getId()) ;
                dConfig.setName("NEW") ;
-               
+
                destinationTableModel.addItem(dConfig) ;
                doEdit(sConfig.getId(), dConfig);
                dialog.setDirty();
@@ -252,14 +259,14 @@ private static final String IMPORT = "Import...";
          Hermes.ui.getThreadPool().invokeLater(
                new EditDestinationPropertiesTask((Hermes) HermesBrowser.getBrowser().getLoader().getContext().lookup(hermesId), dConfig, new Runnable()
                {
-               
+
                   public void run()
                   {
                      // Hack.
-                     
-                     destinationTableModel.fireTableDataChanged() ;               
+
+                     destinationTableModel.fireTableDataChanged() ;
                   }
-               
+
                }));
       }
       catch (NamingException e)

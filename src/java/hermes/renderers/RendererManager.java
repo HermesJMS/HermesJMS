@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2003,2004 Colin Crist
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package hermes.renderers;
@@ -43,7 +43,7 @@ import org.apache.log4j.Logger;
 
 /**
  * Mangages a collection of renderers.
- * 
+ *
  * @author colincrist@hermesjms.com last changed by: $Author: colincrist $
  * @version $Id: RendererManager.java,v 1.7 2006/04/28 09:59:37 colincrist Exp $
  */
@@ -51,12 +51,12 @@ public class RendererManager
 {
    private static final Logger log = Logger.getLogger(RendererManager.class);
    private List<MessageRenderer> renderers = new ArrayList<MessageRenderer>();
-   
+
    private Map<String, MessageRenderer> renderersByClass = new HashMap<String, MessageRenderer>();
    private Map<String, MessageRenderer> renderersByName = new HashMap<String, MessageRenderer>();
 
    /**
-    * 
+    *
     */
    public RendererManager()
    {
@@ -147,7 +147,7 @@ public class RendererManager
             {
                MessageRenderer renderer = (MessageRenderer) Class.forName(rendererClassName).newInstance() ;
                renderers.add(renderer);
-               
+
                renderersByClass.put(rendererClassName, renderer);
                renderersByName.put(renderer.getDisplayName(), renderer);
             }
@@ -157,9 +157,9 @@ public class RendererManager
             }
          }
       }
-      
+
       log.debug("renderer chain:") ;
-      
+
       for (MessageRenderer r : renderers)
       {
          log.debug(r.getDisplayName() + ": " + r.getClass().getName()) ;
@@ -176,7 +176,7 @@ public class RendererManager
             if (dConfig.getRenderer() != null)
             {
                // @@TODO Remove the old destination specific renderers.
-               
+
                dConfig.setRenderer(null) ;
             }
          }
@@ -188,11 +188,17 @@ public class RendererManager
       return renderers;
    }
 
+   public void addRenderer(MessageRenderer renderer) {
+       renderers.add(renderer);
+       renderersByName.put(renderer.getDisplayName(), renderer);
+       renderersByClass.put(renderer.getClass().getName(), renderer);
+   }
+
    public MessageRenderer getRendererByName(String displayName)
    {
       return (MessageRenderer) renderersByName.get(displayName);
    }
-   
+
    public MessageRenderer getRendererByClass(String className)
    {
       return (MessageRenderer) renderersByClass.get(className);
