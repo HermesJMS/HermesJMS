@@ -29,6 +29,7 @@ import hermes.swing.actions.CreateNewSessionAction;
 import hermes.swing.actions.DeleteBrowserTreeNodeAction;
 import hermes.swing.actions.DiscoverDestinationsAction;
 import hermes.swing.actions.EditObjectAction;
+import hermes.swing.actions.NewPreferencesAction;
 import hermes.swing.actions.PreferencesAction;
 
 import java.awt.event.ActionEvent;
@@ -82,6 +83,8 @@ public ConfigurationToolBar()
       add(SwingUtils.createToolBarButton(ActionRegistry.getAction(DeleteBrowserTreeNodeAction.class))) ;
       addSeparator() ;    
       add(SwingUtils.createToolBarButton(ActionRegistry.getAction(PreferencesAction.class)));
+      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(NewPreferencesAction.class)));
+
       add(aboutButton);
    }
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2003,2004 Colin Crist
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package hermes.renderers;
@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ import org.apache.log4j.Logger;
 
 /**
  * Tries to render the message in some simple way.
- * 
+ *
  * @author colincrist@hermesjms.com
  * @version $Id: DefaultMessageRenderer.java,v 1.4 2004/07/30 17:25:13
  *          colincrist Exp $
@@ -62,20 +63,22 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 	private static final Logger log = Logger.getLogger(DefaultMessageRenderer.class);
 	private static final String BYTESISSTRING = "bytesIsString";
 	private static final String BYTESISOBJECT = "bytesIsObject";
+    private static final String BYTESENCODING = "bytesEncoding";
 	private static final String BYTESISOBJECTSIZE = "bytesIsObjectBufferSize";
 	private static final String TOSTRINGOBJECT = "toStringOnObjectMessage";
 	private static final String MESSAGE_CACHE = "messageCache";
-	private static final String BYTESISSTRING_INFO = "Treat a BytesMessage as a sequence of 8 bit characters and convert to a String";
+	private static final String BYTESISSTRING_INFO = "Treat a BytesMessage as a sequence of characters and convert to a String";
 	private static final String BYTESISOBJECT_INFO = "Treat a BytesMessage as a Serialized Java object";
 	private static final String BYTESISOBJECTSIZE_INFO = "Buffer size to use as temporary storage (ignored with JMS 1.1 providers as size is available on the message)";
 	private static final String TOSTRINGOBJECT_INFO = "Just call toString() on any Object in an ObjectMessage";
 	private static final String MESSAGE_CACHE_INFO = "The number of panels to cache - can speed up the user interface when switching between messags";
+    private static final String BYTESENCODING_INFO = "The encoding to use when treating a BytesMessage as a String";
 
 	private LRUMap panelCache;
 
 	/**
 	 * Configuration bean for this renderer
-	 * 
+	 *
 	 * @author colincrist@hermesjms.com last changed by: $Author: colincrist $
 	 * @version $Id: DefaultMessageRenderer.java,v 1.4 2004/07/30 17:25:13
 	 *          colincrist Exp $
@@ -88,6 +91,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 		private boolean toStringOnObjectMessage = false;
 		private int messageCache = 100;
 		private boolean bytesIsString = false;
+		private String bytesEncoding = Charset.defaultCharset().name();
 
 		public String toString() {
 			return name + ".MyConfig: " + "bytesIsObject=" + bytesIsObject + ", bytesIsObjectBufferSize=" + bytesIsObjectBufferSize + ", toStringOnObjectMessage=" + toStringOnObjectMessage
@@ -132,7 +136,22 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 			this.bytesIsObjectBufferSize = bytesIsObjectBufferSize;
 		}
 
-		/**
+        /**
+         * @return Returns the bytesEncoding.
+         */
+		public String getBytesEncoding() {
+            return bytesEncoding;
+        }
+
+        /**
+         * @param bytesEncoding
+         *            The bytesEncoding to set.
+         */
+        public void setBytesEncoding(String bytesEncoding) {
+            this.bytesEncoding = bytesEncoding;
+        }
+
+        /**
 		 * @return Returns the name.
 		 */
 		public String getName() {
@@ -166,6 +185,10 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 			if (propertyName.equals(BYTESISSTRING)) {
 				return BYTESISSTRING_INFO;
+			}
+
+			if (propertyName.equals(BYTESENCODING)) {
+			    return BYTESENCODING_INFO;
 			}
 
 			return propertyName;
@@ -204,7 +227,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/**
 	 * Show the TextMessage in a JTextArea.
-	 * 
+	 *
 	 * @param textMessage
 	 * @return
 	 * @throws JMSException
@@ -268,7 +291,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 	/**
 	 * Depending on configuration, show the object via toString() or a list of
 	 * properties.
-	 * 
+	 *
 	 * @param objectMessage
 	 * @return
 	 * @throws JMSException
@@ -312,7 +335,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/**
 	 * Show the MapMessage as a tree.
-	 * 
+	 *
 	 * @param mapMessage
 	 * @return
 	 * @throws JMSException
@@ -323,7 +346,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/**
 	 * Show a BytesMessage either as a java object or just a size.
-	 * 
+	 *
 	 * @param bytesMessage
 	 * @return
 	 * @throws JMSException
@@ -335,6 +358,8 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 		final MyConfig currentConfig = (MyConfig) getConfig();
 
 		textPane.setEditable(false);
+        textPane.setWrapStyleWord(true);
+        textPane.setLineWrap(true);
 		bytesMessage.reset();
 
 		if (currentConfig.isBytesIsObject()) {
@@ -343,16 +368,11 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 			final ObjectInputStream oistream = new ObjectInputStream(bistream);
 			final Object o = oistream.readObject();
 
-			textPane.setWrapStyleWord(true);
 			textPane.setText(o.toString());
 		} else if (currentConfig.isBytesIsString()) {
 			try {
-				final StringBuffer sb = new StringBuffer();
-
-				sb.append(new String(MessageUtils.asBytes(bytesMessage))); 
-				textPane.setWrapStyleWord(true);
-				textPane.setText(sb.toString());
-
+				String text = new String(MessageUtils.asBytes(bytesMessage), currentConfig.getBytesEncoding());
+				textPane.setText(text);
 				return textPane;
 			} catch (JMSException e) {
 				textPane.setText(e.getMessage());
@@ -362,12 +382,14 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 			textPane.setText("byte[size=" + size + "]");
 		}
 
+		textPane.setCaretPosition(0);
+
 		return textPane;
 	}
 
 	/**
 	 * List out all the properties in the stream message.
-	 * 
+	 *
 	 * @param streamMessage
 	 * @return
 	 * @throws JMSException
@@ -446,7 +468,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see hermes.browser.MessageRenderer#createConfig()
 	 */
 	public Config createConfig() {
@@ -455,7 +477,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * hermes.browser.MessageRenderer#setConfig(hermes.browser.MessageRenderer
 	 * .Config)
