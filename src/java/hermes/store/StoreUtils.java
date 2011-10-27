@@ -42,10 +42,10 @@ public class StoreUtils
    private static final Logger log = Logger.getLogger(StoreUtils.class) ;
    private static JDBCAdapter adapter ;
    private static Map<String, Statements> statements = new HashMap<String, Statements>() ;
-   
+   private static String DERBY = "derby" ;
    static 
    {
-      statements.put("derby", new DefaultStatements()) ;
+      statements.put(DERBY, new DefaultStatements()) ;
    }
    
    public static String getDefaultConnectionURL()
@@ -87,10 +87,11 @@ public class StoreUtils
       }
       else
       {
-         throw new HermesException("Unsupported JDBC provider " + provider) ;
+    	  log.error("no statements for provider " + provider + ", trying default for " + DERBY) ;
+          return statements.get(DERBY) ;
       }
-      
    }
+   
    public synchronized static JDBCAdapter getJDBCAdapter(String url) throws HermesException
    {
       if (adapter == null)
