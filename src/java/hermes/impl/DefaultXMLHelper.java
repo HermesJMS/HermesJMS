@@ -372,7 +372,9 @@ public class DefaultXMLHelper implements XMLHelper {
 			}
 
 			try {
-				rval.setJMSPriority(message.getJMSPriority());
+				if (message.getJMSPriority() != null) {
+					rval.setJMSPriority(message.getJMSPriority());
+				}
 			} catch (JMSException ex) {
 				log.error("unable to set JMSPriority: " + ex.getMessage(), ex);
 			}
