@@ -1,5 +1,7 @@
 package hermes.browser.dialog.message;
 
+import hermes.browser.HermesBrowser;
+import hermes.config.HermesConfig;
 import hermes.swing.PropertyRow;
 import hermes.swing.PropertyType;
 import hermes.util.TextUtils;
@@ -18,12 +20,16 @@ public class UserHeaderPropertyPanel extends GenericPropertyPanel {
 		super(true);
 
 		if (message != null) {
+			HermesConfig config = HermesBrowser.getBrowser().getConfig() ;
 			for (Enumeration<String> e = message.getPropertyNames(); e.hasMoreElements();) {
 				PropertyRow row = new PropertyRow();
 				row.name = e.nextElement();
 				row.value = message.getObjectProperty(row.name);
 				row.type = PropertyType.fromObject(row.value);
-				model.addRow(row);
+				
+				if (config.isCopyJMSProviderProperties() || !row.name.startsWith("JMS")) {
+					model.addRow(row);
+				}
 			}
 		}
 	}
