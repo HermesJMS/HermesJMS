@@ -17,6 +17,9 @@
 
 package hermes.util;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import hermes.Domain;
 
 import javax.jms.Connection;
@@ -42,98 +45,106 @@ import javax.jms.Topic;
  * @version $Id: JMSUtils.java,v 1.6 2005/10/21 08:37:21 colincrist Exp $
  */
 
-public class JMSUtils
-{
-   public static String getFilenameFromMessageID(String messageId)
-   {
-      return messageId.replace('/', '_').replace(':', '_').replace('\\', '_').replace("<", "_").replace(">", "_");
-   }
+public class JMSUtils {
+	public static String getFilenameFromMessageID(String messageId) {
+		return messageId.replace('/', '_').replace(':', '_').replace('\\', '_').replace("<", "_").replace(">", "_");
+	}
 
-   public static void closeQuietly(QueueBrowser browser)
-   {
-      try
-      {
-         if (browser != null)
-         {
-            browser.close();
-         }
-      }
-      catch (JMSException ex)
-      {
-         // NOP
-      }
-   }
+	public static void closeQuietly(QueueBrowser browser) {
+		try {
+			if (browser != null) {
+				browser.close();
+			}
+		} catch (JMSException ex) {
+			// NOP
+		}
+	}
 
-   /**
-    * Is the argument in the queue domain
-    */
-   public static boolean isQueue(Connection o)
-   {
-      return o instanceof QueueConnection;
-   }
+	/**
+	 * Is the argument in the queue domain
+	 */
+	public static boolean isQueue(Connection o) {
+		return o instanceof QueueConnection;
+	}
 
-   /**
-    * Is the argument in the queue domain
-    */
-   public static boolean isQueue(ConnectionFactory o)
-   {
-      return o instanceof QueueConnectionFactory;
-   }
+	/**
+	 * Is the argument in the queue domain
+	 */
+	public static boolean isQueue(ConnectionFactory o) {
+		return o instanceof QueueConnectionFactory;
+	}
 
-   /**
-    * Is the argument in the queue domain
-    */
-   public static boolean isQueue(Destination o)
-   {
-      return Domain.getDomain(o) == Domain.QUEUE;
-   }
+	/**
+	 * Is the argument in the queue domain
+	 */
+	public static boolean isQueue(Destination o) {
+		return Domain.getDomain(o) == Domain.QUEUE;
+	}
 
-   /**
-    * Is the argument in the queue domain
-    */
-   public static boolean isQueue(MessageConsumer o)
-   {
-      return o instanceof QueueReceiver;
-   }
+	/**
+	 * Is the argument in the queue domain
+	 */
+	public static boolean isQueue(MessageConsumer o) {
+		return o instanceof QueueReceiver;
+	}
 
-   /**
-    * Is the argument in the queue domain
-    */
-   public static boolean isQueue(MessageProducer o)
-   {
-      return o instanceof QueueSender;
-   }
+	/**
+	 * Is the argument in the queue domain
+	 */
+	public static boolean isQueue(MessageProducer o) {
+		return o instanceof QueueSender;
+	}
 
-   /**
-    * Is the argument in the queue domain
-    */
-   public static boolean isQueue(Session o)
-   {
-      return o instanceof QueueSession;
-   }
+	/**
+	 * Is the argument in the queue domain
+	 */
+	public static boolean isQueue(Session o) {
+		return o instanceof QueueSession;
+	}
 
-   public static String getDestinationName(Destination to)
-   {
-      if (to == null)
-      {
-         return "";
-      }
+	public static String getDestinationName(Destination to) {
+		if (to == null) {
+			return "";
+		}
 
-      try
-      {
-         if (isQueue(to))
-         {
-            return ((Queue) to).getQueueName();
-         }
-         else
-         {
-            return ((Topic) to).getTopicName();
-         }
-      }
-      catch (JMSException ex)
-      {
-         return ex.getMessage();
-      }
-   }
+		try {
+			if (isQueue(to)) {
+				return ((Queue) to).getQueueName();
+			} else {
+				return ((Topic) to).getTopicName();
+			}
+		} catch (JMSException ex) {
+			return ex.getMessage();
+		}
+	}
+
+	public static String createMessageSelectorUsingIn(Collection<String> messageIds) {
+		StringBuffer sqlBuffer = new StringBuffer();
+		sqlBuffer.append("JMSMessageID in (") ; 
+		for (Iterator iter = messageIds.iterator(); iter.hasNext();) {
+			sqlBuffer.append("\'").append(iter.next()).append("\'");
+
+			if (iter.hasNext()) {
+				sqlBuffer.append(", ");
+			}
+		}
+		sqlBuffer.append(")") ;
+
+		return sqlBuffer.toString();
+	}
+	
+	public static String createMessageSelectorUsingOr(Collection<String> messageIds) {
+		StringBuffer sqlBuffer = new StringBuffer();
+
+		for (Iterator iter = messageIds.iterator(); iter.hasNext();) {
+			sqlBuffer.append("JMSMessageID = \'").append(iter.next()).append("\'");
+
+			if (iter.hasNext()) {
+				sqlBuffer.append(" or ");
+			}
+		}
+
+		return sqlBuffer.toString();
+	}
 
 }
