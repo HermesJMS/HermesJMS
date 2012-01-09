@@ -683,7 +683,7 @@ public class DefaultHermesImpl implements Hermes {
 			out = createBytesMessage();
 			final BytesMessage inBytes = (BytesMessage) in;
 			final BytesMessage outBytes = (BytesMessage) out;
-
+			inBytes.reset();
 			try {
 				outBytes.writeBytes(MessageUtils.asBytes(inBytes));
 			} catch (MessageEOFException ex2) {
