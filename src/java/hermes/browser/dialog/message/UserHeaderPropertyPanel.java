@@ -34,22 +34,22 @@ public class UserHeaderPropertyPanel extends GenericPropertyPanel {
 			if (!TextUtils.isEmpty(row.name)) {
 				switch (row.type) {
 				case INT:
-					message.setIntProperty(row.name, Integer.decode(row.value.toString()));
+					message.setIntProperty(row.name, row.value == null ? null : Integer.decode(row.value.toString()));
 					break;
 				case DOUBLE:
-					message.setDoubleProperty(row.name, Double.parseDouble(row.value.toString()));
+					message.setDoubleProperty(row.name, row.value == null ? null : Double.parseDouble(row.value.toString()));
 					break;
 				case LONG:
-					message.setLongProperty(row.name, Long.decode(row.value.toString()));
+					message.setLongProperty(row.name, row.value == null ? null : Long.decode(row.value.toString()));
 					break;
 				case BOOLEAN:
-					message.setBooleanProperty(row.name, Boolean.parseBoolean(row.value.toString()));
+					message.setBooleanProperty(row.name, row.value == null ? null : Boolean.parseBoolean(row.value.toString()));
 					break;
 				case STRING:
-					message.setStringProperty(row.name, row.value.toString());
+					message.setStringProperty(row.name, row.value == null ? null : row.value.toString());
 					break;
 				case BYTE:
-					message.setByteProperty(row.name, Byte.parseByte(row.value.toString()));
+					message.setByteProperty(row.name, row.value == null ? null : Byte.parseByte(row.value.toString()));
 					break;
 				}
 			}

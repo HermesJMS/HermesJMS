@@ -117,7 +117,7 @@ public class JMSHeaderPropertyPanel extends JPanel {
 			newMessage = handler.createMessage();
 			break;
 		case BytesMessage:
-			newMessage = new BytesMessageImpl() ;
+			newMessage = handler.createBytesMessage();
 			break ;
 		default:
 			throw new JMSException("Unsupported message type " + messageType);
