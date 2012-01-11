@@ -46,6 +46,7 @@ import com.ibm.mq.MQException;
 import com.ibm.mq.MQMessage;
 import com.ibm.mq.MQQueue;
 import com.ibm.mq.MQQueueManager;
+import com.ibm.mq.MQSecurityExit;
 import com.ibm.mq.jms.MQConnectionFactory;
 import com.ibm.mq.jms.MQQueueEnumeration;
 import com.ibm.mq.pcf.CMQC;
@@ -95,7 +96,7 @@ public class MQSeriesAdmin extends HermesAdminSupport implements HermesAdmin
 
  
    
-   private synchronized MQQueueManager getQueueManager() throws MQException
+   private synchronized MQQueueManager getQueueManager() throws Exception
    {
       if (queueManager == null)
       {
@@ -103,7 +104,17 @@ public class MQSeriesAdmin extends HermesAdminSupport implements HermesAdmin
          MQEnvironment.port = mqCF.getPort();
          MQEnvironment.hostname = mqCF.getHostName();
          MQEnvironment.properties.put(MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES);
-
+         if (mqCF.getSecurityExit() != null) {
+        	 Class clazz = getClass().getClassLoader().loadClass(mqCF.getSecurityExit()) ;
+        	 MQSecurityExit securityExit = null ;
+        	 if (mqCF.getSecurityExitInit() != null) {
+        		 securityExit = (MQSecurityExit) clazz.getConstructor(String.class).newInstance(mqCF.getSecurityExitInit()) ;
+        	 } else {
+        		 securityExit = (MQSecurityExit) clazz.newInstance() ;
+        	 }
+        	 MQEnvironment.securityExit = securityExit ;
+         }
+         
          queueManager = new MQQueueManager(mqCF.getQueueManager());
       }
 
@@ -210,7 +221,7 @@ public class MQSeriesAdmin extends HermesAdminSupport implements HermesAdmin
 
          return depth;
       }
-      catch (MQException e)
+      catch (Exception e)
       {
          close();
 
@@ -292,7 +303,7 @@ public class MQSeriesAdmin extends HermesAdminSupport implements HermesAdmin
             log.debug("PCF calls gave a 2033 reason code, ignoring") ;
          }
       }
-      catch (IOException ex)
+      catch (Exception ex)
       {
          throw new HermesException(ex);
       }
@@ -403,6 +414,9 @@ public class MQSeriesAdmin extends HermesAdminSupport implements HermesAdmin
          {
             log.debug("PCF calls gave a 2033 reason code, ignoring") ;
          }
+      }
+      catch (Exception ex) {
+    	  throw new HermesException(ex) ;
       }
       finally
       {
