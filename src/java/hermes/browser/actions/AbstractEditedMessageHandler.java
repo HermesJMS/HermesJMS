@@ -18,18 +18,30 @@ import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.naming.NamingException;
 
+import org.apache.log4j.Logger;
+
 public abstract class AbstractEditedMessageHandler implements EditedMessageHandler {
+	private static final Logger log = Logger.getLogger(AbstractEditedMessageHandler.class) ;
 	private Hermes hermes;
 
 	public AbstractEditedMessageHandler(Hermes hermes) {
 		this.hermes = hermes;
 	}
 
-	public Hermes getHermes() {
-		return hermes ;
+	public void close() {
+		try {
+			hermes.close();
+		} catch (JMSException e) {
+			log.error("closing JMS session: " + e.getMessage(), e) ;
+		}
 	}
+
+	public Hermes getHermes() {
+		return hermes;
+	}
+
 	@Override
-	public abstract void onMessage(Message message) ;
+	public abstract void onMessage(Message message);
 
 	@Override
 	public BytesMessage createBytesMessage() throws JMSException {
