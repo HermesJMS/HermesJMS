@@ -247,12 +247,11 @@ private static final Logger log = Logger.getLogger(ContextTree.class);
       {
          public void mousePressed(MouseEvent e)
          {
-            // NOP
+             onMouseClicked(e);
          }
 
          public void mouseReleased(MouseEvent e)
          {
-            onMouseReleased(e);
          }
 
          public void mouseClicked(MouseEvent e)
@@ -272,7 +271,7 @@ private static final Logger log = Logger.getLogger(ContextTree.class);
     * 
     * @param e
     */
-   private void onMouseReleased(MouseEvent e)
+   private void onMouseClicked(MouseEvent e)
    {
       TreePath currentPath = getPathForLocation(e.getX(), e.getY());
 
