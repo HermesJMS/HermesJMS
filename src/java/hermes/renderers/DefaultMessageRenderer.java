@@ -354,8 +354,9 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 	 * @throws ClassNotFoundException
 	 */
 	protected JComponent handleBytesMessage(BytesMessage bytesMessage) throws JMSException, IOException, ClassNotFoundException {
-		final JTextArea textPane = new MyTextArea();
 		final MyConfig currentConfig = (MyConfig) getConfig();
+
+		JTextArea textPane = new MyTextArea();
 
 		textPane.setEditable(false);
         textPane.setWrapStyleWord(true);
@@ -378,8 +379,8 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 				textPane.setText(e.getMessage());
 			}
 		} else {
-			final long size = MessageUtils.getBodyLength(bytesMessage);
-			textPane.setText("byte[size=" + size + "]");
+			HexMessageRenderer renderer = new HexMessageRenderer() ;
+			textPane = (JTextArea) renderer.render(bytesMessage) ; // Hack.
 		}
 
 		textPane.setCaretPosition(0);

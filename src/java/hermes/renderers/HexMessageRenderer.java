@@ -23,10 +23,12 @@ import hermes.util.MessageUtils;
 
 import java.awt.Font;
 
+import javax.jms.BytesMessage;
 import javax.jms.Message;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 
+import org.apache.activemq.kaha.BytesMarshaller;
 import org.apache.log4j.Logger;
 
 /**
@@ -42,8 +44,7 @@ public class HexMessageRenderer extends AbstractMessageRenderer
 
    public HexMessageRenderer()
    {
-      super();
-      
+      super();      
    }
 
    public JComponent render(Message m)
@@ -74,11 +75,11 @@ public class HexMessageRenderer extends AbstractMessageRenderer
 
   
    /**
-    * Any JMS message is rederable.
+    * BytesMessages are handled by the DefaultMessageRenderer so no point in doing it twice.
     */
    public boolean canRender(Message message)
    {
-      return true;
+      return ! (message instanceof BytesMessage) ;
    }
 
    public String getDisplayName()
