@@ -64,7 +64,7 @@ public class JMSHeaderPropertyPanel extends JPanel {
 	private JSpinner priroritySpinner;
 	private JComboBox messageTypeCombo;
 	private JButton tglbtnQueue;
-	private Domain replyToDomain = Domain.QUEUE ;
+	private Domain replyToDomain = Domain.QUEUE;
 
 	public JComboBox getMessageTypeComboBox() {
 		return messageTypeCombo;
@@ -75,13 +75,12 @@ public class JMSHeaderPropertyPanel extends JPanel {
 		FastDateFormat fmt = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSSZ");
 
 		if (message.getJMSReplyTo() != null) {
-			replyToDomain = Domain.getDomain(message.getJMSReplyTo()) ;
+			replyToDomain = Domain.getDomain(message.getJMSReplyTo());
 		} else {
-			replyToDomain = Domain.QUEUE ;
+			replyToDomain = Domain.QUEUE;
 		}
-		tglbtnQueue.setText(replyToDomain.toString()) ;
-		
-		
+		tglbtnQueue.setText(replyToDomain.toString());
+
 		messageIdField.setText(message.getJMSMessageID());
 		replyToField.setText(JMSUtils.getDestinationName(message.getJMSReplyTo()));
 		destinationField.setText(JMSUtils.getDestinationName(message.getJMSDestination()));
@@ -104,86 +103,63 @@ public class JMSHeaderPropertyPanel extends JPanel {
 	}
 
 	public Message createMessage(EditedMessageHandler handler) throws JMSException, NamingException {
-		MessageType messageType = (MessageType) messageTypeCombo.getSelectedItem();
-		Message newMessage = null;
-		switch (messageType) {
-		case TextMessage:
-			newMessage = handler.createTextMessage();
-			break;
-		case MapMessage:
-			newMessage = handler.createMapMessage();
-			break;
-		case Message:
-			newMessage = handler.createMessage();
-			break;
-		case BytesMessage:
-			newMessage = handler.createBytesMessage();
-			break ;
-		default:
-			throw new JMSException("Unsupported message type " + messageType);
-		}
+		try {
+			MessageType messageType = (MessageType) messageTypeCombo.getSelectedItem();
+			Message newMessage = null;
+			switch (messageType) {
+			case TextMessage:
+				newMessage = handler.createTextMessage();
+				break;
+			case MapMessage:
+				newMessage = handler.createMapMessage();
+				break;
+			case Message:
+				newMessage = handler.createMessage();
+				break;
+			case BytesMessage:
+				newMessage = handler.createBytesMessage();
+				break;
+			default:
+				throw new JMSException("Unsupported message type " + messageType);
+			}
 
-		if (!TextUtils.isEmpty(replyToField.getText())) {
-			newMessage.setJMSReplyTo(tglbtnQueue.getText().equals(Domain.QUEUE.toString()) ? handler.createQueue(replyToField.getText()) : handler.createTopic(replyToField.getText()));
-		}
+			if (!TextUtils.isEmpty(replyToField.getText())) {
+				newMessage.setJMSReplyTo(tglbtnQueue.getText().equals(Domain.QUEUE.toString()) ? handler.createQueue(replyToField.getText()) : handler.createTopic(replyToField.getText()));
+			}
 
-		if (!TextUtils.isEmpty(typeField.getText())) {
-			newMessage.setJMSType(typeField.getText());
-		}
+			if (!TextUtils.isEmpty(typeField.getText())) {
+				newMessage.setJMSType(typeField.getText());
+			}
 
-		if (this.message != null) {
-			 newMessage.setJMSMessageID(this.message.getJMSMessageID());
-			newMessage.setJMSDestination(this.message.getJMSDestination());
-		}
-		
-		if (!TextUtils.isEmpty(correlationIDField.getText())) {
-			newMessage.setJMSCorrelationID(correlationIDField.getText());
-		}
+			if (this.message != null) {
+				newMessage.setJMSMessageID(this.message.getJMSMessageID());
+				newMessage.setJMSDestination(this.message.getJMSDestination());
+			}
 
-		newMessage.setJMSPriority(((SpinnerNumberModel) priroritySpinner.getModel()).getNumber().intValue());
-		newMessage.setJMSExpiration(((SpinnerNumberModel) expirationSpinner.getModel()).getNumber().longValue());
+			if (!TextUtils.isEmpty(correlationIDField.getText())) {
+				newMessage.setJMSCorrelationID(correlationIDField.getText());
+			}
 
-		return newMessage;
+			newMessage.setJMSPriority(((SpinnerNumberModel) priroritySpinner.getModel()).getNumber().intValue());
+			newMessage.setJMSExpiration(((SpinnerNumberModel) expirationSpinner.getModel()).getNumber().longValue());
+
+			return newMessage;
+		} finally {
+			handler.close();
+		}
 	}
-	
+
 	/**
 	 * Create the panel.
 	 */
 	public JMSHeaderPropertyPanel() {
-		setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(75dlu;pref)"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(75dlu;default)"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("75dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.MIN_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				RowSpec.decode("min(50dlu;default)"),}));
+		setLayout(new FormLayout(new ColumnSpec[] { FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(75dlu;pref)"),
+				FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(75dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("75dlu"), FormFactory.RELATED_GAP_COLSPEC, },
+				new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC,
+						FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
+						FormFactory.RELATED_GAP_ROWSPEC, FormFactory.MIN_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC,
+						FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
+						FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, RowSpec.decode("min(50dlu;default)"), }));
 
 		JLabel jmsMessageIDLabel = new JLabel("JMS MessageID:");
 		jmsMessageIDLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -220,22 +196,22 @@ public class JMSHeaderPropertyPanel extends JPanel {
 
 		add(replyToField, "4, 10, 3, 1, fill, default");
 		replyToField.setColumns(10);
-		
+
 		tglbtnQueue = new JButton(replyToDomain.toString());
 		add(tglbtnQueue, "8, 10");
 		tglbtnQueue.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (replyToDomain.equals(Domain.QUEUE)) {
-					replyToDomain = Domain.TOPIC ;
+					replyToDomain = Domain.TOPIC;
 				} else {
-					replyToDomain = Domain.QUEUE ;
+					replyToDomain = Domain.QUEUE;
 				}
-				tglbtnQueue.setText(replyToDomain.toString()) ;
-				
+				tglbtnQueue.setText(replyToDomain.toString());
+
 			}
-		}) ;
+		});
 
 		JLabel jmsTypeLabel = new JLabel("JMS Type:");
 		add(jmsTypeLabel, "2, 14, right, default");
@@ -244,15 +220,15 @@ public class JMSHeaderPropertyPanel extends JPanel {
 		add(typeField, "4, 14, 5, 1, fill, default");
 		typeField.setColumns(10);
 
-//		JPanel cpanel = new JPanel();
-//		cpanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 5));
+		// JPanel cpanel = new JPanel();
+		// cpanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 5));
 
 		JLabel jmsCorrelationIDLabel = new JLabel("JMS CorrelationID:");
 		jmsCorrelationIDLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		add(jmsCorrelationIDLabel, "2, 16, right, default");
 
 		correlationIDField = new JTextField();
-	
+
 		add(correlationIDField, "4, 16, 3, 1, fill, default");
 		correlationIDField.setColumns(30);
 		JButton generateCorrelationIdButton = new JButton("Generate");
@@ -279,21 +255,21 @@ public class JMSHeaderPropertyPanel extends JPanel {
 		priroritySpinner = new JSpinner();
 		priroritySpinner.setModel(new SpinnerNumberModel(new Integer(4), new Integer(0), new Integer(9), new Integer(1)));
 		add(priroritySpinner, "4, 18");
-		
-				JLabel jmsExpirationLabel = new JLabel("JMS Expiration:");
-				add(jmsExpirationLabel, "6, 18, right, default");
-		
-				expirationSpinner = new JSpinner();
-				
-						expirationSpinner.setModel(new SpinnerNumberModel(new Long(0), new Long(0), null, new Long(1)));
-						add(expirationSpinner, "8, 18");
-		
-				JLabel messageTypeLabel = new JLabel("Message Type:");
-				add(messageTypeLabel, "2, 20, right, default");
-		
-				messageTypeCombo = new JComboBox();
-				messageTypeCombo.setModel(new DefaultComboBoxModel(MessageType.values()));
-				add(messageTypeCombo, "4, 20, 5, 1, fill, default");
+
+		JLabel jmsExpirationLabel = new JLabel("JMS Expiration:");
+		add(jmsExpirationLabel, "6, 18, right, default");
+
+		expirationSpinner = new JSpinner();
+
+		expirationSpinner.setModel(new SpinnerNumberModel(new Long(0), new Long(0), null, new Long(1)));
+		add(expirationSpinner, "8, 18");
+
+		JLabel messageTypeLabel = new JLabel("Message Type:");
+		add(messageTypeLabel, "2, 20, right, default");
+
+		messageTypeCombo = new JComboBox();
+		messageTypeCombo.setModel(new DefaultComboBoxModel(MessageType.values()));
+		add(messageTypeCombo, "4, 20, 5, 1, fill, default");
 
 	}
 
