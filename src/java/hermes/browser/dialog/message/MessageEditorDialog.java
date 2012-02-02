@@ -145,8 +145,10 @@ public class MessageEditorDialog extends JDialog {
 			messageWriter = new MapMessagePayloadPanel((MapMessage) message, true);
 		} else if (message instanceof BytesMessage) {
 			messageWriter = new BytesMessagePayloadPanel((BytesMessage) message);
+		} else {
+			messageWriter = new CannotEditMessageWriter(message) ;
 		}
-
+		
 		tabbedPane.addTab("Payload", messageWriter);
 
 		headerPropertyPanel.getMessageTypeComboBox().getModel().addListDataListener(new ListDataListener() {
@@ -186,7 +188,7 @@ public class MessageEditorDialog extends JDialog {
 		case BytesMessage:
 			return new BytesMessagePayloadPanel() ;
 		}
-		return null;
+		return new CannotEditMessageWriter() ;
 	}
 
 	protected void onOK() {

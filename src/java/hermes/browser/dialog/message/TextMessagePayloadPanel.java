@@ -23,8 +23,9 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 public class TextMessagePayloadPanel  extends MessageWriter {
-	JTextArea textArea = new JTextArea();
-
+	private JTextArea textArea = new JTextArea();
+	private CharsetComboBox charSets = new CharsetComboBox() ;
+	
 	public TextMessagePayloadPanel() {
 		setLayout(new BorderLayout(0, 0));
 
@@ -38,23 +39,32 @@ public class TextMessagePayloadPanel  extends MessageWriter {
 
 		final JButton uploadButton = new JButton("Insert...");
 		uploadButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				doUpload();
 			}
 		});
+		
 		actionPanel.add(uploadButton);
 
 		final JCheckBox lineWrapCB = new JCheckBox("Line wrap");
+		
 		lineWrapCB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				textArea.setLineWrap(lineWrapCB.isSelected());
 			}
 		});
+		
 		lineWrapCB.setHorizontalAlignment(SwingConstants.RIGHT);
 		actionPanel.add(lineWrapCB);
 		add(actionPanel, BorderLayout.NORTH);
+		
+		charSets.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setText(new String(charSets.getCharset().encode(getText()).array(), charSets.getCharset()));				
+			}
+		}) ;
 	}
 
 	protected void doUpload() {
@@ -69,7 +79,7 @@ public class TextMessagePayloadPanel  extends MessageWriter {
 		if (chooser.showDialog(this, "Insert File") == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
 			try {
-				setText(IoUtils.readFile(file));
+				setText(IoUtils.readFile(file, charSets.getCharset()));
 			} catch (IOException e) {
 				HermesBrowser.getBrowser().showErrorDialog(e);
 			}
