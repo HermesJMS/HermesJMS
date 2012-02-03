@@ -246,12 +246,14 @@ private static final Logger log = Logger.getLogger(ContextTree.class);
       addMouseListener(new MouseAdapter()
       {
          public void mousePressed(MouseEvent e)
-         {
+         {      	
              onMouseClicked(e);
          }
 
          public void mouseReleased(MouseEvent e)
          {
+             onMouseClicked(e);
+
          }
 
          public void mouseClicked(MouseEvent e)
