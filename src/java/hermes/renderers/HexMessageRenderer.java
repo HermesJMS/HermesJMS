@@ -28,7 +28,6 @@ import javax.jms.Message;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 
-import org.apache.activemq.kaha.BytesMarshaller;
 import org.apache.log4j.Logger;
 
 /**
