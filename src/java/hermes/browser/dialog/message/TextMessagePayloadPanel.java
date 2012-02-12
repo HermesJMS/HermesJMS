@@ -79,7 +79,7 @@ public class TextMessagePayloadPanel  extends MessageWriter {
 		if (chooser.showDialog(this, "Insert File") == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
 			try {
-				setText(IoUtils.readFile(file, charSets.getCharset()));
+				setText(IoUtils.readFile(file));
 			} catch (IOException e) {
 				HermesBrowser.getBrowser().showErrorDialog(e);
 			}
