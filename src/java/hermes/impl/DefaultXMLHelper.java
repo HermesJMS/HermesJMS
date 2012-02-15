@@ -70,6 +70,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.util.ReaderInputStream;
@@ -323,6 +324,8 @@ public class DefaultXMLHelper implements XMLHelper {
 						mapRval.setDouble(property.getName(), Double.parseDouble(property.getValue()));
 					} else if (property.getType().equals(Boolean.class.getName())) {
 						mapRval.setBoolean(property.getName(), Boolean.getBoolean(property.getValue()));
+					} else if (property.getType().equals(Character.class.getName())) {
+						mapRval.setChar(property.getName(), property.getValue().charAt(0) );
 					} else if (property.getType().equals(Short.class.getName())) {
 						mapRval.setShort(property.getName(), Short.parseShort(property.getValue()));
 					} else if (property.getType().equals(Integer.class.getName())) {
@@ -413,7 +416,7 @@ public class DefaultXMLHelper implements XMLHelper {
 				if (property.getValue() == null) {
 					rval.setObjectProperty(property.getName(), null);
 				} else if (property.getType().equals(String.class.getName())) {
-					rval.setStringProperty(property.getName(), property.getValue());
+					rval.setStringProperty(property.getName(), StringEscapeUtils.unescapeXml(property.getValue()));
 				} else if (property.getType().equals(Long.class.getName())) {
 					rval.setLongProperty(property.getName(), Long.parseLong(property.getValue()));
 				} else if (property.getType().equals(Double.class.getName())) {
@@ -583,7 +586,7 @@ public class DefaultXMLHelper implements XMLHelper {
 					property.setName(propertyName);
 
 					if (propertyValue != null) {
-						property.setValue(propertyValue.toString());
+						property.setValue(StringEscapeUtils.escapeXml(propertyValue.toString()));
 						property.setType(propertyValue.getClass().getName());
 					}
 

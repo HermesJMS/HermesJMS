@@ -51,6 +51,9 @@ public class UserHeaderPropertyPanel extends GenericPropertyPanel {
 				case BOOLEAN:
 					message.setBooleanProperty(row.name, row.value == null ? null : Boolean.parseBoolean(row.value.toString()));
 					break;
+				case CHAR:
+					message.setStringProperty (row.name, row.value == null ? null : row.value.toString());
+					break;
 				case STRING:
 					message.setStringProperty(row.name, row.value == null ? null : row.value.toString());
 					break;

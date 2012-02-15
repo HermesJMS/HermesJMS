@@ -69,6 +69,9 @@ public class MapMessagePayloadPanel extends MessageWriter {
 					case STRING:
 						message.setString(row.name, row.value.toString());
 						break;
+					case CHAR:
+						message.setChar(row.name, row.value.toString().charAt(0));
+						break;
 					case BYTE:
 						message.setByte(row.name, Byte.parseByte(row.value.toString()));
 						break;

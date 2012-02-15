@@ -1,7 +1,7 @@
 package hermes.swing;
 
 public enum PropertyType {
-	DOUBLE, INT, LONG, STRING, BOOLEAN, BYTE ;
+	DOUBLE, INT, LONG, STRING, BOOLEAN, BYTE, CHAR ;
 
 	public static PropertyType fromObject(Object value) {
 		if (value instanceof String) {
@@ -14,6 +14,8 @@ public enum PropertyType {
 			return BOOLEAN ;
 		} else if (value instanceof Byte) {
 			return BYTE ;
+		} else if (value instanceof Character) {
+			return CHAR ;
 		} else if (value instanceof Long) {
 			return LONG ;
 		} else {
@@ -26,6 +28,8 @@ public enum PropertyType {
 			return STRING ;
 		} else if ("INT".equals(string)) {
 			return INT ;
+		} else if ("CHAR".equals(string)) {
+			return CHAR ;
 		} else if ("DOUBLE".equals(string)) {
 			return DOUBLE ;
 		}else if ("BOOLEAN".equals(string)) {
