@@ -76,7 +76,7 @@ public class SendMessageTask extends TaskSupport
       this.preserveDestination = preserveDestination;
    }
 
-   public SendMessageTask(Hermes hermes, String destinationName, Domain domain, File file, int isXML, boolean preserveDestination)
+   public SendMessageTask(Hermes hermes, String destinationName, Domain domain, File[] files, int isXML, boolean preserveDestination)
    {
       super(IconCache.getIcon("hermes.messages.send"));
 
@@ -87,7 +87,9 @@ public class SendMessageTask extends TaskSupport
       this.domain = domain;
       this.preserveDestination = preserveDestination;
 
-      files.add(file);
+      for (File file : files) {
+    	  this.files.add(file);
+      }
    }
 
    public String getTitle()

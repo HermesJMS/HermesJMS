@@ -193,9 +193,9 @@ public class ActionFactory
    /**
     * Create an action to send the contents of a file to the queue/topic
     */
-   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, File file, int isXML, boolean preserveDestination)
+   public SendMessageTask createSimpleSendMessageAction(Hermes hermes, String d, Domain domain, File[] files, int isXML, boolean preserveDestination)
    {
-      SendMessageTask rval = new SendMessageTask(hermes, d, domain, file, isXML, preserveDestination);
+      SendMessageTask rval = new SendMessageTask(hermes, d, domain, files, isXML, preserveDestination);
 
       rval.start();
 

@@ -59,11 +59,12 @@ public abstract class AbstractSendFileAction extends ActionSupport {
 		} else {
 			chooser = new JFileChooser(DirectoryCache.lastUploadDirectory);
 		}
+		chooser.setMultiSelectionEnabled(true) ;
 
 		if (chooser.showDialog(HermesBrowser.getBrowser(), text) == JFileChooser.APPROVE_OPTION) {
 			DirectoryCache.lastUploadDirectory = chooser.getSelectedFile().getParentFile();
 			HermesBrowser.getBrowser().getActionFactory()
-					.createSimpleSendMessageAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), chooser.getSelectedFile(), isXML, preserveDestination);
+					.createSimpleSendMessageAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), chooser.getSelectedFiles(), isXML, preserveDestination);
 		} else {
 			Hermes.ui.getDefaultMessageSink().add("File upload cancelled");
 		}
