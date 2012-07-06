@@ -57,11 +57,11 @@ import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageEOFException;
 import javax.jms.ObjectMessage;
-import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.NamingException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
@@ -71,7 +71,6 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.util.ReaderInputStream;
 
@@ -86,19 +85,36 @@ import org.apache.tools.ant.util.ReaderInputStream;
  */
 
 public class DefaultXMLHelper implements XMLHelper {
-	private static final Category log = Logger.getLogger(DefaultXMLHelper.class);
+	private static final Logger log = Logger.getLogger(DefaultXMLHelper.class);
 	private static final int XML_TEXT_MESSAGE = 1;
 	private static final int XML_BYTES_MESSGAE = 2;
 	private static final int XML_OBJECT_MESSAGE = 3;
 	private static final int XML_MAP_MESSAGE = 4;
 	private static final String BASE64_CODEC = "Base64";
-	private final ThreadLocal base64EncoderTL = new ThreadLocal();
+	private final ThreadLocal<Base64> base64EncoderTL = new ThreadLocal<Base64>() {
+		@Override
+		protected Base64 initialValue() {
+			return new Base64();
+		}
+	};
+
+	private final ThreadLocal<JAXBContext> contextTL = new ThreadLocal<JAXBContext>() {
+		@Override
+		protected JAXBContext initialValue() {
+			try {
+				return JAXBContext.newInstance("hermes.xml");
+			} catch (JAXBException e) {
+				log.error(e.getMessage(), e);
+				return null;
+			}
+		}
+	};
 
 	public DefaultXMLHelper() {
 
 	}
 
-	private ObjectFactory factory = new ObjectFactory();
+	private final ObjectFactory factory = new ObjectFactory();
 
 	public boolean isBase64EncodeTextMessages() {
 		if (HermesBrowser.getBrowser() != null) {
@@ -117,28 +133,20 @@ public class DefaultXMLHelper implements XMLHelper {
 		return factory;
 	}
 
-	public Base64 getBase64() {
-		if (base64EncoderTL.get() == null) {
-			base64EncoderTL.set(new Base64());
-		}
-
-		return (Base64) base64EncoderTL.get();
-	}
-
 	public MessageSet readContent(InputStream istream) throws Exception {
-		JAXBContext jc = JAXBContext.newInstance("hermes.xml");
+		JAXBContext jc = contextTL.get();
 		Unmarshaller u = jc.createUnmarshaller();
-		JAXBElement<MessageSet> node = (JAXBElement<MessageSet>) u.unmarshal(new StreamSource(istream), MessageSet.class);
+		JAXBElement<MessageSet> node = u.unmarshal(new StreamSource(istream), MessageSet.class);
 
 		return node.getValue();
 	}
 
 	public MessageSet readContent(Reader reader) throws Exception {
-		JAXBContext jc = JAXBContext.newInstance("hermes.xml");
+		JAXBContext jc = contextTL.get();
 		Unmarshaller u = jc.createUnmarshaller();
-		JAXBElement<MessageSet> node = (JAXBElement<MessageSet>) u.unmarshal(new StreamSource(new ReaderInputStream(reader)), MessageSet.class);
+		JAXBElement<MessageSet> node = u.unmarshal(new StreamSource(new ReaderInputStream(reader)), MessageSet.class);
 
-		return (MessageSet) node.getValue();
+		return node.getValue();
 	}
 
 	public void saveContent(MessageSet messages, OutputStream ostream) throws Exception {
@@ -159,6 +167,7 @@ public class DefaultXMLHelper implements XMLHelper {
 		writer.flush();
 	}
 
+	@Override
 	public void toXML(Message message, OutputStream ostream) throws JMSException, IOException {
 		final Collection<Message> c = new HashSet<Message>();
 		c.add(message);
@@ -166,6 +175,7 @@ public class DefaultXMLHelper implements XMLHelper {
 		toXML(c, ostream);
 	}
 
+	@Override
 	public String toXML(Message message) throws JMSException {
 		final Collection<Message> c = new HashSet<Message>();
 		c.add(message);
@@ -173,6 +183,7 @@ public class DefaultXMLHelper implements XMLHelper {
 		return toXML(c);
 	}
 
+	@Override
 	public Collection fromXML(MessageFactory hermes, InputStream istream) throws JMSException {
 		try {
 			return fromMessageSet(hermes, readContent(istream));
@@ -183,6 +194,7 @@ public class DefaultXMLHelper implements XMLHelper {
 		}
 	}
 
+	@Override
 	public Collection fromXML(MessageFactory hermes, String document) throws JMSException {
 		try {
 			return fromMessageSet(hermes, readContent(new StringReader(document)));
@@ -193,6 +205,7 @@ public class DefaultXMLHelper implements XMLHelper {
 		}
 	}
 
+	@Override
 	public void toXML(Collection messages, OutputStream ostream) throws JMSException, IOException {
 		try {
 			MessageSet messageSet = toMessageSet(messages);
@@ -204,6 +217,7 @@ public class DefaultXMLHelper implements XMLHelper {
 		}
 	}
 
+	@Override
 	public String toXML(Collection messages) throws JMSException {
 		try {
 
@@ -300,7 +314,7 @@ public class DefaultXMLHelper implements XMLHelper {
 				TextMessage textRval = (TextMessage) rval;
 
 				if (BASE64_CODEC.equals(textMessage.getCodec())) {
-					byte[] bytes = getBase64().decode(textMessage.getText().getBytes());
+					byte[] bytes = base64EncoderTL.get().decode(textMessage.getText().getBytes());
 					textRval.setText(new String(bytes, "ASCII"));
 				} else {
 					textRval.setText(textMessage.getText());
@@ -325,7 +339,7 @@ public class DefaultXMLHelper implements XMLHelper {
 					} else if (property.getType().equals(Boolean.class.getName())) {
 						mapRval.setBoolean(property.getName(), Boolean.getBoolean(property.getValue()));
 					} else if (property.getType().equals(Character.class.getName())) {
-						mapRval.setChar(property.getName(), property.getValue().charAt(0) );
+						mapRval.setChar(property.getName(), property.getValue().charAt(0));
 					} else if (property.getType().equals(Short.class.getName())) {
 						mapRval.setShort(property.getName(), Short.parseShort(property.getValue()));
 					} else if (property.getType().equals(Integer.class.getName())) {
@@ -338,13 +352,13 @@ public class DefaultXMLHelper implements XMLHelper {
 				XMLBytesMessage bytesMessage = (XMLBytesMessage) message;
 				BytesMessage bytesRval = (BytesMessage) rval;
 
-				bytesRval.writeBytes(getBase64().decode(bytesMessage.getBytes().getBytes()));
+				bytesRval.writeBytes(base64EncoderTL.get().decode(bytesMessage.getBytes().getBytes()));
 			} else if (message instanceof XMLObjectMessage) {
 				rval = hermes.createObjectMessage();
 
 				XMLObjectMessage objectMessage = (XMLObjectMessage) message;
 				ObjectMessage objectRval = (ObjectMessage) rval;
-				ByteArrayInputStream bistream = new ByteArrayInputStream(getBase64().decode(objectMessage.getObject().getBytes()));
+				ByteArrayInputStream bistream = new ByteArrayInputStream(base64EncoderTL.get().decode(objectMessage.getObject().getBytes()));
 
 				ObjectInputStream oistream = new ObjectInputStream(bistream);
 
@@ -448,7 +462,7 @@ public class DefaultXMLHelper implements XMLHelper {
 				TextMessage textMessage = (TextMessage) message;
 
 				if (isBase64EncodeTextMessages()) {
-					byte[] bytes = getBase64().encode(textMessage.getText().getBytes());
+					byte[] bytes = base64EncoderTL.get().encode(textMessage.getText().getBytes());
 					textRval.setText(new String(bytes, "ASCII"));
 					textRval.setCodec(BASE64_CODEC);
 				} else {
@@ -490,7 +504,7 @@ public class DefaultXMLHelper implements XMLHelper {
 					// NOP
 				}
 
-				bytesRval.setBytes(new String(getBase64().encode(bosream.toByteArray())));
+				bytesRval.setBytes(new String(base64EncoderTL.get().encode(bosream.toByteArray())));
 			} else if (message instanceof ObjectMessage) {
 				rval = factory.createXMLObjectMessage();
 
@@ -502,7 +516,7 @@ public class DefaultXMLHelper implements XMLHelper {
 
 				oostream.writeObject(objectMessage.getObject());
 				oostream.flush();
-				byte b[] = getBase64().encode(bostream.toByteArray());
+				byte b[] = base64EncoderTL.get().encode(bostream.toByteArray());
 				String s = new String(b, "ASCII");
 				objectRval.setObject(s);
 			}
