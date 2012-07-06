@@ -104,15 +104,28 @@ public class JAXBHermesLoader implements HermesLoader {
 
 	private Context context;
 	private String extensionLoaderClass = DEFAULT_EXTENSION_LOADER;
+	private final ThreadLocal<JAXBContext> contextTL = new ThreadLocal<JAXBContext>() {
+		@Override
+		protected JAXBContext initialValue() {
+			try {
+				return JAXBContext.newInstance("hermes.config");
+			} catch (JAXBException e) {
+				log.error(e.getMessage(), e);
+				return null;
+			}
+		}
+	};
 
 	public JAXBHermesLoader() {
 
 	}
 
+	@Override
 	public void setContext(Context context) {
 		this.context = context;
 	}
 
+	@Override
 	public void backup() throws HermesException {
 		try {
 			if (file != null) {
@@ -123,6 +136,7 @@ public class JAXBHermesLoader implements HermesLoader {
 		}
 	}
 
+	@Override
 	public void restore() throws HermesException {
 		try {
 			if (file != null) {
@@ -133,13 +147,12 @@ public class JAXBHermesLoader implements HermesLoader {
 		}
 	}
 
+	@Override
 	public void save() throws HermesException {
 		try {
 			if (file != null) {
 				OutputStream ostream = new FileOutputStream(file);
-				JAXBContext jc = JAXBContext.newInstance("hermes.config");
-				Marshaller m = jc.createMarshaller();
-
+				Marshaller m = contextTL.get().createMarshaller();
 				config.setLastEditedByHermesVersion(Hermes.VERSION);
 				config.setLastEditedByUser(System.getProperty("user.name"));
 				config.setLookAndFeel(UIManager.getLookAndFeel().getClass().getName());
@@ -169,9 +182,10 @@ public class JAXBHermesLoader implements HermesLoader {
 	 * @see hermes.HermesLoader#doLoad()
 	 */
 
+	@Override
 	public void addDestinationConfig(Hermes hermes, DestinationConfig config) throws JMSException {
 		if (factoryConfigById.containsKey(hermes.getId())) {
-			FactoryConfig fConfig = (FactoryConfig) factoryConfigById.get(hermes.getId());
+			FactoryConfig fConfig = factoryConfigById.get(hermes.getId());
 			fConfig.getDestination().add(config);
 			hermes.addDestinationConfig(config);
 			notifyDestinationAdded(hermes, config);
@@ -180,6 +194,7 @@ public class JAXBHermesLoader implements HermesLoader {
 		}
 	}
 
+	@Override
 	public void replaceDestinationConfigs(Hermes hermes, Collection dConfigs) throws JMSException {
 		boolean keepDurableSubscriptions = true, keepDurableSubscriptionsDialogShown = false;
 
@@ -215,8 +230,7 @@ public class JAXBHermesLoader implements HermesLoader {
 				if (dConfig.getDomain() == Domain.TOPIC.getId() && dConfig.isDurable()) {
 					if (!keepDurableSubscriptionsDialogShown) {
 						if (HermesBrowser.getBrowser() != null) {
-							if (JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you want to keep configured durable subscriptions?",
-									"Durable Subscriptions", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+							if (JOptionPane.showConfirmDialog(HermesBrowser.getBrowser(), "Do you want to keep configured durable subscriptions?", "Durable Subscriptions", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 								keepDurableSubscriptions = false;
 							}
 						}
@@ -250,6 +264,7 @@ public class JAXBHermesLoader implements HermesLoader {
 	 * Everything is in here to load up all the Hermes instances from JAXB, it
 	 * kinda sux really. Would be nice to have proper framework for this.
 	 */
+	@Override
 	public List<Hermes> load() throws HermesException {
 		ArrayList<Hermes> rval = null;
 		InputStream istream = null;
@@ -295,13 +310,11 @@ public class JAXBHermesLoader implements HermesLoader {
 
 			rval = new ArrayList<Hermes>();
 
-			JAXBContext jc = JAXBContext.newInstance("hermes.config");
+			Unmarshaller u = contextTL.get().createUnmarshaller();
 
-			Unmarshaller u = jc.createUnmarshaller();
+			element = u.unmarshal(new StreamSource(istream), HermesConfig.class);
 
-			element = (JAXBElement<HermesConfig>) u.unmarshal(new StreamSource(istream), HermesConfig.class);
-
-			config = (HermesConfig) element.getValue();
+			config = element.getValue();
 
 			Hermes.ui.setConfig(config);
 
@@ -399,7 +412,7 @@ public class JAXBHermesLoader implements HermesLoader {
 					continue;
 				}
 
-				ConnectionConfig firstConnection = (ConnectionConfig) factoryConfig.getConnection().get(0);
+				ConnectionConfig firstConnection = factoryConfig.getConnection().get(0);
 
 				if (firstConnection.getSession().size() == 0) {
 					log.debug("cleaning up FactoryConfig with no sessions");
@@ -407,7 +420,7 @@ public class JAXBHermesLoader implements HermesLoader {
 					continue;
 				}
 
-				SessionConfig firstSession = (SessionConfig) firstConnection.getSession().get(0);
+				SessionConfig firstSession = firstConnection.getSession().get(0);
 
 				if (firstSession.getId() == null) {
 					log.debug("cleaning up FactoryConfig with a null session");
@@ -433,12 +446,9 @@ public class JAXBHermesLoader implements HermesLoader {
 							if (isQueue && isTopic) {
 								Object options[] = { "Queue", "Topic" };
 
-								int n = JOptionPane.showOptionDialog(
-										HermesBrowser.getBrowser(),
-										"This XML is from an older version of Hermes and it is unclear which domain the destination\n"
-												+ destinationConfig.getName() + " for session " + hermes.getId()
-												+ " is in. Please choose whether queue or topic domain", "Select domain", JOptionPane.YES_NO_OPTION,
-										JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+								int n = JOptionPane.showOptionDialog(HermesBrowser.getBrowser(), "This XML is from an older version of Hermes and it is unclear which domain the destination\n"
+										+ destinationConfig.getName() + " for session " + hermes.getId() + " is in. Please choose whether queue or topic domain", "Select domain",
+										JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 
 								if (n == JOptionPane.YES_OPTION) {
 									isQueue = true;
@@ -470,15 +480,18 @@ public class JAXBHermesLoader implements HermesLoader {
 			}
 
 			return rval;
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
 
-			throw new HermesException(e);
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+
+			HermesBrowser.getBrowser().showErrorDialog("Unable to load configuration", ex);
+			throw new HermesException(ex);
 		}
 	}
 
-	public Hermes createHermes(FactoryConfig factoryConfig) throws JAXBException, IOException, JMSException, NamingException, InstantiationException,
-			ClassNotFoundException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	@Override
+	public Hermes createHermes(FactoryConfig factoryConfig) throws JAXBException, IOException, JMSException, NamingException, InstantiationException, ClassNotFoundException, IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException {
 		Hermes hermes = null;
 		ConnectionFactoryManager connectionFactoryManager = null;
 		JNDIConnectionFactory jndiFactory = null;
@@ -501,8 +514,7 @@ public class JAXBHermesLoader implements HermesLoader {
 		//
 		// You can now get the factory from the manager.
 
-		if (factoryConfig.getProvider().getClassName().equals(JNDIConnectionFactory.class.getName())
-				|| factoryConfig.getProvider().getClassName().equals(JNDIQueueConnectionFactory.class.getName())
+		if (factoryConfig.getProvider().getClassName().equals(JNDIConnectionFactory.class.getName()) || factoryConfig.getProvider().getClassName().equals(JNDIQueueConnectionFactory.class.getName())
 				|| factoryConfig.getProvider().getClassName().equals(JNDITopicConnectionFactory.class.getName())) {
 
 			jndiFactory = (JNDIConnectionFactory) connectionFactoryManager.getConnectionFactory();
@@ -521,7 +533,7 @@ public class JAXBHermesLoader implements HermesLoader {
 		}
 
 		if (factoryConfig.getConnection().size() > 0) {
-			ConnectionConfig connectionConfig = (ConnectionConfig) factoryConfig.getConnection().get(0);
+			ConnectionConfig connectionConfig = factoryConfig.getConnection().get(0);
 			ConnectionManager connectionManager = null;
 
 			if (connectionConfig.isConnectionPerThread()) {
@@ -537,7 +549,7 @@ public class JAXBHermesLoader implements HermesLoader {
 			if (connectionConfig.getSession().size() > 0) {
 				SessionManager sessionManager;
 				DestinationManager destinationManager;
-				SessionConfig sessionConfig = (SessionConfig) connectionConfig.getSession().get(0);
+				SessionConfig sessionConfig = connectionConfig.getSession().get(0);
 
 				if (jndiFactory != null) {
 					jndiFactory._setDelegateClassLoader(classLoader);
@@ -590,6 +602,7 @@ public class JAXBHermesLoader implements HermesLoader {
 	 * @see hermes.HermesLoader#getConfig()
 	 */
 
+	@Override
 	public HermesConfig getConfig() throws HermesException {
 		return config;
 	}
@@ -615,15 +628,18 @@ public class JAXBHermesLoader implements HermesLoader {
 	 * 
 	 * @see hermes.HermesLoader#setProperties(java.util.Hashtable)
 	 */
+	@Override
 	public void setProperties(Hashtable map) {
 		this.properties = map;
 
 	}
 
+	@Override
 	public Iterator getConfigurationListeners() {
 		return listeners.iterator();
 	}
 
+	@Override
 	public void addConfigurationListener(HermesConfigurationListener listener) {
 
 		listeners.add(listener);
@@ -673,6 +689,7 @@ public class JAXBHermesLoader implements HermesLoader {
 		}
 	}
 
+	@Override
 	public void notifyNamingRemoved(NamingConfig namingConfig) {
 		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
 			HermesConfigurationListener listener = (HermesConfigurationListener) iter.next();
@@ -687,6 +704,7 @@ public class JAXBHermesLoader implements HermesLoader {
 		}
 	}
 
+	@Override
 	public void notifyHermesRemoved(Hermes hermes) {
 		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
 			HermesConfigurationListener listener = (HermesConfigurationListener) iter.next();
@@ -711,6 +729,7 @@ public class JAXBHermesLoader implements HermesLoader {
 	/**
 	 * @return Returns the context.
 	 */
+	@Override
 	public Context getContext() {
 		return context;
 	}
@@ -719,10 +738,12 @@ public class JAXBHermesLoader implements HermesLoader {
 	 * @param extensionLoaderClass
 	 *            The extensionLoaderClass to set.
 	 */
+	@Override
 	public void setExtensionLoaderClass(String extensionLoader) {
 		this.extensionLoaderClass = extensionLoader;
 	}
 
+	@Override
 	public ClassLoaderManager getClassLoaderManager() {
 		return classLoaderManager;
 	}
@@ -731,6 +752,7 @@ public class JAXBHermesLoader implements HermesLoader {
 		return ignoreClasspathGroups;
 	}
 
+	@Override
 	public void setIgnoreClasspathGroups(boolean ignoreClasspathGroups) {
 		this.ignoreClasspathGroups = ignoreClasspathGroups;
 	}
