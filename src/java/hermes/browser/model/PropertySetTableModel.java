@@ -44,228 +44,197 @@ import org.apache.log4j.Logger;
  *          Exp $
  */
 
-public class PropertySetTableModel extends AbstractTableModel
-{
-    /**
+public class PropertySetTableModel extends AbstractTableModel {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6861616752274437531L;
 	private static Set ignore = new HashSet();
-    private static final Logger log = Logger.getLogger(BeanTableModel.class);
-    private PropertySetConfig propertySet;
-    private Map filter;
-    private Vector rows = new Vector();
-    private String[] columns = { "Property", "Value"};
-    private Object bean;
-    private Map beanProperties;
+	private static final Logger log = Logger.getLogger(BeanTableModel.class);
+	private final PropertySetConfig propertySet;
+	private Map filter;
+	private final Vector rows = new Vector();
+	private final String[] columns = { "Property", "Value" };
+	private Object bean;
+	private Map beanProperties;
 
-    static
-    {
-        ignore.add("class");
-    }
+	static {
+		ignore.add("class");
+	}
 
-    public PropertySetTableModel(Object bean, PropertySetConfig propertySet, Set filter) throws IllegalAccessException, InvocationTargetException,
-            NoSuchMethodException
-    {
-    	
-    	
+	public PropertySetTableModel(Object bean, PropertySetConfig propertySet, Set filter) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
-    	this.propertySet = propertySet;
-    	
-        Set iterSet = null;
-        SortedMap sortMap = new TreeMap();
+		this.propertySet = propertySet;
 
-        if (propertySet.getProperty() != null)
-        {
+		Set iterSet = null;
+		SortedMap sortMap = new TreeMap();
 
-            for (Iterator iter = propertySet.getProperty().iterator(); iter.hasNext();)
-            {
-                PropertyConfig property = (PropertyConfig) iter.next();
+		if (propertySet.getProperty() != null) {
 
-                if (!ignore.contains(property.getName()))
-                {
-                    Object propertyValue = property.getValue();
+			for (Iterator iter = propertySet.getProperty().iterator(); iter.hasNext();) {
+				PropertyConfig property = (PropertyConfig) iter.next();
 
-                    if (propertyValue == null)
-                    {
-                        propertyValue = "null";
-                    }
+				if (!ignore.contains(property.getName())) {
+					Object propertyValue = property.getValue();
 
-                    sortMap.put(property.getName(), propertyValue);
-                }
-            }
+					if (propertyValue == null) {
+						propertyValue = "null";
+					}
 
-            for (Iterator iter2 = sortMap.entrySet().iterator(); iter2.hasNext();)
-            {
-                Map.Entry entry = (Map.Entry) iter2.next();
+					sortMap.put(property.getName(), propertyValue);
+				}
+			}
 
-                Vector row = new Vector();
+			for (Iterator iter2 = sortMap.entrySet().iterator(); iter2.hasNext();) {
+				Map.Entry entry = (Map.Entry) iter2.next();
 
-                row.add(entry.getKey());
-                row.add(entry.getValue());
+				Vector row = new Vector();
 
-                rows.add(row);
-            }
-        }
+				row.add(entry.getKey());
+				row.add(entry.getValue());
 
-        setBean(bean);
-    }
+				rows.add(row);
+			}
+		}
 
-    public void setBean(Object bean) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
-    {
-        beanProperties = BeanUtils.describe(bean);
+		setBean(bean);
+	}
 
-        for (Iterator iter = ignore.iterator(); iter.hasNext();)
-        {
-            beanProperties.remove((iter.next()));
-        }
+	public void setBean(Object bean) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		beanProperties = new TreeMap(BeanUtils.describe(bean));
 
-        for (Iterator iter = rows.iterator(); iter.hasNext();)
-        {
-            Vector row = (Vector) iter.next();
+		for (Iterator iter = ignore.iterator(); iter.hasNext();) {
+			beanProperties.remove((iter.next()));
+		}
 
-            String propertyName = (String) row.elementAt(0);
+		for (Iterator iter = rows.iterator(); iter.hasNext();) {
+			Vector row = (Vector) iter.next();
 
-            if (propertyName == null || propertyName.equals("") || !isValidProperty(propertyName))
-            {
-                log.debug(propertyName + " is not a valid property for " + bean.getClass().getName() + " - removed");
+			String propertyName = (String) row.elementAt(0);
 
-                iter.remove();
-            }
-        }
+			if (propertyName == null || propertyName.equals("") || !isValidProperty(propertyName)) {
+				log.debug(propertyName + " is not a valid property for " + bean.getClass().getName() + " - removed");
 
-        fireTableDataChanged();
-    }
+				iter.remove();
+			}
+		}
 
-    public Set getValidProperties()
-    {
-        return beanProperties.keySet();
-    }
+		fireTableDataChanged();
+	}
 
-    public boolean isValidProperty(String propertyName)
-    {
-        return getValidProperties().contains(propertyName);
-    }
+	public Set getValidProperties() {
+		return beanProperties.keySet();
+	}
 
-    public void insertRow() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
-    {
-        Vector row = new Vector();
+	public boolean isValidProperty(String propertyName) {
+		return getValidProperties().contains(propertyName);
+	}
 
-        row.add("");
-        row.add("");
+	public void insertRow() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		Vector row = new Vector();
 
-        rows.add(row);
+		row.add("");
+		row.add("");
 
-        fireTableRowsInserted(rows.size() - 1, rows.size());
-    }
+		rows.add(row);
 
-    public void removeRow(int index)
-    {
-        if (index < rows.size())
-        {
-            Vector r = (Vector) rows.remove(index);
+		fireTableRowsInserted(rows.size() - 1, rows.size());
+	}
 
-        }
+	public void removeRow(int index) {
+		if (index < rows.size()) {
+			Vector r = (Vector) rows.remove(index);
 
-        fireTableDataChanged();
-    }
+		}
 
-    /**
-     * @see javax.swing.table.TableModel#getRowCount()
-     */
-    public int getRowCount()
-    {
-        return rows.size();
-    }
+		fireTableDataChanged();
+	}
 
-    /**
-     * @see javax.swing.table.TableModel#getColumnCount()
-     */
-    public int getColumnCount()
-    {
-        return columns.length;
-    }
+	/**
+	 * @see javax.swing.table.TableModel#getRowCount()
+	 */
+	@Override
+	public int getRowCount() {
+		return rows.size();
+	}
 
-    /**
-     * @see javax.swing.table.TableModel#getValueAt(int, int)
-     */
-    public Object getValueAt(int arg0, int arg1)
-    {
-        Vector row = (Vector) rows.elementAt(arg0);
+	/**
+	 * @see javax.swing.table.TableModel#getColumnCount()
+	 */
+	@Override
+	public int getColumnCount() {
+		return columns.length;
+	}
 
-        return row.elementAt(arg1);
+	/**
+	 * @see javax.swing.table.TableModel#getValueAt(int, int)
+	 */
+	@Override
+	public Object getValueAt(int arg0, int arg1) {
+		Vector row = (Vector) rows.elementAt(arg0);
 
-    }
+		return row.elementAt(arg1);
 
-    public String getColumnName(int x)
-    {
-        return columns[x];
-    }
+	}
 
-    public boolean isCellEditable(int y, int x)
-    {
-        return true;
-    }
+	@Override
+	public String getColumnName(int x) {
+		return columns[x];
+	}
 
-    public void setValueAt(Object value, int y, int x)
-    {
-        Vector row = (Vector) rows.elementAt(y);
-        String propertyName;
-        Object propertyValue;
+	@Override
+	public boolean isCellEditable(int y, int x) {
+		return true;
+	}
 
-        if (x == 0)
-        {
-            propertyName = (String) value;
-            propertyValue = row.elementAt(1);
+	@Override
+	public void setValueAt(Object value, int y, int x) {
+		Vector row = (Vector) rows.elementAt(y);
+		String propertyName;
+		Object propertyValue;
 
-            if (isValidProperty(propertyName))
-            {
-                row.set(0, value);
-            }
-            else
-            {
-                log.error(propertyName + " is not a valid property for " + bean.getClass().getName());
-            }
-        }
-        else
-        {
-            propertyName = (String) row.elementAt(0);
-            propertyValue = value;
-            row.set(1, value);
-        }
+		if (x == 0) {
+			propertyName = (String) value;
+			propertyValue = row.elementAt(1);
 
-        log.debug("set (cached) " + propertyName + "=" + propertyValue.toString());
+			if (isValidProperty(propertyName)) {
+				row.set(0, value);
+			} else {
+				log.error(propertyName + " is not a valid property for " + bean.getClass().getName());
+			}
+		} else {
+			propertyName = (String) row.elementAt(0);
+			propertyValue = value;
+			row.set(1, value);
+		}
 
-        fireTableCellUpdated(y, x);
-    }
+		log.debug("set (cached) " + propertyName + "=" + propertyValue.toString());
 
-    public List getProperties() throws JAXBException
-    {
-        List list = new ArrayList();
+		fireTableCellUpdated(y, x);
+	}
 
-        for (Iterator iter = rows.iterator(); iter.hasNext();)
-        {
-            Vector row = (Vector) iter.next();
+	public List getProperties() throws JAXBException {
+		List list = new ArrayList();
 
-            String key = (String) row.elementAt(0);
-            String value = (String) row.elementAt(1);
+		for (Iterator iter = rows.iterator(); iter.hasNext();) {
+			Vector row = (Vector) iter.next();
 
-            if (key != null && !key.equals(""))
-            {
-                PropertyConfig pConfig = HermesBrowser.getConfigDAO().getFactory().createPropertyConfig();
+			String key = (String) row.elementAt(0);
+			String value = (String) row.elementAt(1);
 
-                pConfig.setName(key);
-                pConfig.setValue(value);
+			if (key != null && !key.equals("")) {
+				PropertyConfig pConfig = HermesBrowser.getConfigDAO().getFactory().createPropertyConfig();
 
-                list.add(pConfig);
-            }
-            else
-            {
-                iter.remove();
-            }
-        }
+				pConfig.setName(key);
+				pConfig.setValue(value);
 
-        return list;
-    }
+				list.add(pConfig);
+			} else {
+				iter.remove();
+			}
+		}
+
+		return list;
+	}
 
 }
