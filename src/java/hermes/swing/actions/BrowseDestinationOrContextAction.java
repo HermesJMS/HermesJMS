@@ -21,6 +21,7 @@ import hermes.Hermes;
 import hermes.HermesException;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
+import hermes.browser.actions.QueueBrowseAction;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
 import hermes.browser.model.tree.HermesTreeNode;
 import hermes.browser.model.tree.MessageStoreQueueTreeNode;
@@ -90,13 +91,16 @@ public class BrowseDestinationOrContextAction extends ActionSupport {
 					final NamingConfigTreeNode node = (NamingConfigTreeNode) selectionPath.getLastPathComponent();
 
 					HermesBrowser.getBrowser().getActionFactory().createBrowseContextAction(node.getConfig());
-
+					
 				} else if (selectionPath.getLastPathComponent() instanceof DestinationConfigTreeNode) {
 					final DestinationConfigTreeNode destinationNode = (DestinationConfigTreeNode) selectionPath.getLastPathComponent();
 					final Hermes hermes = ((HermesTreeNode) destinationNode.getHermesTreeNode()).getHermes();
-
-					HermesBrowser.getBrowser().getActionFactory().createQueueBrowseAction(hermes, destinationNode.getConfig());
-
+					final QueueBrowseAction qBrowser = HermesBrowser.getBrowser().getOpenQueueBrowser(destinationNode.getConfig()) ;
+					if (qBrowser != null) {
+						qBrowser.refresh() ;
+					} else {
+						HermesBrowser.getBrowser().getActionFactory().createQueueBrowseAction(hermes, destinationNode.getConfig());
+					}
 				} else if (selectionPath.getLastPathComponent() instanceof RepositoryTreeNode) {
 					final RepositoryTreeNode repNode = (RepositoryTreeNode) selectionPath.getLastPathComponent();
 					final Hermes hermes = HermesBrowser.getBrowser().getBrowserTree().getHermesAsMessageFactory();

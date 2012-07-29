@@ -24,6 +24,7 @@ import hermes.JNDIContextFactory;
 import hermes.browser.HermesBrowser;
 import hermes.browser.actions.AbstractEditedMessageHandler;
 import hermes.browser.actions.BrowserAction;
+import hermes.browser.actions.QueueBrowseAction;
 import hermes.browser.dialog.BindToolDialog;
 import hermes.browser.dialog.message.MessageEditorDialog;
 import hermes.browser.model.BrowserTreeModel;
@@ -252,7 +253,7 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 			return getLastSelectedHermesTreeNode().getHermes();
 		}
 	}
-	
+
 	/**
 	 * Returns the last Hermes session node that was in a selection path.
 	 */
@@ -324,8 +325,11 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 			final HermesTreeNode hermesNode = getSelectedHermesNode();
 
 			if (hermesNode != null && destinationNode != null) {
-				HermesBrowser.getBrowser().getActionFactory()
-						.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), messages, true, true);
+				HermesBrowser
+						.getBrowser()
+						.getActionFactory()
+						.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), messages, true,
+								true);
 			}
 		}
 
@@ -342,8 +346,11 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 			final HermesTreeNode hermesNode = getSelectedHermesNode();
 
 			if (hermesNode != null && destinationNode != null) {
-				HermesBrowser.getBrowser().getActionFactory()
-						.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), messages, true, true);
+				HermesBrowser
+						.getBrowser()
+						.getActionFactory()
+						.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), messages, true,
+								true);
 			}
 		}
 
@@ -360,24 +367,24 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 
 			if (hermesNode != null && destinationNode != null) {
 				Collection<Message> selected = messages.getSelectedMessages();
-				Message[] messagesArray = messages.getSelectedMessages().toArray(new Message[selected.size()]) ;
+				Message[] messagesArray = messages.getSelectedMessages().toArray(new Message[selected.size()]);
 
 				if (selected.size() == 1 && action == TransferHandler.COPY && MessageEditorDialog.canEdit(messagesArray[0])) {
 					try {
-						Message message = selected.iterator().next() ;
-						MessageEditorDialog dialog = new MessageEditorDialog(message, destinationNode.getDestinationName(), destinationNode.getDomain(), new AbstractEditedMessageHandler(
-								hermesNode.getHermes()) {
-							@Override
-							public void onMessage(Message message) {
-								HermesBrowser
-										.getBrowser()
-										.getActionFactory()
-										.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(),
-												new ArrayList(Arrays.asList(message)), false, true);
-							}
-						});
-						dialog.setLocationRelativeTo(HermesBrowser.getBrowser()) ;
-						dialog.setVisible(true) ;
+						Message message = selected.iterator().next();
+						MessageEditorDialog dialog = new MessageEditorDialog(message, destinationNode.getDestinationName(), destinationNode.getDomain(),
+								new AbstractEditedMessageHandler(hermesNode.getHermes()) {
+									@Override
+									public void onMessage(Message message) {
+										HermesBrowser
+												.getBrowser()
+												.getActionFactory()
+												.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(),
+														destinationNode.getDomain(), new ArrayList(Arrays.asList(message)), false, true);
+									}
+								});
+						dialog.setLocationRelativeTo(HermesBrowser.getBrowser());
+						dialog.setVisible(true);
 					} catch (JMSException ex) {
 						HermesBrowser.getBrowser().showErrorDialog(ex);
 					}
@@ -385,8 +392,11 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 				} else {
 
 					if (action == TransferHandler.COPY) {
-						HermesBrowser.getBrowser().getActionFactory()
-								.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), selected, true, true);
+						HermesBrowser
+								.getBrowser()
+								.getActionFactory()
+								.createMessageCopyAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), selected,
+										true, true);
 					} else {
 						HermesBrowser.getBrowser().getActionFactory()
 								.createMessageMoveAction(hermesNode.getHermes(), destinationNode.getDestinationName(), destinationNode.getDomain(), selected);
@@ -767,14 +777,16 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 						setToolTipText(node.getHermes().getMetaData().getToolTipText());
 					} else if (treePath.getPathComponent(i) instanceof DestinationConfigTreeNode) {
 						final DestinationConfigTreeNode node = (DestinationConfigTreeNode) treePath.getPathComponent(i);
-						
-						String documentTitle =   BrowserAction.getDisplayName(node.getHermesTreeNode().getHermes(), node.getConfig(), null) ;
-						
-						DocumentComponent doc = HermesBrowser.getBrowser().getDocumentPane().getDocument(documentTitle) ;
-						if (doc != null) {
-							HermesBrowser.getBrowser().getDocumentPane().openDocument(doc) ;
+
+						String documentTitle = BrowserAction.getDisplayName(node.getHermesTreeNode().getHermes(), node.getConfig(), null);
+
+						QueueBrowseAction qBrowser = HermesBrowser.getBrowser().getOpenQueueBrowser(node.getConfig());
+
+						if (qBrowser!= null) {
+							HermesBrowser.getBrowser().getDocumentPane().setActiveDocument(qBrowser.getName());
+							break;
 						}
-						
+
 						setToolTipText(node.getDestinationName());
 					} else if (treePath.getPathComponent(i) instanceof RepositoryTreeNode) {
 						final RepositoryTreeNode node = (RepositoryTreeNode) treePath.getPathComponent(i);

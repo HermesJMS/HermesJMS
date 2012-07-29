@@ -32,6 +32,7 @@ import hermes.SingletonManager;
 import hermes.SystemProperties;
 import hermes.browser.actions.ActionFactory;
 import hermes.browser.actions.BrowserAction;
+import hermes.browser.actions.QueueBrowseAction;
 import hermes.browser.components.ActionsPanel;
 import hermes.browser.components.BrowserTree;
 import hermes.browser.components.DockableToolPanel;
@@ -1291,5 +1292,18 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
 		} else {
 			return Collections.EMPTY_LIST;
 		}
+	}
+
+	public QueueBrowseAction getOpenQueueBrowser(DestinationConfig config) {
+		for (int d = 0 ; d < HermesBrowser.getBrowser().getDocumentPane().getDocumentCount() ; d++) {
+			 DocumentComponent doc =  HermesBrowser.getBrowser().getDocumentPane().getDocumentAt(d) ;
+			 if (doc instanceof QueueBrowseAction) {
+				 QueueBrowseAction qBrowser = (QueueBrowseAction) doc ;
+				 if (qBrowser.getDestinationConfig().equals(config)) {
+					 return qBrowser ;
+				 }
+			 }
+		 }
+		return null ;
 	}
 }
