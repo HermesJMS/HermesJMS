@@ -45,7 +45,7 @@ public class PreferencesDialog extends JDialog {
 	 * @throws HermesException
 	 */
 	public PreferencesDialog() throws HermesException {
-		setBounds(100, 100, 654, 473);
+		setBounds(100, 100, 654, 520);
 		getContentPane().setLayout(new BorderLayout());
 		
 		JPanel options = new JPanel() ;

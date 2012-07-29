@@ -705,7 +705,7 @@
 	<target name="osx.app" depends="jar-ext">
 		<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
 
-		<jarbundler dir="build" name="HermesJMS" mainclass="hermes.browser.HermesBrowser" jvmversion="1.6+" icon="icons/hermes-logo.icns" version="1.14" infostring="HermesJMS (c) Colin Crist" bundleid="hermes.HermesBrowser" vmoptions="-Dhermes.libs=HermesJMS.app/Contents/Resources">
+		<jarbundler dir="build" name="HermesJMS" mainclass="hermes.browser.HermesBrowser" jvmversion="1.6+" icon="icons/hermes-logo.icns" version="1.15 build 290712" infostring="HermesJMS (c) Colin Crist" bundleid="hermes.HermesBrowser" vmoptions="-Dhermes.libs=HermesJMS.app/Contents/Resources">
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true" />
 			<javaproperty name="apple.awt.brushMetal" value="true" />
 			<javaproperty name="apple.awt.showGrowBox" value="false" />

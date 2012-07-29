@@ -23,6 +23,7 @@ import hermes.HermesRuntimeException;
 import hermes.JNDIContextFactory;
 import hermes.browser.HermesBrowser;
 import hermes.browser.actions.AbstractEditedMessageHandler;
+import hermes.browser.actions.BrowserAction;
 import hermes.browser.dialog.BindToolDialog;
 import hermes.browser.dialog.message.MessageEditorDialog;
 import hermes.browser.model.BrowserTreeModel;
@@ -87,6 +88,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.log4j.Logger;
 
+import com.jidesoft.document.DocumentComponent;
 import com.jidesoft.swing.JideSwingUtilities;
 import com.xduke.xswing.DataTipManager;
 
@@ -765,7 +767,14 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 						setToolTipText(node.getHermes().getMetaData().getToolTipText());
 					} else if (treePath.getPathComponent(i) instanceof DestinationConfigTreeNode) {
 						final DestinationConfigTreeNode node = (DestinationConfigTreeNode) treePath.getPathComponent(i);
-
+						
+						String documentTitle =   BrowserAction.getDisplayName(node.getHermesTreeNode().getHermes(), node.getConfig(), null) ;
+						
+						DocumentComponent doc = HermesBrowser.getBrowser().getDocumentPane().getDocument(documentTitle) ;
+						if (doc != null) {
+							HermesBrowser.getBrowser().getDocumentPane().openDocument(doc) ;
+						}
+						
 						setToolTipText(node.getDestinationName());
 					} else if (treePath.getPathComponent(i) instanceof RepositoryTreeNode) {
 						final RepositoryTreeNode node = (RepositoryTreeNode) treePath.getPathComponent(i);

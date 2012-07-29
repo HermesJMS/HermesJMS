@@ -181,7 +181,7 @@ public class TruncateQueueTask extends TaskSupport {
 			monitor.setMillisToPopup(100);
 
 			try {
-				int batchSize = 50;
+				int batchSize = HermesBrowser.getBrowser().getConfig().getDeleteBatch() ;
 				ArrayList<String> ids = new ArrayList<String>();
 
 				for (String messageId : messageIds) {

@@ -185,6 +185,7 @@
 		<xs:attribute name="base64EncodeMessages" type="xs:boolean"
 			default="true" />
 		<xs:attribute name="messageStoreMessageFactory" type="xs:string" />
+		<xs:attribute name="deleteBatch" type="xs:int" default="50"/>
 
 		<xs:attribute name="showDestinationsInMessageStore" type="xs:boolean" default="false"/>		
 		<xs:attribute name="HTMLRendererXSL" type="xs:string"/>

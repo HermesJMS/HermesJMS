@@ -41,9 +41,9 @@ public class PreferencesAction extends ActionSupport
 
 public PreferencesAction()
    {
-      putValue(Action.NAME, "Configuration...");
-      putValue(Action.SHORT_DESCRIPTION, "Configuration.");
-      putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.config")) ;
+      putValue(Action.NAME, "Sessions...");
+      putValue(Action.SHORT_DESCRIPTION, "Sessions.");
+      putValue(Action.SMALL_ICON, IconCache.getIcon("jms.connectionFactory")) ;
 
       setEnabled(!HermesBrowser.getBrowser().isRestricted()) ;  
    }

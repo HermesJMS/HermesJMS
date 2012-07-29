@@ -35,6 +35,9 @@ public class GeneralPreferences extends JPanel {
 	private JSpinner spinner_1;
 	private JLabel lblConsumerTimeout;
 	private JSpinner spinner_2;
+	private JLabel lblDeleteBatch;
+	private JSpinner spinner_3;
+	private JSpinner deleteBatchSpinner;
 
 	/**
 	 * Create the panel.
@@ -90,6 +93,14 @@ public class GeneralPreferences extends JPanel {
 		spinner_2 = new JSpinner();
 		spinner_2.setModel(new SpinnerNumberModel(new Integer(1000), new Integer(0), null, new Integer(1)));
 		add(spinner_2, "8, 4");
+		
+		lblDeleteBatch = new JLabel("Delete Batch:");
+		lblDeleteBatch.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		add(lblDeleteBatch, "2, 6");
+		
+		deleteBatchSpinner = new JSpinner(new SpinnerNumberModel(50, 1, 10000, 1));
+		add(deleteBatchSpinner, "4, 6");
 	}
 
 	public void setConfig(HermesConfig config) throws HermesException {
@@ -102,11 +113,13 @@ public class GeneralPreferences extends JPanel {
 		}
 		comboBox.setModel(new DefaultComboBoxModel(sessionNames)) ;
 		comboBox.getModel().setSelectedItem(config.getMessageStoreMessageFactory()) ;
+		deleteBatchSpinner.setValue(config.getDeleteBatch()) ;
 	}
 	
 	public void updateConfig(HermesConfig config) {
 		config.setMaxMessagesInBrowserPane((Integer) spinner.getValue()) ;
 		config.setAutoBrowseRefreshRate((Integer) spinner_1.getValue());
+		config.setDeleteBatch((Integer) deleteBatchSpinner.getValue()) ;
 		config.setQueueBrowseConsumerTimeout(((Integer) spinner_2.getValue()).longValue()) ;
 		config.setMessageStoreMessageFactory(comboBox.getModel().getSelectedItem().toString()) ;
 	}

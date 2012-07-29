@@ -71,7 +71,6 @@ private static final Category cat = Category.getInstance(PreferencesDialog.class
    private DestinationConfigPanel destinationConfigPanel = new DestinationConfigPanel(this);
    private ProviderConfigPanel providerConfigPanel = new ProviderConfigPanel(this);
    private GeneralRendererConfigPanel rendererConfigPanel = new GeneralRendererConfigPanel(this);
-   private GeneralConfigPanel generalConfigPanel = new GeneralConfigPanel(this);
    private HermesAdminFactoryConfigPanel adminConfigPanel = new HermesAdminFactoryConfigPanel(this);
    private JideTabbedPane topPanel;
    private JPanel sessionPanel;
@@ -92,7 +91,7 @@ private static final Category cat = Category.getInstance(PreferencesDialog.class
     */
    public PreferencesDialog(Frame arg0) throws HeadlessException
    {
-      super(arg0, "Preferences", true);
+      super(arg0, "Sessions", true);
 
    }
 
@@ -106,7 +105,6 @@ private static final Category cat = Category.getInstance(PreferencesDialog.class
       cat.debug("refocusing on " + sessionId);
 
       providerConfigPanel.setHermesConfig(model);
-      generalConfigPanel.setHermesConfig(model);
       rendererConfigPanel.setHermesConfig(model);
 
       if (sessionId != null && !sessionId.equals("") && !sessionId.equals(currentSessionId))
@@ -218,7 +216,6 @@ private static final Category cat = Category.getInstance(PreferencesDialog.class
 
          topPanel.add("Sessions", sessionPanel);
          topPanel.add("Providers", providerConfigPanel);
-         topPanel.add("General", generalConfigPanel);
 
          if (HermesBrowser.getRendererManager().getRenderers().size() > 0)
          {
@@ -294,7 +291,6 @@ private static final Category cat = Category.getInstance(PreferencesDialog.class
          connectionConfigPanel.updateModel();
          sessionConfigPanel.updateModel();
          rendererConfigPanel.updateModel();
-         generalConfigPanel.updateModel();
          destinationConfigPanel.updateModel();
 
          if (model.isDisplayFactoryAdmin() && adminConfigPanel != null)
