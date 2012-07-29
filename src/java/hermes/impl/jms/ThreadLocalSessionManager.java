@@ -330,11 +330,19 @@ public class ThreadLocalSessionManager extends AbstractSessionManager
    public MessageConsumer getConsumer(final Destination d, final String selector) throws JMSException
    {
       MessageConsumer consumer = null;
-      Map map;
+      Map<Destination, MessageConsumer> map;
 
       if (selector != null)
       {
          map = (Map) consumersWithSelectorTL.get();
+         
+         if (map != null) {
+        	 if (map.get(d) != null) {
+        		 if (!map.get(d).getMessageSelector().equals(selector)) {
+        			 map.remove(d).close() ; ;
+        		 }
+        	 }
+         }
 
       }
       else
@@ -358,9 +366,10 @@ public class ThreadLocalSessionManager extends AbstractSessionManager
          }
       }
 
-      if (map.containsKey(d))
+      if (map.containsKey(d) )
       {
          consumer = (MessageConsumer) map.get(d);
+       
       }
       else
       {
