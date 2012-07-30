@@ -68,6 +68,7 @@ import hermes.swing.actions.GetDestinationStatisticsAction;
 import hermes.swing.actions.JNDIUnbindAction;
 import hermes.swing.actions.PasteMessagesFromClipboardAction;
 import hermes.swing.actions.RenameJNDIBindingAction;
+import hermes.swing.actions.ReplayAction;
 import hermes.swing.actions.SaveAllMessagesAsXMLAction;
 import hermes.swing.actions.SaveMessagesAsTextAction;
 import hermes.swing.actions.SaveMessagesAsXMLAction;
@@ -257,7 +258,6 @@ public class PopupMenuFactory
       final JideMenu watchMenu = new JideMenu("Watch");
       final JideMenu newMenu = new JideMenu("New");
       final JideMenu recordMenu = new JideMenu("Record to");
-      final JideMenu replayMenu = new JideMenu("Replay to");
 
       final JMenuItem browseItem = new JMenuItem(ActionRegistry.getAction(BrowseDestinationOrContextAction.class));
       final JMenuItem browseWithSelectorItem = new JMenuItem(ActionRegistry.getAction(BrowseDestinationWithSelectorAction.class)) ;
@@ -311,7 +311,8 @@ public class PopupMenuFactory
       popupMenu.add(watchMenu);
       popupMenu.add(recordMenu);
       popupMenu.add(new JMenuItem(ActionRegistry.getAction(SaveAllMessagesAsXMLAction.class))) ;
-      popupMenu.add(replayMenu);
+      popupMenu.add(ActionRegistry.getAction(ReplayAction.class));
+     
       popupMenu.add(unsubscribe);
       popupMenu.addSeparator() ;
       popupMenu.add(new CascadeBrowserTreeAction(tree)) ;
@@ -319,101 +320,8 @@ public class PopupMenuFactory
       popupMenu.add(new CollapseBrowserTreeAction(tree)) ;   
       
 
-      replayMenu.addMouseListener(new MouseAdapter()
-      {
-
-         @Override
-         public void mouseEntered(MouseEvent e)
-         {
-            replayMenu.removeAll();
-
-            final Context ctx = HermesBrowser.getBrowser().getLoader().getContext();
-
-            if (ctx != null)
-            {
-               try
-               {
-                  Object lastComponent = tree.getSelectionPath().getLastPathComponent() ;
-                  
-                  final boolean isEnabled = tree.getSelectionPath() != null
-                  && (lastComponent instanceof MessageStoreDestinationTreeNode || lastComponent instanceof MessageStoreTreeNode || lastComponent instanceof RepositoryTreeNode) ;
-                  
-                  final MessageStore messageStore = tree.getSelectedMessageStore() ; ;
-                  final Destination messageStoreDestination = tree.getSelectedMessageStoreDestination() ;
-                  
-                
-                  for (NamingEnumeration iter = ctx.listBindings(""); iter.hasMoreElements();)
-                  {
-                     final Binding binding = (Binding) iter.next();
-
-                     if (binding.getObject() instanceof Hermes)
-                     {
-                        final Hermes hermes = (Hermes) binding.getObject();
-                        final JideMenu menu = new JideMenu(binding.getName());
-
-                        final JMenuItem originalItem = new JMenuItem("Original queue or topic") ;
-                        
-                        menu.setEnabled(isEnabled) ;
-                        originalItem.setEnabled(isEnabled) ;
-                        originalItem.addActionListener(new ActionListener()
-                        {
-                           public void actionPerformed(ActionEvent e)
-                           {
-                              ThreadPool.get().invokeLater(new ReplayMessagesFromStoreTask(messageStore, messageStoreDestination, hermes, null)) ;
-                           }
-                        }) ;
-                        
-                        menu.add(originalItem) ;
-                        
-                        final Set topics = new HashSet() ;
-                        
-                        for (Iterator destinations = hermes.getDestinations(); destinations.hasNext();)
-                        {
-                           final DestinationConfig destinationConfig = (DestinationConfig) destinations.next();
-                           
-                           if (destinationConfig.getDomain() == Domain.TOPIC.getId())
-                           {
-                              if (topics.contains(destinationConfig.getName()))
-                              {
-                                 continue ;
-                              }
-                              else
-                              {
-                                 topics.add(destinationConfig.getName()) ;
-                              }
-                           }
-                           
-                           final JMenuItem item = new JMenuItem(destinationConfig.getName(), Domain.getDomain(destinationConfig.getDomain()).getIcon());
-
-                           item.setEnabled(isEnabled);
-                           item.addActionListener(new ActionListener()
-                           {
-                              public void actionPerformed(ActionEvent e)
-                              {
-                                 ThreadPool.get().invokeLater(new ReplayMessagesFromStoreTask(messageStore, messageStoreDestination, hermes, destinationConfig)) ;
-                              }
-                           });
-                           
-                           menu.add(item) ;
-                        }
-
-                        replayMenu.add(menu);
-                     }
-                  }
-               }
-               catch (NamingException e1)
-               {
-                  HermesBrowser.getBrowser().showErrorDialog("Unable to list available Hermes", e1);
-               }
-
-            }
-
-            if (replayMenu.getItemCount() == 0)
-            {
-               replayMenu.add(new JMenuItem("<no sessions>"));
-            }
-         }
-      });
+      
+     
 
       recordMenu.addMouseListener(new MouseAdapter()
       {
