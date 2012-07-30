@@ -49,11 +49,10 @@ import javax.swing.tree.TreePath;
 import org.apache.log4j.Logger;
 
 /**
- * Action to browse a queue, topic or JNDI context.
+ * Replay messages from a store.
  * 
  * @author colincrist@hermesjms.com
- * @version $Id: BrowseDestinationOrContextAction.java,v 1.1 2005/05/14 22:53:48
- *          colincrist Exp $
+ * @version $Id$
  */
 
 public class ReplayAction extends ActionSupport {
