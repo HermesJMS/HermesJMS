@@ -24,6 +24,7 @@ import hermes.JNDIContextFactory;
 import hermes.browser.HermesBrowser;
 import hermes.browser.actions.AbstractEditedMessageHandler;
 import hermes.browser.actions.BrowserAction;
+import hermes.browser.actions.MessageStoreBrowserAction;
 import hermes.browser.actions.QueueBrowseAction;
 import hermes.browser.dialog.BindToolDialog;
 import hermes.browser.dialog.message.MessageEditorDialog;
@@ -759,11 +760,28 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 		model.nodeStructureChanged(node);
 	}
 
+	private void maybeRefocusDocument(TreeNode treeNode) {
+		DocumentComponent found = null ;
+		
+		if (treeNode instanceof DestinationConfigTreeNode) {
+			final DestinationConfigTreeNode node = (DestinationConfigTreeNode) treeNode;
+			found = HermesBrowser.getBrowser().getOpenQueueBrowser(node.getConfig());
+		} else if (treeNode instanceof MessageStoreTreeNode) {
+			final MessageStoreTreeNode node = (MessageStoreTreeNode) treeNode;
+			found = HermesBrowser.getBrowser().getOpenStoreBrowser(node.getMessageStore()) ;
+		}
+		
+		if (found != null) {
+			HermesBrowser.getBrowser().getDocumentPane().setActiveDocument(found.getName());
+		}
+	}
+
 	/**
 	 * Called whenever the value of the selection changes, we watch this to
 	 * cache whenever HermesTreeNode is in the selection path and to change the
 	 * components tooltip text.
 	 */
+
 	public void valueChanged(TreeSelectionEvent e) {
 		final TreePath treePath = e.getNewLeadSelectionPath();
 
@@ -777,25 +795,18 @@ public class BrowserTree extends JTree implements TreeSelectionListener, DropTar
 						setToolTipText(node.getHermes().getMetaData().getToolTipText());
 					} else if (treePath.getPathComponent(i) instanceof DestinationConfigTreeNode) {
 						final DestinationConfigTreeNode node = (DestinationConfigTreeNode) treePath.getPathComponent(i);
-
-						String documentTitle = BrowserAction.getDisplayName(node.getHermesTreeNode().getHermes(), node.getConfig(), null);
-
-						QueueBrowseAction qBrowser = HermesBrowser.getBrowser().getOpenQueueBrowser(node.getConfig());
-
-						if (qBrowser!= null) {
-							HermesBrowser.getBrowser().getDocumentPane().setActiveDocument(qBrowser.getName());
-							break;
-						}
-
 						setToolTipText(node.getDestinationName());
+
+						maybeRefocusDocument(node);
+
 					} else if (treePath.getPathComponent(i) instanceof RepositoryTreeNode) {
 						final RepositoryTreeNode node = (RepositoryTreeNode) treePath.getPathComponent(i);
-
 						setToolTipText(node.getRepository().getId());
 					} else if (treePath.getPathComponent(i) instanceof MessageStoreTreeNode) {
 						final MessageStoreTreeNode node = (MessageStoreTreeNode) treePath.getPathComponent(i);
-
 						setToolTipText(node.getMessageStore().getTooltipText());
+						maybeRefocusDocument(node);
+
 					} else if (treePath.getPathComponent(i) instanceof MessageStoreURLTreeNode) {
 						final MessageStoreURLTreeNode node = (MessageStoreURLTreeNode) treePath.getPathComponent(i);
 

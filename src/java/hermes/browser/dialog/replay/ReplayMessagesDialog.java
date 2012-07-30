@@ -44,6 +44,8 @@ import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
 import org.apache.log4j.Logger;
+import javax.swing.border.EtchedBorder;
+import java.awt.Color;
 
 public class ReplayMessagesDialog extends JDialog {
 
@@ -111,7 +113,7 @@ public class ReplayMessagesDialog extends JDialog {
 		setTitle("Replay From " + store.getId());
 		setBounds(100, 100, 450, 181);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new TitledBorder(null, "Select target", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		contentPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Select target", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.DEFAULT_COLSPEC, ColumnSpec.decode("default:grow"), ColumnSpec.decode("60dlu"), },
 				new RowSpec[] { FormFactory.DEFAULT_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,

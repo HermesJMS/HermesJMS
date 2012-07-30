@@ -32,6 +32,7 @@ import hermes.SingletonManager;
 import hermes.SystemProperties;
 import hermes.browser.actions.ActionFactory;
 import hermes.browser.actions.BrowserAction;
+import hermes.browser.actions.MessageStoreBrowserAction;
 import hermes.browser.actions.QueueBrowseAction;
 import hermes.browser.components.ActionsPanel;
 import hermes.browser.components.BrowserTree;
@@ -61,6 +62,7 @@ import hermes.impl.ConfigDAOImpl;
 import hermes.impl.FileRepositoryManager;
 import hermes.impl.SimpleClassLoaderManager;
 import hermes.renderers.RendererManager;
+import hermes.store.MessageStore;
 import hermes.util.JVMUtils;
 import hermes.util.TextUtils;
 
@@ -1294,6 +1296,19 @@ public class HermesBrowser extends DefaultDockableBarDockableHolder implements H
 		}
 	}
 
+	public MessageStoreBrowserAction getOpenStoreBrowser(MessageStore store) {
+		for (int d = 0 ; d < HermesBrowser.getBrowser().getDocumentPane().getDocumentCount() ; d++) {
+			 DocumentComponent doc =  HermesBrowser.getBrowser().getDocumentPane().getDocumentAt(d) ;
+			 if (doc instanceof MessageStoreBrowserAction) {
+				 MessageStoreBrowserAction sBrowser = (MessageStoreBrowserAction) doc ;
+				 if (sBrowser.getMessageStore().equals(store)) {
+					 return sBrowser ;
+				 }
+			 }
+		 }
+		return null ;
+	}
+	
 	public QueueBrowseAction getOpenQueueBrowser(DestinationConfig config) {
 		for (int d = 0 ; d < HermesBrowser.getBrowser().getDocumentPane().getDocumentCount() ; d++) {
 			 DocumentComponent doc =  HermesBrowser.getBrowser().getDocumentPane().getDocumentAt(d) ;

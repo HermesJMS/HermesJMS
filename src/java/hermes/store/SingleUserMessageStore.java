@@ -90,6 +90,38 @@ public class SingleUserMessageStore implements MessageStore {
 		return jdbcURL;
 	}
 
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((jdbcURL == null) ? 0 : jdbcURL.hashCode());
+		result = prime * result + ((storeId == null) ? 0 : storeId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SingleUserMessageStore other = (SingleUserMessageStore) obj;
+		if (jdbcURL == null) {
+			if (other.jdbcURL != null)
+				return false;
+		} else if (!jdbcURL.equals(other.jdbcURL))
+			return false;
+		if (storeId == null) {
+			if (other.storeId != null)
+				return false;
+		} else if (!storeId.equals(other.storeId))
+			return false;
+		return true;
+	}
+
 	private Connection getWriterConnection() throws HermesException {
 		if (writerTL.get() == null) {
 			writerTL.set(connectionPool.get());

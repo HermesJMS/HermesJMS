@@ -88,9 +88,9 @@
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/mina-core-1.1.7.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/quickfixj-all-1.5.0.jar" sourcepath="/HOME/Applications/quickfixj/src.zip"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/tools.jar"/>
-	<classpathentry exported="true" kind="var" path="HORNETQ_ROOT/client/hornetq-jms-client.jar"/>
-	<classpathentry exported="true" kind="var" path="HORNETQ_ROOT/client/jnp-client.jar"/>
-	<classpathentry exported="true" kind="var" path="HORNETQ_ROOT/client/hornetq-core-client.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/lib/hornetq-jms-client.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/lib/jnp-client.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/lib/hornetq-core-client.jar"/>
 	<classpathentry exported="true" kind="var" path="HORNETQ_ROOT/lib/netty.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/cglib-nodep-2.2.2.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/asm-all-4.0_RC1.jar"/>

@@ -168,7 +168,7 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 	public int getDepth(DestinationConfig dConfig) throws JMSException {
 		try {
 			String dest = getRealDestinationName(dConfig);
-			int depth = 0;
+			long depth = 0;
 
 			if (dConfig.getDomain() == Domain.QUEUE.getId()) {
 
@@ -182,7 +182,7 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 			}
 
 			log.debug("Found the depth of (" + depth + ") for: " + dest);
-			return depth;
+			return(int)  depth;
 		} catch (HermesException ex) {
 			throw ex;
 		} catch (Exception e) {

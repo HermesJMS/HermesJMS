@@ -26,6 +26,7 @@ import hermes.swing.actions.GetDestinationStatisticsAction;
 import hermes.swing.actions.OpenConfigAction;
 import hermes.swing.actions.OpenFIXFileAction;
 import hermes.swing.actions.OpenXMLFileAction;
+import hermes.swing.actions.ReplayAction;
 import hermes.swing.actions.SearchDestinationOrContextAction;
 import hermes.swing.actions.SendNewMessageAction;
 import hermes.swing.actions.SendTextFileAction;
@@ -44,41 +45,40 @@ import com.jidesoft.action.DockableBarContext;
  * @version $Id: MainToolBar.java,v 1.28 2006/07/13 07:35:32 colincrist Exp $
  */
 
-public class MainToolBar extends CommandBar
-{
-   /**
+public class MainToolBar extends CommandBar {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5492900168433188166L;
-private static final Category cat = Category.getInstance(MainToolBar.class);
+	private static final Category cat = Category.getInstance(MainToolBar.class);
 
-   /**
-    * BrowserToolBar constructor.
-    */
-   public MainToolBar()
-   {
-      super("Main");
+	/**
+	 * BrowserToolBar constructor.
+	 */
+	public MainToolBar() {
+		super("Main");
 
-      setHidable(false);
+		setHidable(false);
 
-      getContext().setInitSide(DockableBarContext.DOCK_SIDE_NORTH);
-      getContext().setInitMode(DockableBarContext.STATE_HORI_DOCKED);
+		getContext().setInitSide(DockableBarContext.DOCK_SIDE_NORTH);
+		getContext().setInitMode(DockableBarContext.STATE_HORI_DOCKED);
 
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(OpenConfigAction.class)));
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SendNewMessageAction.class))) ;
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(EditMessageAction.class))) ;
-      addSeparator() ;
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(OpenXMLFileAction.class)));
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(OpenFIXFileAction.class)));
-      addSeparator() ;
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(StopAllTasksAction.class)));
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(BrowseDestinationOrContextAction.class)));
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(BrowseDestinationWithSelectorAction.class)));
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SearchDestinationOrContextAction.class)));
-      //add(SwingUtils.createToolBarButton(ActionRegistry.getAction(ToggleFilterInputPanelAction.class)));
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(GetDestinationStatisticsAction.class)));
-      addSeparator();
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SendTextFileAction.class)));
-      add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SendXMLFileAction.class)));
-   }
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(OpenConfigAction.class)));
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SendNewMessageAction.class)));
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(EditMessageAction.class)));
+		addSeparator();
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(OpenXMLFileAction.class)));
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(OpenFIXFileAction.class)));
+		addSeparator();
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(StopAllTasksAction.class)));
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(BrowseDestinationOrContextAction.class)));
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(BrowseDestinationWithSelectorAction.class)));
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SearchDestinationOrContextAction.class)));
+		// add(SwingUtils.createToolBarButton(ActionRegistry.getAction(ToggleFilterInputPanelAction.class)));
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(GetDestinationStatisticsAction.class)));
+		addSeparator();
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SendTextFileAction.class)));
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(SendXMLFileAction.class)));
+		add(SwingUtils.createToolBarButton(ActionRegistry.getAction(ReplayAction.class)));
+	}
 }
