@@ -31,213 +31,189 @@ import javax.jms.TextMessage;
 import org.apache.log4j.Logger;
 
 /**
- * QueueBrowser that facades another QueueBrowser and does an additional level of filtering based on a regular expression.
- * The regex is performed on either MapMessages or TextMessages and on the header properties of all messages.
+ * QueueBrowser that facades another QueueBrowser and does an additional level
+ * of filtering based on a regular expression. The regex is performed on either
+ * MapMessages or TextMessages and on the header properties of all messages.
  * 
  * @author colincrist@hermesjms.com last changed by: $Author: colincrist $
- * @version $Id: RegexQueueBrowser.java,v 1.4 2005/09/28 15:34:41 colincrist Exp $
+ * @version $Id: RegexQueueBrowser.java,v 1.4 2005/09/28 15:34:41 colincrist Exp
+ *          $
  */
-public class RegexQueueBrowser implements QueueBrowser
-{
-    private static final Logger log = Logger.getLogger(RegexQueueBrowser.class);
-    private Pattern pattern;
-    private boolean searchJMSHeader;
-    private boolean searchUserHeader;
-    private QueueBrowser browser;
+public class RegexQueueBrowser implements QueueBrowser {
+	private static final Logger log = Logger.getLogger(RegexQueueBrowser.class);
+	private final Pattern pattern;
+	private final boolean searchJMSHeader;
+	private final boolean searchUserHeader;
+	private final QueueBrowser browser;
 
-    class RegexEnumeration implements Enumeration
-    {
-        private Enumeration iter;
+	class RegexEnumeration implements Enumeration {
+		private final Enumeration iter;
 
-        RegexEnumeration(Enumeration iter)
-        {
-            this.iter = iter;
-        }
+		RegexEnumeration(Enumeration iter) {
+			this.iter = iter;
+		}
 
-        public boolean hasMoreElements()
-        {
-            return iter.hasMoreElements();
-        }
+		@Override
+		public boolean hasMoreElements() {
+			return iter.hasMoreElements();
+		}
 
-        public Object nextElement()
-        {
-            while (iter.hasMoreElements())
-            {
-                Message m = (Message) iter.nextElement();
+		@Override
+		public Object nextElement() {
+			while (iter.hasMoreElements()) {
+				Message m = (Message) iter.nextElement();
 
-                if (m != null)
-                {
-                    if (matches(m))
-                    {
-                        return m;
-                    }
-                }
-                else
-                {
-                    return null;
-                }
-            }
+				if (m != null) {
+					if (matches(m)) {
+						return m;
+					}
+				} else {
+					return null;
+				}
+			}
 
-            return null;
-        }
-    }
+			return null;
+		}
+	}
 
-    /**
-     * Create a new RegexQueueBrowser to filter messages from the underlying QueueBrowser.
-     * 
-     * @param browser the underlying queue browser
-     * @param regex the regular expression
-     * @param searchJMSHeader whether to search the JMS header properties
-     * @param searchUserHeader whether to search the user properties
-     */
-    public RegexQueueBrowser(QueueBrowser browser, String regex, boolean searchJMSHeader, boolean searchUserHeader)
-    {
-        this.browser = browser;
-        this.searchJMSHeader = searchJMSHeader;
-        this.searchUserHeader = searchUserHeader;
+	/**
+	 * Create a new RegexQueueBrowser to filter messages from the underlying
+	 * QueueBrowser.
+	 * 
+	 * @param browser
+	 *            the underlying queue browser
+	 * @param regex
+	 *            the regular expression
+	 * @param searchJMSHeader
+	 *            whether to search the JMS header properties
+	 * @param searchUserHeader
+	 *            whether to search the user properties
+	 */
+	public RegexQueueBrowser(QueueBrowser browser, String regex, boolean searchJMSHeader, boolean searchUserHeader) {
+		this.browser = browser;
+		this.searchJMSHeader = searchJMSHeader;
+		this.searchUserHeader = searchUserHeader;
 
-        pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.DOTALL | Pattern.UNICODE_CASE);
-    }
+		pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.DOTALL | Pattern.UNICODE_CASE);
+	}
 
-    /* (non-Javadoc)
-     * @see javax.jms.QueueBrowser#getQueue()
-     */
-    public Queue getQueue() throws JMSException
-    {
-        return browser.getQueue();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.QueueBrowser#getQueue()
+	 */
+	@Override
+	public Queue getQueue() throws JMSException {
+		return browser.getQueue();
+	}
 
-    /* (non-Javadoc)
-     * @see javax.jms.QueueBrowser#getMessageSelector()
-     */
-    public String getMessageSelector() throws JMSException
-    {
-        return browser.getMessageSelector();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.QueueBrowser#getMessageSelector()
+	 */
+	@Override
+	public String getMessageSelector() throws JMSException {
+		return browser.getMessageSelector();
+	}
 
-    /* (non-Javadoc)
-     * @see javax.jms.QueueBrowser#getEnumeration()
-     */
-    public Enumeration getEnumeration() throws JMSException
-    {
-        return new RegexEnumeration(browser.getEnumeration());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.QueueBrowser#getEnumeration()
+	 */
+	@Override
+	public Enumeration getEnumeration() throws JMSException {
+		return new RegexEnumeration(browser.getEnumeration());
+	}
 
-    /* (non-Javadoc)
-     * @see javax.jms.QueueBrowser#close()
-     */
-    public void close() throws JMSException
-    {
-        browser.close();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.jms.QueueBrowser#close()
+	 */
+	@Override
+	public void close() throws JMSException {
+		browser.close();
+	}
 
-    public boolean matches(Message message)
-    {
-        try
-        {
-            if (searchJMSHeader)
-            {
+	public boolean matches(Message message) {
+		try {
+			if (searchJMSHeader) {
 
-            }
+			}
 
-            if (searchUserHeader)
-            {
-                for (Enumeration headerNames = message.getPropertyNames(); headerNames.hasMoreElements();)
-                {
-                    try
-                    {
-                        String key = (String) headerNames.nextElement();
-                        Object value = message.getObjectProperty(key);
+			if (searchUserHeader) {
+				for (Enumeration headerNames = message.getPropertyNames(); headerNames.hasMoreElements();) {
+					try {
+						String key = (String) headerNames.nextElement();
+						Object value = message.getObjectProperty(key);
 
-                        if (key != null)
-                        {
-                           if (pattern.matcher(key).lookingAt())
-                           {
-                               return true;
-                           }
-                           
-                        }
-                        if (value != null)
-                        {
-                            if (pattern.matcher(value.toString()).lookingAt())
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    catch (JMSException ex)
-                    {
-                        log.error(ex.getMessage(), ex) ;
-                    }
-                }
-            }
+						if (key != null) {
+							if (pattern.matcher(key).lookingAt()) {
+								return true;
+							}
 
-            if (message instanceof TextMessage)
-            {
-                try
-                {
-                    return pattern.matcher(((TextMessage) message).getText()).lookingAt();
-                }
-                catch (JMSException ex)
-                {
-                    log.error(ex.getMessage(), ex) ;
-                }
-            }
-            else if (message instanceof MapMessage)
-            {
-                try
-                {
-                    MapMessage map = (MapMessage) message;
+						}
+						if (value != null) {
+							if (pattern.matcher(value.toString()).lookingAt()) {
+								return true;
+							}
+						}
+					} catch (JMSException ex) {
+						log.error(ex.getMessage(), ex);
+					}
+				}
+			}
 
-                    for (Enumeration mapNames = map.getMapNames(); mapNames.hasMoreElements();)
-                    {
-                        String key = (String) mapNames.nextElement();
-                        Object value = map.getObject(key);
+			if (message instanceof TextMessage) {
+				try {
+					final String text = ((TextMessage) message).getText();
+					if (text != null) {
+						return pattern.matcher(text).lookingAt();
+					}
+				} catch (JMSException ex) {
+					log.error(ex.getMessage(), ex);
+				}
+			} else if (message instanceof MapMessage) {
+				try {
+					MapMessage map = (MapMessage) message;
 
-                        if (pattern.matcher(key).lookingAt())
-                        {
-                           return true ;
-                        }
-                        
-                        if (value != null)
-                        {
-                            if (pattern.matcher(value.toString()).lookingAt())
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                catch (JMSException ex)
-                {
-                    log.error(ex.getMessage(), ex) ;
-                }
-            }
-            else if (message instanceof ObjectMessage)
-            {
-               try
-               {
-                  ObjectMessage om = (ObjectMessage) message;
-                  String toString = om.getObject().toString();
+					for (Enumeration mapNames = map.getMapNames(); mapNames.hasMoreElements();) {
+						String key = (String) mapNames.nextElement();
+						Object value = map.getObject(key);
 
-                  if (pattern.matcher(toString).lookingAt())
-                  {
-                      return true;
-                  }
-               }
-               catch (Throwable t)
-               {
-                  log.error(t.getMessage(), t);
-               }
-            }
+						if (pattern.matcher(key).lookingAt()) {
+							return true;
+						}
 
-            return false;
-        }
-        catch (JMSException e)
-        {
-            log.error(e.getMessage(), e);
-        }
+						if (value != null) {
+							if (pattern.matcher(value.toString()).lookingAt()) {
+								return true;
+							}
+						}
+					}
+				} catch (JMSException ex) {
+					log.error(ex.getMessage(), ex);
+				}
+			} else if (message instanceof ObjectMessage) {
+				try {
+					ObjectMessage om = (ObjectMessage) message;
+					String toString = om.getObject().toString();
 
-        return false;
-    }
+					if (pattern.matcher(toString).lookingAt()) {
+						return true;
+					}
+				} catch (Throwable t) {
+					log.error(t.getMessage(), t);
+				}
+			}
+
+			return false;
+		} catch (JMSException e) {
+			log.error(e.getMessage(), e);
+		}
+
+		return false;
+	}
 }
