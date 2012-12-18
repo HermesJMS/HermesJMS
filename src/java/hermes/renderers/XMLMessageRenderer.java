@@ -20,7 +20,6 @@ package hermes.renderers;
 import hermes.util.MessageUtils;
 import hermes.util.XmlUtils;
 
-import java.awt.Font;
 import java.nio.charset.Charset;
 
 import javax.jms.BytesMessage;
@@ -29,126 +28,113 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
 
 import org.apache.log4j.Logger;
 
 /**
  * A renderer that displays toString() on a JMS message in a text area.
- *
+ * 
  * @author colincrist@hermesjms.com
- * @version $Id: XMLMessageRenderer.java,v 1.3 2007/02/18 16:13:41 colincrist Exp $
+ * @version $Id: XMLMessageRenderer.java,v 1.3 2007/02/18 16:13:41 colincrist
+ *          Exp $
  */
 
-public class XMLMessageRenderer extends AbstractMessageRenderer
-{
-   private static final Logger log = Logger.getLogger(XMLMessageRenderer.class);
+public class XMLMessageRenderer extends AbstractMessageRenderer {
+	private static final Logger log = Logger.getLogger(XMLMessageRenderer.class);
 
-   public class MyConfig extends AbstractMessageRenderer.BasicConfig {
-       private String encoding = Charset.defaultCharset().name();
+	public class MyConfig extends AbstractMessageRenderer.BasicConfig {
+		private String encoding = Charset.defaultCharset().name();
 
-        public String getEncoding() {
-            return encoding;
-        }
+		public String getEncoding() {
+			return encoding;
+		}
 
-        public void setEncoding(String encoding) {
-            this.encoding = encoding;
-        }
-   }
+		public void setEncoding(String encoding) {
+			this.encoding = encoding;
+		}
+	}
 
-   public XMLMessageRenderer()
-   {
-      super();
-      setConfig(createConfig()); // force using instance of MyConfig
-   }
+	public XMLMessageRenderer() {
+		super();
+		setConfig(createConfig()); // force using instance of MyConfig
+	}
 
-   public JComponent render(Message m)
-   {
-      //
-      // Raw Panel.
+	@Override
+	public JComponent render(Message m) {
+		//
+		// Raw Panel.
 
-      JEditorPane pane = new JEditorPane();
+		JEditorPane pane = new JEditorPane();
+		JScrollPane p1 = new JScrollPane(pane);
+		// final JTextArea textArea = new MyTextArea() ;
 
-      //final JTextArea textArea = new MyTextArea() ;
+		pane.setEditable(false);
 
-      pane.setEditable(false);
+		// pane.setLineWrap(true) ;
+		// pane.setWrapStyleWord(true) ;
 
-      pane.setContentType("text/xml") ;
+		try {
+			String string;
+			if (m instanceof BytesMessage) {
+				string = new String(MessageUtils.asBytes(m), getConfig().getEncoding());
+			} else {
+				string = new String(MessageUtils.asString(m).getBytes(Charset.defaultCharset()), getConfig().getEncoding());
+			}
 
+			pane.setContentType("text/xml");
+			pane.setText(XmlUtils.prettyPrintXml(string));
 
-      //pane.setLineWrap(true) ;
-      //pane.setWrapStyleWord(true) ;
+		} catch (Throwable e) {
+			pane.setText(e.getMessage());
+			log.error("exception converting message to byte[]: ", e);
+		}
 
+		pane.setCaretPosition(0);
 
-      try
-      {
-          String string;
-          if(m instanceof BytesMessage) {
-              string = new String(MessageUtils.asBytes(m), getConfig().getEncoding());
-          } else {
-              string = new String(MessageUtils.asString(m).getBytes(Charset.defaultCharset()), getConfig().getEncoding());
-          }
+		return pane;
+	}
 
-          //textArea.setLineWrap(true) ;
-          pane.setText(XmlUtils.prettyPrintXml(string));
-          pane.setCaretPosition(0) ;
-          pane.setFont(Font.decode("Monospaced-PLAIN-12")) ;
-      }
-      catch (Throwable e)
-      {
-         pane.setText(e.getMessage()) ;
-          log.error("exception converting message to byte[]: ", e);
-      }
+	@Override
+	public MyConfig createConfig() {
+		return new MyConfig();
+	}
 
-      pane.setCaretPosition(0);
+	@Override
+	public MyConfig getConfig() {
+		return (MyConfig) super.getConfig();
+	}
 
-      return pane ;
-   }
+	/**
+	 * Any JMS message is rederable.
+	 */
+	@Override
+	public boolean canRender(Message message) {
+		try {
+			if (message instanceof TextMessage) {
+				final String text = ((TextMessage) message).getText();
 
-    @Override
-    public MyConfig createConfig() {
-        return new MyConfig();
-    }
+				return XmlUtils.isXML(text);
+			}
 
-    @Override
-    public MyConfig getConfig() {
-        return (MyConfig) super.getConfig();
-    }
+			if (message instanceof BytesMessage) {
+				BytesMessage bytesMsg = (BytesMessage) message;
+				bytesMsg.reset();
 
-/**
-    * Any JMS message is rederable.
-    */
-   public boolean canRender(Message message)
-   {
-      try
-      {
-         if (message instanceof TextMessage)
-         {
-            final String text = ((TextMessage) message).getText() ;
+				final byte[] decl = new byte["<?xml".length()];
+				bytesMsg.readBytes(decl);
 
-            return XmlUtils.isXML(text) ;
-         }
+				return XmlUtils.isXML(new String(decl));
+			}
+		} catch (JMSException e) {
+			log.error("error getting text: " + e.getMessage(), e);
+		}
 
-         if (message instanceof BytesMessage)
-         {
-             BytesMessage bytesMsg = (BytesMessage) message;
-             bytesMsg.reset();
+		return false;
+	}
 
-             final byte[] decl = new byte["<?xml".length()];
-             bytesMsg.readBytes(decl);
-
-             return XmlUtils.isXML(new String(decl));
-         }
-      }
-      catch (JMSException e)
-      {
-         log.error("error getting text: " + e.getMessage(), e) ;
-      }
-
-      return false ;
-   }
-
-   public String getDisplayName()
-   {
-      return "XML";
-   }
+	@Override
+	public String getDisplayName() {
+		return "XML";
+	}
 }
