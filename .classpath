@@ -3,7 +3,12 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="src/test"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jarbundler-2.2.0.jar"/>
+	<classpathentry kind="lib" path="src/lib/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="providers/hornetq-2.0.0.GA/lib/hornetq-core.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/naming-java.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jaxp-api.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jaxp-ri.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/namespace.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jta-spec1_0_1.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/naming-factory.jar"/>
@@ -61,9 +66,8 @@
 	<classpathentry exported="true" kind="var" path="WEBSPHERE_ROOT/java/commonservices.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/selector-1.1.jar" sourcepath="/LOCAL/jamsel/selector-1.1.jar"/>
 	<classpathentry kind="src" path="src/resources"/>
-	<classpathentry kind="var" path="WEBLOGIC_ROOT/com.bea.core.utils.full_1.0.0.0.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/log4j-1.2.15.jar"/>
-	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/jsyntaxpane-0.9.1.jar"/>
+	<classpathentry kind="var" path="HERMES_ROOT/src/lib/jsyntaxpane-0.9.5-b29.jar" sourcepath="/HOME/Work/jsyntaxpane-read-only/jsyntaxpane/src/main/java"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/hermes-sapjms.jar"/>
 	<classpathentry exported="true" kind="var" path="ORACLEAQ_ROOT/aqapi.jar"/>
 	<classpathentry exported="true" kind="var" path="ORACLEAQ_ROOT/castor-1.0.5-xml.jar"/>
@@ -88,16 +92,13 @@
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/mina-core-1.1.7.jar"/>
 	<classpathentry kind="var" path="HERMES_ROOT/src/lib/quickfixj-all-1.5.0.jar" sourcepath="/HOME/Applications/quickfixj/src.zip"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/tools.jar"/>
-	<classpathentry kind="var" path="HORNETQ_ROOT/lib/hornetq-jms-client.jar"/>
-	<classpathentry kind="var" path="HORNETQ_ROOT/lib/jnp-client.jar"/>
-	<classpathentry kind="var" path="HORNETQ_ROOT/lib/hornetq-core-client.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/client/hornetq-jms-client.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/client/jnp-client.jar"/>
+	<classpathentry kind="var" path="HORNETQ_ROOT/client/hornetq-core-client.jar"/>
 	<classpathentry exported="true" kind="var" path="HORNETQ_ROOT/lib/netty.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/cglib-nodep-2.2.2.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/asm-all-4.0_RC1.jar"/>
 	<classpathentry exported="true" kind="var" path="HERMES_ROOT/src/lib/forms-1.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/jarbundler-2.2.0.jar"/>
-	<classpathentry kind="lib" path="src/lib/jaxb-impl.jar"/>
-	<classpathentry kind="lib" path="providers/apache-qpid/qpid-client-0.13.jar"/>
-	<classpathentry kind="lib" path="providers/apache-qpid/qpid-common-0.13.jar"/>
+	<classpathentry kind="var" path="WEBLOGIC_ROOT/com.bea.core.utils.full_1.0.0.0.jar"/>
 	<classpathentry kind="output" path="ebuild/classes"/>
 </classpath>
