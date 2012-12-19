@@ -355,10 +355,10 @@
 		</path>
 
 		<path id="xjc.classpath">
-			<path refid="project.classpath" />
 			<fileset dir="${jaxb.lib}">
 				<include name="*.jar" />
 			</fileset>
+			<path refid="project.classpath" />
 		</path>
 
 		<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
