@@ -17,8 +17,6 @@
 
 package hermes.fix;
 
-import hermes.fix.quickfix.QuickFIXUtils;
-
 import java.util.Iterator;
 import java.util.Vector;
 

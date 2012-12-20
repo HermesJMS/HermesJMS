@@ -25,17 +25,13 @@ import hermes.swing.SQL92FilterableTableModel;
 import hermes.swing.SwingUtils;
 
 import java.awt.Component;
-import java.awt.Container;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.JTable;
-import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;

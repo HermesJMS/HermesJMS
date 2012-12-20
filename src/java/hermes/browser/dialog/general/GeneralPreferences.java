@@ -5,25 +5,23 @@ import hermes.browser.HermesBrowser;
 import hermes.config.HermesConfig;
 import hermes.config.SessionConfig;
 
-import javax.swing.JCheckBox;
+import java.awt.Color;
+import java.util.Vector;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
-import javax.swing.border.EtchedBorder;
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Vector;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JComboBox;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
 public class GeneralPreferences extends JPanel {
 	private static final long serialVersionUID = 1L;

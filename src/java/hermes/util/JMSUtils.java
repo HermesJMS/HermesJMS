@@ -17,10 +17,10 @@
 
 package hermes.util;
 
+import hermes.Domain;
+
 import java.util.Collection;
 import java.util.Iterator;
-
-import hermes.Domain;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -147,4 +147,5 @@ public class JMSUtils {
 		return sqlBuffer.toString();
 	}
 
+	
 }

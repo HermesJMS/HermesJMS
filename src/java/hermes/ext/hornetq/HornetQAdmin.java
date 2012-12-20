@@ -50,17 +50,15 @@ import org.hornetq.api.jms.management.TopicControl;
  */
 public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 	private static final Logger log = Logger.getLogger(HornetQAdmin.class);
-	private JNDIConnectionFactory jndiCF;
+	private final JNDIConnectionFactory jndiCF;
 	private JMXConnector jmxConnector;
-	private HornetQAdminFactory factory;
+	private final HornetQAdminFactory factory;
 	private MBeanServerConnection mBeanServer = null;
 
 	/**
 	 * Constructor
 	 */
-	public HornetQAdmin(HornetQAdminFactory factory, Hermes hermes,
-			JNDIConnectionFactory jndiCF, ConnectionFactory cf)
-			throws JMSException {
+	public HornetQAdmin(HornetQAdminFactory factory, Hermes hermes, JNDIConnectionFactory jndiCF, ConnectionFactory cf) throws JMSException {
 		super(hermes);
 
 		this.jndiCF = jndiCF;
@@ -86,47 +84,32 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 	 * @throws JMSException
 	 * @throws HermesException
 	 */
-	private MBeanServerConnection getMBeanServerConnection()
-			throws IOException, JMSException, HermesException {
+	private MBeanServerConnection getMBeanServerConnection() throws IOException, JMSException, HermesException {
 		if (mBeanServer == null) {
 			if (factory.getJmxUrl() != null) {
 				if (jmxConnector == null) {
-					log.info("Creating JMXConnector using jmxUrl: "
-							+ factory.getJmxUrl());
+					log.info("Creating JMXConnector using jmxUrl: " + factory.getJmxUrl());
 					// Create a JMX Connector to connect to the server's
 					// MBeanServer
 					try {
-						jmxConnector = JMXConnectorFactory.connect(
-								new JMXServiceURL(factory.getJmxUrl()),
-								new HashMap());
+						jmxConnector = JMXConnectorFactory.connect(new JMXServiceURL(factory.getJmxUrl()), new HashMap());
 						mBeanServer = jmxConnector.getMBeanServerConnection();
 					} catch (Exception ex) {
-						throw new HermesException(
-								"Error creating the JMXConnector. Check the jmxUrl in the Admin Factory. An example for JBoss would look like: "
-										+ "service:jmx:rmi:///jndi/rmi://localhost:1090/jmxconnector",
-								ex);
+						throw new HermesException("Error creating the JMXConnector. Check the jmxUrl in the Admin Factory. An example for JBoss would look like: "
+								+ "service:jmx:rmi:///jndi/rmi://localhost:1090/jmxconnector", ex);
 					}
 				}
 			} else if (factory.getMBeanServerConnectionJndi() != null) {
 				try {
-					mBeanServer = (MBeanServerConnection) jndiCF
-							.createContext().lookup(
-									factory.getMBeanServerConnectionJndi());
+					mBeanServer = (MBeanServerConnection) jndiCF.createContext().lookup(factory.getMBeanServerConnectionJndi());
 				} catch (NamingException e) {
-					throw new HermesException(
-							"Error accessing the MBeanServerConnection via JNDI using: "
-									+ factory.getMBeanServerConnectionJndi()
-									+ ". "
-									+ "Please make sure the mBeanServerConnectionJndi is configured properly. "
-									+ "An example for JBoss would be: jmx/invoker/RMIAdaptor",
-							e);
+					throw new HermesException("Error accessing the MBeanServerConnection via JNDI using: " + factory.getMBeanServerConnectionJndi() + ". "
+							+ "Please make sure the mBeanServerConnectionJndi is configured properly. " + "An example for JBoss would be: jmx/invoker/RMIAdaptor", e);
 				}
 
 			} else {
-				throw new HermesException(
-						"You must set either the jmxUrl or the jmxAdapterJndi. jmxUrl example: "
-								+ "service:jmx:rmi:///jndi/rmi://localhost:1090/jmxconnector. "
-								+ "jmxAdapterJndi example: jmx/invoker/RMIAdaptor");
+				throw new HermesException("You must set either the jmxUrl or the jmxAdapterJndi. jmxUrl example: " + "service:jmx:rmi:///jndi/rmi://localhost:1090/jmxconnector. "
+						+ "jmxAdapterJndi example: jmx/invoker/RMIAdaptor");
 			}
 		}
 		return mBeanServer;
@@ -137,12 +120,10 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 		MBeanServerConnection mbsc = getMBeanServerConnection();
 
 		// Construct an ObjectName for JMX access to the Queue
-		ObjectName on = ObjectNameBuilder.DEFAULT
-				.getJMSQueueObjectName(queueName);
+		ObjectName on = ObjectNameBuilder.DEFAULT.getJMSQueueObjectName(queueName);
 
 		// Create a JMSQueueControl proxy to manage the queue on the server
-		JMSQueueControl queueControl = (JMSQueueControl) MBeanServerInvocationHandler
-				.newProxyInstance(mbsc, on, JMSQueueControl.class, false);
+		JMSQueueControl queueControl = MBeanServerInvocationHandler.newProxyInstance(mbsc, on, JMSQueueControl.class, false);
 
 		return queueControl;
 	}
@@ -152,12 +133,10 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 		MBeanServerConnection mbsc = getMBeanServerConnection();
 
 		// Construct an ObjectName for JMX access to the Queue
-		ObjectName on = ObjectNameBuilder.DEFAULT
-				.getJMSTopicObjectName(topicName);
+		ObjectName on = ObjectNameBuilder.DEFAULT.getJMSTopicObjectName(topicName);
 
 		// Create a JMSQueueControl proxy to manage the queue on the server
-		TopicControl topicControl = (TopicControl) MBeanServerInvocationHandler
-				.newProxyInstance(mbsc, on, TopicControl.class, false);
+		TopicControl topicControl = MBeanServerInvocationHandler.newProxyInstance(mbsc, on, TopicControl.class, false);
 
 		return topicControl;
 	}
@@ -165,6 +144,7 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 	/**
 	 * @see hermes.ProviderExtensionSession#size(javax.jms.Destination)
 	 */
+	@Override
 	public int getDepth(DestinationConfig dConfig) throws JMSException {
 		try {
 			String dest = getRealDestinationName(dConfig);
@@ -182,7 +162,7 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 			}
 
 			log.debug("Found the depth of (" + depth + ") for: " + dest);
-			return(int)  depth;
+			return (int) depth;
 		} catch (HermesException ex) {
 			throw ex;
 		} catch (Exception e) {
@@ -196,6 +176,7 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 	/**
 	 * @see hermes.ProviderExtensionSession#close()
 	 */
+	@Override
 	public void close() throws JMSException {
 		closeJMXConnector();
 		mBeanServer = null;
@@ -206,13 +187,13 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 			try {
 				jmxConnector.close();
 			} catch (IOException e) {
-				log.error("Error closing the JMXConnector: " + e.getMessage(),
-						e);
+				log.error("Error closing the JMXConnector: " + e.getMessage(), e);
 			}
 			jmxConnector = null;
 		}
 	}
 
+	@Override
 	public Map getStatistics(DestinationConfig dConfig) throws JMSException {
 		final Map stats = new LinkedHashMap();
 		try {
@@ -233,19 +214,13 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 
 				stats.put("TopicName", topicControl.getName());
 				stats.put("MessageCount", topicControl.getMessageCount());
-				stats.put("DurableMessageCount", topicControl
-						.getDurableMessageCount());
-				stats.put("NonDurableMessageCount", topicControl
-						.getNonDurableMessageCount());
-				stats.put("SubscriptionCount", topicControl
-						.getSubscriptionCount());
-				stats.put("DurableSubscriptionCount", topicControl
-						.getDurableSubscriptionCount());
-				stats.put("NonDurableSubscriptionCount", topicControl
-						.getNonDurableSubscriptionCount());
+				stats.put("DurableMessageCount", topicControl.getDurableMessageCount());
+				stats.put("NonDurableMessageCount", topicControl.getNonDurableMessageCount());
+				stats.put("SubscriptionCount", topicControl.getSubscriptionCount());
+				stats.put("DurableSubscriptionCount", topicControl.getDurableSubscriptionCount());
+				stats.put("NonDurableSubscriptionCount", topicControl.getNonDurableSubscriptionCount());
 			}
-			log.debug("Statistics of destination: " + destination + " are:\n"
-					+ stats);
+			log.debug("Statistics of destination: " + destination + " are:\n" + stats);
 		} catch (Exception e) {
 			throw new HermesException(e);
 		}
@@ -262,8 +237,7 @@ public class HornetQAdmin extends HermesAdminSupport implements HermesAdmin {
 				JMSQueueControl queueControl = getQueueControl(destination);
 				return queueControl.removeMessages(null);
 			} else {
-				throw new HermesException(
-						"JBoss does not support truncating a durable subscription");
+				throw new HermesException("JBoss does not support truncating a durable subscription");
 			}
 		} catch (HermesException ex) {
 			throw ex;

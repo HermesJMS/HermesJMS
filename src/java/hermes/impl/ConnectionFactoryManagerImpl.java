@@ -48,7 +48,6 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 
 /**

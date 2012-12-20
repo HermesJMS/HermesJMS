@@ -4,14 +4,13 @@ import hermes.config.HermesConfig;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
-import java.awt.Font;
-import javax.swing.SwingConstants;
 
 public class CopyingMessagesPreferences extends JPanel {
 	private static final long serialVersionUID = 1L;

@@ -26,6 +26,7 @@ import java.awt.Font;
 import javax.jms.BytesMessage;
 import javax.jms.Message;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
@@ -34,55 +35,51 @@ import org.apache.log4j.Logger;
  * A renderer that converts the message into hex for viewing.
  * 
  * @author colincrist@hermesjms.com
- * @version $Id: HexMessageRenderer.java,v 1.3 2007/02/18 16:13:41 colincrist Exp $
+ * @version $Id: HexMessageRenderer.java,v 1.3 2007/02/18 16:13:41 colincrist
+ *          Exp $
  */
 
-public class HexMessageRenderer extends AbstractMessageRenderer
-{
-   private static final Logger log = Logger.getLogger(HexMessageRenderer.class);
+public class HexMessageRenderer extends AbstractMessageRenderer {
+	private static final Logger log = Logger.getLogger(HexMessageRenderer.class);
 
-   public HexMessageRenderer()
-   {
-      super();      
-   }
+	public HexMessageRenderer() {
+		super();
+	}
 
-   public JComponent render(Message m)
-   {
-      final JTextArea textArea = new MyTextArea();
+	@Override
+	public JComponent render(JScrollPane parent, Message m) {
+		final JTextArea textArea = new MyTextArea();
 
-      textArea.setEditable(false);     
-      textArea.setFont(Font.decode("Monospaced-PLAIN-12")) ;
-      
-      byte[] bytes = null;
+		textArea.setEditable(false);
+		textArea.setFont(Font.decode("Monospaced-PLAIN-12"));
 
-      try
-      {
-         bytes = MessageUtils.asBytes(m);
-         textArea.setText(DumpUtils.dumpBinary(bytes, DumpUtils.DUMP_AS_HEX_AND_ALPHA));
-      }
-      catch (Throwable e)
-      {
-         textArea.setText(e.getMessage());
-         
-         log.error("exception converting message to byte[]: ", e);
-      }
+		byte[] bytes = null;
 
-      textArea.setCaretPosition(0);
+		try {
+			bytes = MessageUtils.asBytes(m);
+			textArea.setText(DumpUtils.dumpBinary(bytes, DumpUtils.DUMP_AS_HEX_AND_ALPHA));
+		} catch (Throwable e) {
+			textArea.setText(e.getMessage());
 
-      return textArea ;
-   }
+			log.error("exception converting message to byte[]: ", e);
+		}
 
-  
-   /**
-    * BytesMessages are handled by the DefaultMessageRenderer so no point in doing it twice.
-    */
-   public boolean canRender(Message message)
-   {
-      return ! (message instanceof BytesMessage) ;
-   }
+		textArea.setCaretPosition(0);
 
-   public String getDisplayName()
-   {
-      return "Hex";
-   }
+		return textArea;
+	}
+
+	/**
+	 * BytesMessages are handled by the DefaultMessageRenderer so no point in
+	 * doing it twice.
+	 */
+	@Override
+	public boolean canRender(Message message) {
+		return !(message instanceof BytesMessage);
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "Hex";
+	}
 }

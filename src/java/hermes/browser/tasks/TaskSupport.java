@@ -129,7 +129,7 @@ public abstract class TaskSupport implements Task, Runnable
       {
          listener.onStatus(this, status);
       }
-   }
+   } 
 
    /*
     * (non-Javadoc)

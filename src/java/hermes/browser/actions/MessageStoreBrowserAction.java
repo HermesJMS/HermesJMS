@@ -17,8 +17,6 @@
 
 package hermes.browser.actions;
 
-import java.io.Serializable;
-
 import hermes.Domain;
 import hermes.Hermes;
 import hermes.browser.HermesBrowser;
@@ -29,17 +27,9 @@ import hermes.browser.tasks.Task;
 import hermes.store.MessageStore;
 import hermes.util.JMSUtils;
 
-import javax.jms.BytesMessage;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.MapMessage;
 import javax.jms.Message;
-import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.StreamMessage;
-import javax.jms.TextMessage;
-import javax.jms.Topic;
-import javax.naming.NamingException;
 import javax.swing.Icon;
 
 import org.apache.log4j.Logger;

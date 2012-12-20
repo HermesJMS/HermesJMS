@@ -22,10 +22,10 @@
             <author name="Colin Crist" email="colincrist@hermesjms.com"/>
         </authors>
         <url>http://www.hermesjms.com/</url>
-	<javaversion>1.4</javaversion> 
+	<javaversion>1.5</javaversion> 
     </info>
     
-    <native type="izpack" name="ShellLink.dll"/>
+    <native type="izpack" name="ShellLink_x64.dll"/>
 
     <!-- 
         The gui preferences indication.

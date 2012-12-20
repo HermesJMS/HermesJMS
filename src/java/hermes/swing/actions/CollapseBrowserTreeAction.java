@@ -31,34 +31,31 @@ import javax.swing.event.TreeSelectionListener;
  * @version $Id$
  */
 
-public class CollapseBrowserTreeAction extends ActionSupport
-{
-   /**
+public class CollapseBrowserTreeAction extends ActionSupport {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6597934395907554641L;
-private BrowserTree browserTree;
+	private final BrowserTree browserTree;
 
-   public CollapseBrowserTreeAction(BrowserTree browserTree)
-   {
-      this.browserTree = browserTree;
+	public CollapseBrowserTreeAction(BrowserTree browserTree) {
+		this.browserTree = browserTree;
 
-      putValue(Action.NAME, "Collapse");
-      putValue(Action.SHORT_DESCRIPTION, "Collapse tree.");
-      putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.collapse.all"));
-      setEnabled(false);
+		putValue(Action.NAME, "Collapse");
+		putValue(Action.SHORT_DESCRIPTION, "Collapse tree.");
+		putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.collapse.all"));
+		setEnabled(false);
 
-      browserTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener()
-      {
-         public void valueChanged(TreeSelectionEvent e)
-         {
-            CollapseBrowserTreeAction.this.setEnabled(e.getPath() != null);
-         }
-      });
-   }
+		browserTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
+			@Override
+			public void valueChanged(TreeSelectionEvent e) {
+				CollapseBrowserTreeAction.this.setEnabled(e.getPath() != null);
+			}
+		});
+	}
 
-   public void actionPerformed(ActionEvent e)
-   {
-      browserTree.collapseRow(browserTree.getSelectionRows()[0]);
-   }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		browserTree.collapseRow(browserTree.getSelectionRows()[0]);
+	}
 }

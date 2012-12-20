@@ -1,17 +1,12 @@
 package hermes.browser.dialog.message;
 
 import hermes.Domain;
-import hermes.Hermes;
 import hermes.browser.components.EditedMessageHandler;
-import hermes.providers.messages.BytesMessageImpl;
 import hermes.util.JMSUtils;
-import hermes.util.MessageUtils;
 import hermes.util.TextUtils;
 
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -21,14 +16,11 @@ import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
 import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
-import javax.jms.Topic;
 import javax.naming.NamingException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,10 +28,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.log4j.Logger;
 
@@ -47,8 +36,6 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
-import javax.swing.JToggleButton;
-import javax.swing.BoxLayout;
 
 public class JMSHeaderPropertyPanel extends JPanel {
 	private static final Logger log = Logger.getLogger(JMSHeaderPropertyPanel.class);

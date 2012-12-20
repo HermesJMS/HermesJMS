@@ -61,18 +61,14 @@ public class XMLMessageRenderer extends AbstractMessageRenderer {
 	}
 
 	@Override
-	public JComponent render(Message m) {
+	public JComponent render(JScrollPane parent, Message m) {
 		//
 		// Raw Panel.
 
 		JEditorPane pane = new JEditorPane();
-		JScrollPane p1 = new JScrollPane(pane);
-		// final JTextArea textArea = new MyTextArea() ;
+		parent.setViewportView(pane);
 
 		pane.setEditable(false);
-
-		// pane.setLineWrap(true) ;
-		// pane.setWrapStyleWord(true) ;
 
 		try {
 			String string;

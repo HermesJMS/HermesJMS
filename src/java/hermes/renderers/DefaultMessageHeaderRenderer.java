@@ -27,6 +27,7 @@ import java.util.Enumeration;
 
 import javax.jms.Message;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
@@ -50,7 +51,8 @@ public class DefaultMessageHeaderRenderer extends AbstractMessageRenderer {
 		// TODO Auto-generated constructor stub
 	}
 
-	public JComponent render(Message m) {
+	@Override
+	public JComponent render(JScrollPane parent, Message m) {
 		final SortableTable table = new SortableTable();
 		final DefaultTableModel tableModel = new DefaultTableModel() {
 
@@ -149,6 +151,7 @@ public class DefaultMessageHeaderRenderer extends AbstractMessageRenderer {
 	/**
 	 * There are no configurable options on this renderer
 	 */
+	@Override
 	public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception {
 		return null;
 	}
@@ -156,10 +159,12 @@ public class DefaultMessageHeaderRenderer extends AbstractMessageRenderer {
 	/**
 	 * Any JMS message is rederable.
 	 */
+	@Override
 	public boolean canRender(Message message) {
 		return true;
 	}
 
+	@Override
 	public String getDisplayName() {
 		return "Header";
 	}

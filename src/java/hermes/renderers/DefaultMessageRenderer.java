@@ -43,6 +43,7 @@ import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -53,7 +54,7 @@ import org.apache.log4j.Logger;
 
 /**
  * Tries to render the message in some simple way.
- *
+ * 
  * @author colincrist@hermesjms.com
  * @version $Id: DefaultMessageRenderer.java,v 1.4 2004/07/30 17:25:13
  *          colincrist Exp $
@@ -63,7 +64,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 	private static final Logger log = Logger.getLogger(DefaultMessageRenderer.class);
 	private static final String BYTESISSTRING = "bytesIsString";
 	private static final String BYTESISOBJECT = "bytesIsObject";
-    private static final String BYTESENCODING = "bytesEncoding";
+	private static final String BYTESENCODING = "bytesEncoding";
 	private static final String BYTESISOBJECTSIZE = "bytesIsObjectBufferSize";
 	private static final String TOSTRINGOBJECT = "toStringOnObjectMessage";
 	private static final String MESSAGE_CACHE = "messageCache";
@@ -72,13 +73,13 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 	private static final String BYTESISOBJECTSIZE_INFO = "Buffer size to use as temporary storage (ignored with JMS 1.1 providers as size is available on the message)";
 	private static final String TOSTRINGOBJECT_INFO = "Just call toString() on any Object in an ObjectMessage";
 	private static final String MESSAGE_CACHE_INFO = "The number of panels to cache - can speed up the user interface when switching between messags";
-    private static final String BYTESENCODING_INFO = "The encoding to use when treating a BytesMessage as a String";
+	private static final String BYTESENCODING_INFO = "The encoding to use when treating a BytesMessage as a String";
 
 	private LRUMap panelCache;
 
 	/**
 	 * Configuration bean for this renderer
-	 *
+	 * 
 	 * @author colincrist@hermesjms.com last changed by: $Author: colincrist $
 	 * @version $Id: DefaultMessageRenderer.java,v 1.4 2004/07/30 17:25:13
 	 *          colincrist Exp $
@@ -93,6 +94,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 		private boolean bytesIsString = false;
 		private String bytesEncoding = Charset.defaultCharset().name();
 
+		@Override
 		public String toString() {
 			return name + ".MyConfig: " + "bytesIsObject=" + bytesIsObject + ", bytesIsObjectBufferSize=" + bytesIsObjectBufferSize + ", toStringOnObjectMessage=" + toStringOnObjectMessage
 					+ ", messageCache=" + messageCache + ", bytesIsString=" + bytesIsString;
@@ -136,24 +138,25 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 			this.bytesIsObjectBufferSize = bytesIsObjectBufferSize;
 		}
 
-        /**
-         * @return Returns the bytesEncoding.
-         */
+		/**
+		 * @return Returns the bytesEncoding.
+		 */
 		public String getBytesEncoding() {
-            return bytesEncoding;
-        }
+			return bytesEncoding;
+		}
 
-        /**
-         * @param bytesEncoding
-         *            The bytesEncoding to set.
-         */
-        public void setBytesEncoding(String bytesEncoding) {
-            this.bytesEncoding = bytesEncoding;
-        }
+		/**
+		 * @param bytesEncoding
+		 *            The bytesEncoding to set.
+		 */
+		public void setBytesEncoding(String bytesEncoding) {
+			this.bytesEncoding = bytesEncoding;
+		}
 
-        /**
+		/**
 		 * @return Returns the name.
 		 */
+		@Override
 		public String getName() {
 			return name;
 		}
@@ -162,10 +165,12 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 		 * @param name
 		 *            The name to set.
 		 */
+		@Override
 		public void setName(String name) {
 			this.name = name;
 		}
 
+		@Override
 		public String getPropertyDescription(String propertyName) {
 			if (propertyName.equals(BYTESISOBJECT)) {
 				return BYTESISOBJECT_INFO;
@@ -188,7 +193,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 			}
 
 			if (propertyName.equals(BYTESENCODING)) {
-			    return BYTESENCODING_INFO;
+				return BYTESENCODING_INFO;
 			}
 
 			return propertyName;
@@ -227,7 +232,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/**
 	 * Show the TextMessage in a JTextArea.
-	 *
+	 * 
 	 * @param textMessage
 	 * @return
 	 * @throws JMSException
@@ -270,14 +275,17 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 				}
 			}
 
+			@Override
 			public void changedUpdate(DocumentEvent arg0) {
 				doChange();
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent arg0) {
 				doChange();
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent arg0) {
 				doChange();
 			}
@@ -291,7 +299,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 	/**
 	 * Depending on configuration, show the object via toString() or a list of
 	 * properties.
-	 *
+	 * 
 	 * @param objectMessage
 	 * @return
 	 * @throws JMSException
@@ -335,7 +343,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/**
 	 * Show the MapMessage as a tree.
-	 *
+	 * 
 	 * @param mapMessage
 	 * @return
 	 * @throws JMSException
@@ -346,21 +354,23 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/**
 	 * Show a BytesMessage either as a java object or just a size.
-	 *
+	 * 
+	 * @param parent
+	 * 
 	 * @param bytesMessage
 	 * @return
 	 * @throws JMSException
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	protected JComponent handleBytesMessage(BytesMessage bytesMessage) throws JMSException, IOException, ClassNotFoundException {
+	protected JComponent handleBytesMessage(JScrollPane parent, BytesMessage bytesMessage) throws JMSException, IOException, ClassNotFoundException {
 		final MyConfig currentConfig = (MyConfig) getConfig();
 
 		JTextArea textPane = new MyTextArea();
 
 		textPane.setEditable(false);
-        textPane.setWrapStyleWord(true);
-        textPane.setLineWrap(true);
+		textPane.setWrapStyleWord(true);
+		textPane.setLineWrap(true);
 		bytesMessage.reset();
 
 		if (currentConfig.isBytesIsObject()) {
@@ -379,8 +389,8 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 				textPane.setText(e.getMessage());
 			}
 		} else {
-			HexMessageRenderer renderer = new HexMessageRenderer() ;
-			textPane = (JTextArea) renderer.render(bytesMessage) ; // Hack.
+			HexMessageRenderer renderer = new HexMessageRenderer();
+			textPane = (JTextArea) renderer.render(parent, bytesMessage); // Hack.
 		}
 
 		textPane.setCaretPosition(0);
@@ -390,7 +400,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/**
 	 * List out all the properties in the stream message.
-	 *
+	 * 
 	 * @param streamMessage
 	 * @return
 	 * @throws JMSException
@@ -417,7 +427,8 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 	/**
 	 * Render the message, delegates to typed methods.
 	 */
-	public JComponent render(final Message m) {
+	@Override
+	public JComponent render(JScrollPane parent, final Message m) {
 		try {
 			if (getPanelMap().containsKey(m)) {
 				return (JComponent) getPanelMap().get(m);
@@ -432,7 +443,7 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 			} else if (m instanceof javax.jms.MapMessage) {
 				rval = handleMapMessage((MapMessage) m);
 			} else if (m instanceof BytesMessage) {
-				rval = handleBytesMessage((BytesMessage) m);
+				rval = handleBytesMessage(parent, (BytesMessage) m);
 			} else if (m instanceof StreamMessage) {
 				rval = handleStreamMessage((StreamMessage) m);
 			} else {
@@ -469,20 +480,22 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see hermes.browser.MessageRenderer#createConfig()
 	 */
+	@Override
 	public Config createConfig() {
 		return new MyConfig();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * hermes.browser.MessageRenderer#setConfig(hermes.browser.MessageRenderer
 	 * .Config)
 	 */
+	@Override
 	public synchronized void setConfig(Config config) {
 		final MyConfig currentConfig = (MyConfig) config;
 		panelCache = new LRUMap(currentConfig.getMessageCache());
@@ -501,10 +514,12 @@ public class DefaultMessageRenderer extends AbstractMessageRenderer {
 	/**
 	 * This is the catch all renderer so will always render a message.
 	 */
+	@Override
 	public boolean canRender(Message message) {
 		return true;
 	}
 
+	@Override
 	public String getDisplayName() {
 		return "Payload";
 	}

@@ -15,12 +15,12 @@
  */
 package hermes.ext.qpid;
 
-import java.util.Hashtable;
-import java.util.Properties;
-
 import hermes.Hermes;
 import hermes.HermesAdmin;
 import hermes.HermesAdminFactory;
+
+import java.util.Hashtable;
+import java.util.Properties;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;

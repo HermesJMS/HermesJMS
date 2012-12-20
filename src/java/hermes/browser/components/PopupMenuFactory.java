@@ -17,24 +17,17 @@
 
 package hermes.browser.components;
 
-import hermes.Domain;
 import hermes.Hermes;
 import hermes.HermesException;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
 import hermes.browser.model.tree.DestinationConfigTreeNode;
-import hermes.browser.model.tree.MessageStoreDestinationTreeNode;
-import hermes.browser.model.tree.MessageStoreTreeNode;
 import hermes.browser.model.tree.QueueTopicTreeNode;
 import hermes.browser.model.tree.QueueTreeNode;
-import hermes.browser.model.tree.RepositoryTreeNode;
 import hermes.browser.model.tree.TopicTreeNode;
 import hermes.browser.tasks.RecordDestinationTask;
-import hermes.browser.tasks.ReplayMessagesFromStoreTask;
-import hermes.browser.tasks.ThreadPool;
 import hermes.browser.transferable.HermesConfigGroup;
 import hermes.browser.transferable.JMSAdministeredObjectTransferable;
-import hermes.config.DestinationConfig;
 import hermes.config.WatchConfig;
 import hermes.fix.FIXMessageTable;
 import hermes.store.MessageStore;
@@ -84,15 +77,8 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
-import javax.jms.Destination;
-import javax.naming.Binding;
-import javax.naming.Context;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;

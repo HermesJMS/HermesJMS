@@ -17,33 +17,20 @@
 
 package hermes.swing.actions;
 
-import hermes.Hermes;
-import hermes.HermesException;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
-import hermes.browser.actions.QueueBrowseAction;
 import hermes.browser.dialog.replay.ReplayMessagesDialog;
-import hermes.browser.model.tree.DestinationConfigTreeNode;
-import hermes.browser.model.tree.HermesTreeNode;
 import hermes.browser.model.tree.MessageStoreQueueTreeNode;
 import hermes.browser.model.tree.MessageStoreTopicTreeNode;
 import hermes.browser.model.tree.MessageStoreTreeNode;
-import hermes.browser.model.tree.NamingConfigTreeNode;
-import hermes.browser.model.tree.RepositoryTreeNode;
-import hermes.util.TextUtils;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.jms.Queue;
-import javax.jms.Topic;
-import javax.naming.NamingException;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;

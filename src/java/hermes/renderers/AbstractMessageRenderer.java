@@ -20,88 +20,99 @@ package hermes.renderers;
 import hermes.browser.ConfigDialogProxy;
 import hermes.browser.MessageRenderer;
 
+import javax.jms.Message;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 
 /**
  * @author colincrist@hermesjms.com
  * @version $Id$
  */
 
-public abstract class AbstractMessageRenderer implements MessageRenderer
-{
-   private Config config = new BasicConfig() ;
-   
-   public class BasicConfig implements Config
-   {
-      private boolean active = true;
-      private String name = AbstractMessageRenderer.this.getClass().getName();
+public abstract class AbstractMessageRenderer implements MessageRenderer {
+	private Config config = new BasicConfig();
 
-      public boolean isActive()
-      {
-         return active;
-      }
+	public class BasicConfig implements Config {
+		private boolean active = true;
+		private String name = AbstractMessageRenderer.this.getClass().getName();
 
-      public void setActive(boolean active)
-      {
-         this.active = active;
-      }
+		@Override
+		public boolean isActive() {
+			return active;
+		}
 
-      public String getName()
-      {
-         return name;
-      }
+		@Override
+		public void setActive(boolean active) {
+			this.active = active;
+		}
 
-      public String getPropertyDescription(String propertyName)
-      {
-         return propertyName;
-      }
+		@Override
+		public String getName() {
+			return name;
+		}
 
-      public void setName(String name)
-      {
-         this.name = name;
-      }
-   }
+		@Override
+		public String getPropertyDescription(String propertyName) {
+			return propertyName;
+		}
 
-   /**
-    * There are no configurable options on this renderer.
-    */
-   public Config createConfig()
-   {
-      return new BasicConfig() ;
-   }
+		@Override
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
 
-   public Config getConfig()
-   {
-      return config ;
-   }
+	/**
+	 * There are no configurable options on this renderer.
+	 */
+	@Override
+	public Config createConfig() {
+		return new BasicConfig();
+	}
 
-   /**
-    * There are no configurable options on this renderer
-    */
-   public void setConfig(Config config)
-   {
-      if (config == null)
-      {
-         this.config = createConfig() ;
-      }
-      else
-      {
-         this.config = config ;
-      }
-   }
+	@Override
+	public Config getConfig() {
+		return config;
+	}
 
-   public boolean isActive()
-   {
-      return getConfig().isActive();
-   }
+	/**
+	 * There are no configurable options on this renderer
+	 */
+	@Override
+	public void setConfig(Config config) {
+		if (config == null) {
+			this.config = createConfig();
+		} else {
+			this.config = config;
+		}
+	}
 
-   public void setActive(boolean active)
-   {
-      getConfig().setActive(active);
-   }
+	@Override
+	public boolean isActive() {
+		return getConfig().isActive();
+	}
 
-   public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception
-   {
-      return RendererHelper.createDefaultConfigPanel(dialogProxy);
-   }
+	@Override
+	public void setActive(boolean active) {
+		getConfig().setActive(active);
+	}
+
+	@Override
+	public JComponent getConfigPanel(ConfigDialogProxy dialogProxy) throws Exception {
+		return RendererHelper.createDefaultConfigPanel(dialogProxy);
+	}
+
+	/**
+	 * Backward compatability so older renderers will work with the new
+	 * signature that includes the parent scroll pane.
+	 */
+	@Override
+	public JComponent render(JScrollPane parent, Message message) {
+		return render(message);
+	}
+
+	public JComponent render(Message message) {
+		return null;
+	}
+
 }

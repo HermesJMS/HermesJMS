@@ -15,7 +15,6 @@
  */
 package hermes.ext.qpid;
 
-import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -38,7 +37,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
-import org.apache.qpid.transport.codec.BBDecoder;
 
 /**
  * Hide qpid jms communication.
@@ -160,9 +158,10 @@ public class QpidManager {
         // only handles responses up to 2^31-1 bytes long
         byte[] data = new byte[(int) msg.getBodyLength()];
         msg.readBytes(data);
-        BBDecoder decoder = new BBDecoder();
-        decoder.init(ByteBuffer.wrap(data));
-        return (List<T>) decoder.readList();
+        //BBDecoder decoder = new BBDecoder();
+        //decoder.init(ByteBuffer.wrap(data));
+        //return (List<T>) decoder.readList();
+        return Collections.EMPTY_LIST ;
     }
 
     /**

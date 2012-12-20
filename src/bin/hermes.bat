@@ -25,22 +25,27 @@ if "%HERMES_CONFIG%"=="" goto tryDotHermes
 goto setOtherVars
 
 :tryDotHermes
-if not exist "%HOME%\.hermes\hermes-config.xml" goto tryHermes
-set HERMES_CONFIG=%HOME%\.hermes
+if not exist "%HOMEDRIVE%\%HOMEPATH%\.hermes\hermes-config.xml" goto tryHermes
+set HERMES_CONFIG=%HOMEDRIVE%\%HOMEPATH%\.hermes
 goto setOtherVars
 
 :tryHermes
-if not exist "%HOME%\hermes\hermes-config.xml" goto tryHermesCfg
-set HERMES_CONFIG=%HOME%\hermes
+if not exist "%HOMEDRIVE%\%HOMEPATH%\hermes\hermes-config.xml" goto tryHermesCfg
+set HERMES_CONFIG=%HOMEDRIVE%\%HOMEPATH%\hermes
 goto setOtherVars
 
 :tryHermesCfg
-if not exist "%HOME%\hermes\cfg\hermes-config.xml" goto setHermesConfigDefault
-set HERMES_CONFIG=%HOME%\hermes
+if not exist "%HOMEDRIVE%\%HOMEPATH%\hermes\cfg\hermes-config.xml" goto tryCDrive
+set HERMES_CONFIG=%HOMEDRIVE%\%HOMEPATH%\hermes
+goto setOtherVars
+
+:tryCDrive
+if no exist "C:\.hermes\hermes-config.xml" goto setHermesConfigDefault
+set HERMES_CONFIG=C:\.hermes
 goto setOtherVars
 
 :setHermesConfigDefault
-set HERMES_CONFIG=%HOME%\.hermes
+set HERMES_CONFIG=%HOMEDRIVE%\%HOMEPATH%\.hermes
 
 rem Bootstrap a configuration if it does not exist.
 

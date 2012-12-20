@@ -27,7 +27,6 @@ import hermes.swing.SwingRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.jms.JMSException;
 import javax.swing.JOptionPane;

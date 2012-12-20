@@ -2,20 +2,21 @@ package hermes.browser.dialog.general;
 
 import hermes.config.HermesConfig;
 
+import java.awt.Color;
+
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
-import javax.swing.border.EtchedBorder;
-import java.awt.Color;
-import javax.swing.JSpinner;
-import javax.swing.JLabel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 
 public class FIXPreferences extends JPanel {
 	private static final long serialVersionUID = 1L;

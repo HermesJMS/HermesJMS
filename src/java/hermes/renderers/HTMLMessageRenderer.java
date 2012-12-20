@@ -31,6 +31,7 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -53,7 +54,7 @@ public class HTMLMessageRenderer extends AbstractMessageRenderer {
 
 	private Transformer getTransformer() throws HermesException {
 		if (transformer == null && HermesBrowser.getBrowser().getConfig().getHTMLRendererXSL() != null) {
-			TransformerFactory tFactory = TransformerFactory.newInstance() ;
+			TransformerFactory tFactory = TransformerFactory.newInstance();
 
 			try {
 				transformer = tFactory.newTransformer(new StreamSource(new File(HermesBrowser.getBrowser().getConfig().getHTMLRendererXSL())));
@@ -68,7 +69,8 @@ public class HTMLMessageRenderer extends AbstractMessageRenderer {
 		super();
 	}
 
-	public JComponent render(Message m) {
+	@Override
+	public JComponent render(JScrollPane parent, Message m) {
 		JEditorPane pane = new JEditorPane();
 		pane.setEditable(false);
 		pane.setContentType("text/html");
@@ -77,14 +79,14 @@ public class HTMLMessageRenderer extends AbstractMessageRenderer {
 			String input = MessageUtils.asString(m);
 			StringWriter output = new StringWriter();
 			getTransformer().setURIResolver(new URIResolver() {
-				
+
 				@Override
 				public Source resolve(String arg0, String arg1) throws TransformerException {
-					log.info("resolve("+arg0+ "," + arg1) ;
-					return null ;
+					log.info("resolve(" + arg0 + "," + arg1);
+					return null;
 				}
-			}) ;
-			
+			});
+
 			getTransformer().transform(new StreamSource(new StringReader(input)), new StreamResult(output));
 			pane.setText(output.toString());
 		} catch (Throwable e) {
@@ -97,6 +99,7 @@ public class HTMLMessageRenderer extends AbstractMessageRenderer {
 		return pane;
 	}
 
+	@Override
 	public boolean canRender(Message message) {
 		try {
 			if (HermesBrowser.getBrowser().getConfig().getHTMLRendererXSL() != null && message instanceof TextMessage) {
@@ -110,6 +113,7 @@ public class HTMLMessageRenderer extends AbstractMessageRenderer {
 		return false;
 	}
 
+	@Override
 	public String getDisplayName() {
 		return "HTML";
 	}

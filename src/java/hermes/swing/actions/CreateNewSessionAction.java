@@ -19,7 +19,6 @@ package hermes.swing.actions;
 
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
-import hermes.browser.dialog.DestinationConfigPanel;
 import hermes.browser.dialog.PreferencesDialog;
 import hermes.browser.dialog.SessionConfigPanel;
 

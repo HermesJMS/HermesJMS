@@ -80,12 +80,15 @@ public abstract class IoUtils {
 	}
 
 	public static String readFile(File file) throws IOException {
+		return readFile(file, Charset.defaultCharset()) ;
+	}
+	
+	public static String readFile(File file, Charset charset) throws IOException {
 		FileInputStream stream = new FileInputStream(file);
 		try {
 			FileChannel fc = stream.getChannel();
 			MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
-			/* Instead of using default, pass in a decoder. */
-			return Charset.defaultCharset().decode(bb).toString();
+			return charset.decode(bb).toString();
 		} finally {
 			stream.close();
 		}

@@ -5,6 +5,9 @@ import hermes.browser.HermesBrowser;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,10 +16,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.log4j.Logger;
-
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PreferencesDialog extends JDialog {
 

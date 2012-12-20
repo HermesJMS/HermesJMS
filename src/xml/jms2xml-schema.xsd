@@ -3,9 +3,12 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >
 
 	<xs:complexType name="Property">
+		<xs:sequence>
+			<xs:element name="longValue" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
  		<xs:attribute name="name" type="xs:string"/>	
 		<xs:attribute name="value" type="xs:string"/>
-		<xs:attribute name="type" type="xs:string"/>
+		<xs:attribute name="type" type="xs:string"/>		
 	</xs:complexType>
 	
 	<xs:complexType name="XMLMessage">

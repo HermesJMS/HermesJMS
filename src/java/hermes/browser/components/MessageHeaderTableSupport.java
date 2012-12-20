@@ -26,6 +26,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JComponent;
@@ -46,12 +47,20 @@ import org.apache.log4j.Logger;
  */
 class MessageHeaderTableSupport {
 	private static final Logger log = Logger.getLogger(MessageHeaderTableSupport.class);
+	private static final ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>() {
+
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		}
+	};
 
 	static void init(final BrowserAction action, final MessageHeaderTable table, DataFlavor[] myFlavours) {
 		table.setDragEnabled(true);
 		table.setTransferHandler(new MessageHeaderTransferHandler(action));
 
 		final MouseListener ml = new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent e) {
 				if (SwingUtilities.isMiddleMouseButton(e)) {
 					table.clearSelection();
@@ -77,8 +86,9 @@ class MessageHeaderTableSupport {
 		final DefaultTableCellRenderer dateRenderer = new DefaultTableCellRenderer() {
 			private static final long serialVersionUID = 1967620759224151946L;
 
+			@Override
 			protected void setValue(Object value) {
-				super.setText((value == null) ? "" : value.toString());
+				super.setText((value == null) ? "" : dateFormat.get().format((Date) value));
 			}
 		};
 

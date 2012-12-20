@@ -58,10 +58,10 @@ public class MessageHeaderTable extends SortableTable {
 	private static final Logger log = Logger.getLogger(MessageHeaderTable.class);
 
 	private DataFlavor[] myFlavours;
-	private Map<String, HideableTableColumn> userPropertyColumns = new HashMap<String, HideableTableColumn>();
-	private Hermes hermes;
+	private final Map<String, HideableTableColumn> userPropertyColumns = new HashMap<String, HideableTableColumn>();
+	private final Hermes hermes;
 
-	private EditedMessageHandler editedMessageHander;
+	private final EditedMessageHandler editedMessageHander;
 
 	public MessageHeaderTable(Hermes hermes, BrowserAction action, MessageHeaderTableModel model, EditedMessageHandler editedMessageHandler) {
 		super(model);
@@ -114,7 +114,9 @@ public class MessageHeaderTable extends SortableTable {
 		}
 	}
 
+	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+
 		return MessageHeaderTableSupport.prepareRenderer(super.prepareRenderer(renderer, row, column), this, renderer, row, column);
 	}
 

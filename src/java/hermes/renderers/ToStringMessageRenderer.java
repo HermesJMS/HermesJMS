@@ -23,6 +23,7 @@ import java.awt.Font;
 
 import javax.jms.Message;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
@@ -35,39 +36,37 @@ import org.apache.log4j.Logger;
  *          colincrist Exp $
  */
 
-public class ToStringMessageRenderer extends AbstractMessageRenderer
-{
-   private static final Logger log = Logger.getLogger(ToStringMessageRenderer.class);
+public class ToStringMessageRenderer extends AbstractMessageRenderer {
+	private static final Logger log = Logger.getLogger(ToStringMessageRenderer.class);
 
-   public ToStringMessageRenderer()
-   {
-      super();    
-   }
+	public ToStringMessageRenderer() {
+		super();
+	}
 
-   public JComponent render(Message m)
-   {
-      final JTextArea textArea = new MyTextArea() ; 
+	@Override
+	public JComponent render(JScrollPane parent, Message m) {
+		final JTextArea textArea = new MyTextArea();
 
-      textArea.setEditable(false);
-      textArea.setFont(Font.decode("Monospaced-PLAIN-12"));
-      textArea.setWrapStyleWord(true);
-      textArea.setLineWrap(true);      
-      textArea.setText(m.toString());
-      textArea.setCaretPosition(0);
+		textArea.setEditable(false);
+		textArea.setFont(Font.decode("Monospaced-PLAIN-12"));
+		textArea.setWrapStyleWord(true);
+		textArea.setLineWrap(true);
+		textArea.setText(m.toString());
+		textArea.setCaretPosition(0);
 
-      return textArea;
-   }
+		return textArea;
+	}
 
-   /**
-    * Any JMS message is rederable.
-    */
-   public boolean canRender(Message message)
-   {
-      return true;
-   }
+	/**
+	 * Any JMS message is rederable.
+	 */
+	@Override
+	public boolean canRender(Message message) {
+		return true;
+	}
 
-   public String getDisplayName()
-   {
-      return "toString";
-   }
+	@Override
+	public String getDisplayName() {
+		return "toString";
+	}
 }

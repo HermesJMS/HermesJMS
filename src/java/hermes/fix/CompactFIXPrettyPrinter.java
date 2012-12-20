@@ -19,7 +19,6 @@ package hermes.fix;
 
 import java.io.StringWriter;
 import java.util.Iterator;
-import java.util.Map;
 
 import quickfix.DataDictionary;
 import quickfix.Field;

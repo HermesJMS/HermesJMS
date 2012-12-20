@@ -17,15 +17,11 @@
 
 package hermes.swing.actions;
 
-import java.awt.event.ActionEvent;
-
-import hermes.Hermes;
 import hermes.HermesException;
 import hermes.browser.HermesBrowser;
 import hermes.browser.IconCache;
-import hermes.browser.model.tree.DestinationConfigTreeNode;
-import hermes.browser.model.tree.HermesTreeNode;
-import hermes.browser.tasks.SendMessageTask;
+
+import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 import javax.swing.JFileChooser;

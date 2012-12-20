@@ -18,7 +18,6 @@
 package hermes.providers.file;
 
 import hermes.HermesException;
-import hermes.browser.HermesBrowser;
 
 import java.io.IOException;
 import java.util.ArrayList;

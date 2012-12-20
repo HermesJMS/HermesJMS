@@ -30,21 +30,17 @@ import hermes.fix.quickfix.NIOFIXFileReader;
 import hermes.fix.quickfix.QuickFIXMessageCache;
 import hermes.util.TextUtils;
 
-import java.awt.EventQueue;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import org.apache.log4j.Logger;
-
-import com.jidesoft.document.DocumentComponentEvent;
 
 import quickfix.field.SenderCompID;
 import quickfix.field.TargetCompID;
+
+import com.jidesoft.document.DocumentComponentEvent;
 
 /**
  * @author colincrist@hermesjms.com

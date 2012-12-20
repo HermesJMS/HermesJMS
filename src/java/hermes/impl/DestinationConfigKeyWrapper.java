@@ -26,106 +26,81 @@ import org.apache.commons.beanutils.BeanUtils;
 
 /**
  * @author colincrist@hermesjms.com
- * @version $Id: DestinationConfigKeyWrapper.java,v 1.3 2005/08/15 20:37:24 colincrist Exp $
+ * @version $Id: DestinationConfigKeyWrapper.java,v 1.3 2005/08/15 20:37:24
+ *          colincrist Exp $
  */
 
-public class DestinationConfigKeyWrapper 
-{
-   private DestinationConfig config;
-   private Hermes hermes;
+public class DestinationConfigKeyWrapper {
+	private final DestinationConfig config;
+	private Hermes hermes;
 
-   public DestinationConfigKeyWrapper(Hermes hermes, DestinationConfig config)
-   {
-      this.config = config;
-      this.hermes = hermes;
-   }
-   
-   public String toString()
-   {
-      try
-      {
-         return BeanUtils.describe(config).toString() ;
-      }
-      catch (Exception e)
-      {
-         return e.getMessage() ;
-      }
-   }
-   public DestinationConfigKeyWrapper(DestinationConfig config)
-   {
-      this(null, config) ;
-   }
-   
-   public DestinationConfigKeyWrapper(String destinationName, Domain domain)
-   {
-      config = HermesBrowser.getConfigDAO().createDestinationConfig(destinationName, domain) ;
-   }
+	public DestinationConfigKeyWrapper(Hermes hermes, DestinationConfig config) {
+		this.config = config;
+		this.hermes = hermes;
+	}
 
-   public Hermes getHermes()
-   {
-      return hermes ;
-   }
-   
-   public DestinationConfig getConfig() 
-   {
-      return config ;
-   }
-   
-  
+	@Override
+	public String toString() {
+		try {
+			return BeanUtils.describe(config).toString();
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+	}
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj instanceof DestinationConfigKeyWrapper)
-      {
-         DestinationConfigKeyWrapper other = (DestinationConfigKeyWrapper) obj;
+	public DestinationConfigKeyWrapper(DestinationConfig config) {
+		this(null, config);
+	}
 
-         if (hermes == null || hermes.getId().equals(other.hermes.getId()))
-         {
-            if (config.getDomain() == other.config.getDomain())
-            {
-               if (config.getName().equals(other.config.getName()))
-               {
-                  if ((config.getSelector() == null && other.config.getSelector() == null) || (config.getSelector().equals(other.config.getSelector())))
-                  {
-                     if (config.getDomain() == Domain.TOPIC.getId())
-                     {
-                        if (config.isDurable() && other.config.isDurable())
-                        {
-                           return config.getClientID() != null && config.getClientID().equals(other.config.getClientID());
-                        }
-                        else if (!config.isDurable() && !other.config.isDurable())
-                        {
-                           return true;
-                        }
-                     }
-                     else
-                     {
-                        return true;
-                     }
-                  }
-               }
-            }
-         }
-      }
+	public DestinationConfigKeyWrapper(String destinationName, Domain domain) {
+		config = HermesBrowser.getConfigDAO().createDestinationConfig(destinationName, domain);
+	}
 
-      return false;
-   }
+	public Hermes getHermes() {
+		return hermes;
+	}
 
-   @Override
-   public int hashCode()
-   {
-      StringBuffer buffer = new StringBuffer();
-      buffer.append(Domain.getDomain(config.getDomain())).append(config.getName()).append(config.getSelector());
+	public DestinationConfig getConfig() {
+		return config;
+	}
 
-      if (config.getDomain() == Domain.TOPIC.getId())
-      {
-         buffer.append(config.isDurable()).append(config.getClientID());
-      }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DestinationConfigKeyWrapper) {
+			DestinationConfigKeyWrapper other = (DestinationConfigKeyWrapper) obj;
 
-      return buffer.toString().hashCode();
-   }
+			if (hermes == null || hermes.getId().equals(other.hermes.getId())) {
+				if (config.getDomain() == other.config.getDomain()) {
+					if (config.getName().equals(other.config.getName())) {
+						if ((config.getSelector() == null && other.config.getSelector() == null) || (config.getSelector().equals(other.config.getSelector()))) {
+							if (config.getDomain() == Domain.TOPIC.getId() && other.config.getDomain() == Domain.TOPIC.getId()) {
+								if (config.isDurable() && other.config.isDurable()) {
+									return config.getClientID() != null && config.getClientID().equals(other.config.getClientID());
+								} else if (!config.isDurable() && !other.config.isDurable()) {
+									return true;
+								}
+							} else {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
 
-  
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(Domain.getDomain(config.getDomain())).append(config.getName()).append(config.getSelector());
+
+		if (config.getDomain() == Domain.TOPIC.getId()) {
+			buffer.append(config.isDurable()).append(config.getClientID());
+		}
+
+		return buffer.toString().hashCode();
+	}
 
 }

@@ -33,14 +33,12 @@ public class MessageEditorDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JMSHeaderPropertyPanel headerPropertyPanel;
 	private UserHeaderPropertyPanel userHeaderPropertyPanel;
-	private EditedMessageHandler onOK;
-	private JideTabbedPane tabbedPane = new JideTabbedPane(JTabbedPane.TOP);
+	private final EditedMessageHandler onOK;
+	private final JideTabbedPane tabbedPane = new JideTabbedPane(JTabbedPane.TOP);
 
 	private MessageWriter messageWriter;
-	private String destinationName;
-	private Domain domain;
-	
-	
+	private final String destinationName;
+	private final Domain domain;
 
 	/**
 	 * Launch the application.
@@ -56,7 +54,7 @@ public class MessageEditorDialog extends JDialog {
 	}
 
 	public static boolean canEdit(Message message) {
-		return message == null || message instanceof Message || message instanceof TextMessage || message instanceof MapMessage || message instanceof BytesMessage ;
+		return message == null || message instanceof Message || message instanceof TextMessage || message instanceof MapMessage || message instanceof BytesMessage;
 	}
 
 	/**
@@ -65,7 +63,7 @@ public class MessageEditorDialog extends JDialog {
 
 	public MessageEditorDialog(final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK) throws JMSException {
 		this("Send message to " + destinationName, message, destinationName, domain, onOK, "Send", "Done");
-		
+
 		setModal(false);
 	}
 
@@ -74,8 +72,7 @@ public class MessageEditorDialog extends JDialog {
 		setModal(true);
 	}
 
-	public MessageEditorDialog(final String title, final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK, String okText, String cancelText)
-			throws JMSException {
+	public MessageEditorDialog(final String title, final Message message, String destinationName, Domain domain, final EditedMessageHandler onOK, String okText, String cancelText) throws JMSException {
 		super(HermesBrowser.getBrowser());
 		if (!canEdit(message)) {
 			throw new JMSException("Unsupported message type");
@@ -93,8 +90,8 @@ public class MessageEditorDialog extends JDialog {
 			contentPanel.add(tabbedPane);
 			{
 				headerPropertyPanel = new JMSHeaderPropertyPanel();
-				JPanel panel = new JPanel(new GridBagLayout()) ;
-				panel.add(headerPropertyPanel) ;
+				JPanel panel = new JPanel(new GridBagLayout());
+				panel.add(headerPropertyPanel);
 				tabbedPane.addTab("JMS Header", null, panel, null);
 			}
 			{
@@ -111,6 +108,7 @@ public class MessageEditorDialog extends JDialog {
 			{
 				JButton okButton = new JButton(okText);
 				okButton.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						if (isModal()) {
 							MessageEditorDialog.this.dispose();
@@ -127,6 +125,7 @@ public class MessageEditorDialog extends JDialog {
 			{
 				JButton cancelButton = new JButton(cancelText);
 				cancelButton.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						MessageEditorDialog.this.dispose();
 					}
@@ -140,15 +139,14 @@ public class MessageEditorDialog extends JDialog {
 			messageWriter = new TextMessagePayloadPanel();
 		} else if (message instanceof TextMessage) {
 			messageWriter = new TextMessagePayloadPanel((TextMessage) message);
-			tabbedPane.addTab("Payload", messageWriter);
 		} else if (message instanceof MapMessage) {
 			messageWriter = new MapMessagePayloadPanel((MapMessage) message, true);
 		} else if (message instanceof BytesMessage) {
 			messageWriter = new BytesMessagePayloadPanel((BytesMessage) message);
 		} else {
-			messageWriter = new CannotEditMessageWriter(message) ;
+			messageWriter = new CannotEditMessageWriter(message);
 		}
-		
+
 		tabbedPane.addTab("Payload", messageWriter);
 
 		headerPropertyPanel.getMessageTypeComboBox().getModel().addListDataListener(new ListDataListener() {
@@ -186,9 +184,9 @@ public class MessageEditorDialog extends JDialog {
 		case MapMessage:
 			return new MapMessagePayloadPanel();
 		case BytesMessage:
-			return new BytesMessagePayloadPanel() ;
+			return new BytesMessagePayloadPanel();
 		}
-		return new CannotEditMessageWriter() ;
+		return new CannotEditMessageWriter();
 	}
 
 	protected void onOK() {

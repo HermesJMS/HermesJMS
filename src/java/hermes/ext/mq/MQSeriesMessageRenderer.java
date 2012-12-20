@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 
 import org.apache.log4j.Logger;
 
@@ -39,135 +40,117 @@ import com.jidesoft.grid.SortableTable;
 /**
  * @author colincrist@hermesjms.com
  */
-public class MQSeriesMessageRenderer extends AbstractMessageRenderer
-{
-   private static final Logger log = Logger.getLogger(MQSeriesMessageRenderer.class);
+public class MQSeriesMessageRenderer extends AbstractMessageRenderer {
+	private static final Logger log = Logger.getLogger(MQSeriesMessageRenderer.class);
 
-  
-   private MQSeriesAdmin admin;
+	private final MQSeriesAdmin admin;
 
-   public MQSeriesMessageRenderer(MQSeriesAdmin admin)
-   {
-      this.admin = admin;
-   }
+	public MQSeriesMessageRenderer(MQSeriesAdmin admin) {
+		this.admin = admin;
+	}
 
-  
+	@Override
+	public JComponent render(JScrollPane parent, final Message message) {
+		JComponent rval = null;
 
-   public JComponent render(final Message message)
-   {
-      JComponent rval = null;
+		try {
+			MQMessage mqMessage = admin.getMQMessage(message);
 
-      try
-      {
-         MQMessage mqMessage = admin.getMQMessage(message);
+			final Map map = new LinkedHashMap();
 
-         final Map map = new LinkedHashMap();
+			try {
+				inspectMessage(map, mqMessage);
+				final OneRowMapTableModel model = new OneRowMapTableModel(map);
 
-         try
-         {
-            inspectMessage(map, mqMessage);
-            final OneRowMapTableModel model = new OneRowMapTableModel(map);
+				rval = new SortableTable(model);
+			} catch (IOException e) {
+				log.error(e.getMessage(), e);
+			}
+		} catch (JMSException e) {
+			log.error(e.getMessage(), e);
+		}
+		return rval;
+	}
 
-            rval = new SortableTable(model);
-         }
-         catch (IOException e)
-         {
-            log.error(e.getMessage(), e);
-         }
-      }
-      catch (JMSException e)
-      {
-         log.error(e.getMessage(), e);
-      }
-      return rval;
-   }
+	public void inspectMessage(Map map, MQMessage message) throws IOException {
+		map.put("AccountingToken", TextUtils.toHexString(message.accountingToken, false));
+		map.put("ApplicationIdData", message.applicationIdData);
+		map.put("ApplicationOriginData", message.applicationOriginData);
+		map.put("BackoutCount", new Integer(message.backoutCount));
+		map.put("CharacterSet", new Integer(message.characterSet));
+		map.put("Encoding", new Integer(message.encoding));
+		map.put("Expiry", new Integer(message.expiry));
+		map.put("Feedback", new Integer(message.feedback));
+		map.put("Format", message.format);
+		map.put("DataLength", new Integer(message.getDataLength()));
+		map.put("DataOffset", new Integer(message.getDataOffset()));
+		map.put("TotalMessageLength", new Integer(message.getTotalMessageLength()));
+		map.put("Version", new Integer(message.getVersion()));
+		map.put("GroupId", TextUtils.toHexString(message.groupId, false));
+		map.put("MessageFlags", new Integer(message.messageFlags));
+		map.put("MessageId", TextUtils.toHexString(message.messageId, false));
+		map.put("MessageSequenceNumber", new Integer(message.messageSequenceNumber));
+		map.put("MessageType", new Integer(message.messageType));
+		map.put("Offset", new Integer(message.offset));
+		map.put("OriginalLength", new Integer(message.originalLength));
+		map.put("Persistence", new Integer(message.persistence));
+		map.put("PutApplicationName", message.putApplicationName);
+		map.put("PutApplicationType", new Integer(message.putApplicationType));
+		map.put("PutDateTime", message.putDateTime.getTime());
+		map.put("ReplyToQueueManager", message.replyToQueueManagerName);
+		map.put("ReplyToQueueName", message.replyToQueueName);
+		map.put("Report", new Integer(message.report));
+		map.put("TotalMessageLength", new Integer(message.getTotalMessageLength()));
 
-   public void inspectMessage(Map map, MQMessage message) throws IOException
-   {
-      map.put("AccountingToken", TextUtils.toHexString(message.accountingToken, false));
-      map.put("ApplicationIdData", message.applicationIdData);
-      map.put("ApplicationOriginData", message.applicationOriginData);
-      map.put("BackoutCount", new Integer(message.backoutCount));
-      map.put("CharacterSet", new Integer(message.characterSet));
-      map.put("Encoding", new Integer(message.encoding));
-      map.put("Expiry", new Integer(message.expiry));
-      map.put("Feedback", new Integer(message.feedback));
-      map.put("Format", message.format);
-      map.put("DataLength", new Integer(message.getDataLength()));
-      map.put("DataOffset", new Integer(message.getDataOffset()));
-      map.put("TotalMessageLength", new Integer(message.getTotalMessageLength()));
-      map.put("Version", new Integer(message.getVersion()));
-      map.put("GroupId", TextUtils.toHexString(message.groupId, false));
-      map.put("MessageFlags", new Integer(message.messageFlags));
-      map.put("MessageId", TextUtils.toHexString(message.messageId, false));
-      map.put("MessageSequenceNumber", new Integer(message.messageSequenceNumber));
-      map.put("MessageType", new Integer(message.messageType));
-      map.put("Offset", new Integer(message.offset));
-      map.put("OriginalLength", new Integer(message.originalLength));
-      map.put("Persistence", new Integer(message.persistence));
-      map.put("PutApplicationName", message.putApplicationName);
-      map.put("PutApplicationType", new Integer(message.putApplicationType));
-      map.put("PutDateTime", message.putDateTime.getTime());
-      map.put("ReplyToQueueManager", message.replyToQueueManagerName);
-      map.put("ReplyToQueueName", message.replyToQueueName);
-      map.put("Report", new Integer(message.report));
-      map.put("TotalMessageLength", new Integer(message.getTotalMessageLength()));
+		int dataLength = message.getTotalMessageLength();
 
-      int dataLength = message.getTotalMessageLength();
+		if (message.format.equals(MQC.MQFMT_RF_HEADER_1)) {
+			MsgUtils.MqRfh header = MsgUtils.getRfhHeader(message);
 
-      if (message.format.equals(MQC.MQFMT_RF_HEADER_1))
-      {
-         MsgUtils.MqRfh header = MsgUtils.getRfhHeader(message);
+			inspectHeader(map, header);
 
-         inspectHeader(map, header);
+			dataLength = message.getDataLength();
+		} else if (message.format.equals(MQC.MQFMT_RF_HEADER_2)) {
+			MsgUtils.MqRfh2 header = MsgUtils.getRfh2Header(message);
 
-         dataLength = message.getDataLength();
-      }
-      else if (message.format.equals(MQC.MQFMT_RF_HEADER_2))
-      {
-         MsgUtils.MqRfh2 header = MsgUtils.getRfh2Header(message);
+			inspectHeader(map, header);
 
-         inspectHeader(map, header);
+			dataLength = message.getDataLength();
+		}
+	}
 
-         dataLength = message.getDataLength();
-      }
-   }
+	private void inspectHeader(Map map, MsgUtils.MqRfh header) {
+		map.put("RFH.StructId", header.strucId);
+		map.put("RFH.Version", new Long(header.version));
+		map.put("RFH.Length", new Long(header.length));
+		map.put("RFH.Encoding", new Long(header.encoding));
+		map.put("RFH.EncodedCharSetId", new Long(header.codedCharSetId));
+		map.put("RFH.Format", header.format);
+		map.put("RFH.Flags", new Long(header.flags));
 
-   private void inspectHeader(Map map, MsgUtils.MqRfh header)
-   {
-      map.put("RFH.StructId", header.strucId);
-      map.put("RFH.Version", new Long(header.version));
-      map.put("RFH.Length", new Long(header.length));
-      map.put("RFH.Encoding", new Long(header.encoding));
-      map.put("RFH.EncodedCharSetId", new Long(header.codedCharSetId));
-      map.put("RFH.Format", header.format);
-      map.put("RFH.Flags", new Long(header.flags));
+		if (header instanceof MsgUtils.MqRfh2) {
+			MsgUtils.MqRfh2 header2 = (MsgUtils.MqRfh2) header;
 
-      if (header instanceof MsgUtils.MqRfh2)
-      {
-         MsgUtils.MqRfh2 header2 = (MsgUtils.MqRfh2) header;
+			map.put("RFH2.NamesValuesCharSetId", new Long(header2.nameValuesCharSetId));
+			map.put("RFH2.NamesValuesLength", new Long(header2.nameValuesLength));
+		}
 
-         map.put("RFH2.NamesValuesCharSetId", new Long(header2.nameValuesCharSetId));
-         map.put("RFH2.NamesValuesLength", new Long(header2.nameValuesLength));
-      }
+		for (Iterator iter = header.nameValues.entrySet().iterator(); iter.hasNext();) {
+			Map.Entry entry = (Map.Entry) iter.next();
 
-      for (Iterator iter = header.nameValues.entrySet().iterator(); iter.hasNext();)
-      {
-         Map.Entry entry = (Map.Entry) iter.next();
+			map.put(entry.getKey().toString(), entry.getValue());
+		}
 
-         map.put(entry.getKey().toString(), entry.getValue());
-      }
+	}
 
-   }
+	@Override
+	public boolean canRender(Message message) {
 
-   public boolean canRender(Message message)
-   {
-     
-      return false;
-   }
-   
-   public String getDisplayName() 
-   {
-      return "RFH2" ;
-   }
+		return false;
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "RFH2";
+	}
 }

@@ -40,7 +40,6 @@ import quickfix.StringField;
 import quickfix.UtcDateOnlyField;
 import quickfix.UtcTimeOnlyField;
 import quickfix.UtcTimeStampField;
-import quickfix.field.MsgType;
 
 /**
  * @author colincrist@hermesjms.com

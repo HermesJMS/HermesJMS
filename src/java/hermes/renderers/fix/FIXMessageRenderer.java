@@ -17,7 +17,6 @@
 
 package hermes.renderers.fix;
 
-import hermes.fix.FIXException;
 import hermes.fix.FIXMessage;
 import hermes.fix.FIXUtils;
 import hermes.fix.quickfix.QuickFIXMessage;
@@ -35,6 +34,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.apache.commons.collections.map.LRUMap;
@@ -56,7 +56,7 @@ public class FIXMessageRenderer extends AbstractMessageRenderer {
 	private static final String SHOW_HEADER_AND_TRAINER = "displayHeaderAndTrailer";
 	private static final String SHOW_HEADER_AND_TRAINER_INFO = "Display header and trailer fields";
 
-	private QuickFIXMessageCache cache = new QuickFIXMessageCache(32);
+	private final QuickFIXMessageCache cache = new QuickFIXMessageCache(32);
 	private LRUMap panelCache;
 
 	public class MyConfig extends AbstractMessageRenderer.BasicConfig {
@@ -65,14 +65,17 @@ public class FIXMessageRenderer extends AbstractMessageRenderer {
 		private boolean displayHeaderAndTrailer = true;
 		private String name;
 
+		@Override
 		public String getName() {
 			return name;
 		}
 
+		@Override
 		public void setName(String name) {
 			this.name = name;
 		}
 
+		@Override
 		public String getPropertyDescription(String propertyName) {
 			if (propertyName.equals(MESSAGE_CACHE)) {
 				return MESSAGE_CACHE_INFO;
@@ -162,7 +165,8 @@ public class FIXMessageRenderer extends AbstractMessageRenderer {
 	 * 
 	 * @see hermes.browser.MessageRenderer#render(javax.jms.Message)
 	 */
-	public JComponent render(Message m) {
+	@Override
+	public JComponent render(JScrollPane parent, Message m) {
 		try {
 			JComponent rval = null;
 
@@ -204,6 +208,7 @@ public class FIXMessageRenderer extends AbstractMessageRenderer {
 	 * 
 	 * @see hermes.browser.MessageRenderer#createConfig()
 	 */
+	@Override
 	public Config createConfig() {
 		return new MyConfig();
 	}
@@ -217,6 +222,7 @@ public class FIXMessageRenderer extends AbstractMessageRenderer {
 		return panelCache;
 	}
 
+	@Override
 	public boolean canRender(Message message) {
 		try {
 			return FIXUtils.isFIX(message);
@@ -226,6 +232,7 @@ public class FIXMessageRenderer extends AbstractMessageRenderer {
 		}
 	}
 
+	@Override
 	public String getDisplayName() {
 		return "FIX";
 	}

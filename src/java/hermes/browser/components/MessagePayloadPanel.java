@@ -23,7 +23,6 @@ import hermes.browser.MessageRenderer;
 import java.awt.BorderLayout;
 
 import javax.jms.Message;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -39,75 +38,68 @@ import com.jidesoft.swing.JideTabbedPane;
  * @version $Id: MessagePayloadPanel.java,v 1.3 2004/07/30 17:25:13 colincrist
  *          Exp $
  */
-public class MessagePayloadPanel extends JPanel
-{
-   /**
+public class MessagePayloadPanel extends JPanel {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7962228996637817501L;
-private static final Logger log = Logger.getLogger(MessagePayloadPanel.class);
-   private final JTabbedPane tabbedPane = new JideTabbedPane();
+	private static final Logger log = Logger.getLogger(MessagePayloadPanel.class);
+	private final JTabbedPane tabbedPane = new JideTabbedPane();
 
-   private String destinationName;
-private Message message;
+	private final String destinationName;
+	private Message message;
 
-   public MessagePayloadPanel(String destinationName)
-   {
-      super();
-      this.destinationName = destinationName;
+	public MessagePayloadPanel(String destinationName) {
+		super();
+		this.destinationName = destinationName;
 
-      init();
-   }
+		init();
+	}
 
-   public MessagePayloadPanel(Hermes hermes, String destinationName, Message message)
-   {
-      super();
-      this.destinationName = destinationName;
+	public MessagePayloadPanel(Hermes hermes, String destinationName, Message message) {
+		super();
+		this.destinationName = destinationName;
 
-      init();
+		init();
 
-      setMessage(hermes, message);
-   }
+		setMessage(hermes, message);
+	}
 
-   public Message getMessage() {
-	   return message ;
-   }
-   private void init()
-   {
-      tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
-      setLayout(new BorderLayout());
-      add(tabbedPane, BorderLayout.CENTER);
-   }
+	public Message getMessage() {
+		return message;
+	}
 
-   public void setMessage(Hermes hermes, Message m)
-   {
-      String selectedTitle = null;
-      int selectedIndex = 0;
+	private void init() {
+		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
+		setLayout(new BorderLayout());
+		add(tabbedPane, BorderLayout.CENTER);
+	}
 
-      if (tabbedPane.getSelectedIndex() > -1)
-      {
-         selectedTitle = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
-      }
+	public void setMessage(Hermes hermes, Message m) {
+		String selectedTitle = null;
+		int selectedIndex = 0;
 
-      tabbedPane.removeAll();
+		if (tabbedPane.getSelectedIndex() > -1) {
+			selectedTitle = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
+		}
 
-      for (MessageRenderer renderer : HermesBrowser.getRendererManager().getRenderers())
-      {
-         if (renderer.isActive() && renderer.canRender(m))
-         {
-            JComponent component = new JideScrollPane(renderer.render(m)) ;
-            
-            tabbedPane.add(renderer.getDisplayName(), component);
+		tabbedPane.removeAll();
 
-            if (renderer.getDisplayName().equals(selectedTitle))
-            {
-               selectedIndex = tabbedPane.getTabCount() - 1;
-               tabbedPane.setSelectedIndex(selectedIndex);
-            }
-         }
-      }
+		for (MessageRenderer renderer : HermesBrowser.getRendererManager().getRenderers()) {
+			if (renderer.isActive() && renderer.canRender(m)) {
+				JideScrollPane scrollPane = new JideScrollPane();
+				scrollPane.setViewportView(renderer.render(scrollPane, m));
 
-      tabbedPane.setSelectedIndex(selectedIndex);
-      this.message = m ;
-   }
+				tabbedPane.add(renderer.getDisplayName(), scrollPane);
+
+				if (renderer.getDisplayName().equals(selectedTitle)) {
+					selectedIndex = tabbedPane.getTabCount() - 1;
+					tabbedPane.setSelectedIndex(selectedIndex);
+				}
+			}
+		}
+
+		tabbedPane.setSelectedIndex(selectedIndex);
+		this.message = m;
+	}
 }

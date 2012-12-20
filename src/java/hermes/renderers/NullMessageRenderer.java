@@ -19,6 +19,7 @@ package hermes.renderers;
 
 import javax.jms.Message;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 
 /**
  * An example renderer that does nothing.
@@ -27,35 +28,32 @@ import javax.swing.JComponent;
  * @version $Id: NullMessageRenderer.java,v 1.2 2004/09/16 20:30:48 colincrist
  *          Exp $
  */
-public class NullMessageRenderer extends AbstractMessageRenderer
-{
-   /**
+public class NullMessageRenderer extends AbstractMessageRenderer {
+	/**
     * 
     */
-   public NullMessageRenderer()
-   {
-      super();
-   }
+	public NullMessageRenderer() {
+		super();
+	}
 
-   public boolean canRender(Message message)
-   {
-      return false ;
-   }
+	@Override
+	public boolean canRender(Message message) {
+		return false;
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see hermes.browser.MessageRenderer#render(javax.jms.Message)
-    */
-   public JComponent render(Message message)
-   {
-      return null;
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hermes.browser.MessageRenderer#render(javax.jms.Message)
+	 */
+	@Override
+	public JComponent render(JScrollPane parent, Message message) {
+		return null;
+	}
 
-  
-   public String getDisplayName() 
-   {
-      return "Null" ;
-   }
+	@Override
+	public String getDisplayName() {
+		return "Null";
+	}
 
 }

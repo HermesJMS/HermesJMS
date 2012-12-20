@@ -32,35 +32,32 @@ import javax.swing.event.TreeSelectionListener;
  * @version $Id$
  */
 
-public class ExpandBrowserTreeAction extends ActionSupport
-{
-   /**
+public class ExpandBrowserTreeAction extends ActionSupport {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2848811547735769952L;
-private BrowserTree browserTree ;
-   public ExpandBrowserTreeAction(BrowserTree browserTree)
-   {
-      this.browserTree = browserTree ;   
-      putValue(Action.NAME, "Expand");
-      putValue(Action.SHORT_DESCRIPTION, "Expand tree.");
-      putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.expand.all"));
-         
-      setEnabled(false);
+	private final BrowserTree browserTree;
 
-      browserTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener()
-      {
-         public void valueChanged(TreeSelectionEvent e)
-         {
-            ExpandBrowserTreeAction.this.setEnabled(e.getPath() != null);
-         }
-      });
-   }
-   
+	public ExpandBrowserTreeAction(BrowserTree browserTree) {
+		this.browserTree = browserTree;
+		putValue(Action.NAME, "Expand");
+		putValue(Action.SHORT_DESCRIPTION, "Expand tree.");
+		putValue(Action.SMALL_ICON, IconCache.getIcon("hermes.expand.all"));
 
-   public void actionPerformed(ActionEvent e)
-   {
-     TreeUtils.expandFully(browserTree, browserTree.getSelectionPath()) ;
-     
-   }
+		setEnabled(false);
+
+		browserTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
+			@Override
+			public void valueChanged(TreeSelectionEvent e) {
+				ExpandBrowserTreeAction.this.setEnabled(e.getPath() != null);
+			}
+		});
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		TreeUtils.expandFully(browserTree, browserTree.getSelectionPath());
+
+	}
 }
