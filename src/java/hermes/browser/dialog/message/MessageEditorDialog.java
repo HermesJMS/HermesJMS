@@ -28,17 +28,18 @@ import org.apache.log4j.Logger;
 import com.jidesoft.swing.JideTabbedPane;
 
 public class MessageEditorDialog extends JDialog {
+	private static final long serialVersionUID = 8270616550261160182L;
 	private static final Logger log = Logger.getLogger(MessageEditorDialog.class);
 
-	private final JPanel contentPanel = new JPanel();
-	private JMSHeaderPropertyPanel headerPropertyPanel;
-	private UserHeaderPropertyPanel userHeaderPropertyPanel;
+	private final JPanel topPanel = new JPanel();
+	private final String destinationName;
+	private final Domain domain;
 	private final EditedMessageHandler onOK;
 	private final JideTabbedPane tabbedPane = new JideTabbedPane(JTabbedPane.TOP);
 
+	private JMSHeaderPropertyPanel headerPropertyPanel;
+	private UserHeaderPropertyPanel userHeaderPropertyPanel;
 	private MessageWriter messageWriter;
-	private final String destinationName;
-	private final Domain domain;
 
 	/**
 	 * Launch the application.
@@ -80,14 +81,18 @@ public class MessageEditorDialog extends JDialog {
 		this.onOK = onOK;
 		this.destinationName = destinationName;
 		this.domain = domain;
+
 		setTitle(title);
 		setBounds(100, 100, 700, 400);
+
+		topPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		topPanel.setLayout(new BorderLayout(0, 0));
+
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new BorderLayout(0, 0));
+		getContentPane().add(topPanel, BorderLayout.CENTER);
+
 		{
-			contentPanel.add(tabbedPane);
+			topPanel.add(tabbedPane);
 			{
 				headerPropertyPanel = new JMSHeaderPropertyPanel();
 				JPanel panel = new JPanel(new GridBagLayout());
@@ -101,6 +106,7 @@ public class MessageEditorDialog extends JDialog {
 		}
 
 		headerPropertyPanel.setMessage(message, destinationName, domain);
+
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -162,7 +168,7 @@ public class MessageEditorDialog extends JDialog {
 			public void contentsChanged(ListDataEvent e) {
 				MessageType type = (MessageType) headerPropertyPanel.getMessageTypeComboBox().getModel().getSelectedItem();
 
-				if (messageWriter != null && !messageWriter.supports(type)) {
+				if (messageWriter != null) {
 					tabbedPane.remove(messageWriter);
 				}
 				try {
