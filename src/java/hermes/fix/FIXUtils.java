@@ -32,72 +32,58 @@ import quickfix.FieldNotFound;
  * @version $Id: FIXUtils.java,v 1.7 2006/08/01 07:29:35 colincrist Exp $
  */
 
-public class FIXUtils
-{
-   private static FIXPrettyPrinter defaultPrettyPrinter = new CompactFIXPrettyPrinter() ;
-   private static FIXPrettyPrinter prettyPrinter = null ;
+public class FIXUtils {
+	private static FIXPrettyPrinter defaultPrettyPrinter = new CompactFIXPrettyPrinter();
+	private static FIXPrettyPrinter prettyPrinter = null;
 
-   public FIXUtils()
-   {
-      super();
-   }
+	public FIXUtils() {
+		super();
+	}
 
-   public static JComponent createView(FIXMessage message, boolean displayHeaderAndTrailer, boolean displayValueWithEnum) throws FIXException, FieldNotFound
-   {
-      return new FIXMessageViewTable(new FIXMessageViewTableModel(message));
-   }
- 
-   public static String prettyPrint(FIXMessage message)
-   {
-      if (prettyPrinter != null)
-      {
-         return prettyPrinter.print(message) ;
-      }
-      else
-      {
-         return defaultPrettyPrinter.print(message) ;
-      }
-   }
-   
-   public static FIXPrettyPrinter getPrettyPrinter()
-   {
-      return prettyPrinter ;
-   }
-   
-   public static void setPrettyPrinter(FIXPrettyPrinter prettyPrinter) 
-   {
-      FIXUtils.prettyPrinter = prettyPrinter ;
-   }
-   
-   public static FIXPrettyPrinter getDefaultPrettyPrinter()
-   {
-      return defaultPrettyPrinter ;      
-   } 
+	public static JComponent createView(FIXMessage message, boolean displayHeaderAndTrailer, boolean displayValueWithEnum) throws FIXException, FieldNotFound {
+		return new FIXMessageViewTable(new FIXMessageViewTableModel(message));
+	}
 
-   public static boolean isFIX(Message message) throws JMSException
-   {
-      if (message instanceof TextMessage)
-      {
-         return ((TextMessage) message).getText().startsWith("8=FIX");
-      }
+	public static String prettyPrint(FIXMessage message) {
+		if (prettyPrinter != null) {
+			return prettyPrinter.print(message);
+		} else {
+			return defaultPrettyPrinter.print(message);
+		}
+	}
 
-      if (message instanceof BytesMessage)
-      {
-         try
-         {
-            final byte[] prefix = new byte[5];
-            ((BytesMessage) message).reset();
-            ((BytesMessage) message).readBytes(prefix);
+	public static FIXPrettyPrinter getPrettyPrinter() {
+		return prettyPrinter;
+	}
 
-            return ByteUtils.startsWith(prefix, "8=FIX");
-         }
-         finally
-         {
-            ((BytesMessage) message).reset();
-         }
-      }
+	public static void setPrettyPrinter(FIXPrettyPrinter prettyPrinter) {
+		FIXUtils.prettyPrinter = prettyPrinter;
+	}
 
-      return false;
-   }
+	public static FIXPrettyPrinter getDefaultPrettyPrinter() {
+		return defaultPrettyPrinter;
+	}
+
+	public static boolean isFIX(Message message) throws JMSException {
+		if (message instanceof TextMessage) {
+			String text = ((TextMessage) message).getText();
+
+			return text != null && text.startsWith("8=FIX");
+		}
+
+		if (message instanceof BytesMessage) {
+			try {
+				final byte[] prefix = new byte[5];
+				((BytesMessage) message).reset();
+				((BytesMessage) message).readBytes(prefix);
+
+				return ByteUtils.startsWith(prefix, "8=FIX");
+			} finally {
+				((BytesMessage) message).reset();
+			}
+		}
+
+		return false;
+	}
 
 }
